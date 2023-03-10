@@ -1,14 +1,8 @@
 import { GetServerSidePropsContext } from "next";
 import { useRouter } from "next/router";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
-import {
-  Box,
-  Divider,
-  ToggleButton,
-  ToggleButtonGroup,
-  Alert,
-} from "@mui/material";
+import { Box, Alert } from "@mui/material";
 import Head from "next/head";
 
 import NFTTrait from "../../components/NFTTrait";
@@ -21,10 +15,17 @@ const Detail = ({ nft }) => {
   const router = useRouter();
   const { seller } = router.query;
   const { account } = useActiveWeb3React();
-  const [darkTheme, setDarkTheme] = useState(true);
   const [buyOffers, setBuyOffers] = useState([]);
   const [sellOffers, setSellOffers] = useState([]);
   const [userSellOffers, setUserSellOffers] = useState([]);
+  const blackVideo = nft?.black_triple_video_url;
+  const ref = useRef(null);
+
+  useEffect(() => {
+    if (blackVideo) {
+      ref.current.load();
+    }
+  }, [blackVideo]);
 
   useEffect(() => {
     const getOffers = async () => {
@@ -38,17 +39,6 @@ const Detail = ({ nft }) => {
       setUserSellOffers(userSellOffers);
     };
 
-    let hash = router.asPath.match(/#([a-z0-9]+)/gi);
-    const darkModes = ["#black_image"];
-    const lightModes = ["#white_image"];
-
-    if (hash) {
-      if (darkModes.includes(hash[0])) {
-        setDarkTheme(true);
-      } else if (lightModes.includes(hash[0])) {
-        setDarkTheme(false);
-      }
-    }
     getOffers();
   }, [account, nft, router]);
 
@@ -59,7 +49,35 @@ const Detail = ({ nft }) => {
       <Head>
         <title>NFT #{nft.id} | Random Walk NFT</title>
       </Head>
-
+      {blackVideo && (
+        <div
+          style={{
+            position: "fixed",
+            top: 125,
+            bottom: 64,
+            left: 0,
+            right: 0,
+            zIndex: -1,
+          }}
+        >
+          <video
+            autoPlay
+            muted
+            playsInline
+            style={{
+              position: "absolute",
+              width: "100%",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              filter: "blur(3px) opacity(0.5)",
+            }}
+            ref={ref}
+          >
+            <source src={blackVideo} type="video/mp4"></source>
+          </video>
+        </div>
+      )}
       <MainWrapper
         maxWidth={false}
         style={{
@@ -76,31 +94,7 @@ const Detail = ({ nft }) => {
             </Alert>
           </Box>
         )}
-        <Box
-          display="flex"
-          alignItems="center"
-          justifyContent="center"
-          style={{ position: "relative", height: 60 }}
-        >
-          <Divider style={{ background: "#121212", width: "100%" }} />
-          <ToggleButtonGroup
-            value={darkTheme}
-            exclusive
-            onChange={() => setDarkTheme(!darkTheme)}
-            style={{ position: "absolute" }}
-          >
-            <ToggleButton value={true}>Dark theme</ToggleButton>
-            <ToggleButton value={false}>White theme</ToggleButton>
-          </ToggleButtonGroup>
-        </Box>
-        <NFTTrait
-          nft={nft}
-          darkTheme={darkTheme}
-          seller={seller}
-          buy_offers={buyOffers}
-          sell_offers={sellOffers}
-          user_sell_offers={userSellOffers}
-        />
+        <NFTTrait nft={nft} />
       </MainWrapper>
     </>
   );
@@ -111,7 +105,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   const tokenId = Array.isArray(id) ? id[0] : id;
   const nft = await api.get(tokenId);
   return {
-    props: { nft },
+    props: { nft, title: "Detail", description: `NFT#${nft?.id} Details - ` },
   };
 }
 
