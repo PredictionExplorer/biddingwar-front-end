@@ -9,7 +9,9 @@ import useBiddingWarContract from "../hooks/useBiddingWarContract";
 import { parseBalance } from "../utils";
 import { ethers } from "ethers";
 import NFTDialog from "../components/NFTDialog";
+import useNFTContract from "../hooks/useNFTContract";
 import { formatUnits } from "@ethersproject/units";
+import { useActiveWeb3React } from "../hooks/web3";
 
 const NewHome = ({ biddingHistory, page, totalCount }) => {
   const [withdrawalSeconds, setWithdrawalSeconds] = useState(null);
@@ -19,8 +21,11 @@ const NewHome = ({ biddingHistory, page, totalCount }) => {
   const [charityAddress, setCharityAddress] = useState(null);
   const [charityPercentage, setCharityPercentage] = useState("0");
   const [open, setOpen] = useState(false);
+  const [rwlknftIds, setRwlknftIds] = useState([]);
 
+  const { account } = useActiveWeb3React();
   const biddingWarContract = useBiddingWarContract();
+  const nftContract = useNFTContract();
 
   const handleBid = async () => {
     try {
@@ -37,17 +42,17 @@ const NewHome = ({ biddingHistory, page, totalCount }) => {
   };
 
   const handleBidWithRWLK = async (tokenId: number) => {
+    setOpen(false);
     try {
       const receipt = await biddingWarContract
-        .bidWithRWLK(ethers.utils.parseEther(tokenId.toString()))
+        .bidWithRWLK(tokenId)
         .then((tx) => tx.wait());
       console.log(receipt);
       getData();
     } catch (err) {
       console.log(err);
-      alert(err.data.message);
+      alert(err.message);
     }
-    setOpen(false);
   };
 
   const openNFTDialog = () => {
@@ -97,11 +102,16 @@ const NewHome = ({ biddingHistory, page, totalCount }) => {
       const charityPercentage = await biddingWarContract.charityPercentage();
       setCharityPercentage(parseFloat(charityPercentage).toFixed(2));
     }
+    if (nftContract) {
+      const tokens = await nftContract.walletOfOwner(account);
+      const nftIds = tokens.map((t) => t.toNumber()).reverse();
+      setRwlknftIds(nftIds);
+    }
   };
 
   useEffect(() => {
     getData();
-  }, [biddingWarContract]);
+  }, [biddingWarContract, nftContract]);
 
   if (withdrawalSeconds === null) return null;
 
@@ -266,7 +276,7 @@ const NewHome = ({ biddingHistory, page, totalCount }) => {
         />
       </MainWrapper>
       <NFTDialog
-        nfts={[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]}
+        nfts={rwlknftIds}
         open={open}
         onClose={() => setOpen(false)}
         onSelect={handleBidWithRWLK}

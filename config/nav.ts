@@ -7,6 +7,7 @@ type NavItem = {
 const NAVS: NavItem[] = [
   { title: "Home", route: "/" },
   { title: "Gallery", route: "/gallery" },
+  { title: "RWLK Mint", route: "/mint" },
   { title: "My NFTs", route: "/my-nfts" },
   { title: "FAQ", route: "/faq" },
   // { title: "Marketplace", route: "/marketplace" },
