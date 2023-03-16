@@ -65,9 +65,10 @@ const NewHome = ({ biddingHistory, page, totalCount }) => {
         .claimPrize()
         .then((tx) => tx.wait());
       console.log(receipt);
+      getData();
     } catch (err) {
       console.log(err);
-      alert(err.data.message);
+      alert(err.message);
     }
   };
 
@@ -102,7 +103,7 @@ const NewHome = ({ biddingHistory, page, totalCount }) => {
       const charityPercentage = await biddingWarContract.charityPercentage();
       setCharityPercentage(parseFloat(charityPercentage).toFixed(2));
     }
-    if (nftContract) {
+    if (nftContract && account) {
       const tokens = await nftContract.walletOfOwner(account);
       const nftIds = tokens.map((t) => t.toNumber()).reverse();
       setRwlknftIds(nftIds);
@@ -111,7 +112,7 @@ const NewHome = ({ biddingHistory, page, totalCount }) => {
 
   useEffect(() => {
     getData();
-  }, [biddingWarContract, nftContract]);
+  }, [biddingWarContract, nftContract, account]);
 
   if (withdrawalSeconds === null) return null;
 
