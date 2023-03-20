@@ -54,34 +54,18 @@ const HistoryRow = ({ history }) => {
         {convertTimestampToDateTime(history.TimeStamp)}
       </TablePrimaryCell>
       <TablePrimaryCell>
-        {history.Price &&
-          `${history.Price?.toFixed(3)}Ξ ($${(history.Price * ethPrice).toFixed(
-            3
-          )})`}
-      </TablePrimaryCell>
-      <TablePrimaryCell>
         <Link
-          href={`/detail/${history.TokenId}`}
+          href={`/gallery?address=${history.BidderAddr}`}
           style={{ color: "#fff" }}
         >
-          {history.TokenId}
+          {history.BidderAddr}
         </Link>
       </TablePrimaryCell>
       <TablePrimaryCell>
-        <Link
-          href={`/gallery?address=${history.BuyerAddr}`}
-          style={{ color: "#fff" }}
-        >
-          {history.BuyerAddr}
-        </Link>
+        {history.BidPriceEth && `${history.BidPriceEth?.toFixed(6)}Ξ`}
       </TablePrimaryCell>
       <TablePrimaryCell>
-        <Link
-          href={`/gallery?address=${history.SellerAddr}`}
-          style={{ color: "#fff" }}
-        >
-          {history.SellerAddr}
-        </Link>
+        {history.ERC20_AmountEth && `${history.ERC20_AmountEth?.toFixed(3)}`}
       </TablePrimaryCell>
     </TableRow>
   );
@@ -94,10 +78,9 @@ const HistoryTable = ({ biddingHistory }) => {
         <TableHead>
           <TableRow>
             <TablePrimaryCell>Date</TablePrimaryCell>
+            <TablePrimaryCell>Bidder</TablePrimaryCell>
             <TablePrimaryCell>Price</TablePrimaryCell>
-            <TablePrimaryCell>NFT#</TablePrimaryCell>
-            <TablePrimaryCell>Buyer</TablePrimaryCell>
-            <TablePrimaryCell>Seller</TablePrimaryCell>
+            <TablePrimaryCell>ERC20 Amount</TablePrimaryCell>
           </TableRow>
         </TableHead>
         <TableBody>

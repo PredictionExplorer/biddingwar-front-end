@@ -6,20 +6,13 @@ import Counter from "../components/Counter";
 import BiddingHistory from "../components/BiddingHistory";
 import api from "../services/api";
 import useBiddingWarContract from "../hooks/useBiddingWarContract";
-import { parseBalance } from "../utils";
 import { ethers } from "ethers";
 import NFTDialog from "../components/NFTDialog";
 import useNFTContract from "../hooks/useNFTContract";
-import { formatUnits } from "@ethersproject/units";
 import { useActiveWeb3React } from "../hooks/web3";
 
-const NewHome = ({ biddingHistory, page, totalCount }) => {
+const NewHome = ({ biddingHistory, page, totalCount, data }) => {
   const [withdrawalSeconds, setWithdrawalSeconds] = useState(null);
-  const [lastBidder, setLastBidder] = useState(null);
-  const [newBidPrice, setNewBidPrice] = useState("0");
-  const [prize, setPrize] = useState("0");
-  const [charityAddress, setCharityAddress] = useState(null);
-  const [charityPercentage, setCharityPercentage] = useState("0");
   const [open, setOpen] = useState(false);
   const [rwlknftIds, setRwlknftIds] = useState([]);
 
@@ -72,36 +65,10 @@ const NewHome = ({ biddingHistory, page, totalCount }) => {
     }
   };
 
-  // const handleDonate = async () => {
-  //   try {
-  //     const receipt = await biddingWarContract
-  //       .donate({ value: ethers.utils.parseEther("10") })
-  //       .then((tx) => tx.wait());
-  //     console.log(receipt);
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // };
-
   const getData = async () => {
     if (biddingWarContract) {
-      const bidPrice = await biddingWarContract.getBidPrice();
-      setNewBidPrice((parseFloat(formatUnits(bidPrice)) * 1.01).toFixed(6));
-
-      const prize = await biddingWarContract.prizeAmount();
-      setPrize(parseBalance(prize));
-
       const seconds = (await biddingWarContract.timeUntilPrize()).toNumber();
       setWithdrawalSeconds(seconds);
-
-      const lastBidder = await biddingWarContract.lastBidder();
-      setLastBidder(lastBidder);
-
-      const charityAddress = await biddingWarContract.charity();
-      setCharityAddress(charityAddress);
-
-      const charityPercentage = await biddingWarContract.charityPercentage();
-      setCharityPercentage(parseFloat(charityPercentage).toFixed(2));
     }
     if (nftContract && account) {
       const tokens = await nftContract.walletOfOwner(account);
@@ -125,7 +92,7 @@ const NewHome = ({ biddingHistory, page, totalCount }) => {
           </Typography>
           &nbsp;&nbsp;
           <Typography variant="body1" component="span">
-            {newBidPrice}
+            {data.BidPriceEth.toFixed(6)}
           </Typography>
         </Box>
         <Box>
@@ -134,7 +101,7 @@ const NewHome = ({ biddingHistory, page, totalCount }) => {
           </Typography>
           &nbsp;&nbsp;
           <Typography variant="body1" component="span">
-            {prize}
+            {data.PrizeAmountEth.toFixed(6)}
           </Typography>
         </Box>
         <Box>
@@ -143,7 +110,7 @@ const NewHome = ({ biddingHistory, page, totalCount }) => {
           </Typography>
           &nbsp;&nbsp;
           <Typography variant="body1" component="span">
-            {charityAddress}
+            {data.CharityAddr}
           </Typography>
         </Box>
         <Box>
@@ -152,7 +119,7 @@ const NewHome = ({ biddingHistory, page, totalCount }) => {
           </Typography>
           &nbsp;&nbsp;
           <Typography variant="body1" component="span">
-            {charityPercentage}%
+            {data.CharityPercentage}%
           </Typography>
         </Box>
         {withdrawalSeconds > 0 && (
@@ -188,8 +155,8 @@ const NewHome = ({ biddingHistory, page, totalCount }) => {
                   Last Bidder Address
                 </Typography>
                 <Typography variant="body2">
-                  <StyledLink href={`/gallery?address=${lastBidder}`}>
-                    {lastBidder}
+                  <StyledLink href={`/gallery?address=${data.LastBidderAddr}`}>
+                    {data.LastBidderAddr}
                   </StyledLink>
                 </Typography>
               </Box>
@@ -227,15 +194,6 @@ const NewHome = ({ biddingHistory, page, totalCount }) => {
             Claim Prize
           </Button>
         </Box>
-
-        {/* <Button
-          onClick={handleDonate}
-          color="primary"
-          variant="contained"
-          size="large"
-        >
-          Donate
-        </Button> */}
 
         <Typography variant="body1" gutterBottom>
           When you bid, you will get 100 tokens as a reward. These tokens allow
@@ -289,11 +247,13 @@ const NewHome = ({ biddingHistory, page, totalCount }) => {
 export async function getServerSideProps(context) {
   const page = context.query.page ?? 1;
   const res = await api.biddingHistory(page);
+  const dashboardData = await api.dashboardInfo();
   return {
     props: {
       biddingHistory: res.biddingHistory,
       totalCount: res.totalCount,
       page,
+      data: dashboardData
     },
   };
 }

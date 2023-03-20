@@ -1,0 +1,51 @@
+{
+  "PrizeClaims": [
+    {
+      "EvtLogId": 289,
+      "BlockNum": 21,
+      "TxId": 153,
+      "TxHash": "0xa4035368103d5f65a2eca7c1a7693c4959e8d6301608fe4047cc2f13e22e2613",
+      "TimeStamp": 1679016656,
+      "DateTime": "2023-03-17T01:30:56Z",
+      "WinnerAid": 9,
+      "WinnerAddr": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+      "Amount": "5007651002500000000",
+      "AmountEth": 5.0076510025,
+      "PrizeNum": 0,
+      "TokenId": 0,
+      "Seed": "b857b968237e1def9b38d37958fa4723ce0a857ac6de05e7d111c4911e5fef5e"
+    },
+    {
+      "EvtLogId": 295,
+      "BlockNum": 24,
+      "TxId": 155,
+      "TxHash": "0x904a39af34bb2f489ba5b864231f08bd8ff1db731573b74557b3e84edf2b1e88",
+      "TimeStamp": 1679106659,
+      "DateTime": "2023-03-18T02:30:59Z",
+      "WinnerAid": 8,
+      "WinnerAddr": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+      "Amount": "2005589264756262500",
+      "AmountEth": 2.0055892647562623,
+      "PrizeNum": 1,
+      "TokenId": 1,
+      "Seed": "5d9f5ab993b5af4657ef84edf1e6125285759da3377394ebc437bb29a49d573c"
+    },
+    {
+      "EvtLogId": 301,
+      "BlockNum": 26,
+      "TxId": 157,
+      "TxHash": "0xfbf0648c611c96d266595452e69fad3b3b90dd3c5d0c13f70dd0d7a51aaab261",
+      "TimeStamp": 1679196661,
+      "DateTime": "2023-03-19T03:31:01Z",
+      "WinnerAid": 8,
+      "WinnerAddr": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+      "Amount": "803248528481206912",
+      "AmountEth": 0.8032485284812069,
+      "PrizeNum": 2,
+      "TokenId": 2,
+      "Seed": "d24cc4cfd0195422e1118d9a499c60cdaabfce7b3991a540aec8f09d0dd38c30"
+    }
+  ],
+  "error": "",
+  "status": 1
+}
