@@ -1,18 +1,17 @@
-import React from 'react'
+import React from "react";
 
 import {
-  AppBar,
   Toolbar,
   Box,
   IconButton,
   Container,
   Typography,
   Link,
-} from '@mui/material'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faDiscord, faTwitter } from '@fortawesome/free-brands-svg-icons'
+} from "@mui/material";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faDiscord, faTwitter } from "@fortawesome/free-brands-svg-icons";
 
-import { FooterWrapper } from './styled'
+import { FooterWrapper } from "./styled";
 
 const Footer = () => (
   <FooterWrapper position="fixed" color="primary">
@@ -33,7 +32,7 @@ const Footer = () => (
                 color="textSecondary"
                 target="_blank"
                 href={`https://www.nftalliance.xyz`}
-                style={{ textDecoration: 'underline' }}
+                style={{ textDecoration: "underline" }}
               >
                 Arbitrum NFT Alliance
               </Link>
@@ -49,6 +48,6 @@ const Footer = () => (
       </Container>
     </Toolbar>
   </FooterWrapper>
-)
+);
 
-export default Footer
+export default Footer;

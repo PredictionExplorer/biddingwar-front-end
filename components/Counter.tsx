@@ -1,13 +1,12 @@
-import { Box, Typography } from '@mui/material'
-import { isMobile } from 'react-device-detect'
+import { Typography } from "@mui/material";
 
-import { CounterWrapper, CounterItem } from './styled'
+import { CounterWrapper, CounterItem } from "./styled";
 
 const Counter = ({ days, hours, minutes, seconds, completed }) => {
-  const padZero = (x) => x.toString().padStart(2, '0')
+  const padZero = (x) => x.toString().padStart(2, "0");
 
   if (completed) {
-    return <></>
+    return <></>;
   } else {
     return (
       <CounterWrapper>
@@ -44,8 +43,8 @@ const Counter = ({ days, hours, minutes, seconds, completed }) => {
           </Typography>
         </CounterItem>
       </CounterWrapper>
-    )
+    );
   }
-}
+};
 
-export default Counter
+export default Counter;

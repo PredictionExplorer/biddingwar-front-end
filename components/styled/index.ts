@@ -106,19 +106,6 @@ export const CenterBox = styled(Box)(({ theme }) => ({
   },
 }))
 
-export const MintButton = styled(Button)({
-  width: 128,
-  height: 128,
-  borderRadius: '100%',
-  border: '1px solid #fff',
-  color: '#fff',
-})
-
-export const MintActiveButton = styled(MintButton)({
-  border: '1px solid #F4BFFF',
-  backgroundColor: '#303030',
-})
-
 export const CounterWrapper = styled(Box)({
   display: 'flex',
   flexDirection: isMobile ? 'column' : 'row',
@@ -165,13 +152,6 @@ export const NFTInfoWrapper = styled('div')({
   position: 'absolute',
   top: 10,
   right: 12,
-})
-
-export const NFTPrice = styled(Typography)({
-  borderRadius: 3,
-  backgroundColor: '#C676D7',
-  padding: '3px 12px',
-  marginTop: 12,
 })
 
 export const SearchBox = styled(Box)(({ theme }) => ({
