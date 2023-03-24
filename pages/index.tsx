@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Button, Box, Typography, Grid } from "@mui/material";
+import { Button, Box, Typography, Grid, TextField } from "@mui/material";
 import Countdown from "react-countdown";
 import { CenterBox, MainWrapper, StyledLink } from "../components/styled";
 import Counter from "../components/Counter";
@@ -10,12 +10,19 @@ import { ethers } from "ethers";
 import NFTDialog from "../components/NFTDialog";
 import useNFTContract from "../hooks/useNFTContract";
 import { useActiveWeb3React } from "../hooks/web3";
+import { DateTimePicker, LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import dayjs, { Dayjs } from "dayjs";
 
 const NewHome = ({ biddingHistory, page, totalCount, data }) => {
   const [withdrawalSeconds, setWithdrawalSeconds] = useState(null);
+  const [activationTime, setActivationTime] = useState(1682377200);
   const [open, setOpen] = useState(false);
   const [rwlknftIds, setRwlknftIds] = useState([]);
-
+  const [newActivationTime, setNewActivationTime] = useState<Dayjs | null>(
+    dayjs(Date.now() + 3600)
+  );
+  const [contractOwner, setContractOwner] = useState("");
   const { account } = useActiveWeb3React();
   const biddingWarContract = useBiddingWarContract();
   const nftContract = useNFTContract();
@@ -65,10 +72,31 @@ const NewHome = ({ biddingHistory, page, totalCount, data }) => {
     }
   };
 
+  const onSetActivationTime = async () => {
+    try {
+      const receipt = await biddingWarContract
+        .setActivationTime(newActivationTime.unix())
+        .then((tx) => tx.wait());
+      console.log(receipt);
+      getData();
+    } catch (err) {
+      console.log(err);
+      alert(err.message);
+    }
+  };
+
   const getData = async () => {
     if (biddingWarContract) {
       const seconds = (await biddingWarContract.timeUntilPrize()).toNumber();
       setWithdrawalSeconds(seconds);
+
+      const activationTime = (
+        await biddingWarContract.activationTime()
+      ).toNumber();
+      setActivationTime(activationTime);
+
+      const owner = await biddingWarContract.owner();
+      setContractOwner(owner);
     }
     if (nftContract && account) {
       const tokens = await nftContract.walletOfOwner(account);
@@ -82,10 +110,43 @@ const NewHome = ({ biddingHistory, page, totalCount, data }) => {
   }, [biddingWarContract, nftContract, account]);
 
   if (withdrawalSeconds === null) return null;
+  if (activationTime > Date.now()) {
+    return (
+      <MainWrapper>
+        <Box mb={2}>
+          <Countdown date={activationTime * 1000} renderer={Counter} />
+        </Box>
+      </MainWrapper>
+    );
+  }
 
   return (
     <>
       <MainWrapper>
+        {account !== contractOwner && (
+          <Box sx={{ display: "flex", alignItems: "center" }}>
+            <Typography variant="body1" color="primary" component="span" mr={2}>
+              Contract Activation Time:
+            </Typography>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DateTimePicker
+                renderInput={(props) => <TextField {...props} />}
+                value={newActivationTime}
+                onChange={(newValue) => {
+                  setNewActivationTime(newValue);
+                }}
+                minDateTime={dayjs(Date.now())}
+              />
+            </LocalizationProvider>
+            <Button
+              variant="contained"
+              sx={{ ml: 2 }}
+              onClick={onSetActivationTime}
+            >
+              Set Activation Time
+            </Button>
+          </Box>
+        )}
         <Box>
           <Typography variant="body1" color="primary" component="span">
             BID PRICE:
@@ -253,7 +314,7 @@ export async function getServerSideProps(context) {
       biddingHistory: res.biddingHistory,
       totalCount: res.totalCount,
       page,
-      data: dashboardData
+      data: dashboardData,
     },
   };
 }
