@@ -123,7 +123,7 @@ const NewHome = ({ biddingHistory, page, totalCount, data }) => {
   return (
     <>
       <MainWrapper>
-        {account !== contractOwner && (
+        {account === contractOwner && (
           <Box sx={{ display: "flex", alignItems: "center" }}>
             <Typography variant="body1" color="primary" component="span" mr={2}>
               Contract Activation Time:
