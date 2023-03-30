@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import {
+  Box,
   Button,
   Dialog,
   DialogActions,
@@ -7,6 +8,7 @@ import {
   DialogTitle,
   IconButton,
   styled,
+  Typography,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import PaginationNFTGrid from "./PaginationNFTGrid";
@@ -49,29 +51,36 @@ function BootstrapDialogTitle(props: DialogTitleProps) {
   );
 }
 
-const NFTDialog = ({ nfts, open, onClose, onSelect }) => {
-  const [selectedToken, setSelectedToken] = useState();
+const DonatedNFTDialog = ({ nfts, open, onClose, onSelect }) => {
+  const [nftID, setNftID] = useState("");
+
+  const onClick = () => {
+    onSelect(nftID);
+    setNftID("");
+    onClose();
+  };
+
   return (
-    <BootstrapDialog onClose={onClose} open={open}>
+    <BootstrapDialog onClose={onClose} open={open} maxWidth="md" fullWidth>
       <BootstrapDialogTitle onClose={onClose}>
-        Available NFTs
+        Donated NFT Dialog
       </BootstrapDialogTitle>
       <DialogContent dividers>
-        <PaginationNFTGrid
-          loading={false}
-          data={nfts}
-          selectedToken={selectedToken}
-          setSelectedToken={setSelectedToken}
-        />
+        <Box>
+          <Typography variant="h6" gutterBottom>
+            Select Donated NFT to claim.
+          </Typography>
+          <PaginationNFTGrid
+            loading={false}
+            data={nfts}
+            selectedToken={nftID}
+            setSelectedToken={setNftID}
+            isRWLK={false}
+          />
+        </Box>
       </DialogContent>
       <DialogActions>
-        <Button
-          autoFocus
-          onClick={() => {
-            onSelect(selectedToken);
-          }}
-          disabled={!selectedToken}
-        >
+        <Button autoFocus onClick={onClick} disabled={!nftID}>
           Select
         </Button>
       </DialogActions>
@@ -79,4 +88,4 @@ const NFTDialog = ({ nfts, open, onClose, onSelect }) => {
   );
 };
 
-export default NFTDialog;
+export default DonatedNFTDialog;

@@ -7,7 +7,7 @@ import BiddingHistory from "../components/BiddingHistory";
 import api from "../services/api";
 import useBiddingWarContract from "../hooks/useBiddingWarContract";
 import { ethers } from "ethers";
-import NFTDialog from "../components/NFTDialog";
+import NFTDialog from "../components/BidDialog";
 import useNFTContract from "../hooks/useNFTContract";
 import { useActiveWeb3React } from "../hooks/web3";
 import { DateTimePicker, LocalizationProvider } from "@mui/x-date-pickers";
@@ -19,21 +19,46 @@ const NewHome = ({ biddingHistory, page, totalCount, data }) => {
   const [activationTime, setActivationTime] = useState(1682377200);
   const [open, setOpen] = useState(false);
   const [rwlknftIds, setRwlknftIds] = useState([]);
+  const [bidOptions, setBidOptions] = useState({
+    withRWLK: false,
+    withDonation: false,
+  });
   const [newActivationTime, setNewActivationTime] = useState<Dayjs | null>(
-    dayjs(Date.now() + 3600)
+    dayjs(Date.now() + 3600000)
   );
   const [contractOwner, setContractOwner] = useState("");
   const { account } = useActiveWeb3React();
   const biddingWarContract = useBiddingWarContract();
   const nftContract = useNFTContract();
 
-  const handleBid = async () => {
+  const handleBid = async (
+    rwlkID?: number,
+    nftAddress?: string,
+    nftID?: number
+  ) => {
     try {
       const bidPrice = await biddingWarContract.getBidPrice();
       const newBidPrice = parseFloat(ethers.utils.formatEther(bidPrice)) * 1.01;
-      const receipt = await biddingWarContract
-        .bid({ value: ethers.utils.parseEther(newBidPrice.toFixed(6)) })
-        .then((tx) => tx.wait());
+      let receipt;
+      if (!bidOptions.withRWLK && !bidOptions.withDonation) {
+        receipt = await biddingWarContract
+          .bid("", { value: ethers.utils.parseEther(newBidPrice.toFixed(6)) })
+          .then((tx) => tx.wait());
+      } else if (bidOptions.withRWLK && !bidOptions.withDonation) {
+        receipt = await biddingWarContract
+          .bidWithRWLK(rwlkID, "")
+          .then((tx) => tx.wait());
+      } else if (!bidOptions.withRWLK && bidOptions.withDonation) {
+        receipt = await biddingWarContract
+          .bidAndDonateNFT("", nftAddress, nftID, {
+            value: ethers.utils.parseEther(newBidPrice.toFixed(6)),
+          })
+          .then((tx) => tx.wait());
+      } else if (bidOptions.withRWLK && bidOptions.withDonation) {
+        receipt = await biddingWarContract
+          .bidWithRWLKAndDonateNFT(rwlkID, "", nftAddress, nftID)
+          .then((tx) => tx.wait());
+      }
       console.log(receipt);
       getData();
     } catch (err) {
@@ -41,21 +66,27 @@ const NewHome = ({ biddingHistory, page, totalCount, data }) => {
     }
   };
 
-  const handleBidWithRWLK = async (tokenId: number) => {
-    setOpen(false);
-    try {
-      const receipt = await biddingWarContract
-        .bidWithRWLK(tokenId)
-        .then((tx) => tx.wait());
-      console.log(receipt);
-      getData();
-    } catch (err) {
-      console.log(err);
-      alert(err.message);
+  const openBidDialog = (bidType: string) => {
+    if (bidType === "Bid") {
+      handleBid();
+      return;
     }
-  };
-
-  const openNFTDialog = () => {
+    if (bidType === "Bid with RWLK") {
+      setBidOptions({
+        withDonation: false,
+        withRWLK: true,
+      });
+    } else if (bidType === "Bid & Donate") {
+      setBidOptions({
+        withDonation: true,
+        withRWLK: false,
+      });
+    } else if (bidType === "Bid with RWLK & Donate") {
+      setBidOptions({
+        withDonation: true,
+        withRWLK: true,
+      });
+    }
     setOpen(true);
   };
 
@@ -123,7 +154,7 @@ const NewHome = ({ biddingHistory, page, totalCount, data }) => {
   return (
     <>
       <MainWrapper>
-        {account === contractOwner && (
+        {account !== contractOwner && (
           <Box sx={{ display: "flex", alignItems: "center" }}>
             <Typography variant="body1" color="primary" component="span" mr={2}>
               Contract Activation Time:
@@ -227,20 +258,20 @@ const NewHome = ({ biddingHistory, page, totalCount, data }) => {
 
         <Box my={2}>
           <Button
-            onClick={handleBid}
+            name="Bid"
             color="primary"
             variant="contained"
-            size="large"
+            onClick={(e) => openBidDialog(e.target["name"])}
           >
             Bid Now
           </Button>
 
           <Button
-            onClick={openNFTDialog}
+            name="Bid with RWLK"
             color="primary"
             variant="contained"
-            size="large"
             sx={{ ml: 2 }}
+            onClick={(e) => openBidDialog(e.target["name"])}
           >
             Bid with RWLK
           </Button>
@@ -249,10 +280,34 @@ const NewHome = ({ biddingHistory, page, totalCount, data }) => {
             onClick={handleClaimPrize}
             color="primary"
             variant="contained"
-            size="large"
             sx={{ ml: 2 }}
           >
             Claim Prize
+          </Button>
+        </Box>
+
+        <Box my={2}>
+          <Button
+            color="primary"
+            variant="contained"
+            name="Bid & Donate"
+            onClick={(e) => openBidDialog(e.target["name"])}
+          >
+            Bid & Donate
+          </Button>
+
+          <Button
+            name="Bid with RWLK & Donate"
+            color="primary"
+            variant="contained"
+            sx={{ ml: 2 }}
+            onClick={(e) => openBidDialog(e.target["name"])}
+          >
+            Bid with RWLK & Donate
+          </Button>
+
+          <Button color="primary" variant="contained" sx={{ ml: 2 }}>
+            Claim Donated NFT
           </Button>
         </Box>
 
@@ -296,10 +351,11 @@ const NewHome = ({ biddingHistory, page, totalCount, data }) => {
         />
       </MainWrapper>
       <NFTDialog
+        bidOptions={bidOptions}
         nfts={rwlknftIds}
         open={open}
         onClose={() => setOpen(false)}
-        onSelect={handleBidWithRWLK}
+        onSelect={handleBid}
       />
     </>
   );
@@ -320,3 +376,7 @@ export async function getServerSideProps(context) {
 }
 
 export default NewHome;
+
+// Need Cosmic Signature NFT settings Dialog
+
+// Bid with RWLK nft and donate Dialog

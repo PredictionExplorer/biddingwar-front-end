@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Typography, CardActionArea } from "@mui/material";
 
 import { useNFT } from "../hooks/useNFT";
