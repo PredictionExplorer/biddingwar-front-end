@@ -13,12 +13,12 @@ import {
   TablePrimaryContainer,
   TablePrimaryCell,
 } from "./styled";
-import { useTokenPrice } from "../hooks/useTokenInfo";
+// import { useTokenPrice } from "../hooks/useTokenInfo";
 import Pagination from "@mui/material/Pagination";
 import { useRouter } from "next/router";
 
 const HistoryRow = ({ history }) => {
-  const ethPrice = useTokenPrice();
+  // const ethPrice = useTokenPrice();
 
   const convertTimestampToDateTime = (timestamp: any) => {
     var months = [
@@ -65,7 +65,16 @@ const HistoryRow = ({ history }) => {
         {history.BidPriceEth && `${history.BidPriceEth?.toFixed(6)}Ξ`}
       </TablePrimaryCell>
       <TablePrimaryCell>
-        {history.ERC20_AmountEth && `${history.ERC20_AmountEth?.toFixed(3)}`}
+        {history.RWalkNFTId < 0 ? '' : history.RWalkNFTId}
+      </TablePrimaryCell>
+      <TablePrimaryCell>
+        {history.ERC20_AmountEth && history.ERC20_AmountEth?.toFixed(3)}
+      </TablePrimaryCell>
+      <TablePrimaryCell>
+        {history.NFTDonationTokenAddr}
+      </TablePrimaryCell>
+      <TablePrimaryCell>
+        {history.NFTDonationTokenId < 0 ? '': history.NFTDonationTokenId}
       </TablePrimaryCell>
     </TableRow>
   );
@@ -80,7 +89,10 @@ const HistoryTable = ({ biddingHistory }) => {
             <TablePrimaryCell>Date</TablePrimaryCell>
             <TablePrimaryCell>Bidder</TablePrimaryCell>
             <TablePrimaryCell>Price</TablePrimaryCell>
+            <TablePrimaryCell>RWLK ID</TablePrimaryCell>
             <TablePrimaryCell>ERC20 Amount</TablePrimaryCell>
+            <TablePrimaryCell>Donated NFT Address</TablePrimaryCell>
+            <TablePrimaryCell>Donated NFT ID</TablePrimaryCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -90,7 +102,7 @@ const HistoryTable = ({ biddingHistory }) => {
             ))
           ) : (
             <TableRow>
-              <TablePrimaryCell align="center" colSpan={5}>
+              <TablePrimaryCell align="center" colSpan={8}>
                 No history yet.
               </TablePrimaryCell>
             </TableRow>

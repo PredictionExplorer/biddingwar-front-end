@@ -1,20 +1,27 @@
 import axios from "axios";
-import bids from "./mockData/bid.json"
-import dashboard from "./mockData/dashboard.json"
 
 const baseUrl = "https://randomwalknft-api.com/";
+const biddingwarBaseUrl = "http://170.187.142.12:9090/api/biddingwar/";
 
 class ApiService {
   public async biddingHistory(page: number) {
     let perPage = 20;
+    const { data } = await axios.get(biddingwarBaseUrl + "bids/0/1000000");
+    const biddingHistory = data?.Bids.slice(perPage * (page - 1), perPage * page)
     return {
-      biddingHistory: bids.Bids,
-      totalCount: bids.Bids.length
+      biddingHistory,
+      totalCount: data?.Bids.length
     };
   }
 
   public async dashboardInfo() {
-    return dashboard;
+    const { data } = await axios.get(biddingwarBaseUrl + "dashboard");
+    return data;
+  }
+
+  public async donatedNFTs() {
+    const { data } = await axios.get(biddingwarBaseUrl + "nftdonations/0/1000000");
+    return data;
   }
 
   public async get_info(token_id: number | string) {
@@ -31,7 +38,7 @@ class ApiService {
     }
     return data;
   }
-  
+
   public async get_sell(id = -1) {
     let { data } = await axios.get(baseUrl + "sell_offer");
     data = data.sort((a: any, b: any) => a.Price - b.Price);

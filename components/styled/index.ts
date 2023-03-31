@@ -34,7 +34,7 @@ export const TablePrimaryContainer = styled(TableContainer)({
 })
 
 export const TablePrimaryCell = styled(TableCell)({
-  fontSize: 15,
+  fontSize: 14,
 })
 
 export const NavLink = styled(StyledLink)({
