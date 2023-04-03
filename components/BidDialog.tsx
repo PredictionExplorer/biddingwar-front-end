@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -13,6 +13,7 @@ import {
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import PaginationNFTGrid from "./PaginationNFTGrid";
+import useNFTContract from "../hooks/useNFTContract";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -54,21 +55,40 @@ function BootstrapDialogTitle(props: DialogTitleProps) {
 
 const BidDialog = ({ bidOptions, nfts, open, onClose, onSelect }) => {
   const [selectedToken, setSelectedToken] = useState("");
+  const [tempNftAddress, setTempNftAddress] = useState("");
   const [nftAddress, setNftAddress] = useState("");
   const [nftID, setNftID] = useState("");
+  const [message, setMessage] = useState("");
+  const nftContract = useNFTContract(nftAddress);
 
   const onClick = () => {
-    onSelect(selectedToken, nftAddress, nftID);
-    setNftAddress("");
-    setNftID("");
-    setSelectedToken("");
-    onClose();
+    setNftAddress(tempNftAddress);
   };
+
+  useEffect(() => {
+    if (nftContract) {
+      onSelect(message, selectedToken, nftAddress, nftID, nftContract);
+      setNftAddress("");
+      setTempNftAddress("");
+      setNftID("");
+      setSelectedToken("");
+      onClose();
+    }
+  }, [nftContract]);
 
   return (
     <BootstrapDialog onClose={onClose} open={open} maxWidth="md" fullWidth>
       <BootstrapDialogTitle onClose={onClose}>Bid Dialog</BootstrapDialogTitle>
       <DialogContent dividers>
+        <Box>
+          <TextField
+            label="Message"
+            variant="standard"
+            value={message}
+            fullWidth
+            onChange={(e) => setMessage(e.target.value)}
+          />
+        </Box>
         {bidOptions.withRWLK && (
           <Box>
             <Typography variant="h6" gutterBottom>
@@ -92,9 +112,9 @@ const BidDialog = ({ bidOptions, nfts, open, onClose, onSelect }) => {
               <TextField
                 label="NFT Contract Address"
                 variant="standard"
-                value={nftAddress}
+                value={tempNftAddress}
                 fullWidth
-                onChange={(e) => setNftAddress(e.target.value)}
+                onChange={(e) => setTempNftAddress(e.target.value)}
               />
             </Box>
             <Box mt={2}>
@@ -116,7 +136,7 @@ const BidDialog = ({ bidOptions, nfts, open, onClose, onSelect }) => {
           onClick={onClick}
           disabled={
             (bidOptions.withRWLK && !selectedToken) ||
-            (bidOptions.withDonation && (!nftAddress || !nftID))
+            (bidOptions.withDonation && (!tempNftAddress || !nftID))
           }
         >
           Select

@@ -21,7 +21,7 @@ import ModalVideo from "react-modal-video";
 import "react-modal-video/css/modal-video.min.css";
 
 import NFTVideo from "./NFTVideo";
-import useNFTContract from "../hooks/useNFTContract";
+import useRWLKNFTContract from "../hooks/useRWLKNFTContract";
 import { useActiveWeb3React } from "../hooks/web3";
 import { formatId } from "../utils";
 import { StyledCard, SectionWrapper, NFTImage, NFTInfoWrapper } from "./styled";
@@ -45,7 +45,7 @@ const NFTTrait = ({ nft }) => {
   const [realOwner, setRealOwner] = useState("");
   const [anchorEl, setAnchorEl] = useState(null);
   const router = useRouter();
-  const nftContract = useNFTContract();
+  const nftContract = useRWLKNFTContract();
   const { account, library } = useActiveWeb3React();
 
   const handlePlay = (videoPath) => {

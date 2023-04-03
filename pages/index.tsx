@@ -8,11 +8,12 @@ import api from "../services/api";
 import useBiddingWarContract from "../hooks/useBiddingWarContract";
 import { ethers } from "ethers";
 import NFTDialog from "../components/BidDialog";
-import useNFTContract from "../hooks/useNFTContract";
+import useRWLKNFTContract from "../hooks/useRWLKNFTContract";
 import { useActiveWeb3React } from "../hooks/web3";
 import { DateTimePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs, { Dayjs } from "dayjs";
+import { BIDDINGWAR_ADDRESS } from "../config/app";
 
 const NewHome = ({ biddingHistory, page, totalCount, data }) => {
   const [withdrawalSeconds, setWithdrawalSeconds] = useState(null);
@@ -29,35 +30,47 @@ const NewHome = ({ biddingHistory, page, totalCount, data }) => {
   const [contractOwner, setContractOwner] = useState("");
   const { account } = useActiveWeb3React();
   const biddingWarContract = useBiddingWarContract();
-  const nftContract = useNFTContract();
-
+  const nftRWLKContract = useRWLKNFTContract();
   const handleBid = async (
+    message: string,
     rwlkID?: number,
     nftAddress?: string,
-    nftID?: number
+    nftID?: number,
+    nftContract?: any
   ) => {
     try {
       const bidPrice = await biddingWarContract.getBidPrice();
       const newBidPrice = parseFloat(ethers.utils.formatEther(bidPrice)) * 1.01;
       let receipt;
-      if (!bidOptions.withRWLK && !bidOptions.withDonation) {
-        receipt = await biddingWarContract
-          .bid("", { value: ethers.utils.parseEther(newBidPrice.toFixed(6)) })
+      if (!bidOptions.withDonation) {
+        if (!bidOptions.withRWLK) {
+          receipt = await biddingWarContract
+            .bid(message, {
+              value: ethers.utils.parseEther(newBidPrice.toFixed(6)),
+            })
+            .then((tx) => tx.wait());
+        } else {
+          receipt = await biddingWarContract
+            .bidWithRWLK(rwlkID, message)
+            .then((tx) => tx.wait());
+        }
+      } else {
+        // setApprovalForAll
+        const response = await nftContract
+          .setApprovalForAll(BIDDINGWAR_ADDRESS, true)
           .then((tx) => tx.wait());
-      } else if (bidOptions.withRWLK && !bidOptions.withDonation) {
-        receipt = await biddingWarContract
-          .bidWithRWLK(rwlkID, "")
-          .then((tx) => tx.wait());
-      } else if (!bidOptions.withRWLK && bidOptions.withDonation) {
-        receipt = await biddingWarContract
-          .bidAndDonateNFT("", nftAddress, nftID, {
-            value: ethers.utils.parseEther(newBidPrice.toFixed(6)),
-          })
-          .then((tx) => tx.wait());
-      } else if (bidOptions.withRWLK && bidOptions.withDonation) {
-        receipt = await biddingWarContract
-          .bidWithRWLKAndDonateNFT(rwlkID, "", nftAddress, nftID)
-          .then((tx) => tx.wait());
+        console.log(response);
+        if (!bidOptions.withRWLK) {
+          receipt = await biddingWarContract
+            .bidAndDonateNFT(message, nftAddress, nftID, {
+              value: ethers.utils.parseEther(newBidPrice.toFixed(6)),
+            })
+            .then((tx) => tx.wait());
+        } else {
+          receipt = await biddingWarContract
+            .bidWithRWLKAndDonateNFT(rwlkID, message, nftAddress, nftID)
+            .then((tx) => tx.wait());
+        }
       }
       console.log(receipt);
       getData();
@@ -68,10 +81,11 @@ const NewHome = ({ biddingHistory, page, totalCount, data }) => {
 
   const openBidDialog = (bidType: string) => {
     if (bidType === "Bid") {
-      handleBid();
-      return;
-    }
-    if (bidType === "Bid with RWLK") {
+      setBidOptions({
+        withDonation: false,
+        withRWLK: false,
+      });
+    } else if (bidType === "Bid with RWLK") {
       setBidOptions({
         withDonation: false,
         withRWLK: true,
@@ -129,8 +143,8 @@ const NewHome = ({ biddingHistory, page, totalCount, data }) => {
       const owner = await biddingWarContract.owner();
       setContractOwner(owner);
     }
-    if (nftContract && account) {
-      const tokens = await nftContract.walletOfOwner(account);
+    if (nftRWLKContract && account) {
+      const tokens = await nftRWLKContract.walletOfOwner(account);
       const nftIds = tokens.map((t) => t.toNumber()).reverse();
       setRwlknftIds(nftIds);
     }
@@ -138,7 +152,7 @@ const NewHome = ({ biddingHistory, page, totalCount, data }) => {
 
   useEffect(() => {
     getData();
-  }, [biddingWarContract, nftContract, account]);
+  }, [biddingWarContract, nftRWLKContract, account]);
 
   if (withdrawalSeconds === null) return null;
   if (activationTime > Date.now()) {

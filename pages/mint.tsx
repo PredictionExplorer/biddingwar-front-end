@@ -5,7 +5,7 @@ import { Typography, Box, Button } from "@mui/material";
 import "react-slideshow-image/dist/styles.css";
 import Head from "next/head";
 import { MainWrapper, CenterBox } from "../components/styled";
-import useNFTContract from "../hooks/useNFTContract";
+import useRWLKNFTContract from "../hooks/useRWLKNFTContract";
 import { parseBalance } from "../utils";
 import { useActiveWeb3React } from "../hooks/web3";
 import PaginationGrid from "../components/PaginationGrid";
@@ -15,7 +15,7 @@ const Mint = () => {
   const [loading, setLoading] = useState(true);
   const [nftIds, setNftIds] = useState([]);
   const { account } = useActiveWeb3React();
-  const nftContract = useNFTContract();
+  const nftContract = useRWLKNFTContract();
   const router = useRouter();
 
   const handleMint = async () => {

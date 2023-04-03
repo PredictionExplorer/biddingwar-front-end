@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { ethers } from "ethers";
 
 import { NFT_ADDRESS } from "../config/app";
-import useNFTContract from "./useNFTContract";
+import useRWLKNFTContract from "./useRWLKNFTContract";
 import useMarketContract from "./useMarketContract";
 
 export const getOfferById = async (nftContract, marketContract, offerId) => {
@@ -29,7 +29,7 @@ export const getOfferById = async (nftContract, marketContract, offerId) => {
 };
 
 export const useOffer = (offerId) => {
-  const nftContract = useNFTContract();
+  const nftContract = useRWLKNFTContract();
   const marketContract = useMarketContract();
   const [offer, setOffer] = useState(null);
 

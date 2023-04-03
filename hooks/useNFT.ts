@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
-import useNFTContract from "./useNFTContract";
+import useRWLKNFTContract from "./useRWLKNFTContract";
 import api from "../services/api";
 
 export const useNFT = (tokenId) => {
-  const contract = useNFTContract();
+  const contract = useRWLKNFTContract();
   const [nft, setNft] = useState(null);
 
   useEffect(() => {
