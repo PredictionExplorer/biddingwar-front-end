@@ -12,6 +12,7 @@ import {
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import PaginationNFTGrid from "./PaginationNFTGrid";
+import PaginationDonatedNFTGrid from "./PaginationDonatedNFTGrid";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -52,11 +53,11 @@ function BootstrapDialogTitle(props: DialogTitleProps) {
 }
 
 const DonatedNFTDialog = ({ nfts, open, onClose, onSelect }) => {
-  const [nftID, setNftID] = useState(-1);
+  const [nft, setNft] = useState(null);
 
   const onClick = () => {
-    onSelect(nftID);
-    setNftID(-1);
+    onSelect(nft);
+    setNft(null);
     onClose();
   };
 
@@ -70,17 +71,16 @@ const DonatedNFTDialog = ({ nfts, open, onClose, onSelect }) => {
           <Typography variant="h6" gutterBottom>
             Select Donated NFT to claim.
           </Typography>
-          <PaginationNFTGrid
+          <PaginationDonatedNFTGrid
             loading={false}
             data={nfts}
-            selectedToken={nftID}
-            setSelectedToken={setNftID}
-            isRWLK={false}
+            selectedToken={nft}
+            setSelectedToken={setNft}
           />
         </Box>
       </DialogContent>
       <DialogActions>
-        <Button autoFocus onClick={onClick} disabled={nftID < 0}>
+        <Button autoFocus onClick={onClick} disabled={!nft}>
           Select
         </Button>
       </DialogActions>

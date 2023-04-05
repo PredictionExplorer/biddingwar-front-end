@@ -16,7 +16,7 @@ import dayjs, { Dayjs } from "dayjs";
 import { BIDDINGWAR_ADDRESS } from "../config/app";
 import DonatedNFTDialog from "../components/DonatedNFTDialog";
 
-const NewHome = ({ biddingHistory, page, totalCount, data }) => {
+const NewHome = ({ biddingHistory, page, totalCount, data, donatedNfts }) => {
   const [withdrawalSeconds, setWithdrawalSeconds] = useState(null);
   const [activationTime, setActivationTime] = useState(1682377200);
   const [open, setOpen] = useState(false);
@@ -108,7 +108,7 @@ const NewHome = ({ biddingHistory, page, totalCount, data }) => {
 
   const openClaimDialog = () => {
     setDonatedNFTOpen(true);
-  }
+  };
 
   const handleClaimPrize = async () => {
     try {
@@ -123,7 +123,18 @@ const NewHome = ({ biddingHistory, page, totalCount, data }) => {
     }
   };
 
-  const claimDonatedNFT = () => {};
+  const claimDonatedNFT = async (token) => {
+    try {
+      const receipt = await biddingWarContract
+        .claimDonatedNFT(token.RecordId)
+        .then((tx) => tx.wait());
+      console.log(receipt);
+      getData();
+    } catch (err) {
+      console.log(err);
+      alert(err.message);
+    }
+  };
 
   const onSetActivationTime = async () => {
     try {
@@ -385,7 +396,7 @@ const NewHome = ({ biddingHistory, page, totalCount, data }) => {
         onSelect={handleBid}
       />
       <DonatedNFTDialog
-        nfts={[0, 1, 2]}
+        nfts={donatedNfts}
         open={donatedNFTOpen}
         onClose={() => setDonatedNFTOpen(false)}
         onSelect={claimDonatedNFT}
@@ -398,14 +409,14 @@ export async function getServerSideProps(context) {
   const page = context.query.page ?? 1;
   const res = await api.biddingHistory(page);
   const dashboardData = await api.dashboardInfo();
-  const donatedNfts = await api.donatedNFTs();
+  const { NFTDonations: donatedNfts } = await api.donatedNFTs();
   return {
     props: {
       biddingHistory: res.biddingHistory,
       totalCount: res.totalCount,
       page,
       data: dashboardData,
-      donatedNfts
+      donatedNfts,
     },
   };
 }

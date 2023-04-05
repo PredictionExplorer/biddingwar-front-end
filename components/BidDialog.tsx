@@ -99,7 +99,6 @@ const BidDialog = ({ bidOptions, nfts, open, onClose, onSelect }) => {
               data={nfts}
               selectedToken={selectedToken}
               setSelectedToken={setSelectedToken}
-              isRWLK={true}
             />
           </Box>
         )}

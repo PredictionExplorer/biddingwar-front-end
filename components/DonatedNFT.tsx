@@ -1,7 +1,6 @@
 import React from "react";
 import { Typography, CardActionArea } from "@mui/material";
 
-import { useNFT } from "../hooks/useNFT";
 import { formatId } from "../utils";
 import {
   NFTImage,
@@ -12,24 +11,23 @@ import {
 } from "./styled";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 
-const DonatedNFT = ({ tokenId, selectable = false, selected = false }) => {
-  const nft = useNFT(tokenId);
+const DonatedNFT = ({ token, selected = false }) => {
   return (
     <StyledCard>
-      <CardActionArea href={nft && !selectable ? `/detail/${nft.id}` : ""}>
+      <CardActionArea>
         {selected && (
           <NFTCheckMark>
             <CheckCircleOutlineIcon color="success" />
           </NFTCheckMark>
         )}
-        {!nft ? (
+        {!token ? (
           <NFTSkeleton animation="wave" variant="rectangular" />
         ) : (
-          <NFTImage image={nft.black_image_thumb} />
+          <NFTImage image={token.NFTTokenURI} />
         )}
-        {nft && (
+        {token && (
           <NFTInfoWrapper>
-            <Typography variant="body1">{formatId(nft.id)}</Typography>
+            <Typography variant="body1">{formatId(token.RecordId)}</Typography>
           </NFTInfoWrapper>
         )}
       </CardActionArea>

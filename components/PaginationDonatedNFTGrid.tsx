@@ -2,9 +2,9 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { Grid, Box, CircularProgress, Typography } from "@mui/material";
 import Pagination from "@mui/material/Pagination";
-import NFT from "./NFT";
+import DonatedNFT from "./DonatedNFT";
 
-const PaginationNFTGrid = ({
+const PaginationDonatedNFTGrid = ({
   loading,
   data,
   selectedToken,
@@ -41,21 +41,20 @@ const PaginationNFTGrid = ({
           <Grid spacing={4} container>
             {collection
               .slice((curPage - 1) * perPage, curPage * perPage)
-              .map((index) => (
+              .map((token) => (
                 <Grid
-                  key={index}
+                  key={token.RecordId}
                   item
                   xs={12}
                   sm={6}
                   md={4}
                   onClick={() => {
-                    setSelectedToken(index);
+                    setSelectedToken(token);
                   }}
                 >
-                  <NFT
-                    tokenId={index}
-                    selectable={true}
-                    selected={index === selectedToken}
+                  <DonatedNFT
+                    token={token}
+                    selected={selectedToken && token.RecordId === selectedToken.RecordId}
                   />
                 </Grid>
               ))}
@@ -81,4 +80,4 @@ const PaginationNFTGrid = ({
   );
 };
 
-export default PaginationNFTGrid;
+export default PaginationDonatedNFTGrid;

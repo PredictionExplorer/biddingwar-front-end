@@ -24,6 +24,11 @@ class ApiService {
     return data;
   }
 
+  public async getDonatedNFTbyIndex(index: number) {
+    const { data } = await axios.get(biddingwarBaseUrl + "donatednft_info/" + index);
+    return data;
+  }
+
   public async get_info(token_id: number | string) {
     const { data } = await axios.get(baseUrl + "token_info/" + token_id);
     return data;
