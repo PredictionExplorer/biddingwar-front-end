@@ -57,7 +57,7 @@ const BidDialog = ({ bidOptions, nfts, open, onClose, onSelect }) => {
   const [selectedToken, setSelectedToken] = useState("");
   const [tempNftAddress, setTempNftAddress] = useState("");
   const [nftAddress, setNftAddress] = useState("");
-  const [nftID, setNftID] = useState("");
+  const [nftID, setNftID] = useState(-1);
   const [message, setMessage] = useState("");
   const nftContract = useNFTContract(nftAddress);
 
@@ -70,7 +70,7 @@ const BidDialog = ({ bidOptions, nfts, open, onClose, onSelect }) => {
       onSelect(message, selectedToken, nftAddress, nftID, nftContract);
       setNftAddress("");
       setTempNftAddress("");
-      setNftID("");
+      setNftID(-1);
       setSelectedToken("");
       onClose();
     }
@@ -124,7 +124,7 @@ const BidDialog = ({ bidOptions, nfts, open, onClose, onSelect }) => {
                 variant="standard"
                 value={nftID}
                 fullWidth
-                onChange={(e) => setNftID(e.target.value)}
+                onChange={(e) => setNftID(Number(e.target.value))}
               />
             </Box>
           </Box>
@@ -136,7 +136,7 @@ const BidDialog = ({ bidOptions, nfts, open, onClose, onSelect }) => {
           onClick={onClick}
           disabled={
             (bidOptions.withRWLK && !selectedToken) ||
-            (bidOptions.withDonation && (!tempNftAddress || !nftID))
+            (bidOptions.withDonation && (!tempNftAddress || nftID < 0))
           }
         >
           Select

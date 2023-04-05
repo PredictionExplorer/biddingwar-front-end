@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import { Grid, Box, CircularProgress, Typography } from "@mui/material";
 import Pagination from "@mui/material/Pagination";
 import NFT from "./NFT";
+import DonatedNFT from "./DonatedNFT";
 
 const PaginationNFTGrid = ({
   loading,
@@ -60,7 +61,7 @@ const PaginationNFTGrid = ({
                       selected={index === selectedToken}
                     />
                   ) : (
-                    <NFT
+                    <DonatedNFT
                       tokenId={index}
                       selectable={true}
                       selected={index === selectedToken}

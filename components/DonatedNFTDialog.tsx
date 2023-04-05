@@ -52,11 +52,11 @@ function BootstrapDialogTitle(props: DialogTitleProps) {
 }
 
 const DonatedNFTDialog = ({ nfts, open, onClose, onSelect }) => {
-  const [nftID, setNftID] = useState("");
+  const [nftID, setNftID] = useState(-1);
 
   const onClick = () => {
     onSelect(nftID);
-    setNftID("");
+    setNftID(-1);
     onClose();
   };
 
@@ -80,7 +80,7 @@ const DonatedNFTDialog = ({ nfts, open, onClose, onSelect }) => {
         </Box>
       </DialogContent>
       <DialogActions>
-        <Button autoFocus onClick={onClick} disabled={!nftID}>
+        <Button autoFocus onClick={onClick} disabled={nftID < 0}>
           Select
         </Button>
       </DialogActions>

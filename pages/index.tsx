@@ -14,11 +14,13 @@ import { DateTimePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs, { Dayjs } from "dayjs";
 import { BIDDINGWAR_ADDRESS } from "../config/app";
+import DonatedNFTDialog from "../components/DonatedNFTDialog";
 
 const NewHome = ({ biddingHistory, page, totalCount, data }) => {
   const [withdrawalSeconds, setWithdrawalSeconds] = useState(null);
   const [activationTime, setActivationTime] = useState(1682377200);
   const [open, setOpen] = useState(false);
+  const [donatedNFTOpen, setDonatedNFTOpen] = useState(false);
   const [rwlknftIds, setRwlknftIds] = useState([]);
   const [bidOptions, setBidOptions] = useState({
     withRWLK: false,
@@ -104,6 +106,10 @@ const NewHome = ({ biddingHistory, page, totalCount, data }) => {
     setOpen(true);
   };
 
+  const openClaimDialog = () => {
+    setDonatedNFTOpen(true);
+  }
+
   const handleClaimPrize = async () => {
     try {
       const receipt = await biddingWarContract
@@ -116,6 +122,8 @@ const NewHome = ({ biddingHistory, page, totalCount, data }) => {
       alert(err.message);
     }
   };
+
+  const claimDonatedNFT = () => {};
 
   const onSetActivationTime = async () => {
     try {
@@ -320,7 +328,12 @@ const NewHome = ({ biddingHistory, page, totalCount, data }) => {
             Bid with RWLK & Donate
           </Button>
 
-          <Button color="primary" variant="contained" sx={{ ml: 2 }}>
+          <Button
+            color="primary"
+            variant="contained"
+            sx={{ ml: 2 }}
+            onClick={openClaimDialog}
+          >
             Claim Donated NFT
           </Button>
         </Box>
@@ -371,6 +384,12 @@ const NewHome = ({ biddingHistory, page, totalCount, data }) => {
         onClose={() => setOpen(false)}
         onSelect={handleBid}
       />
+      <DonatedNFTDialog
+        nfts={[0, 1, 2]}
+        open={donatedNFTOpen}
+        onClose={() => setDonatedNFTOpen(false)}
+        onSelect={claimDonatedNFT}
+      />
     </>
   );
 };
@@ -379,12 +398,14 @@ export async function getServerSideProps(context) {
   const page = context.query.page ?? 1;
   const res = await api.biddingHistory(page);
   const dashboardData = await api.dashboardInfo();
+  const donatedNfts = await api.donatedNFTs();
   return {
     props: {
       biddingHistory: res.biddingHistory,
       totalCount: res.totalCount,
       page,
       data: dashboardData,
+      donatedNfts
     },
   };
 }
