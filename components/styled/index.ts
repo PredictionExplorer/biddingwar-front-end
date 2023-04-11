@@ -12,12 +12,12 @@ import {
   Card,
   TextField,
   Skeleton,
-  Typography,
   TableContainer,
   TableCell,
 } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import { isMobile } from 'react-device-detect'
+import { NoEncryption } from '@mui/icons-material'
 
 export const StyledLink = styled(Link)({
   color: '#fff',
@@ -46,7 +46,7 @@ export const NavLink = styled(StyledLink)({
 })
 
 export const AppBarWrapper = styled(AppBar)(({ theme }) => ({
-  background: '#000',
+  backgroundImage: "none",
   paddingTop: theme.spacing(2),
   paddingBottom: theme.spacing(2),
 }))

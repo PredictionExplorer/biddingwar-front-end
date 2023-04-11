@@ -27,9 +27,9 @@ const Settings = () => {
     let bnPerspective = BigNumber.from(perspective);
     result = bnIgnoreSteps;
     result = result.add(bnNumberOfSteps.mul(BigNumber.from(2).pow(32)));
-    for(let i = 0; i < 3; i ++) {
+    for (let i = 0; i < 3; i++) {
       if (bodies[i]) {
-        result = result.add(BigNumber.from(2).pow(64 + i))
+        result = result.add(BigNumber.from(2).pow(64 + i));
       }
     }
     result = result.add(bnPerspective.mul(BigNumber.from(2).pow(68)));
@@ -78,19 +78,34 @@ const Settings = () => {
           <Typography component="span" mr={2}>
             Display 1st Body:
           </Typography>
-          <Switch defaultChecked={bodies[0]} />
+          <Switch
+            defaultChecked={bodies[0]}
+            onChange={(e) =>
+              setBodies([e.target.checked, bodies[1], bodies[2]])
+            }
+          />
         </Box>
         <Box sx={{ display: "flex", alignItems: "center", mt: 4 }}>
           <Typography component="span" mr={2}>
             Display 2nd Body:
           </Typography>
-          <Switch defaultChecked={bodies[1]} />
+          <Switch
+            defaultChecked={bodies[1]}
+            onChange={(e) =>
+              setBodies([bodies[0], e.target.checked, bodies[2]])
+            }
+          />
         </Box>
         <Box sx={{ display: "flex", alignItems: "center", mt: 4 }}>
           <Typography component="span" mr={2}>
             Display 3rd Body:
           </Typography>
-          <Switch defaultChecked={bodies[2]} />
+          <Switch
+            defaultChecked={bodies[2]}
+            onChange={(e) =>
+              setBodies([bodies[0], bodies[1], e.target.checked])
+            }
+          />
         </Box>
         <Box sx={{ display: "flex", alignItems: "center", mt: 4 }}>
           <Typography component="span" mr={2}>

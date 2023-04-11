@@ -52,3 +52,15 @@ a {
   -webkit-text-decoration-color: white !important;
   text-decoration-color: white !important;
 }
+
+@property --radius {
+  syntax: '<length>';
+  inherits: true;
+  initial-value: 0;
+}
+
+@property --border {
+  syntax: '<length>';
+  inherits: true;
+  initial-value: 0;
+}

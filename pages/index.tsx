@@ -15,6 +15,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs, { Dayjs } from "dayjs";
 import { BIDDINGWAR_ADDRESS } from "../config/app";
 import DonatedNFTDialog from "../components/DonatedNFTDialog";
+import styled from "@emotion/styled";
 
 const NewHome = ({ biddingHistory, page, totalCount, data, donatedNfts }) => {
   const [withdrawalSeconds, setWithdrawalSeconds] = useState(null);
@@ -187,6 +188,7 @@ const NewHome = ({ biddingHistory, page, totalCount, data, donatedNfts }) => {
   return (
     <>
       <MainWrapper>
+      <Button variant="outlined" color="secondary">sample button</Button>
         {account !== contractOwner && (
           <Box sx={{ display: "flex", alignItems: "center" }}>
             <Typography variant="body1" color="primary" component="span" mr={2}>
@@ -292,7 +294,6 @@ const NewHome = ({ biddingHistory, page, totalCount, data, donatedNfts }) => {
         <Box my={2}>
           <Button
             name="Bid"
-            color="primary"
             variant="contained"
             onClick={(e) => openBidDialog(e.target["name"])}
           >
