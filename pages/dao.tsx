@@ -2,7 +2,7 @@ import React from "react";
 import { Box, Typography } from "@mui/material";
 import Head from "next/head";
 import { MainWrapper } from "../components/styled";
-const Marketplace = () => {
+const Dao = () => {
   return (
     <>
       <Head>
@@ -25,4 +25,4 @@ const Marketplace = () => {
   );
 };
 
-export default Marketplace;
+export default Dao;
