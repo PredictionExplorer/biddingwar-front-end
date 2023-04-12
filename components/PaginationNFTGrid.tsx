@@ -64,10 +64,11 @@ const PaginationNFTGrid = ({
             <Pagination
               color="primary"
               page={curPage}
-              onChange={(e, page) => handleNextPage(page)}
+              onChange={(_e, page) => handleNextPage(page)}
               count={Math.ceil(collection.length / perPage)}
-              showFirstButton
-              showLastButton
+              hideNextButton
+              hidePrevButton
+              shape="rounded"
             />
           </Box>
         </>

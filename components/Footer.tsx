@@ -39,10 +39,10 @@ const Footer = () => (
             </Typography>
           </Box>
           <IconButton href="https://twitter.com/RandomWalkNFT" target="_blank">
-            <FontAwesomeIcon icon={faTwitter} size="xs" color="#C676D7" />
+            <FontAwesomeIcon icon={faTwitter} size="xs" color="#A9AAB5" />
           </IconButton>
           <IconButton href="https://discord.gg/bGnPn96Qwt" target="_blank">
-            <FontAwesomeIcon icon={faDiscord} size="xs" color="#C676D7" />
+            <FontAwesomeIcon icon={faDiscord} size="xs" color="#A9AAB5" />
           </IconButton>
         </Box>
       </Container>

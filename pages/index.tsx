@@ -391,7 +391,7 @@ const NewHome = ({ biddingHistory, page, totalCount, data, donatedNfts }) => {
       </MainWrapper>
       <NFTDialog
         bidOptions={bidOptions}
-        nfts={rwlknftIds}
+        nfts={[1,2,3,4,5,6,7,8,9,10,11,12]}
         open={open}
         onClose={() => setOpen(false)}
         onSelect={handleBid}

@@ -14,10 +14,10 @@ import {
   Skeleton,
   TableContainer,
   TableCell,
+  TableHead,
 } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import { isMobile } from 'react-device-detect'
-import { NoEncryption } from '@mui/icons-material'
 
 export const StyledLink = styled(Link)({
   color: '#fff',
@@ -25,12 +25,17 @@ export const StyledLink = styled(Link)({
 })
 
 export const StyledCard = styled(Card)({
-  border: '1px solid #F4BFFF',
+  border: '1px solid #181F64',
   boxSizing: 'border-box',
 })
 
 export const TablePrimaryContainer = styled(TableContainer)({
-  backgroundColor: '#121212',
+  backgroundColor: 'rgba(255, 255, 255, 0.02)',
+  borderRadius: '8px 8px 0px 0px'
+})
+
+export const TablePrimaryHead = styled(TableHead)({
+  backgroundColor: '#15BFFD',
 })
 
 export const TablePrimaryCell = styled(TableCell)({
@@ -54,14 +59,14 @@ export const AppBarWrapper = styled(AppBar)(({ theme }) => ({
 export const FooterWrapper = styled(AppBar)({
   top: 'auto',
   bottom: 0,
-  background: '#200C31',
+  backgroundImage: "none",
 })
 
 export const DrawerList = styled(List)(({ theme }) => ({
   paddingTop: theme.spacing(2),
   width: 265,
   height: '100%',
-  backgroundColor: '#200C31',
+  backgroundColor: '#080B2A',
   borderLeft: '1px solid #F4BFFF',
 }))
 
@@ -127,9 +132,34 @@ export const QuestionIcon = styled('img')({
 })
 
 export const FaqAccordion = styled(Accordion)({
-  border: '1px solid #F4BFFF',
+  border: 0,
   marginBottom: 16,
   padding: '12px 16px',
+  position: 'relative',
+  borderRadius: '8px',
+  zIndex: 0,
+  '&:before': {
+    display: 'none',
+  },
+  '&:after': {
+    zIndex: -1,
+    content: '""',
+    position: "absolute",
+    inset: 0,
+    borderRadius: '8px',
+    padding: "1px",
+    height: "100%",
+    background: "linear-gradient(152.14deg, #15BFFD 9.96%, #9C37FD 100%)",
+    "-webkit-mask": "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
+    "-webkit-mask-composite": "xor",
+    opacity: "1 !important"
+  },
+  '&:first-of-type': {
+    borderRadius: '8px',
+  },
+  '&:last-of-type': {
+    borderRadius: '8px',
+  }
 })
 
 export const NFTImage = styled(CardMedia)({

@@ -12,6 +12,7 @@ import {
   SectionWrapper,
   TablePrimaryContainer,
   TablePrimaryCell,
+  TablePrimaryHead,
 } from "./styled";
 // import { useTokenPrice } from "../hooks/useTokenInfo";
 import Pagination from "@mui/material/Pagination";
@@ -83,8 +84,8 @@ const HistoryRow = ({ history }) => {
 const HistoryTable = ({ biddingHistory }) => {
   return (
     <TablePrimaryContainer>
-      <Table aria-label="simple table">
-        <TableHead>
+      <Table>
+        <TablePrimaryHead>
           <TableRow>
             <TablePrimaryCell>Date</TablePrimaryCell>
             <TablePrimaryCell>Bidder</TablePrimaryCell>
@@ -94,7 +95,7 @@ const HistoryTable = ({ biddingHistory }) => {
             <TablePrimaryCell>Donated NFT Address</TablePrimaryCell>
             <TablePrimaryCell>Donated NFT ID</TablePrimaryCell>
           </TableRow>
-        </TableHead>
+        </TablePrimaryHead>
         <TableBody>
           {biddingHistory.length > 0 ? (
             biddingHistory.map((history, i) => (

@@ -32,22 +32,10 @@
 .cm-s-material.CodeMirror,
 .CodeMirror-linenumbers,
 .CodeMirror-linenumber {
-  background-color: #121212 !important;
+  background-color: rgba(255, 255, 255, 0.02) !important;
   font-size: 12px !important;
 }
 
-.MuiToggleButton-root {
-  background-color: #000 !important;
-}
-.MuiToggleButton-root.Mui-selected {
-  background-color: #1d1d1d !important;
-}
-.MuiToggleButton-root:hover {
-  background-color: #0d0d0d !important;
-}
-.MuiToggleButton-root.Mui-selected:hover {
-  background-color: #222 !important;
-}
 a {
   -webkit-text-decoration-color: white !important;
   text-decoration-color: white !important;

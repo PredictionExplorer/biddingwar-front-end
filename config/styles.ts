@@ -19,7 +19,7 @@ const theme = createTheme({
     },
     background: {
       default: "#080B2A",
-      paper: "#080B2A",
+      paper: "#101441",
     },
   },
   typography: {
@@ -42,7 +42,7 @@ const theme = createTheme({
           paddingLeft: "24px",
           paddingRight: "24px",
           color: "#6DC3FF",
-          border: "transparent",
+          border: 0,
           "--border": "1px",
           "--radius": "4px",
           "--t": 0,
@@ -59,7 +59,7 @@ const theme = createTheme({
             "-webkit-mask": "paint(rounded-shape)"
           },
           "&:hover": {
-            border: "transparent"
+            border: 0
           }
         },
         outlinedSecondary: {
@@ -74,7 +74,7 @@ const theme = createTheme({
           paddingLeft: "24px",
           paddingRight: "24px",
           color: "#FFFFFF",
-          border: "transparent",
+          border: 0,
           "--border": "1px",
           "--radius": "4px",
           "--t": 0,
@@ -83,9 +83,34 @@ const theme = createTheme({
           "background": "linear-gradient(92.49deg, #06AEEC 0.4%, #9C37FD 86.02%)",
 
           "&:hover": {
-            border: "transparent"
+            border: 0
           }
         },
+      }
+    },
+    MuiPaginationItem: {
+      styleOverrides: {
+        rounded: {
+          position: "relative",
+          border: 0,
+          backgroundColor: "#1B2262",
+          "--border": "1px",
+          "--radius": "4px",
+          "--t": 0,
+          "--path": "0 0px,0 0,100% 0,100% calc(100% - 8px),calc(100% -12px) 100%,0 100%",
+          "-webkit-mask": "paint(rounded-shape)",
+
+          "&:hover": {
+            border: 0
+          }
+        }
+      }
+    },
+    MuiDialog: {
+      styleOverrides: {
+        paper: {
+          backgroundImage: "none"
+        }
       }
     }
   },

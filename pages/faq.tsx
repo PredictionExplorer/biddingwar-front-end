@@ -82,7 +82,7 @@ const FAQ = () => {
 
   const [expanded, setExpanded] = useState(null);
 
-  const handleChange = (index) => (event, isExpanded) => {
+  const handleChange = (index) => (_event, isExpanded) => {
     setExpanded(isExpanded ? index : false);
   };
 
@@ -119,7 +119,12 @@ const FAQ = () => {
                   >
                     <Box display="flex" alignItems="center">
                       <QuestionIcon src="images/question.svg" />
-                      <Typography variant="body2">{summary}</Typography>
+                      <Typography
+                        variant="body2"
+                        color={expanded === i ? "primary" : "info"}
+                      >
+                        {summary}
+                      </Typography>
                     </Box>
                   </AccordionSummary>
                   <AccordionDetails>
