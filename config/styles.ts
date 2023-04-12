@@ -94,6 +94,7 @@ const theme = createTheme({
           position: "relative",
           border: 0,
           backgroundColor: "#1B2262",
+          color: "#A8AABF",
           "--border": "1px",
           "--radius": "4px",
           "--t": 0,
