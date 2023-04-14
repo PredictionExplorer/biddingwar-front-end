@@ -31,7 +31,14 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           fontFamily: "Kelson Sans",
+          fontSize: 16,
         },
+        h4: {
+          fontSize: 45,
+        },
+        h6: {
+          fontSize: 21,
+        }
       },
     },
     MuiButton: {

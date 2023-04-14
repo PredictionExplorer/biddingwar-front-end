@@ -25,8 +25,28 @@ export const StyledLink = styled(Link)({
 })
 
 export const StyledCard = styled(Card)({
-  border: '1px solid #181F64',
-  boxSizing: 'border-box',
+  background: "transparent",
+  boxShadow: "none",
+  button: {
+    position: "relative",
+    border: 0,
+    "--border": "1px",
+    "--radius": "16px",
+    "--t": 0,
+    "--path": "0 0px,20px 0,100% 0,100% calc(100% - 80px),calc(100% - 150px) 100%,0 100%",
+    "-webkit-mask": "paint(rounded-shape)",
+    background: "transparent",
+    boxShadow: "0px 2px 1px -1px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 1px 3px 0px rgba(0,0,0,0.12)",
+    "&:before": {
+      content: '""',
+      position: "absolute",
+      inset: 0,
+      background: "linear-gradient(-27.86deg, #15BFFD 9.96%, #9C37FD 100%)",
+      opacity: 0.7,
+      "--t": 1,
+      "-webkit-mask": "paint(rounded-shape)"
+    }
+  }
 })
 
 export const TablePrimaryContainer = styled(TableContainer)({

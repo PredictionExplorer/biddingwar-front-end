@@ -1,7 +1,21 @@
 import React, { useState, useEffect } from "react";
-import { Button, Box, Typography, Grid, TextField } from "@mui/material";
+import {
+  Button,
+  Box,
+  Typography,
+  Grid,
+  TextField,
+  CardActionArea,
+} from "@mui/material";
 import Countdown from "react-countdown";
-import { CenterBox, MainWrapper, StyledLink } from "../components/styled";
+import {
+  CenterBox,
+  MainWrapper,
+  NFTImage,
+  NFTInfoWrapper,
+  StyledCard,
+  StyledLink,
+} from "../components/styled";
 import Counter from "../components/Counter";
 import BiddingHistory from "../components/BiddingHistory";
 import api from "../services/api";
@@ -16,6 +30,7 @@ import dayjs, { Dayjs } from "dayjs";
 import { BIDDINGWAR_ADDRESS } from "../config/app";
 import DonatedNFTDialog from "../components/DonatedNFTDialog";
 import styled from "@emotion/styled";
+import { formatId } from "../utils";
 
 const NewHome = ({ biddingHistory, page, totalCount, data, donatedNfts }) => {
   const [withdrawalSeconds, setWithdrawalSeconds] = useState(null);
@@ -188,220 +203,45 @@ const NewHome = ({ biddingHistory, page, totalCount, data, donatedNfts }) => {
   return (
     <>
       <MainWrapper>
-      <Button variant="outlined" color="secondary">sample button</Button>
-        {account !== contractOwner && (
-          <Box sx={{ display: "flex", alignItems: "center" }}>
-            <Typography variant="body1" color="primary" component="span" mr={2}>
-              Contract Activation Time:
-            </Typography>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DateTimePicker
-                renderInput={(props) => <TextField {...props} />}
-                value={newActivationTime}
-                onChange={(newValue) => {
-                  setNewActivationTime(newValue);
-                }}
-                minDateTime={dayjs(Date.now())}
-              />
-            </LocalizationProvider>
-            <Button
-              variant="contained"
-              sx={{ ml: 2 }}
-              onClick={onSetActivationTime}
-            >
-              Set Activation Time
-            </Button>
+        <Box sx={{ display: "flex", gap: "70px" }}>
+          <Box sx={{ flex: 1 }}>
+            <StyledCard>
+              <CardActionArea>
+                <NFTImage image="https://randomwalknft.s3.us-east-2.amazonaws.com/000496_black_thumb.jpg" />
+              </CardActionArea>
+            </StyledCard>
           </Box>
-        )}
-        <Box>
-          <Typography variant="body1" color="primary" component="span">
-            BID PRICE:
-          </Typography>
-          &nbsp;&nbsp;
-          <Typography variant="body1" component="span">
-            {data.BidPriceEth.toFixed(6)}
-          </Typography>
+          <Box sx={{ flex: 1 }}>
+            <Typography variant="h4">Current Bid</Typography>
+            <Box sx={{ display: "flex" }}>
+              <Typography color="primary">BID PRICE:</Typography>
+              &nbsp;
+              <Typography>0.002064</Typography>
+            </Box>
+            <Box sx={{ display: "flex" }}>
+              <Typography color="primary">REWARD:</Typography>
+              &nbsp;
+              <Typography>0.8024</Typography>
+            </Box>
+            <Box sx={{ display: "flex" }}>
+              <Typography color="primary">Charity Address:</Typography>
+              &nbsp;
+              <Typography>0xB9A66Fe7C1B7b8b3f14F68399AD1202</Typography>
+            </Box>
+            <Box sx={{ display: "flex" }}>
+              <Typography color="primary">Percentage of Donation:</Typography>
+              &nbsp;
+              <Typography>10.00%</Typography>
+            </Box>
+            <Box sx={{ my: "24px" }}>
+              <Typography color="primary">Last Bidder Address:</Typography>
+              <Typography>
+                0xA867454690CA5142917165FB2dBb08ccaEb303df
+              </Typography>
+            </Box>
+          </Box>
         </Box>
-        <Box>
-          <Typography variant="body1" color="primary" component="span">
-            REWARD:
-          </Typography>
-          &nbsp;&nbsp;
-          <Typography variant="body1" component="span">
-            {data.PrizeAmountEth.toFixed(6)}
-          </Typography>
-        </Box>
-        <Box>
-          <Typography variant="body1" color="primary" component="span">
-            Charity Address:
-          </Typography>
-          &nbsp;&nbsp;
-          <Typography variant="body1" component="span">
-            {data.CharityAddr}
-          </Typography>
-        </Box>
-        <Box>
-          <Typography variant="body1" color="primary" component="span">
-            Percentage of Donation:
-          </Typography>
-          &nbsp;&nbsp;
-          <Typography variant="body1" component="span">
-            {data.CharityPercentage}%
-          </Typography>
-        </Box>
-        {withdrawalSeconds > 0 && (
-          <CenterBox>
-            <Typography variant="h4" component="span">
-              THE CURRENT
-            </Typography>
-            &nbsp;&nbsp;
-            <Typography variant="h4" component="span" color="primary">
-              BIDDING ROUND
-            </Typography>
-            &nbsp;&nbsp;
-            <Typography variant="h4" component="span">
-              FINISHES IN
-            </Typography>
-          </CenterBox>
-        )}
-        <Box mt={3}>
-          <Grid container spacing={4}>
-            {withdrawalSeconds > 0 && (
-              <Grid item xs={12} sm={12} md={6}>
-                <Box mb={2}>
-                  <Countdown
-                    date={Date.now() + withdrawalSeconds * 1000}
-                    renderer={Counter}
-                  />
-                </Box>
-              </Grid>
-            )}
-            <Grid item xs={12} sm={12} md={6}>
-              <Box>
-                <Typography variant="body1" color="primary">
-                  Last Bidder Address
-                </Typography>
-                <Typography variant="body2">
-                  <StyledLink href={`/gallery?address=${data.LastBidderAddr}`}>
-                    {data.LastBidderAddr}
-                  </StyledLink>
-                </Typography>
-              </Box>
-            </Grid>
-          </Grid>
-        </Box>
-
-        <Box my={2}>
-          <Button
-            name="Bid"
-            variant="contained"
-            onClick={(e) => openBidDialog(e.target["name"])}
-          >
-            Bid Now
-          </Button>
-
-          <Button
-            name="Bid with RWLK"
-            color="primary"
-            variant="contained"
-            sx={{ ml: 2 }}
-            onClick={(e) => openBidDialog(e.target["name"])}
-          >
-            Bid with RWLK
-          </Button>
-
-          <Button
-            onClick={handleClaimPrize}
-            color="primary"
-            variant="contained"
-            sx={{ ml: 2 }}
-          >
-            Claim Prize
-          </Button>
-        </Box>
-
-        <Box my={2}>
-          <Button
-            color="primary"
-            variant="contained"
-            name="Bid & Donate"
-            onClick={(e) => openBidDialog(e.target["name"])}
-          >
-            Bid & Donate
-          </Button>
-
-          <Button
-            name="Bid with RWLK & Donate"
-            color="primary"
-            variant="contained"
-            sx={{ ml: 2 }}
-            onClick={(e) => openBidDialog(e.target["name"])}
-          >
-            Bid with RWLK & Donate
-          </Button>
-
-          <Button
-            color="primary"
-            variant="contained"
-            sx={{ ml: 2 }}
-            onClick={openClaimDialog}
-          >
-            Claim Donated NFT
-          </Button>
-        </Box>
-
-        <Typography variant="body1" gutterBottom>
-          When you bid, you will get 100 tokens as a reward. These tokens allow
-          you to participate in the DAO.
-        </Typography>
-
-        <Box
-          display="flex"
-          justifyContent="center"
-          alignItems="center"
-          flexWrap="wrap"
-          sx={{ mt: 3 }}
-        >
-          <Typography variant="h4" component="span">
-            CURRENT ROUND
-          </Typography>
-          <Typography
-            variant="h4"
-            component="span"
-            color="primary"
-            sx={{ ml: 1.5 }}
-          >
-            BID
-          </Typography>
-          <Typography
-            variant="h4"
-            component="span"
-            color="secondary"
-            sx={{ ml: 1.5 }}
-          >
-            HISTORY
-          </Typography>
-        </Box>
-
-        <BiddingHistory
-          curPage={page}
-          biddingHistory={biddingHistory}
-          totalCount={totalCount}
-        />
       </MainWrapper>
-      <NFTDialog
-        bidOptions={bidOptions}
-        nfts={[1,2,3,4,5,6,7,8,9,10,11,12]}
-        open={open}
-        onClose={() => setOpen(false)}
-        onSelect={handleBid}
-      />
-      <DonatedNFTDialog
-        nfts={donatedNfts}
-        open={donatedNFTOpen}
-        onClose={() => setDonatedNFTOpen(false)}
-        onSelect={claimDonatedNFT}
-      />
     </>
   );
 };
