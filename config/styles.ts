@@ -27,6 +27,17 @@ const theme = createTheme({
     fontSize: 16,
   },
   components: {
+    MuiInputBase: {
+      styleOverrides: {
+        root: {
+          fontSize: 15,
+          padding: "12px 16px !important"
+        },
+        input: {
+          padding: "0 !important"
+        }
+      }
+    },
     MuiTypography: {
       styleOverrides: {
         root: {
@@ -38,6 +49,13 @@ const theme = createTheme({
         },
         h6: {
           fontSize: 21,
+        },
+        subtitle1: {
+          fontSize: 20,
+        },
+        body2: {
+          fontSize: 13,
+          color: "rgba(255, 255, 255, 0.68)"
         }
       },
     },
@@ -118,6 +136,42 @@ const theme = createTheme({
       styleOverrides: {
         paper: {
           backgroundImage: "none"
+        }
+      }
+    },
+    MuiAccordion: {
+      styleOverrides: {
+        root: {
+          backgroundColor: "transparent",
+          backgroundImage: "none",
+          boxShadow: "none",
+          "&:before": {
+            display: "none",
+          },
+        }
+      }
+    },
+    MuiAccordionSummary: {
+      styleOverrides: {
+        root: {
+          minHeight: "48px !important",
+          borderBottom: "1px solid rgba(217, 217, 217, 0.3)",
+          padding: 0
+        },
+        content: {
+          marginTop: 8,
+          marginBottom: 8,
+          "&.Mui-expanded": {
+            marginTop: 8,
+            marginBottom: 8,
+          }
+        },
+      }
+    },
+    MuiAccordionDetails: {
+      styleOverrides: {
+        root: {
+          padding: "16px 0 0 0"
         }
       }
     }

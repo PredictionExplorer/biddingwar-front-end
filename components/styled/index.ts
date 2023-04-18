@@ -15,6 +15,7 @@ import {
   TableContainer,
   TableCell,
   TableHead,
+  AccordionDetails,
 } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import { isMobile } from 'react-device-detect'
@@ -153,11 +154,14 @@ export const QuestionIcon = styled('img')({
 
 export const FaqAccordion = styled(Accordion)({
   border: 0,
-  marginBottom: 16,
+  marginBottom: "40px !important",
   padding: '12px 16px',
   position: 'relative',
   borderRadius: '8px',
   zIndex: 0,
+  "& > .MuiAccordionSummary-root": {
+    border: "0 !important"
+  },
   '&:before': {
     display: 'none',
   },
@@ -169,7 +173,7 @@ export const FaqAccordion = styled(Accordion)({
     borderRadius: '8px',
     padding: "1px",
     height: "100%",
-    background: "linear-gradient(152.14deg, #15BFFD 9.96%, #9C37FD 100%)",
+    background: "linear-gradient(152.14deg, rgba(21, 191, 253, 0.49) 9.96%, rgba(156, 55, 253, 0.49) 100%)",
     "-webkit-mask": "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
     "-webkit-mask-composite": "xor",
     opacity: "1 !important"
@@ -180,6 +184,10 @@ export const FaqAccordion = styled(Accordion)({
   '&:last-of-type': {
     borderRadius: '8px',
   }
+})
+
+export const FaqAccordionDetails = styled(AccordionDetails)({
+  padding: "0 40px 12px"
 })
 
 export const NFTImage = styled(CardMedia)({

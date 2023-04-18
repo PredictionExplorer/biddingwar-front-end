@@ -6,6 +6,9 @@ import {
   Grid,
   TextField,
   CardActionArea,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
 } from "@mui/material";
 import Countdown from "react-countdown";
 import {
@@ -31,6 +34,8 @@ import { BIDDINGWAR_ADDRESS } from "../config/app";
 import DonatedNFTDialog from "../components/DonatedNFTDialog";
 import styled from "@emotion/styled";
 import { formatId } from "../utils";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import FAQ from "../components/FAQ";
 
 const NewHome = ({ biddingHistory, page, totalCount, data, donatedNfts }) => {
   const [withdrawalSeconds, setWithdrawalSeconds] = useState(null);
@@ -216,31 +221,66 @@ const NewHome = ({ biddingHistory, page, totalCount, data, donatedNfts }) => {
             <Box sx={{ display: "flex" }}>
               <Typography color="primary">BID PRICE:</Typography>
               &nbsp;
-              <Typography>0.002064</Typography>
+              <Typography>{data.BidPriceEth.toFixed(6)}</Typography>
             </Box>
             <Box sx={{ display: "flex" }}>
               <Typography color="primary">REWARD:</Typography>
               &nbsp;
-              <Typography>0.8024</Typography>
+              <Typography>{data.PrizeAmountEth.toFixed(4)}</Typography>
             </Box>
             <Box sx={{ display: "flex" }}>
               <Typography color="primary">Charity Address:</Typography>
               &nbsp;
-              <Typography>0xB9A66Fe7C1B7b8b3f14F68399AD1202</Typography>
+              <Typography>{data.CharityAddr}</Typography>
             </Box>
             <Box sx={{ display: "flex" }}>
               <Typography color="primary">Percentage of Donation:</Typography>
               &nbsp;
-              <Typography>10.00%</Typography>
+              <Typography>{data.CharityPercentage}%</Typography>
             </Box>
             <Box sx={{ my: "24px" }}>
               <Typography color="primary">Last Bidder Address:</Typography>
               <Typography>
-                0xA867454690CA5142917165FB2dBb08ccaEb303df
+                <StyledLink href={`/gallery?address=${data.LastBidderAddr}`}>
+                  {data.LastBidderAddr}
+                </StyledLink>
               </Typography>
             </Box>
+            <Accordion>
+              <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                <Typography>Advanced Options</Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                <Typography variant="body2">
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                  Suspendisse malesuada lacus ex, sit amet blandit leo lobortis
+                  eget.
+                </Typography>
+                <TextField
+                  placeholder="NFT contract address"
+                  size="small"
+                  fullWidth
+                  sx={{ marginTop: 2 }}
+                />
+                <TextField
+                  placeholder="NFT number"
+                  size="small"
+                  fullWidth
+                  sx={{ marginTop: 2 }}
+                />
+                <TextField
+                  placeholder="Message (280 characters)"
+                  size="small"
+                  multiline
+                  fullWidth
+                  rows={4}
+                  sx={{ marginTop: 2 }}
+                />
+              </AccordionDetails>
+            </Accordion>
           </Box>
         </Box>
+        <FAQ />
       </MainWrapper>
     </>
   );
