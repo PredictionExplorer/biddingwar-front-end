@@ -340,7 +340,7 @@ const NewHome = ({ biddingHistory, page, totalCount, data, donatedNfts }) => {
             </Typography>
           </Box>
           <Box textAlign="center" marginBottom="56px">
-            <Image src={"/images/divider.svg"} width={93} height={3} />
+            <Image src={"/images/divider.svg"} width={93} height={3} alt="divider" />
           </Box>
           <Box sx={{ display: "flex", gap: "60px" }}>
             <StyledCard sx={{ flex: 1 }}>
@@ -351,6 +351,7 @@ const NewHome = ({ biddingHistory, page, totalCount, data, donatedNfts }) => {
                   src={"/images/CosmicSignatureNFT.png"}
                   width={88}
                   height={88}
+                  alt="cosmic signature nft"
                 />
                 <GradientText variant="h5" marginLeft="16px">
                   1 Cosmic Signature NFT
@@ -361,7 +362,7 @@ const NewHome = ({ biddingHistory, page, totalCount, data, donatedNfts }) => {
               <CardActionArea
                 sx={{ display: "flex", justifyContent: "start", p: "16px" }}
               >
-                <Image src={"/images/Ethereum.png"} width={88} height={88} />
+                <Image src={"/images/Ethereum.png"} width={88} height={88} alt="cosmic signture nft" />
                 <GradientText variant="h5" marginLeft="16px">
                   1 Cosmic Signature NFT
                 </GradientText>
@@ -466,7 +467,7 @@ const NewHome = ({ biddingHistory, page, totalCount, data, donatedNfts }) => {
             </Typography>
           </Box>
           <Box textAlign="center" marginBottom="56px">
-            <Image src={"/images/divider.svg"} width={93} height={3} />
+            <Image src={"/images/divider.svg"} width={93} height={3} alt="divider" />
           </Box>
 
           <Grid container spacing={2} marginTop="58px">
@@ -496,6 +497,7 @@ const NewHome = ({ biddingHistory, page, totalCount, data, donatedNfts }) => {
                       src={"/images/Ethereum_small.svg"}
                       width={16}
                       height={16}
+                      alt="ethereum"
                     />
                     <Typography variant="caption" color="primary" component="p">
                       3.2 NFT
@@ -537,6 +539,7 @@ const NewHome = ({ biddingHistory, page, totalCount, data, donatedNfts }) => {
                       src={"/images/Ethereum_small.svg"}
                       width={16}
                       height={16}
+                      alt="ethereum"
                     />
                     <Typography variant="caption" color="primary" component="p">
                       3.2 NFT
@@ -578,6 +581,7 @@ const NewHome = ({ biddingHistory, page, totalCount, data, donatedNfts }) => {
                       src={"/images/Ethereum_small.svg"}
                       width={16}
                       height={16}
+                      alt="ethereum"
                     />
                     <Typography variant="caption" color="primary" component="p">
                       3.2 NFT
@@ -619,6 +623,7 @@ const NewHome = ({ biddingHistory, page, totalCount, data, donatedNfts }) => {
                       src={"/images/Ethereum_small.svg"}
                       width={16}
                       height={16}
+                      alt="ethereum"
                     />
                     <Typography variant="caption" color="primary" component="p">
                       3.2 NFT
@@ -660,6 +665,7 @@ const NewHome = ({ biddingHistory, page, totalCount, data, donatedNfts }) => {
                       src={"/images/Ethereum_small.svg"}
                       width={16}
                       height={16}
+                      alt="ethereum"
                     />
                     <Typography variant="caption" color="primary" component="p">
                       3.2 NFT
@@ -701,6 +707,7 @@ const NewHome = ({ biddingHistory, page, totalCount, data, donatedNfts }) => {
                       src={"/images/Ethereum_small.svg"}
                       width={16}
                       height={16}
+                      alt="ethereum"
                     />
                     <Typography variant="caption" color="primary" component="p">
                       3.2 NFT
