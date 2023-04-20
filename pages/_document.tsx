@@ -32,7 +32,7 @@ export default class MyDocument extends Document {
             }}
           />
           <script
-            language="javascript+paint"
+            type="javascript+paint"
             dangerouslySetInnerHTML={{
               __html: `
                   registerPaint(
@@ -191,7 +191,7 @@ export default class MyDocument extends Document {
             dangerouslySetInnerHTML={{
               __html: `
                   if ("paintWorklet" in CSS) {
-                    const src = document.querySelector('script[language$="paint"]').innerHTML;
+                    const src = document.querySelector('script[type$="paint"]').innerHTML;
                     const blob = new Blob([src], {
                       type: 'text/javascript'
                     });
