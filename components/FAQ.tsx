@@ -81,7 +81,7 @@ const FAQ = () => {
         FAQ&#39;S
       </Typography>
       <Box textAlign="center" marginBottom="56px">
-        <Image src={"/images/divider.svg"} width={93} height={3} />
+        <Image src={"/images/divider.svg"} width={93} height={3} alt="divider" />
       </Box>
       <Box mt={4}>
         {items.map(({ summary, detail }, i) => (
