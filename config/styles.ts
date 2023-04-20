@@ -47,11 +47,17 @@ const theme = createTheme({
         h4: {
           fontSize: 45,
         },
+        h5: {
+          fontSize: 29,
+        },
         h6: {
           fontSize: 21,
         },
         subtitle1: {
           fontSize: 20,
+        },
+        caption: {
+          fontSize: 14,
         },
         body2: {
           fontSize: 13,
@@ -71,7 +77,7 @@ const theme = createTheme({
           "--border": "1px",
           "--radius": "4px",
           "--t": 0,
-          "--path": "0 0px,20px 0,100% 0,100% calc(100% - 13px),calc(100% - 24px) 100%,0 100%",
+          "--path": "0 0px,20px 0,100% 0,100% calc(100% - 16px),calc(100% - 20px) 100%,0 100%",
           "-webkit-mask": "paint(rounded-shape)",
           "background": "transparent",
 
@@ -103,7 +109,7 @@ const theme = createTheme({
           "--border": "1px",
           "--radius": "4px",
           "--t": 0,
-          "--path": "0 0px,20px 0,100% 0,100% calc(100% - 13px),calc(100% - 24px) 100%,0 100%",
+          "--path": "0 0px,20px 0,100% 0,100% calc(100% - 16px),calc(100% - 20px) 100%,0 100%",
           "-webkit-mask": "paint(rounded-shape)",
           "background": "linear-gradient(92.49deg, #06AEEC 0.4%, #9C37FD 86.02%)",
 

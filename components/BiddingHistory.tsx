@@ -1,26 +1,22 @@
 import React from "react";
 import {
   Box,
-  Container,
   Table,
-  TableHead,
   TableRow,
   TableBody,
   Link,
+  TableCell,
 } from "@mui/material";
 import {
-  SectionWrapper,
   TablePrimaryContainer,
   TablePrimaryCell,
   TablePrimaryHead,
+  TablePrimaryRow,
 } from "./styled";
-// import { useTokenPrice } from "../hooks/useTokenInfo";
 import Pagination from "@mui/material/Pagination";
 import { useRouter } from "next/router";
 
 const HistoryRow = ({ history }) => {
-  // const ethPrice = useTokenPrice();
-
   const convertTimestampToDateTime = (timestamp: any) => {
     var months = [
       "Jan",
@@ -46,18 +42,18 @@ const HistoryRow = ({ history }) => {
   };
 
   if (!history) {
-    return <TableRow></TableRow>;
+    return <TablePrimaryRow></TablePrimaryRow>;
   }
 
   return (
-    <TableRow>
+    <TablePrimaryRow>
       <TablePrimaryCell>
         {convertTimestampToDateTime(history.TimeStamp)}
       </TablePrimaryCell>
       <TablePrimaryCell>
         <Link
           href={`/gallery?address=${history.BidderAddr}`}
-          style={{ color: "#fff" }}
+          style={{ color: "rgba(255, 255, 255, 0.68)" }}
         >
           {history.BidderAddr}
         </Link>
@@ -66,18 +62,16 @@ const HistoryRow = ({ history }) => {
         {history.BidPriceEth && `${history.BidPriceEth?.toFixed(6)}Ξ`}
       </TablePrimaryCell>
       <TablePrimaryCell>
-        {history.RWalkNFTId < 0 ? '' : history.RWalkNFTId}
+        {history.RWalkNFTId < 0 ? "" : history.RWalkNFTId}
       </TablePrimaryCell>
       <TablePrimaryCell>
         {history.ERC20_AmountEth && history.ERC20_AmountEth?.toFixed(3)}
       </TablePrimaryCell>
+      <TablePrimaryCell>{history.NFTDonationTokenAddr}</TablePrimaryCell>
       <TablePrimaryCell>
-        {history.NFTDonationTokenAddr}
+        {history.NFTDonationTokenId < 0 ? "" : history.NFTDonationTokenId}
       </TablePrimaryCell>
-      <TablePrimaryCell>
-        {history.NFTDonationTokenId < 0 ? '': history.NFTDonationTokenId}
-      </TablePrimaryCell>
-    </TableRow>
+    </TablePrimaryRow>
   );
 };
 
@@ -87,13 +81,13 @@ const HistoryTable = ({ biddingHistory }) => {
       <Table>
         <TablePrimaryHead>
           <TableRow>
-            <TablePrimaryCell>Date</TablePrimaryCell>
-            <TablePrimaryCell>Bidder</TablePrimaryCell>
-            <TablePrimaryCell>Price</TablePrimaryCell>
-            <TablePrimaryCell>RWLK ID</TablePrimaryCell>
-            <TablePrimaryCell>ERC20 Amount</TablePrimaryCell>
-            <TablePrimaryCell>Donated NFT Address</TablePrimaryCell>
-            <TablePrimaryCell>Donated NFT ID</TablePrimaryCell>
+            <TableCell>Date</TableCell>
+            <TableCell>Bidder</TableCell>
+            <TableCell>Price</TableCell>
+            <TableCell>RWLK ID</TableCell>
+            <TableCell>ERC20 Amount</TableCell>
+            <TableCell>Donated NFT Address</TableCell>
+            <TableCell>Donated NFT ID</TableCell>
           </TableRow>
         </TablePrimaryHead>
         <TableBody>
@@ -123,21 +117,19 @@ const BiddingHistory = ({ curPage, biddingHistory, totalCount }) => {
   };
 
   return (
-    <SectionWrapper>
-      <Container>
-        <HistoryTable biddingHistory={biddingHistory} />
-        <Box display="flex" justifyContent="center" mt={4}>
-          <Pagination
-            color="primary"
-            page={parseInt(curPage)}
-            onChange={(e, page) => handleNextPage(page)}
-            count={Math.ceil(totalCount / perPage)}
-            showFirstButton
-            showLastButton
-          />
-        </Box>
-      </Container>
-    </SectionWrapper>
+    <Box mt={4}>
+      <HistoryTable biddingHistory={biddingHistory} />
+      <Box display="flex" justifyContent="center" mt={4}>
+        <Pagination
+          color="primary"
+          page={parseInt(curPage)}
+          onChange={(e, page) => handleNextPage(page)}
+          count={Math.ceil(totalCount / perPage)}
+          showFirstButton
+          showLastButton
+        />
+      </Box>
+    </Box>
   );
 };
 

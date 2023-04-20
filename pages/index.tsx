@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import Image from "next/image";
 import {
   Button,
   Box,
@@ -9,10 +10,12 @@ import {
   Accordion,
   AccordionSummary,
   AccordionDetails,
+  Container,
 } from "@mui/material";
 import Countdown from "react-countdown";
 import {
   CenterBox,
+  GradientText,
   MainWrapper,
   NFTImage,
   NFTInfoWrapper,
@@ -36,6 +39,7 @@ import styled from "@emotion/styled";
 import { formatId } from "../utils";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import FAQ from "../components/FAQ";
+import { ArrowForward } from "@mui/icons-material";
 
 const NewHome = ({ biddingHistory, page, totalCount, data, donatedNfts }) => {
   const [withdrawalSeconds, setWithdrawalSeconds] = useState(null);
@@ -278,10 +282,445 @@ const NewHome = ({ biddingHistory, page, totalCount, data, donatedNfts }) => {
                 />
               </AccordionDetails>
             </Accordion>
+            <Box mb={2}>
+              <Box sx={{ display: "flex", mt: "45px" }}>
+                <Button
+                  variant="contained"
+                  size="large"
+                  endIcon={<ArrowForward />}
+                  sx={{ width: "33%", marginRight: "24px" }}
+                >
+                  Bid Now
+                </Button>
+                <Button
+                  variant="outlined"
+                  size="large"
+                  endIcon={<ArrowForward />}
+                  sx={{ flex: 1 }}
+                >
+                  Bid with Random Walk NFT
+                </Button>
+              </Box>
+              <Button
+                variant="outlined"
+                size="large"
+                endIcon={<ArrowForward />}
+                sx={{ width: "33%", mt: "20px" }}
+              >
+                Claim Prize
+              </Button>
+            </Box>
+            <Typography variant="body2">
+              When you bid, you will get 100 tokens as a reward. These tokens
+              allow you to participate in the DAO.
+            </Typography>
           </Box>
         </Box>
-        <FAQ />
+
+        <Box mt="130px">
+          <Box
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            flexWrap="wrap"
+          >
+            <Typography variant="h4" component="span">
+              The
+            </Typography>
+            <Typography
+              variant="h4"
+              component="span"
+              color="primary"
+              sx={{ ml: 1.5 }}
+            >
+              Winner
+            </Typography>
+            <Typography variant="h4" component="span" sx={{ ml: 1.5 }}>
+              will Receive
+            </Typography>
+          </Box>
+          <Box textAlign="center" marginBottom="56px">
+            <Image src={"/images/divider.svg"} width={93} height={3} />
+          </Box>
+          <Box sx={{ display: "flex", gap: "60px" }}>
+            <StyledCard sx={{ flex: 1 }}>
+              <CardActionArea
+                sx={{ display: "flex", justifyContent: "start", p: "16px" }}
+              >
+                <Image
+                  src={"/images/CosmicSignatureNFT.png"}
+                  width={88}
+                  height={88}
+                />
+                <GradientText variant="h5" marginLeft="16px">
+                  1 Cosmic Signature NFT
+                </GradientText>
+              </CardActionArea>
+            </StyledCard>
+            <StyledCard sx={{ flex: 1 }}>
+              <CardActionArea
+                sx={{ display: "flex", justifyContent: "start", p: "16px" }}
+              >
+                <Image src={"/images/Ethereum.png"} width={88} height={88} />
+                <GradientText variant="h5" marginLeft="16px">
+                  1 Cosmic Signature NFT
+                </GradientText>
+              </CardActionArea>
+            </StyledCard>
+          </Box>
+        </Box>
+
+        <Grid container spacing={2} marginTop="138px">
+          <Grid item xs={4}>
+            <StyledCard>
+              <CardActionArea>
+                <NFTImage image="https://randomwalknft.s3.us-east-2.amazonaws.com/000496_black_thumb.jpg" />
+              </CardActionArea>
+              <Box
+                sx={{
+                  display: "flex",
+                  position: "absolute",
+                  inset: "16px",
+                  justifyContent: "space-between",
+                }}
+              >
+                <Typography variant="caption">#000176</Typography>
+                <Typography color="primary">Donated</Typography>
+              </Box>
+            </StyledCard>
+          </Grid>
+          <Grid item xs={4}>
+            <StyledCard>
+              <CardActionArea>
+                <NFTImage image="https://randomwalknft.s3.us-east-2.amazonaws.com/000496_black_thumb.jpg" />
+              </CardActionArea>
+              <Box
+                sx={{
+                  display: "flex",
+                  position: "absolute",
+                  inset: "16px",
+                  justifyContent: "space-between",
+                }}
+              >
+                <Typography variant="caption">#000176</Typography>
+                <Typography color="primary">Donated</Typography>
+              </Box>
+            </StyledCard>
+          </Grid>
+          <Grid item xs={4}>
+            <StyledCard>
+              <CardActionArea>
+                <NFTImage image="https://randomwalknft.s3.us-east-2.amazonaws.com/000496_black_thumb.jpg" />
+              </CardActionArea>
+              <Box
+                sx={{
+                  display: "flex",
+                  position: "absolute",
+                  inset: "16px",
+                  justifyContent: "space-between",
+                }}
+              >
+                <Typography variant="caption">#000176</Typography>
+                <Typography color="primary">Donated</Typography>
+              </Box>
+            </StyledCard>
+          </Grid>
+        </Grid>
+
+        <Box mt="120px">
+          <Box display="flex" alignItems="center" flexWrap="wrap">
+            <Typography variant="h6" component="span">
+              CURRENT ROUND
+            </Typography>
+            <Typography
+              variant="h6"
+              component="span"
+              color="primary"
+              sx={{ ml: 1.5 }}
+            >
+              BID HISTORY
+            </Typography>
+          </Box>
+          <BiddingHistory
+            curPage={page}
+            biddingHistory={biddingHistory}
+            totalCount={totalCount}
+          />
+        </Box>
       </MainWrapper>
+
+      <Box
+        sx={{
+          backgroundColor: "#101441",
+        }}
+      >
+        <Container sx={{ padding: "80px 0 150px" }}>
+          <Box
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            flexWrap="wrap"
+          >
+            <Typography variant="h4" component="span">
+              Latest NFT's
+            </Typography>
+          </Box>
+          <Box textAlign="center" marginBottom="56px">
+            <Image src={"/images/divider.svg"} width={93} height={3} />
+          </Box>
+
+          <Grid container spacing={2} marginTop="58px">
+            <Grid item xs={4} sx={{ position: "relative" }}>
+              <StyledCard>
+                <CardActionArea>
+                  <NFTImage image="https://randomwalknft.s3.us-east-2.amazonaws.com/000496_black_thumb.jpg" />
+                </CardActionArea>
+              </StyledCard>
+              <Box
+                sx={{
+                  display: "flex",
+                  position: "absolute",
+                  top: "32px",
+                  left: "32px",
+                  right: "16px",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
+                <Box>
+                  <Typography variant="caption" component="p">
+                    #000176
+                  </Typography>
+                  <Box sx={{ display: "flex" }}>
+                    <Image
+                      src={"/images/Ethereum_small.svg"}
+                      width={16}
+                      height={16}
+                    />
+                    <Typography variant="caption" color="primary" component="p">
+                      3.2 NFT
+                    </Typography>
+                  </Box>
+                </Box>
+                <Button
+                  variant="contained"
+                  endIcon={<ArrowForward />}
+                  sx={{ width: "140px" }}
+                >
+                  Bid Now
+                </Button>
+              </Box>
+            </Grid>
+            <Grid item xs={4} sx={{ position: "relative" }}>
+              <StyledCard>
+                <CardActionArea>
+                  <NFTImage image="https://randomwalknft.s3.us-east-2.amazonaws.com/000496_black_thumb.jpg" />
+                </CardActionArea>
+              </StyledCard>
+              <Box
+                sx={{
+                  display: "flex",
+                  position: "absolute",
+                  top: "32px",
+                  left: "32px",
+                  right: "16px",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
+                <Box>
+                  <Typography variant="caption" component="p">
+                    #000176
+                  </Typography>
+                  <Box sx={{ display: "flex" }}>
+                    <Image
+                      src={"/images/Ethereum_small.svg"}
+                      width={16}
+                      height={16}
+                    />
+                    <Typography variant="caption" color="primary" component="p">
+                      3.2 NFT
+                    </Typography>
+                  </Box>
+                </Box>
+                <Button
+                  variant="contained"
+                  endIcon={<ArrowForward />}
+                  sx={{ width: "140px" }}
+                >
+                  Bid Now
+                </Button>
+              </Box>
+            </Grid>
+            <Grid item xs={4} sx={{ position: "relative" }}>
+              <StyledCard>
+                <CardActionArea>
+                  <NFTImage image="https://randomwalknft.s3.us-east-2.amazonaws.com/000496_black_thumb.jpg" />
+                </CardActionArea>
+              </StyledCard>
+              <Box
+                sx={{
+                  display: "flex",
+                  position: "absolute",
+                  top: "32px",
+                  left: "32px",
+                  right: "16px",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
+                <Box>
+                  <Typography variant="caption" component="p">
+                    #000176
+                  </Typography>
+                  <Box sx={{ display: "flex" }}>
+                    <Image
+                      src={"/images/Ethereum_small.svg"}
+                      width={16}
+                      height={16}
+                    />
+                    <Typography variant="caption" color="primary" component="p">
+                      3.2 NFT
+                    </Typography>
+                  </Box>
+                </Box>
+                <Button
+                  variant="contained"
+                  endIcon={<ArrowForward />}
+                  sx={{ width: "140px" }}
+                >
+                  Bid Now
+                </Button>
+              </Box>
+            </Grid>
+            <Grid item xs={4} sx={{ position: "relative" }}>
+              <StyledCard>
+                <CardActionArea>
+                  <NFTImage image="https://randomwalknft.s3.us-east-2.amazonaws.com/000496_black_thumb.jpg" />
+                </CardActionArea>
+              </StyledCard>
+              <Box
+                sx={{
+                  display: "flex",
+                  position: "absolute",
+                  top: "32px",
+                  left: "32px",
+                  right: "16px",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
+                <Box>
+                  <Typography variant="caption" component="p">
+                    #000176
+                  </Typography>
+                  <Box sx={{ display: "flex" }}>
+                    <Image
+                      src={"/images/Ethereum_small.svg"}
+                      width={16}
+                      height={16}
+                    />
+                    <Typography variant="caption" color="primary" component="p">
+                      3.2 NFT
+                    </Typography>
+                  </Box>
+                </Box>
+                <Button
+                  variant="contained"
+                  endIcon={<ArrowForward />}
+                  sx={{ width: "140px" }}
+                >
+                  Bid Now
+                </Button>
+              </Box>
+            </Grid>
+            <Grid item xs={4} sx={{ position: "relative" }}>
+              <StyledCard>
+                <CardActionArea>
+                  <NFTImage image="https://randomwalknft.s3.us-east-2.amazonaws.com/000496_black_thumb.jpg" />
+                </CardActionArea>
+              </StyledCard>
+              <Box
+                sx={{
+                  display: "flex",
+                  position: "absolute",
+                  top: "32px",
+                  left: "32px",
+                  right: "16px",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
+                <Box>
+                  <Typography variant="caption" component="p">
+                    #000176
+                  </Typography>
+                  <Box sx={{ display: "flex" }}>
+                    <Image
+                      src={"/images/Ethereum_small.svg"}
+                      width={16}
+                      height={16}
+                    />
+                    <Typography variant="caption" color="primary" component="p">
+                      3.2 NFT
+                    </Typography>
+                  </Box>
+                </Box>
+                <Button
+                  variant="contained"
+                  endIcon={<ArrowForward />}
+                  sx={{ width: "140px" }}
+                >
+                  Bid Now
+                </Button>
+              </Box>
+            </Grid>
+            <Grid item xs={4} sx={{ position: "relative" }}>
+              <StyledCard>
+                <CardActionArea>
+                  <NFTImage image="https://randomwalknft.s3.us-east-2.amazonaws.com/000496_black_thumb.jpg" />
+                </CardActionArea>
+              </StyledCard>
+              <Box
+                sx={{
+                  display: "flex",
+                  position: "absolute",
+                  top: "32px",
+                  left: "32px",
+                  right: "16px",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
+                <Box>
+                  <Typography variant="caption" component="p">
+                    #000176
+                  </Typography>
+                  <Box sx={{ display: "flex" }}>
+                    <Image
+                      src={"/images/Ethereum_small.svg"}
+                      width={16}
+                      height={16}
+                    />
+                    <Typography variant="caption" color="primary" component="p">
+                      3.2 NFT
+                    </Typography>
+                  </Box>
+                </Box>
+                <Button
+                  variant="contained"
+                  endIcon={<ArrowForward />}
+                  sx={{ width: "140px" }}
+                >
+                  Bid Now
+                </Button>
+              </Box>
+            </Grid>
+          </Grid>
+        </Container>
+      </Box>
+
+      <FAQ />
     </>
   );
 };
@@ -303,7 +742,3 @@ export async function getServerSideProps(context) {
 }
 
 export default NewHome;
-
-// Need Cosmic Signature NFT settings Dialog
-
-// Bid with RWLK nft and donate Dialog

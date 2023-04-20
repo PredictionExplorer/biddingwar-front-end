@@ -1,7 +1,6 @@
 import React, { useState } from "react";
-
-import { Box, Typography, AccordionSummary } from "@mui/material";
-
+import Image from "next/image";
+import { Box, Typography, AccordionSummary, Container } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import { FaqAccordion, FaqAccordionDetails, QuestionIcon } from "./styled";
@@ -77,10 +76,13 @@ const FAQ = () => {
   };
 
   return (
-    <>
-      <Typography variant="h4" color="secondary" textAlign="center" mt="90px">
+    <Container sx={{ padding: "90px 0 80px" }}>
+      <Typography variant="h4" textAlign="center">
         FAQ'S
       </Typography>
+      <Box textAlign="center" marginBottom="56px">
+        <Image src={"/images/divider.svg"} width={93} height={3} />
+      </Box>
       <Box mt={4}>
         {items.map(({ summary, detail }, i) => (
           <FaqAccordion
@@ -117,7 +119,7 @@ const FAQ = () => {
           </FaqAccordion>
         ))}
       </Box>
-    </>
+    </Container>
   );
 };
 

@@ -16,6 +16,8 @@ import {
   TableCell,
   TableHead,
   AccordionDetails,
+  TableRow,
+  Typography,
 } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import { isMobile } from 'react-device-detect'
@@ -26,6 +28,7 @@ export const StyledLink = styled(Link)({
 })
 
 export const StyledCard = styled(Card)({
+  position: "relative",
   background: "transparent",
   boxShadow: "none",
   button: {
@@ -34,7 +37,7 @@ export const StyledCard = styled(Card)({
     "--border": "1px",
     "--radius": "16px",
     "--t": 0,
-    "--path": "0 0px,20px 0,100% 0,100% calc(100% - 80px),calc(100% - 150px) 100%,0 100%",
+    "--path": "0 0px,20px 0,100% 0,100% 80%,70% 100%,0 100%",
     "-webkit-mask": "paint(rounded-shape)",
     background: "transparent",
     boxShadow: "0px 2px 1px -1px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 1px 3px 0px rgba(0,0,0,0.12)",
@@ -61,6 +64,12 @@ export const TablePrimaryHead = styled(TableHead)({
 
 export const TablePrimaryCell = styled(TableCell)({
   fontSize: 14,
+  color: "rgba(255, 255, 255, 0.68)",
+  borderBottom: 0
+})
+
+export const TablePrimaryRow = styled(TableRow)({
+  border: "1px solid rgba(255, 255, 255, 0.06)"
 })
 
 export const NavLink = styled(StyledLink)({
@@ -252,3 +261,9 @@ export const SectionWrapper = styled(Box)(({ theme }) => ({
     paddingBottom: theme.spacing(4),
   },
 }))
+
+export const GradientText = styled(Typography)({
+  background: "-webkit-linear-gradient(117.76deg, #35C9FF 3.35%, #1D9BEF 3.35%, #AC56FF 82.8%)",
+  "-webkit-background-clip": "text",
+  "-webkit-text-fill-color": "transparent"
+})
