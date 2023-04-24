@@ -23,7 +23,7 @@ const theme = createTheme({
     },
   },
   typography: {
-    fontFamily: "Kelson Sans",
+    fontFamily: "Inter",
     fontSize: 16,
   },
   components: {
@@ -41,20 +41,27 @@ const theme = createTheme({
     MuiTypography: {
       styleOverrides: {
         root: {
-          fontFamily: "Kelson Sans",
           fontSize: 16,
         },
         h4: {
+          fontFamily: "ClashDisplay-Variable",
+          fontWeight: 600,
           fontSize: 45,
         },
         h5: {
+          fontFamily: "ClashDisplay-Variable",
+          fontWeight: 600,
           fontSize: 29,
         },
         h6: {
+          fontFamily: "ClashDisplay-Variable",
+          fontWeight: 600,
           fontSize: 21,
         },
         subtitle1: {
+          fontFamily: "ClashDisplay-Variable",
           fontSize: 20,
+          fontWeight: 500,
         },
         caption: {
           fontSize: 14,
