@@ -217,7 +217,7 @@ export const NFTCheckMark = styled('div')({
 
 export const NFTInfoWrapper = styled('div')({
   position: 'absolute',
-  top: 10,
+  top: 8,
   right: 12,
 })
 

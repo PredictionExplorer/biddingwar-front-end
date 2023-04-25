@@ -98,7 +98,6 @@ export default class MyDocument extends Document {
                           else Radius.push(r);
                           
                           p = cc(p[0], p[1]);
-                          console.log(p)
                           Ppoints.push([p[0], p[1]]);
                           var pj = points[j].trim().split(/(?!\\(.*)\\s(?![^(]*?\\))/g);
                           pj = cc(pj[0], pj[1]);

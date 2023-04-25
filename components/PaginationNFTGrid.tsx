@@ -1,8 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { useRouter } from "next/router";
-import { Grid, Box, CircularProgress, Typography } from "@mui/material";
+import Image from "next/image";
+import {
+  Grid,
+  Box,
+  CircularProgress,
+  Typography,
+  TextField,
+  InputAdornment,
+} from "@mui/material";
 import Pagination from "@mui/material/Pagination";
-import NFT from "./NFT";
+import RandomWalkNFT from "./RandomWalkNFT";
 
 const PaginationNFTGrid = ({
   loading,
@@ -11,26 +18,38 @@ const PaginationNFTGrid = ({
   setSelectedToken,
 }) => {
   const [collection, setCollection] = useState([]);
-  const [perPage] = useState(9);
+  const [perPage] = useState(6);
   const [curPage, setCurPage] = useState(1);
-  const router = useRouter();
-
-  const handleNextPage = (page) => {
-    router.query["page"] = page;
-    router.push({ pathname: router.pathname, query: router.query });
-  };
+  const [searchId, setSearchId] = useState("");
 
   useEffect(() => {
-    setCollection(data);
-  }, [data]);
-
-  useEffect(() => {
-    const page = parseInt(router.query["page"] as string) || 1;
-    setCurPage(page);
-  }, [router]);
+    const filtered = data.filter(
+      (x) => searchId === "" || x === Number(searchId)
+    );
+    setCollection(filtered);
+  }, [data, searchId]);
 
   return (
     <Box mt={4}>
+      <TextField
+        placeholder="Enter NFT ID"
+        size="small"
+        fullWidth
+        sx={{ marginBottom: 2 }}
+        onChange={(e) => setSearchId(e.target.value)}
+        InputProps={{
+          endAdornment: (
+            <InputAdornment position="end">
+              <Image
+                src="/images/search.svg"
+                width={19}
+                height={19}
+                alt="search icon"
+              />
+            </InputAdornment>
+          ),
+        }}
+      />
       {loading && (
         <Box display="flex" justifyContent="center">
           <CircularProgress color="secondary" />
@@ -52,7 +71,7 @@ const PaginationNFTGrid = ({
                     setSelectedToken(index);
                   }}
                 >
-                  <NFT
+                  <RandomWalkNFT
                     tokenId={index}
                     selectable={true}
                     selected={index === selectedToken}
@@ -60,11 +79,11 @@ const PaginationNFTGrid = ({
                 </Grid>
               ))}
           </Grid>
-          <Box display="flex" justifyContent="center" mt={4}>
+          <Box mt={3}>
             <Pagination
               color="primary"
               page={curPage}
-              onChange={(_e, page) => handleNextPage(page)}
+              onChange={(_e, page) => setCurPage(page)}
               count={Math.ceil(collection.length / perPage)}
               hideNextButton
               hidePrevButton
@@ -74,7 +93,7 @@ const PaginationNFTGrid = ({
         </>
       )}
       {!loading && !data.length && (
-        <Typography variant="h6" align="center">
+        <Typography variant="body1" align="center">
           Nothing Found!
         </Typography>
       )}

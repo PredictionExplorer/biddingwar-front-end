@@ -57,6 +57,7 @@ const theme = createTheme({
           fontFamily: "ClashDisplay-Variable",
           fontWeight: 600,
           fontSize: 21,
+          lineHeight: "60px"
         },
         subtitle1: {
           fontFamily: "ClashDisplay-Variable",

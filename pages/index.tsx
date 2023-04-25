@@ -24,7 +24,7 @@ import Counter from "../components/Counter";
 import BiddingHistory from "../components/BiddingHistory";
 import api from "../services/api";
 import useBiddingWarContract from "../hooks/useBiddingWarContract";
-import { ethers } from "ethers";
+import { Contract, ethers } from "ethers";
 import useRWLKNFTContract from "../hooks/useRWLKNFTContract";
 import { useActiveWeb3React } from "../hooks/web3";
 import dayjs, { Dayjs } from "dayjs";
@@ -32,10 +32,18 @@ import { BIDDINGWAR_ADDRESS } from "../config/app";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import FAQ from "../components/FAQ";
 import { ArrowForward } from "@mui/icons-material";
+import useNFTContract from "../hooks/useNFTContract";
+import NFT_ABI from "../contracts/NFT.json";
+import PaginationNFTGrid from "../components/PaginationNFTGrid";
 
 const NewHome = ({ biddingHistory, page, totalCount, data, donatedNfts }) => {
   const [withdrawalSeconds, setWithdrawalSeconds] = useState(null);
   const [activationTime, setActivationTime] = useState(1682377200);
+  const [message, setMessage] = useState("");
+  const [nftDonateAddress, setNftDonateAddress] = useState("");
+  const [nftId, setNftId] = useState(-1);
+  const [rwlkId, setRwlkId] = useState();
+
   const [open, setOpen] = useState(false);
   const [donatedNFTOpen, setDonatedNFTOpen] = useState(false);
   const [rwlknftIds, setRwlknftIds] = useState([]);
@@ -47,9 +55,10 @@ const NewHome = ({ biddingHistory, page, totalCount, data, donatedNfts }) => {
     dayjs(Date.now() + 3600000)
   );
   const [contractOwner, setContractOwner] = useState("");
-  const { account } = useActiveWeb3React();
+  const { library, account } = useActiveWeb3React();
   const biddingWarContract = useBiddingWarContract();
   const nftRWLKContract = useRWLKNFTContract();
+
   // const handleBid = async (
   //   message: string,
   //   rwlkID?: number,
@@ -127,18 +136,18 @@ const NewHome = ({ biddingHistory, page, totalCount, data, donatedNfts }) => {
   //   setDonatedNFTOpen(true);
   // };
 
-  // const handleClaimPrize = async () => {
-  //   try {
-  //     const receipt = await biddingWarContract
-  //       .claimPrize()
-  //       .then((tx) => tx.wait());
-  //     console.log(receipt);
-  //     getData();
-  //   } catch (err) {
-  //     console.log(err);
-  //     alert(err.message);
-  //   }
-  // };
+  const onClaimPrize = async () => {
+    try {
+      const receipt = await biddingWarContract
+        .claimPrize()
+        .then((tx) => tx.wait());
+      console.log(receipt);
+      getData();
+    } catch (err) {
+      console.log(err);
+      alert(err.message);
+    }
+  };
 
   // const claimDonatedNFT = async (token) => {
   //   try {
@@ -165,6 +174,71 @@ const NewHome = ({ biddingHistory, page, totalCount, data, donatedNfts }) => {
   //     alert(err.message);
   //   }
   // };
+
+  const onBid = async () => {
+    try {
+      const bidPrice = await biddingWarContract.getBidPrice();
+      const newBidPrice = parseFloat(ethers.utils.formatEther(bidPrice)) * 1.01;
+      let receipt;
+      if (!nftDonateAddress || nftId === -1) {
+        receipt = await biddingWarContract
+          .bid(message, {
+            value: ethers.utils.parseEther(newBidPrice.toFixed(6)),
+          })
+          .then((tx) => tx.wait());
+      } else {
+        // setApprovalForAll
+        const nftDonateContract = new Contract(
+          nftDonateAddress,
+          NFT_ABI,
+          library.getSigner(account)
+        );
+        const response = await nftDonateContract
+          .setApprovalForAll(BIDDINGWAR_ADDRESS, true)
+          .then((tx) => tx.wait());
+        console.log(response);
+        receipt = await biddingWarContract
+          .bidAndDonateNFT(message, nftDonateAddress, nftId, {
+            value: ethers.utils.parseEther(newBidPrice.toFixed(6)),
+          })
+          .then((tx) => tx.wait());
+      }
+      console.log(receipt);
+      getData();
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const onBidWithRWLK = async () => {
+    try {
+      let receipt;
+      if (!bidOptions.withDonation) {
+        receipt = await biddingWarContract
+          .bidWithRWLK(rwlkId, message)
+          .then((tx) => tx.wait());
+      } else {
+        // setApprovalForAll
+        const nftDonateContract = new Contract(
+          nftDonateAddress,
+          NFT_ABI,
+          library.getSigner(account)
+        );
+        const response = await nftDonateContract
+          .setApprovalForAll(BIDDINGWAR_ADDRESS, true)
+          .then((tx) => tx.wait());
+        console.log(response);
+
+        receipt = await biddingWarContract
+          .bidWithRWLKAndDonateNFT(rwlkId, message, nftDonateAddress, nftId)
+          .then((tx) => tx.wait());
+      }
+      console.log(receipt);
+      getData();
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   const getData = async () => {
     if (biddingWarContract) {
@@ -257,12 +331,14 @@ const NewHome = ({ biddingHistory, page, totalCount, data, donatedNfts }) => {
                   size="small"
                   fullWidth
                   sx={{ marginTop: 2 }}
+                  onChange={(e) => setNftDonateAddress(e.target.value)}
                 />
                 <TextField
                   placeholder="NFT number"
                   size="small"
                   fullWidth
                   sx={{ marginTop: 2 }}
+                  onChange={(e) => setNftId(Number(e.target.value))}
                 />
                 <TextField
                   placeholder="Message (280 characters)"
@@ -271,16 +347,18 @@ const NewHome = ({ biddingHistory, page, totalCount, data, donatedNfts }) => {
                   fullWidth
                   rows={4}
                   sx={{ marginTop: 2 }}
+                  onChange={(e) => setMessage(e.target.value)}
                 />
               </AccordionDetails>
             </Accordion>
-            <Box mb={2}>
+            <Box mb={2} position="relative">
               <Box sx={{ display: "flex", mt: "45px" }}>
                 <Button
                   variant="contained"
                   size="large"
                   endIcon={<ArrowForward />}
                   sx={{ width: "33%", marginRight: "24px" }}
+                  onClick={onBid}
                 >
                   Bid Now
                 </Button>
@@ -289,6 +367,7 @@ const NewHome = ({ biddingHistory, page, totalCount, data, donatedNfts }) => {
                   size="large"
                   endIcon={<ArrowForward />}
                   sx={{ flex: 1 }}
+                  onClick={onBidWithRWLK}
                 >
                   Bid with Random Walk NFT
                 </Button>
@@ -298,9 +377,34 @@ const NewHome = ({ biddingHistory, page, totalCount, data, donatedNfts }) => {
                 size="large"
                 endIcon={<ArrowForward />}
                 sx={{ width: "33%", mt: "20px" }}
+                onClick={onClaimPrize}
               >
                 Claim Prize
               </Button>
+              {/* Random Walk NFT list */}
+              <Box
+                sx={{
+                  border: "1px solid rgba(255, 255, 255, 0.09)",
+                  borderRadius: "5px",
+                  background: "#101441",
+                  padding: "24px",
+                  position: "absolute",
+                  zIndex: 1,
+                  top: "64px",
+                }}
+              >
+                <Typography variant="h6">Random Walk NFT Gallery</Typography>
+                <Typography variant="body2">
+                  If you own some RandomWalkNFTs, you can use them to bid for
+                  free! Each NFT can be used only once!
+                </Typography>
+                <PaginationNFTGrid
+                  loading={false}
+                  data={[0, 1, 2, 3, 4, 6, 7, 8, 9]}
+                  selectedToken={rwlkId}
+                  setSelectedToken={setRwlkId}
+                />
+              </Box>
             </Box>
             <Typography variant="body2">
               When you bid, you will get 100 tokens as a reward. These tokens
@@ -332,7 +436,12 @@ const NewHome = ({ biddingHistory, page, totalCount, data, donatedNfts }) => {
             </Typography>
           </Box>
           <Box textAlign="center" marginBottom="56px">
-            <Image src={"/images/divider.svg"} width={93} height={3} alt="divider" />
+            <Image
+              src={"/images/divider.svg"}
+              width={93}
+              height={3}
+              alt="divider"
+            />
           </Box>
           <Box sx={{ display: "flex", gap: "60px" }}>
             <StyledCard sx={{ flex: 1 }}>
@@ -354,7 +463,12 @@ const NewHome = ({ biddingHistory, page, totalCount, data, donatedNfts }) => {
               <CardActionArea
                 sx={{ display: "flex", justifyContent: "start", p: "16px" }}
               >
-                <Image src={"/images/Ethereum.png"} width={88} height={88} alt="cosmic signture nft" />
+                <Image
+                  src={"/images/Ethereum.png"}
+                  width={88}
+                  height={88}
+                  alt="cosmic signture nft"
+                />
                 <GradientText variant="h5" marginLeft="16px">
                   1 Cosmic Signature NFT
                 </GradientText>
@@ -459,7 +573,12 @@ const NewHome = ({ biddingHistory, page, totalCount, data, donatedNfts }) => {
             </Typography>
           </Box>
           <Box textAlign="center" marginBottom="56px">
-            <Image src={"/images/divider.svg"} width={93} height={3} alt="divider" />
+            <Image
+              src={"/images/divider.svg"}
+              width={93}
+              height={3}
+              alt="divider"
+            />
           </Box>
 
           <Grid container spacing={2} marginTop="58px">
