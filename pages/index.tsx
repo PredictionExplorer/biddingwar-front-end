@@ -38,14 +38,13 @@ import PaginationNFTGrid from "../components/PaginationNFTGrid";
 
 const NewHome = ({ biddingHistory, page, totalCount, data, donatedNfts }) => {
   const [withdrawalSeconds, setWithdrawalSeconds] = useState(null);
-  const [activationTime, setActivationTime] = useState(1682377200);
+  const [activationTime, setActivationTime] = useState(1702377200);
   const [message, setMessage] = useState("");
   const [nftDonateAddress, setNftDonateAddress] = useState("");
   const [nftId, setNftId] = useState(-1);
-  const [rwlkId, setRwlkId] = useState();
+  const [rwlkId, setRwlkId] = useState(-1);
+  const [galleryVisibility, setGalleryVisibility] = useState(false);
 
-  const [open, setOpen] = useState(false);
-  const [donatedNFTOpen, setDonatedNFTOpen] = useState(false);
   const [rwlknftIds, setRwlknftIds] = useState([]);
   const [bidOptions, setBidOptions] = useState({
     withRWLK: false,
@@ -213,7 +212,7 @@ const NewHome = ({ biddingHistory, page, totalCount, data, donatedNfts }) => {
   const onBidWithRWLK = async () => {
     try {
       let receipt;
-      if (!bidOptions.withDonation) {
+      if (!nftDonateAddress || nftId === -1) {
         receipt = await biddingWarContract
           .bidWithRWLK(rwlkId, message)
           .then((tx) => tx.wait());
@@ -265,7 +264,7 @@ const NewHome = ({ biddingHistory, page, totalCount, data, donatedNfts }) => {
   }, [biddingWarContract, nftRWLKContract, account]);
 
   if (withdrawalSeconds === null) return null;
-  if (activationTime > Date.now()) {
+  if (activationTime * 1000 > Date.now()) {
     return (
       <MainWrapper>
         <Box mb={2}>
@@ -367,7 +366,7 @@ const NewHome = ({ biddingHistory, page, totalCount, data, donatedNfts }) => {
                   size="large"
                   endIcon={<ArrowForward />}
                   sx={{ flex: 1 }}
-                  onClick={onBidWithRWLK}
+                  onClick={() => setGalleryVisibility(!galleryVisibility)}
                 >
                   Bid with Random Walk NFT
                 </Button>
@@ -392,6 +391,7 @@ const NewHome = ({ biddingHistory, page, totalCount, data, donatedNfts }) => {
                   zIndex: 1,
                   top: "64px",
                 }}
+                visibility={galleryVisibility ? "visible" : "hidden"}
               >
                 <Typography variant="h6">Random Walk NFT Gallery</Typography>
                 <Typography variant="body2">
@@ -404,12 +404,33 @@ const NewHome = ({ biddingHistory, page, totalCount, data, donatedNfts }) => {
                   selectedToken={rwlkId}
                   setSelectedToken={setRwlkId}
                 />
+                {rwlkId !== -1 && (
+                  <Button
+                    variant="outlined"
+                    size="small"
+                    sx={{ position: "absolute", bottom: "24px", right: "24px" }}
+                    onClick={onBidWithRWLK}
+                  >
+                    Done
+                  </Button>
+                )}
               </Box>
             </Box>
             <Typography variant="body2">
               When you bid, you will get 100 tokens as a reward. These tokens
               allow you to participate in the DAO.
             </Typography>
+            <Box mt={2}>
+              <Typography variant="body2" color="primary" component="span">
+                *
+              </Typography>
+              <Typography variant="body2" component="span">
+                When you bid, you are also buying a raffle ticket. 3 raffle
+                tickets will be chosen and these people will win 5% of the pot
+                each. Also, 5 additional winners will be chosen which will
+                receive a Cosmic Signature NFT.
+              </Typography>
+            </Box>
           </Box>
         </Box>
 
@@ -837,6 +858,86 @@ const NewHome = ({ biddingHistory, page, totalCount, data, donatedNfts }) => {
           </Grid>
         </Container>
       </Box>
+
+      <Container sx={{ marginTop: "70px" }}>
+        <Typography variant="h4" width={500} textAlign="center" marginX="auto">
+          Previous Round Raffle Winners
+        </Typography>
+        <Grid container spacing={2} marginTop="48px">
+          <Grid item xs={4} sx={{ position: "relative" }}>
+            <StyledCard>
+              <CardActionArea>
+                <NFTImage image="https://randomwalknft.s3.us-east-2.amazonaws.com/000496_black_thumb.jpg" />
+              </CardActionArea>
+            </StyledCard>
+            <Box mt={2}>
+              <Typography variant="body2" textAlign="center">
+                0xA867454690CA5142917165FB2dBb08ccaEb303df
+              </Typography>
+              <Box sx={{ display: "flex", justifyContent: "center" }}>
+                <Typography variant="caption" marginRight={1}>Prize Won:</Typography>
+                <Image
+                  src={"/images/Ethereum_small.svg"}
+                  width={16}
+                  height={16}
+                  alt="ethereum"
+                />
+                <Typography variant="caption" color="primary">
+                  3.2 NFT
+                </Typography>
+              </Box>
+            </Box>
+          </Grid>
+          <Grid item xs={4} sx={{ position: "relative" }}>
+            <StyledCard>
+              <CardActionArea>
+                <NFTImage image="https://randomwalknft.s3.us-east-2.amazonaws.com/000496_black_thumb.jpg" />
+              </CardActionArea>
+            </StyledCard>
+            <Box mt={2}>
+              <Typography variant="body2" textAlign="center">
+                0xA867454690CA5142917165FB2dBb08ccaEb303df
+              </Typography>
+              <Box sx={{ display: "flex", justifyContent: "center" }}>
+                <Typography variant="caption" marginRight={1}>Prize Won:</Typography>
+                <Image
+                  src={"/images/Ethereum_small.svg"}
+                  width={16}
+                  height={16}
+                  alt="ethereum"
+                />
+                <Typography variant="caption" color="primary">
+                  7.2 NFT
+                </Typography>
+              </Box>
+            </Box>
+          </Grid>
+          <Grid item xs={4} sx={{ position: "relative" }}>
+            <StyledCard>
+              <CardActionArea>
+                <NFTImage image="https://randomwalknft.s3.us-east-2.amazonaws.com/000496_black_thumb.jpg" />
+              </CardActionArea>
+            </StyledCard>
+            <Box mt={2}>
+              <Typography variant="body2" textAlign="center">
+                0xA867454690CA5142917165FB2dBb08ccaEb303df
+              </Typography>
+              <Box sx={{ display: "flex", justifyContent: "center" }}>
+                <Typography variant="caption" marginRight={1}>Prize Won:</Typography>
+                <Image
+                  src={"/images/Ethereum_small.svg"}
+                  width={16}
+                  height={16}
+                  alt="ethereum"
+                />
+                <Typography variant="caption" color="primary">
+                  5.2 NFT
+                </Typography>
+              </Box>
+            </Box>
+          </Grid>
+        </Grid>
+      </Container>
 
       <FAQ />
     </>
