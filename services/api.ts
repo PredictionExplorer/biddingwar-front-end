@@ -4,6 +4,11 @@ const baseUrl = "https://randomwalknft-api.com/";
 const biddingwarBaseUrl = "http://170.187.142.12:9090/api/biddingwar/";
 
 class ApiService {
+  public async create(token_id: number, seed: string) {
+    const { data } = await axios.post(baseUrl + "cosmicgame_tokens", { token_id, seed });
+    return data?.task_id || -1;
+  }
+
   public async biddingHistory(page: number) {
     let perPage = 20;
     const { data } = await axios.get(biddingwarBaseUrl + "bids/0/1000000");
