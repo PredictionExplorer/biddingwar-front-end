@@ -11,7 +11,7 @@ const PaginationGrid = ({ loading, data }) => {
   const [searchId, setSearchId] = useState(null)
   const [searchResult, setSearchResult] = useState(false)
   const [collection, setCollection] = useState([])
-  const [perPage] = useState(9)
+  const [perPage] = useState(12)
   const [curPage, setCurPage] = useState(1)
 
   const router = useRouter()
@@ -99,8 +99,9 @@ const PaginationGrid = ({ loading, data }) => {
                 page={curPage}
                 onChange={(e, page) => handleNextPage(page)}
                 count={Math.ceil(collection.length / perPage)}
-                showFirstButton
-                showLastButton
+                hideNextButton
+                hidePrevButton
+                shape="rounded"
               />
             </Box>
           )}

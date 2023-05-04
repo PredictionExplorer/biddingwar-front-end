@@ -12,7 +12,7 @@ import {
   Typography,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import PaginationNFTGrid from "./PaginationNFTGrid";
+import PaginationNFTGrid from "./PaginationRWLKGrid";
 import useNFTContract from "../hooks/useNFTContract";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({

@@ -217,8 +217,8 @@ export const NFTCheckMark = styled('div')({
 
 export const NFTInfoWrapper = styled('div')({
   position: 'absolute',
-  top: 8,
-  right: 12,
+  top: 16,
+  left: 20,
 })
 
 export const SearchBox = styled(Box)(({ theme }) => ({

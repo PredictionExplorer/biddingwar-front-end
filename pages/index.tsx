@@ -30,7 +30,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import FAQ from "../components/FAQ";
 import { ArrowForward } from "@mui/icons-material";
 import NFT_ABI from "../contracts/NFT.json";
-import PaginationNFTGrid from "../components/PaginationNFTGrid";
+import PaginationRWLKGrid from "../components/PaginationRWLKGrid";
 import useCosmicSignatureContract from "../hooks/useCosmicSignatureContract";
 
 const NewHome = ({ biddingHistory, page, totalCount, data, donatedNfts }) => {
@@ -60,7 +60,7 @@ const NewHome = ({ biddingHistory, page, totalCount, data, donatedNfts }) => {
       console.log(receipt);
       const token_id = receipt.events[0].args[2].toNumber();
       const seed = await cosmicSignatureContract.seeds(token_id);
-      const task_id = await api.create(token_id, seed);
+      await api.create(token_id, seed);
       getData();
     } catch (err) {
       console.log(err);
@@ -292,7 +292,7 @@ const NewHome = ({ biddingHistory, page, totalCount, data, donatedNfts }) => {
                   If you own some RandomWalkNFTs, you can use them to bid for
                   free! Each NFT can be used only once!
                 </Typography>
-                <PaginationNFTGrid
+                <PaginationRWLKGrid
                   loading={false}
                   data={[0, 1, 2, 3, 4, 6, 7, 8, 9]}
                   selectedToken={rwlkId}

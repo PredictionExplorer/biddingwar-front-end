@@ -48,7 +48,7 @@ const Gallery = () => {
   return (
     <>
       <Head>
-        <title>Gallery | Bidding War</title>
+        <title>Gallery | Cosmic Signature NFT</title>
         <meta name="description" content="" />
       </Head>
       <MainWrapper>
@@ -58,8 +58,12 @@ const Gallery = () => {
           alignItems="center"
           flexWrap="wrap"
         >
+          <Typography variant="h4" component="span" color="primary">
+            CosmicSignature
+          </Typography>
+          &nbsp;
           <Typography variant="h4" component="span">
-            BIDDING WAR GALLERY
+            NFT Gallery
           </Typography>
         </Box>
         {address && (

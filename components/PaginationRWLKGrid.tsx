@@ -11,7 +11,7 @@ import {
 import Pagination from "@mui/material/Pagination";
 import RandomWalkNFT from "./RandomWalkNFT";
 
-const PaginationNFTGrid = ({
+const PaginationRWLKGrid = ({
   loading,
   data,
   selectedToken,
@@ -101,4 +101,4 @@ const PaginationNFTGrid = ({
   );
 };
 
-export default PaginationNFTGrid;
+export default PaginationRWLKGrid;

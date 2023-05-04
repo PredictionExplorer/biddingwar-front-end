@@ -4,7 +4,6 @@ import { Typography, CardActionArea, Card } from "@mui/material";
 import { useNFT } from "../hooks/useNFT";
 import { formatId } from "../utils";
 import { NFTImage, NFTSkeleton, NFTInfoWrapper, NFTCheckMark } from "./styled";
-import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 
 const RandomWalkNFT = ({ tokenId, selectable = false, selected = false }) => {
   const nft = useNFT(tokenId);
