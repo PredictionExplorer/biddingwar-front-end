@@ -25,7 +25,7 @@ import useRWLKNFTContract from "../hooks/useRWLKNFTContract";
 import { useActiveWeb3React } from "../hooks/web3";
 import { formatId } from "../utils";
 import { StyledCard, SectionWrapper, NFTImage, NFTInfoWrapper } from "./styled";
-import { ExpandLess, ExpandMore } from "@mui/icons-material";
+import { ArrowBack, ArrowForward, ExpandLess, ExpandMore } from "@mui/icons-material";
 
 const NFTTrait = ({ nft }) => {
   const {
@@ -39,14 +39,12 @@ const NFTTrait = ({ nft }) => {
   const [open, setOpen] = useState(false);
   const [imageOpen, setImageOpen] = useState(false);
   const [videoPath, setVideoPath] = useState(null);
-  const [tokenName, setTokenName] = useState(name);
   const [address, setAddress] = useState("");
-  const [accountTokenIds, setAccountTokenIds] = useState([]);
   const [realOwner, setRealOwner] = useState("");
   const [anchorEl, setAnchorEl] = useState(null);
   const router = useRouter();
   const nftContract = useRWLKNFTContract();
-  const { account, library } = useActiveWeb3React();
+  const { account } = useActiveWeb3React();
 
   const handlePlay = (videoPath) => {
     fetch(videoPath).then((res) => {
@@ -71,13 +69,8 @@ const NFTTrait = ({ nft }) => {
     }
   };
 
-  const handleSetTokenName = async () => {
-    try {
-      await nftContract.setTokenName(id, tokenName).then((tx) => tx.wait());
-      router.push("/my-nfts");
-    } catch (err) {
-      alert(err.data ? err.data.message : err.message);
-    }
+  const handleClaimPrize = () => {
+
   };
 
   const handlePrev = () => router.push(`/detail/${Math.max(id - 1, 0)}`);
@@ -85,20 +78,6 @@ const NFTTrait = ({ nft }) => {
   const handleNext = async () => {
     const totalSupply = await nftContract.totalSupply();
     router.push(`/detail/${Math.min(id + 1, totalSupply.toNumber() - 1)}`);
-  };
-
-  const handlePrevInWallet = () => {
-    const index = accountTokenIds.indexOf(id);
-    router.push(`/detail/${accountTokenIds[Math.max(index - 1, 0)]}`);
-  };
-
-  const handleNextInWallet = async () => {
-    const index = accountTokenIds.indexOf(id);
-    router.push(
-      `/detail/${
-        accountTokenIds[Math.min(index + 1, accountTokenIds.length - 1)]
-      }`
-    );
   };
 
   const handleMenuOpen = (e) => {
@@ -151,16 +130,6 @@ const NFTTrait = ({ nft }) => {
     }
   }, [black_triple_video_url]);
 
-  useEffect(() => {
-    const getAccountTokenIds = async () => {
-      const tokenIds = await nftContract.walletOfOwner(account);
-      setAccountTokenIds(tokenIds.map((tokenId) => tokenId.toNumber()));
-    };
-    if (account) {
-      getAccountTokenIds();
-    }
-  }, [account, library, nftContract]);
-
   return (
     <Container>
       <SectionWrapper>
@@ -183,18 +152,11 @@ const NFTTrait = ({ nft }) => {
               </CardActionArea>
             </StyledCard>
             <Box mt={2}>
-              <NFTVideo
-                image_thumb={black_image_thumb_url}
-                onClick={() => handlePlay(black_triple_video_url)}
-              />
-            </Box>
-            <Box mt={2}>
               <Grid container spacing={2}>
                 <Grid item xs={4}>
                   <Button
-                    variant="outlined"
-                    color="primary"
-                    style={{ width: "100%" }}
+                    variant="text"
+                    fullWidth
                     onClick={handleMenuOpen}
                   >
                     Copy link
@@ -230,8 +192,9 @@ const NFTTrait = ({ nft }) => {
                 <Grid item xs={4}>
                   <Button
                     variant="outlined"
-                    color="primary"
-                    style={{ width: "100%" }}
+                    color="info"
+                    fullWidth
+                    startIcon={<ArrowBack />}
                     onClick={handlePrev}
                   >
                     Prev
@@ -239,9 +202,10 @@ const NFTTrait = ({ nft }) => {
                 </Grid>
                 <Grid item xs={4}>
                   <Button
-                    variant="outlined"
+                    variant="contained"
                     color="primary"
                     style={{ width: "100%" }}
+                    endIcon={<ArrowForward />}
                     onClick={handleNext}
                   >
                     Next
@@ -249,57 +213,34 @@ const NFTTrait = ({ nft }) => {
                 </Grid>
               </Grid>
             </Box>
-            {account === realOwner && accountTokenIds.length > 0 && (
-              <Box mt={1}>
-                <Grid container spacing={2}>
-                  <Grid item xs={6}>
-                    <Button
-                      variant="outlined"
-                      color="primary"
-                      style={{ width: "100%" }}
-                      onClick={handlePrevInWallet}
-                    >
-                      Prev In Wallet
-                    </Button>
-                  </Grid>
-                  <Grid item xs={6}>
-                    <Button
-                      variant="outlined"
-                      color="primary"
-                      style={{ width: "100%" }}
-                      onClick={handleNextInWallet}
-                    >
-                      Next In Wallet
-                    </Button>
-                  </Grid>
-                </Grid>
-              </Box>
-            )}
-            {imageOpen && (
-              <Lightbox
-                image={black_image_url}
-                onClose={() => setImageOpen(false)}
-              />
-            )}
           </Grid>
           <Grid item xs={12} sm={8} md={6}>
             {nft.tokenHistory[0]?.Record?.TimeStamp && (
-              <Box mb={3}>
-                <Typography align="left" variant="body1" color="secondary">
-                  Minted Date
+              <Box>
+                <Typography color="primary" component="span">
+                  Minted Date:
                 </Typography>
-                <Typography align="left" variant="body2" color="textPrimary">
+                &nbsp;
+                <Typography component="span">
                   {convertTimestampToDateTime(
                     nft.tokenHistory[0]?.Record?.TimeStamp
                   )}
                 </Typography>
               </Box>
             )}
-            <Box mb={3}>
-              <Typography align="left" variant="body1" color="secondary">
-                Owner
+            <Box>
+              <Typography color="primary" component="span">
+                Beauty Score:
               </Typography>
-              <Typography align="left" variant="body2" color="textPrimary">
+              &nbsp;
+              <Typography component="span">1200</Typography>
+            </Box>
+            <Box>
+              <Typography color="primary" component="span">
+                Owner:
+              </Typography>
+              &nbsp;
+              <Typography component="span">
                 <Link
                   style={{ color: "#fff" }}
                   href={`/gallery?address=${realOwner}`}
@@ -308,78 +249,68 @@ const NFTTrait = ({ nft }) => {
                 </Link>
               </Typography>
             </Box>
-            <Box mb={3}>
-              <Typography align="left" variant="body1" color="secondary">
-                Seed
+            <Box>
+              <Typography color="primary" component="span">
+                Percentage of Donation:
               </Typography>
-              <Typography align="left" variant="body2" color="textPrimary">
-                {seed}
+              &nbsp;
+              <Typography component="span">10.00%</Typography>
+            </Box>
+            <Box>
+              <Typography color="primary">ETH donated to:</Typography>
+              <Typography>
+                0xA867454690CA5142917165FB2dBb08ccaEb303df
               </Typography>
             </Box>
-            {name && (
-              <Box mb={3}>
-                <Typography align="left" variant="body1" color="secondary">
-                  Name
-                </Typography>
-                <Typography align="left" variant="body2" color="textPrimary">
-                  {name}
-                </Typography>
-              </Box>
-            )}
             <Box>
               {account === realOwner && (
                 <>
-                  <Box mb={3}>
-                    <Typography gutterBottom variant="h6" align="left">
-                      TRANSFER
-                    </Typography>
-                    <Box display="flex">
-                      <TextField
-                        variant="filled"
-                        color="secondary"
-                        placeholder="Enter address here"
-                        fullWidth
-                        size="small"
-                        value={address}
-                        onChange={(e) => setAddress(e.target.value)}
-                      />
-                      <Button
-                        color="secondary"
-                        variant="contained"
-                        onClick={handleTransfer}
-                      >
-                        Send
-                      </Button>
-                    </Box>
-                  </Box>
-                  <Box mb={3}>
-                    <Typography gutterBottom variant="h6" align="left">
-                      RENAME
-                    </Typography>
-                    <Box display="flex">
-                      <TextField
-                        variant="filled"
-                        color="secondary"
-                        placeholder="Enter token name here"
-                        value={tokenName}
-                        size="small"
-                        fullWidth
-                        onChange={(e) => setTokenName(e.target.value)}
-                      />
-                      <Button
-                        color="secondary"
-                        variant="contained"
-                        onClick={handleSetTokenName}
-                      >
-                        Update
-                      </Button>
-                    </Box>
+                  <Box display="flex" mt={3}>
+                    <TextField
+                      variant="filled"
+                      color="secondary"
+                      placeholder="Enter address here"
+                      fullWidth
+                      size="small"
+                      value={address}
+                      onChange={(e) => setAddress(e.target.value)}
+                    />
+                    <Button
+                      color="secondary"
+                      variant="contained"
+                      onClick={handleTransfer}
+                      endIcon={<ArrowForward />}
+                      sx={{ml: 1}}
+                    >
+                      Transfer
+                    </Button>
                   </Box>
                 </>
               )}
             </Box>
+
+            <Button
+              variant="outlined"
+              onClick={handleClaimPrize}
+              sx={{mt: 2}}
+              endIcon={<ArrowForward />}
+            >
+              Claim Prize
+            </Button>
           </Grid>
         </Grid>
+        <Box mt={2}>
+          <NFTVideo
+            image_thumb={black_image_thumb_url}
+            onClick={() => handlePlay(black_triple_video_url)}
+          />
+        </Box>
+        {imageOpen && (
+          <Lightbox
+            image={black_image_url}
+            onClose={() => setImageOpen(false)}
+          />
+        )}
         <ModalVideo
           channel="custom"
           url={videoPath}

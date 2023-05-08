@@ -101,11 +101,24 @@ const theme = createTheme({
             border: 0
           }
         },
+        outlinedInfo: {
+          color: "#fff",
+          border: "1px solid rgba(255, 255, 255, 0.06)",
+          "&:before": {
+            background: "rgba(255, 255, 255, 0.02)"
+          },
+        },
         outlinedSecondary: {
           color: "#15BFFD",
           "&:before": {
             background: "#15BFFD",
           },
+        },
+        text: {
+          color: "#fff",
+          border: "1px solid rgba(255, 255, 255, 0.06)",
+          background: "rgba(255, 255, 255, 0.02)",
+          borderRadius: 0
         },
         contained: {
           textTransform: "capitalize",

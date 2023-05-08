@@ -204,6 +204,25 @@ export const NFTImage = styled(CardMedia)({
   paddingTop: '64%',
 })
 
+export const NFTImageWrapper = styled(Box)({
+    position: "relative",
+    border: 0,
+    "--border": "1px",
+    "--radius": "8px",
+    "--t": 0,
+    "--path": "0 0,16px 0,100% 0,100% calc(100% - 16px),100% 100%,0 100%",
+    "-webkit-mask": "paint(rounded-shape)",
+    background: "transparent",
+    "&:before": {
+      content: '""',
+      position: "absolute",
+      inset: 0,
+      background: "linear-gradient(152.14deg, #15BFFD 9.96%, #9C37FD 100%)",
+      "--t": 1,
+      "-webkit-mask": "paint(rounded-shape)"
+    }
+})
+
 export const NFTSkeleton = styled(Skeleton)({
   width: '100%',
   paddingTop: '64%',
@@ -248,9 +267,14 @@ export const SearchButton = styled(Button)(({ theme }) => ({
 }))
 
 export const VideoCard = styled(StyledCard)({
-  border: 'none',
-  boxShadow: '0px 0px 10px #000000',
   position: 'relative',
+  background: "linear-gradient(#080B2A, #080B2A) padding-box, linear-gradient(90deg, rgba(21, 191, 253, 0) 8.19%, rgba(21, 191, 253, 0.7) 70.61%, rgba(156, 55, 253, 0.7) 100%) border-box",
+  borderRadius: "16px",
+  border: "6px solid transparent",
+  padding: "21px 16px",
+
+  ".MuiCardMedia-root": {
+  }
 })
 
 export const SectionWrapper = styled(Box)(({ theme }) => ({

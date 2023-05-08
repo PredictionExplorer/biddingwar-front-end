@@ -1,22 +1,27 @@
-import React from 'react'
-import Image from 'next/image'
+import React from "react";
+import Image from "next/image";
 
-import { VideoCard, NFTImage } from './styled'
+import { VideoCard, NFTImage, NFTImageWrapper } from "./styled";
 
 const NFTVideo = ({ image_thumb, onClick }) => (
-  <VideoCard>
-    <NFTImage image={image_thumb} style={{ opacity: 0.55 }} />
+  <VideoCard sx={{ width: "90%", margin: "80px auto" }}>
+    <NFTImageWrapper>
+      <NFTImage
+        image={image_thumb}
+        style={{ opacity: 0.55, paddingTop: "33%" }}
+      />
+    </NFTImageWrapper>
     <div
       style={{
-        position: 'absolute',
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)',
-        cursor: 'pointer',
+        position: "absolute",
+        top: "50%",
+        left: "50%",
+        transform: "translate(-50%, -50%)",
+        cursor: "pointer",
       }}
     >
       <Image
-        src={'/images/play.png'}
+        src={"/images/play.svg"}
         alt="play"
         onClick={onClick}
         width={85}
@@ -24,6 +29,6 @@ const NFTVideo = ({ image_thumb, onClick }) => (
       />
     </div>
   </VideoCard>
-)
+);
 
-export default NFTVideo
+export default NFTVideo;
