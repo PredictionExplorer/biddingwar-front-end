@@ -76,7 +76,7 @@ const FAQ = () => {
   };
 
   return (
-    <Container sx={{ padding: "90px 0 80px" }}>
+    <Box sx={{ padding: "90px 0 80px" }}>
       <Typography variant="h4" textAlign="center">
         FAQ&#39;S
       </Typography>
@@ -119,7 +119,7 @@ const FAQ = () => {
           </FaqAccordion>
         ))}
       </Box>
-    </Container>
+    </Box>
   );
 };
 

@@ -1,11 +1,14 @@
 import { GetServerSidePropsContext } from "next";
 import { useRouter } from "next/router";
 import React from "react";
-import { Box, Alert } from "@mui/material";
+import { Box, Alert, Container, Typography } from "@mui/material";
 import Head from "next/head";
 import NFTTrait from "../../components/NFTTrait";
 import { MainWrapper } from "../../components/styled";
 import api from "../../services/api";
+import Prize from "../../components/Prize";
+import Winners from "../../components/Winners";
+import BiddingHistory from "../../components/BiddingHistory";
 
 const Detail = ({ nft }) => {
   const router = useRouter();
@@ -33,6 +36,25 @@ const Detail = ({ nft }) => {
           </Box>
         )}
         <NFTTrait nft={nft} />
+        <Box sx={{ background: "#101441", padding: "80px 0" }}>
+          <Container>
+            <Box display="flex" alignItems="center" flexWrap="wrap">
+              <Typography
+                variant="h6"
+                component="span"
+                color="primary"
+                sx={{ ml: 1.5 }}
+              >
+                BID HISTORY
+              </Typography>
+            </Box>
+            <BiddingHistory curPage={0} biddingHistory={[]} totalCount={0} />
+          </Container>
+        </Box>
+        <Container>
+          <Prize />
+          <Winners />
+        </Container>
       </MainWrapper>
     </>
   );
