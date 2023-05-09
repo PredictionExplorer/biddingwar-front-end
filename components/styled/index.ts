@@ -37,7 +37,7 @@ export const StyledCard = styled(Card)({
     "--border": "1px",
     "--radius": "16px",
     "--t": 0,
-    "--path": "0 0px,20px 0,100% 0,100% 80%,70% 100%,0 100%",
+    "--path": "0 0px,32px 0,100% 0,100% 80%,70% 100%,0 100%",
     "-webkit-mask": "paint(rounded-shape)",
     background: "transparent",
     boxShadow: "0px 2px 1px -1px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 1px 3px 0px rgba(0,0,0,0.12)",
@@ -287,7 +287,26 @@ export const SectionWrapper = styled(Box)(({ theme }) => ({
 }))
 
 export const GradientText = styled(Typography)({
-  background: "-webkit-linear-gradient(117.76deg, #35C9FF 3.35%, #1D9BEF 3.35%, #AC56FF 82.8%)",
+  background: "linear-gradient(117.76deg, #35C9FF 3.35%, #1D9BEF 3.35%, #AC56FF 82.8%)",
   "-webkit-background-clip": "text",
   "-webkit-text-fill-color": "transparent"
+})
+
+export const GradientBorder = styled(Box)({
+  position: "relative",
+  border: 0,
+  "--border": "1px",
+  "--radius": "16px",
+  "--t": 0,
+  "--path": "0 0,32px 0,100% 0,100% calc(100% - 32px),100% 100%,0 100%",
+  "-webkit-mask": "paint(rounded-shape)",
+  background: "transparent",
+  "&:before": {
+    content: '""',
+    position: "absolute",
+    inset: 0,
+    background: "linear-gradient(152.14deg, rgba(21, 191, 253, 0.7) 9.96%, rgba(156, 55, 253, 0.7) 100%)",
+    "--t": 1,
+    "-webkit-mask": "paint(rounded-shape)"
+  }
 })
