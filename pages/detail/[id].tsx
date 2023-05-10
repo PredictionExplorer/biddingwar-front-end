@@ -5,7 +5,6 @@ import { Box, Alert, Container, Typography } from "@mui/material";
 import Head from "next/head";
 import NFTTrait from "../../components/NFTTrait";
 import { MainWrapper } from "../../components/styled";
-import api from "../../services/api";
 import Prize from "../../components/Prize";
 import Winners from "../../components/Winners";
 import BiddingHistory from "../../components/BiddingHistory";

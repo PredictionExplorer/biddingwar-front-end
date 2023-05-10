@@ -258,15 +258,6 @@ const NFTTrait = ({ nft }) => {
                 </>
               )}
             </Box>
-
-            <Button
-              variant="outlined"
-              onClick={handleClaimPrize}
-              sx={{ mt: 2 }}
-              endIcon={<ArrowForward />}
-            >
-              Claim Prize
-            </Button>
           </Grid>
         </Grid>
         <Box mt={2}>
