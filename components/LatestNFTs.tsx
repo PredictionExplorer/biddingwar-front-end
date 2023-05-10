@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import {
   Box,
@@ -10,8 +10,80 @@ import {
 } from "@mui/material";
 import { NFTImage, StyledCard } from "./styled";
 import { ArrowForward } from "@mui/icons-material";
+import useCosmicSignatureContract from "../hooks/useCosmicSignatureContract";
+
+const CGNFT = ({ tokenId: number }) => {
+  return (
+    <>
+      <StyledCard>
+        <CardActionArea>
+          <NFTImage image="https://randomwalknft.s3.us-east-2.amazonaws.com/000496_black_thumb.jpg" />
+        </CardActionArea>
+      </StyledCard>
+      <Box
+        sx={{
+          display: "flex",
+          position: "absolute",
+          top: "32px",
+          left: "32px",
+          right: "16px",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        <Box>
+          <Typography variant="caption" component="p">
+            #000176
+          </Typography>
+          <Box sx={{ display: "flex" }}>
+            <Image
+              src={"/images/Ethereum_small.svg"}
+              width={16}
+              height={16}
+              alt="ethereum"
+            />
+            <Typography variant="caption" color="primary" component="p">
+              3.2 NFT
+            </Typography>
+          </Box>
+        </Box>
+        <Button
+          variant="contained"
+          endIcon={<ArrowForward />}
+          sx={{ width: "140px", fontSize: 14 }}
+          size="large"
+        >
+          Place Bid
+        </Button>
+      </Box>
+    </>
+  );
+};
 
 const LatestNFTs = () => {
+  const [loading, setLoading] = useState(true);
+  const [collection, setCollection] = useState([]);
+  const contract = useCosmicSignatureContract();
+
+  useEffect(() => {
+    const getTokens = async () => {
+      try {
+        setLoading(true);
+        let tokenIds = [];
+        const balance = await contract.totalSupply();
+        tokenIds = Object.keys(new Array(balance.toNumber()).fill(0));
+        tokenIds = tokenIds.reverse().slice(0, 6);
+        setCollection(tokenIds);
+        setLoading(false);
+      } catch (err) {
+        console.log(err);
+        setLoading(false);
+      }
+    };
+
+    getTokens();
+  }, [contract]);
+
   return (
     <Box
       sx={{
@@ -37,266 +109,52 @@ const LatestNFTs = () => {
             alt="divider"
           />
         </Box>
-
         <Grid container spacing={2} marginTop="58px">
-          <Grid item xs={4} sx={{ position: "relative" }}>
-            <StyledCard>
-              <CardActionArea>
-                <NFTImage image="https://randomwalknft.s3.us-east-2.amazonaws.com/000496_black_thumb.jpg" />
-              </CardActionArea>
-            </StyledCard>
-            <Box
-              sx={{
-                display: "flex",
-                position: "absolute",
-                top: "32px",
-                left: "32px",
-                right: "16px",
-                justifyContent: "space-between",
-                alignItems: "center",
-              }}
-            >
-              <Box>
-                <Typography variant="caption" component="p">
-                  #000176
-                </Typography>
-                <Box sx={{ display: "flex" }}>
-                  <Image
-                    src={"/images/Ethereum_small.svg"}
-                    width={16}
-                    height={16}
-                    alt="ethereum"
-                  />
-                  <Typography variant="caption" color="primary" component="p">
-                    3.2 NFT
-                  </Typography>
-                </Box>
-              </Box>
-              <Button
-                variant="contained"
-                endIcon={<ArrowForward />}
-                sx={{ width: "140px", fontSize: 14 }}
-                size="large"
+          {!loading && collection.length && (
+            <Grid item xs={4} sx={{ position: "relative" }}>
+              <StyledCard>
+                <CardActionArea>
+                  <NFTImage image="https://randomwalknft.s3.us-east-2.amazonaws.com/000496_black_thumb.jpg" />
+                </CardActionArea>
+              </StyledCard>
+              <Box
+                sx={{
+                  display: "flex",
+                  position: "absolute",
+                  top: "32px",
+                  left: "32px",
+                  right: "16px",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
               >
-                Place Bid
-              </Button>
-            </Box>
-          </Grid>
-          <Grid item xs={4} sx={{ position: "relative" }}>
-            <StyledCard>
-              <CardActionArea>
-                <NFTImage image="https://randomwalknft.s3.us-east-2.amazonaws.com/000496_black_thumb.jpg" />
-              </CardActionArea>
-            </StyledCard>
-            <Box
-              sx={{
-                display: "flex",
-                position: "absolute",
-                top: "32px",
-                left: "32px",
-                right: "16px",
-                justifyContent: "space-between",
-                alignItems: "center",
-              }}
-            >
-              <Box>
-                <Typography variant="caption" component="p">
-                  #000176
-                </Typography>
-                <Box sx={{ display: "flex" }}>
-                  <Image
-                    src={"/images/Ethereum_small.svg"}
-                    width={16}
-                    height={16}
-                    alt="ethereum"
-                  />
-                  <Typography variant="caption" color="primary" component="p">
-                    3.2 NFT
+                <Box>
+                  <Typography variant="caption" component="p">
+                    #000176
                   </Typography>
+                  <Box sx={{ display: "flex" }}>
+                    <Image
+                      src={"/images/Ethereum_small.svg"}
+                      width={16}
+                      height={16}
+                      alt="ethereum"
+                    />
+                    <Typography variant="caption" color="primary" component="p">
+                      3.2 NFT
+                    </Typography>
+                  </Box>
                 </Box>
+                <Button
+                  variant="contained"
+                  endIcon={<ArrowForward />}
+                  sx={{ width: "140px", fontSize: 14 }}
+                  size="large"
+                >
+                  Place Bid
+                </Button>
               </Box>
-              <Button
-                variant="contained"
-                endIcon={<ArrowForward />}
-                sx={{ width: "140px", fontSize: 14 }}
-                size="large"
-              >
-                Place Bid
-              </Button>
-            </Box>
-          </Grid>
-          <Grid item xs={4} sx={{ position: "relative" }}>
-            <StyledCard>
-              <CardActionArea>
-                <NFTImage image="https://randomwalknft.s3.us-east-2.amazonaws.com/000496_black_thumb.jpg" />
-              </CardActionArea>
-            </StyledCard>
-            <Box
-              sx={{
-                display: "flex",
-                position: "absolute",
-                top: "32px",
-                left: "32px",
-                right: "16px",
-                justifyContent: "space-between",
-                alignItems: "center",
-              }}
-            >
-              <Box>
-                <Typography variant="caption" component="p">
-                  #000176
-                </Typography>
-                <Box sx={{ display: "flex" }}>
-                  <Image
-                    src={"/images/Ethereum_small.svg"}
-                    width={16}
-                    height={16}
-                    alt="ethereum"
-                  />
-                  <Typography variant="caption" color="primary" component="p">
-                    3.2 NFT
-                  </Typography>
-                </Box>
-              </Box>
-              <Button
-                variant="contained"
-                endIcon={<ArrowForward />}
-                sx={{ width: "140px", fontSize: 14 }}
-                size="large"
-              >
-                Place Bid
-              </Button>
-            </Box>
-          </Grid>
-          <Grid item xs={4} sx={{ position: "relative" }}>
-            <StyledCard>
-              <CardActionArea>
-                <NFTImage image="https://randomwalknft.s3.us-east-2.amazonaws.com/000496_black_thumb.jpg" />
-              </CardActionArea>
-            </StyledCard>
-            <Box
-              sx={{
-                display: "flex",
-                position: "absolute",
-                top: "32px",
-                left: "32px",
-                right: "16px",
-                justifyContent: "space-between",
-                alignItems: "center",
-              }}
-            >
-              <Box>
-                <Typography variant="caption" component="p">
-                  #000176
-                </Typography>
-                <Box sx={{ display: "flex" }}>
-                  <Image
-                    src={"/images/Ethereum_small.svg"}
-                    width={16}
-                    height={16}
-                    alt="ethereum"
-                  />
-                  <Typography variant="caption" color="primary" component="p">
-                    3.2 NFT
-                  </Typography>
-                </Box>
-              </Box>
-              <Button
-                variant="contained"
-                endIcon={<ArrowForward />}
-                sx={{ width: "140px", fontSize: 14 }}
-                size="large"
-              >
-                Place Bid
-              </Button>
-            </Box>
-          </Grid>
-          <Grid item xs={4} sx={{ position: "relative" }}>
-            <StyledCard>
-              <CardActionArea>
-                <NFTImage image="https://randomwalknft.s3.us-east-2.amazonaws.com/000496_black_thumb.jpg" />
-              </CardActionArea>
-            </StyledCard>
-            <Box
-              sx={{
-                display: "flex",
-                position: "absolute",
-                top: "32px",
-                left: "32px",
-                right: "16px",
-                justifyContent: "space-between",
-                alignItems: "center",
-              }}
-            >
-              <Box>
-                <Typography variant="caption" component="p">
-                  #000176
-                </Typography>
-                <Box sx={{ display: "flex" }}>
-                  <Image
-                    src={"/images/Ethereum_small.svg"}
-                    width={16}
-                    height={16}
-                    alt="ethereum"
-                  />
-                  <Typography variant="caption" color="primary" component="p">
-                    3.2 NFT
-                  </Typography>
-                </Box>
-              </Box>
-              <Button
-                variant="contained"
-                endIcon={<ArrowForward />}
-                sx={{ width: "140px", fontSize: 14 }}
-                size="large"
-              >
-                Place Bid
-              </Button>
-            </Box>
-          </Grid>
-          <Grid item xs={4} sx={{ position: "relative" }}>
-            <StyledCard>
-              <CardActionArea>
-                <NFTImage image="https://randomwalknft.s3.us-east-2.amazonaws.com/000496_black_thumb.jpg" />
-              </CardActionArea>
-            </StyledCard>
-            <Box
-              sx={{
-                display: "flex",
-                position: "absolute",
-                top: "32px",
-                left: "32px",
-                right: "16px",
-                justifyContent: "space-between",
-                alignItems: "center",
-              }}
-            >
-              <Box>
-                <Typography variant="caption" component="p">
-                  #000176
-                </Typography>
-                <Box sx={{ display: "flex" }}>
-                  <Image
-                    src={"/images/Ethereum_small.svg"}
-                    width={16}
-                    height={16}
-                    alt="ethereum"
-                  />
-                  <Typography variant="caption" color="primary" component="p">
-                    3.2 NFT
-                  </Typography>
-                </Box>
-              </Box>
-              <Button
-                variant="contained"
-                endIcon={<ArrowForward />}
-                sx={{ width: "140px", fontSize: 14 }}
-                size="large"
-              >
-                Place Bid
-              </Button>
-            </Box>
-          </Grid>
+            </Grid>
+          )}
         </Grid>
       </Container>
     </Box>
