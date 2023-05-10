@@ -131,7 +131,19 @@ const theme = createTheme({
             border: 0
           }
         },
-      }
+      },
+      variants: [
+        {
+          props: { variant: 'outlined', color: 'info' },
+          style: {
+            color: "#fff",
+            border: "1px solid rgba(255, 255, 255, 0.06)",
+            "&:before": {
+              background: "rgba(255, 255, 255, 0.02)"
+            },
+          },
+        },
+      ],
     },
     MuiPaginationItem: {
       styleOverrides: {
