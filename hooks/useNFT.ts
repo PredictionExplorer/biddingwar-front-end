@@ -7,37 +7,28 @@ export const useNFT = (tokenId) => {
   useEffect(() => {
     const getNFT = async () => {
       try {
-        const nft = await api.get_info(tokenId);
+        const nft = await api.get_prizeinfo(tokenId);
         const fileName = tokenId.toString().padStart(6, "0");
-        const white_image = `https://randomwalknft.s3.us-east-2.amazonaws.com/${fileName}_white.png`;
-        const white_image_thumb = `https://randomwalknft.s3.us-east-2.amazonaws.com/${fileName}_white_thumb.jpg`;
-        const white_single_video = `https://randomwalknft.s3.us-east-2.amazonaws.com/${fileName}_white_single.mp4`;
-        const white_triple_video = `https://randomwalknft.s3.us-east-2.amazonaws.com/${fileName}_white_triple.mp4`;
-        const black_image = `https://randomwalknft.s3.us-east-2.amazonaws.com/${fileName}_black.png`;
-        const black_image_thumb = `https://randomwalknft.s3.us-east-2.amazonaws.com/${fileName}_black_thumb.jpg`;
-        const black_single_video = `https://randomwalknft.s3.us-east-2.amazonaws.com/${fileName}_black_single.mp4`;
-        const black_triple_video = `https://randomwalknft.s3.us-east-2.amazonaws.com/${fileName}_black_triple.mp4`;
+        const image = `https://cosmic-game.s3.us-east-2.amazonaws.com/${fileName}.png`;
+        const video = `https://cosmic-game.s3.us-east-2.amazonaws.com/${fileName}.mp4`;
 
         setNft({
           id: parseInt(tokenId),
           name: nft.CurName,
           owner: nft.CurOwnerAddr,
-          seed: nft.SeedHex,
-          white_image,
-          white_image_thumb,
-          white_single_video,
-          white_triple_video,
-          black_image,
-          black_image_thumb,
-          black_single_video,
-          black_triple_video,
+          seed: nft.Seed,
+          amount: nft.Amount,
+          amountEth: nft.AmountEth,
+          timestamp: nft.TimeStamp,
+          image,
+          video,
         });
       } catch (err) {
         console.log(err);
       }
     };
 
-    if (tokenId != null) {
+    if (tokenId !== null) {
       getNFT();
     }
   }, [tokenId]);

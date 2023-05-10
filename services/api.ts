@@ -34,6 +34,18 @@ class ApiService {
     return data;
   }
 
+  public async get_prizeinfo_all() {
+    const { data } = await axios.get(biddingwarBaseUrl + "prizes/0/1000000");
+    return data.PrizeClaims;
+  }
+
+  public async get_prizeinfo(tokenId: number) {
+    const { data } = await axios.get(biddingwarBaseUrl + "prizes/0/1000000");
+    const prizeClaims = data.PrizeClaims;
+    return prizeClaims[tokenId];
+  }
+
+
   public async get_info(token_id: number | string) {
     const { data } = await axios.get(baseUrl + "token_info/" + token_id);
     return data;

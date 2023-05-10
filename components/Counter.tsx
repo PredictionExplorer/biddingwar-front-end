@@ -1,6 +1,6 @@
 import { Typography } from "@mui/material";
 
-import { CounterWrapper, CounterItem } from "./styled";
+import { CounterWrapper, CounterItem, GradientText, CounterItemWrapper } from "./styled";
 
 const Counter = ({ days, hours, minutes, seconds, completed }) => {
   const padZero = (x) => x.toString().padStart(2, "0");
@@ -11,35 +11,43 @@ const Counter = ({ days, hours, minutes, seconds, completed }) => {
     return (
       <CounterWrapper>
         <CounterItem>
-          <Typography align="center" component="p" variant="h4" color="primary">
+          <CounterItemWrapper>
+          <GradientText align="center" variant="h5" fontSize={31}>
             {padZero(days)}
-          </Typography>
-          <Typography align="center" variant="body1">
-            Days
+          </GradientText>
+          </CounterItemWrapper>
+          <Typography align="center" variant="subtitle1" fontSize={14}>
+            DAYS
           </Typography>
         </CounterItem>
         <CounterItem>
-          <Typography align="center" component="p" variant="h4" color="primary">
+          <CounterItemWrapper>
+          <GradientText align="center" variant="h5" fontSize={31}>
             {padZero(hours)}
-          </Typography>
-          <Typography align="center" variant="body1">
-            Hours
+          </GradientText>
+          </CounterItemWrapper>
+          <Typography align="center" variant="subtitle1" fontSize={14}>
+            HOURS
           </Typography>
         </CounterItem>
         <CounterItem>
-          <Typography align="center" component="p" variant="h4" color="primary">
+          <CounterItemWrapper>
+          <GradientText align="center" variant="h5" fontSize={31}>
             {padZero(minutes)}
-          </Typography>
-          <Typography align="center" variant="body1">
-            Minutes
+          </GradientText>
+          </CounterItemWrapper>
+          <Typography align="center" variant="subtitle1" fontSize={14}>
+            MINUTES
           </Typography>
         </CounterItem>
         <CounterItem>
-          <Typography align="center" component="p" variant="h4" color="primary">
+          <CounterItemWrapper>
+          <GradientText align="center" variant="h5" fontSize={31}>
             {padZero(seconds)}
-          </Typography>
-          <Typography align="center" variant="body1">
-            Seconds
+          </GradientText>
+          </CounterItemWrapper>
+          <Typography align="center" variant="subtitle1" fontSize={14}>
+            SECONDS
           </Typography>
         </CounterItem>
       </CounterWrapper>

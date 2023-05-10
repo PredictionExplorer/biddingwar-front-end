@@ -8,64 +8,250 @@ import { FaqAccordion, FaqAccordionDetails, QuestionIcon } from "./styled";
 const FAQ = () => {
   const items = [
     {
-      summary: "How do I mint Random Walk NFTs?",
+      summary: "What is Cosmic Signature?",
       detail:
-        "You need the <a style='color: #fff' href='https://metamask.io'>MetaMask</a> extension installed in your browser and enough ETH on Arbitrum to mint the next NFT. " +
-        "You can transfer ETH from Ethereum to Arbitrum using <a style='color: #fff' href='https://hop.exchange'>Hop</a>, " +
-        "<a style='color: #fff' href='https://bridge.arbitrum.io'>Arbitrum Bridge</a> or you can withdraw from an exchange directly to Arbitrum using <a style='color: #fff' href='https://www.layerswap.io'>LayerSwap</a>.",
+        "Cosmic Signature is an NFT project that combines generative art, an exciting bidding game, and social impact through charitable giving. It offers a unique, engaging, and socially impactful experience for the NFT community.",
     },
     {
-      summary: "How do I add Arbitrum to my MetaMask?",
+      summary: "How does the bidding game work?",
       detail:
-        "Check out this <a style='color: #fff' href='https://help.uniswap.org/en/articles/5538707-how-to-connect-to-arbitrum'>simple guide</a>.",
+        "Each round begins with a 24-hour countdown and a low initial bid price of around 0.01 ETH. Every new bid increases the price by 1% and adds an hour to the clock. If you're the last person to bid when the timer runs out, you win the main prize.",
     },
     {
-      summary: "How many Random Walk NFTs will there be?",
+      summary: "What is the main prize?",
       detail:
-        "Every time an NFT is minted, the price of the next mint increases by about 0.1%. After 5,000 NFTs are minted, the mint price would be 0.24 ETH. After 10,000 NFTs are minted, the mint price would be about 60 ETH. " +
-        "Given the exponential increase in price, it's hard to imagine more than a few thousand NFTs being minted.",
+        "The main prize is a unique Cosmic Signature NFT, 25% of the ETH pot, and any donated NFTs from other projects.",
     },
     {
-      summary: "Where does the ETH go that people paid for minting?",
+      summary: "What are Cosmic Tokens and the Cosmic DAO?",
       detail:
-        "We are doing a social experiment with it! " +
-        "After there hasn't been a mint for 30 days, the last minter can withdraw half of all the ETH spend on minting up to that point. " +
-        "The other half stays in the contract and is distributed using the same mechanism. For example, suppose Minter A is the last minter and 100 ETH has been spent minting up to that point. " +
-        "There is no mint for 30 days and Minter A withdraws 50 ETH. Minter B now mints and there is no mint for 30 days. Minter B can now withdraw 25 ETH. Note that it would take many withdrawal events " +
-        "for all the ETH in the contract to be claimed.",
+        "Every bid also earns you Cosmic Tokens, which can be used to vote in the Cosmic DAO. The DAO helps decide which beneficiary receives 10% of the pot each round and may be used for other governance decisions in the future.",
     },
     {
-      summary: "Are the contracts verified on Etherscan?",
+      summary: "How does the raffle work?",
       detail:
-        "Check out this <a style='color: #fff' href='https://arbiscan.io/address/0x895a6F444BE4ba9d124F61DF736605792B35D66b#code'>NFT Contract</a>, " +
-        "and this <a style='color: #fff' href='https://arbiscan.io/address/0x47eF85Dfb775aCE0934fBa9EEd09D22e6eC0Cc08#code'>Market Contract</a>.",
+        "Each bid doubles as a raffle ticket. There are eight raffle winners each round — three winning a portion of the pot and five receiving a newly minted Cosmic Signature NFT.",
     },
     {
-      summary: "What is the fee for using the market to buy and sell NFTs?",
-      detail: "It's free! The fee is 0%!",
+      summary: "What is the connection with RandomWalkNFT?",
+      detail:
+        "If you're a RandomWalkNFT holder, you can bid for free in Cosmic Signature, adding an extra layer of excitement and opportunity to the game.",
     },
     {
-      summary: "How are the NFT images generated?",
+      summary: "How are the NFT images created?",
       detail:
-        "When you mint, a random number (called a seed) is generated for each NFT by the smart contract. We use the seed in the Python script to generate an image and videos.",
+        "The images for the Cosmic Signature NFTs are generated based on the three-body problem in physics. We simulate the movement of three planets in space and draw the trajectories of each planet, creating beautiful and unique patterns.",
     },
     {
-      summary: "What is a Random Walk?",
+      summary: "How can I get involved?",
       detail:
-        "Imagine you are standing on a 2D plane. You can take a step in one of the 4 directions (forward, back, left, right). Imagine you decide the direction of your step randomly. " +
-        "If you do this a few million times and plot it you will you will get images that look like Random Walk NFTs.",
+        "You can participate by bidding in a round or by donating an NFT from your project. We look forward to seeing you in the Cosmic Signature community!",
     },
     {
-      summary: "How are the colors generated?",
+      summary: "How does the price increase with each bid?",
       detail:
-        "By doing a random walk in color space! At each step we modify the value of red, blue and green. This means we are actually doing a random walk in a 5 dimensional space (2 spatial dimensions and 3 color dimensions).",
+        "Each bid increases the current price by 1%. This exponential growth adds an exciting strategic element to the bidding game.",
     },
     {
-      summary: "Does the creator of the NFT get any special privileges?",
+      summary: "Who receives the 10% contribution from the pot?",
       detail:
-        "No, once the contract is deployed, nobody has any special privileges. The creator of the NFT has to buy the NFTs like everybody else, and does not get any ETH spent on minting. " +
-        "Instead, the ETH is distributed to some of the minters as described above. " +
-        "This is inspired by how Satoshi launched Bitcoin. He did not give himself any special privileges and had to mine the coin like everybody else.",
+        "10% of the pot is allocated as a contribution to a beneficiary, decided by the Cosmic DAO. This could be a charitable organization, a research group, an open-source project, or even Ethereum client developers. This is our way of contributing to and supporting the wider community.",
+    },
+    {
+      summary: "What happens to the remaining ETH in the pot after each round?",
+      detail:
+        "About half of the ETH pot is given to the winner of the round. The remaining half is carried over to the next round's pot, increasing the starting value for the next game.",
+    },
+    {
+      summary: "Can I participate if I don't own any NFTs?",
+      detail:
+        "Yes, anyone can participate in the Cosmic Signature game by placing a bid. You do not need to own an NFT to bid, but owning a RandomWalkNFT allows you to place a bid for free.",
+    },
+    {
+      summary: "How can other NFT projects donate their NFTs to the game?",
+      detail:
+        "Projects interested in donating their NFTs to the Cosmic Signature pot can get in touch with us through our website. Their NFTs will be displayed on the Cosmic Signature page for the duration of the round, providing visibility and marketing for their project.",
+    },
+    {
+      summary: "How many Cosmic Signature NFTs are minted each round?",
+      detail:
+        "Six Cosmic Signature NFTs are minted each round—one for the main prize winner and one for each of the five NFT raffle winners.",
+    },
+    {
+      summary:
+        "How can I trade or sell my Cosmic Signature NFTs or Cosmic Tokens?",
+      detail:
+        "Cosmic Signature NFTs and Cosmic Tokens are compatible with any marketplace or exchange that supports ERC721 and ERC20 tokens, respectively. This includes popular platforms like OpenSea for NFTs and Uniswap for tokens.",
+    },
+    {
+      summary: "Can I place multiple bids during a round?",
+      detail:
+        "Yes, you can place as many bids as you like during a round. Each bid increases your chances of winning and earns you more Cosmic Tokens.",
+    },
+    {
+      summary:
+        "Can I participate in the Cosmic DAO without bidding in the game?",
+      detail:
+        "Yes, you can purchase Cosmic Tokens on a supported exchange and use them to participate in the DAO. However, bidding in the game is the primary way to earn tokens.",
+    },
+    {
+      summary: "Can I donate to the pot without participating in the bidding?",
+      detail:
+        "Yes, it is possible to donate directly to the pot. While this functionality is not directly accessible on the website, our smart contract includes a method that allows for ETH donations to the pot. Please reach out to our support team for guidance if you're interested in making a donation in this way.",
+    },
+    {
+      summary: "How can I ensure that my bid has been successfully placed?",
+      detail:
+        "All successful bids will be confirmed on the blockchain. You can verify your transaction on the relevant Ethereum block explorer using your transaction hash.",
+    },
+    {
+      summary: "What happens if two bids are placed at the same time?",
+      detail:
+        "Transactions on the Ethereum blockchain are processed in the order they are received. If two bids are received at the same time, the one that is confirmed by the blockchain first will be considered the valid bid.",
+    },
+    {
+      summary: "How long does each round last?",
+      detail:
+        "Each round begins with a 24-hour countdown. However, because each bid adds an hour to the countdown, rounds may last longer than 24 hours.",
+    },
+    {
+      summary: "How is the security of the Cosmic Signature game ensured?",
+      detail:
+        "Cosmic Signature is built on the Ethereum blockchain, which provides robust security for all transactions. The smart contracts for the game have been carefully designed to ensure fairness and transparency.",
+    },
+    {
+      summary: "How can I stay updated on Cosmic Signature news and updates?",
+      detail:
+        "We recommend following our social media channels and joining our community chat for the latest news and updates.",
+    },
+    {
+      summary: "Are there any fees involved in the Cosmic Signature game?",
+      detail:
+        "Aside from the cost of your bids, the only additional cost is the transaction fee on the Arbitrum network. This fee is for processing transactions and is not controlled by Cosmic Signature. Please be aware that network fees can vary.",
+    },
+    {
+      summary: "How can I get help if I encounter problems or have questions?",
+      detail:
+        "Our community and support team are always ready to help. You can reach out to us via our community chat, social media channels, or support email.",
+    },
+    {
+      summary: "What is Arbitrum and why is Cosmic Signature deployed on it?",
+      detail:
+        "Arbitrum is a layer 2 scaling solution for Ethereum that helps to speed up transactions and reduce fees. Cosmic Signature is deployed on Arbitrum to take advantage of these benefits, providing a better user experience with faster and cheaper transactions.",
+    },
+    {
+      summary: "How do I get ETH on Arbitrum?",
+      detail:
+        "To get ETH on Arbitrum, you need to bridge it from the Ethereum mainnet. You can do this through the official Arbitrum bridge or other supported bridges. This involves sending your ETH to a special contract on Ethereum, which then mints an equivalent amount of ETH on Arbitrum. Please note that bridging assets requires gas fees on the Ethereum network and can take some time due to Ethereum block times.",
+    },
+    {
+      summary: "Can I use my existing Ethereum wallet on Arbitrum?",
+      detail:
+        "Yes, you can use your existing Ethereum wallet on Arbitrum. The same private keys are valid on both networks. However, you will need to adjust your wallet's network settings to connect to Arbitrum. Instructions for this can vary by wallet, so please refer to your wallet's specific guidance on connecting to other networks.",
+    },
+    {
+      summary: "How do I view my Cosmic Tokens and NFTs on Arbitrum?",
+      detail:
+        "You can view your Cosmic Tokens and NFTs directly on the Cosmic Signature website or in your wallet like any other ERC20 or ERC721 asset. However, to view them in your wallet, you will need to add the tokens' contract addresses manually. These addresses can be found on our website or by asking in our community chat. Always ensure that you're connected to the Arbitrum network in your wallet to view your assets correctly.",
+    },
+    {
+      summary: "Can I trade my Cosmic Tokens and NFTs on Arbitrum?",
+      detail:
+        "Yes, Cosmic Tokens and NFTs can be traded on any marketplace or exchange that supports the Arbitrum network. This includes popular platforms like Uniswap for tokens and OpenSea for NFTs. Always make sure to verify that you are interacting with the correct contract addresses when trading.",
+    },
+    {
+      summary:
+        "What controls does the team have over the Cosmic Signature game?",
+      detail:
+        'Initially, the team behind Cosmic Signature will have the ability to adjust certain parameters of the game, such as the number of hours added after each bid or the percentage of the pot that goes to the raffle winners. This control is facilitated through the smart contract\'s "Ownable" feature, which assigns control to the address that deployed the contract.',
+    },
+    {
+      summary: "Will the team always have control over the game's parameters?",
+      detail:
+        "No. Once the project is stable and functioning as intended, the developers will renounce their ownership of the contract, effectively giving up control over these parameters. This is done by calling the renounceOwnership() function in the contract.",
+    },
+    {
+      summary: 'What does it mean to "renounce ownership"?',
+      detail:
+        'Renouncing ownership is a feature of the "Ownable" smart contract. When the developers call the renounceOwnership() function, they are permanently transferring control from their address. Once this function is called, the parameters of the game become immutable and cannot be changed.',
+    },
+    {
+      summary: "Why would the team renounce ownership?",
+      detail:
+        "The team's goal is to create a fair and decentralized game. Renouncing ownership ensures that the game's rules can't be changed arbitrarily once it's up and running, adding a layer of trust and transparency for the players.",
+    },
+    {
+      summary: "Does the time added per bid always stay the same?",
+      detail:
+        "No, the time added after each bid starts at 1 hour, but it will gradually increase over time. This increment is designed to be very slow, approximately 10% to 20% per year (exponential growth).",
+    },
+    {
+      summary: "Why does the time added per bid increase over time?",
+      detail:
+        "The primary reason for this mechanism is to control the total number of Cosmic Signature NFTs that are minted. By slowing down the game, we limit the number of new NFTs being created, maintaining their exclusivity and potential value over time.",
+    },
+    {
+      summary:
+        "Does this mean that the number of Cosmic Signature NFTs is limited?",
+      detail:
+        "Yes, due to the gradual increase in time added per bid, the pace of new NFT creation slows down over time. This effectively limits the total number of Cosmic Signature NFTs, making them a limited resource in the long run.",
+    },
+    {
+      summary: "How does the increase in time per bid affect the game?",
+      detail:
+        "As the time added per bid increases, the game slows down, which means that rounds will last longer. This change is designed to be gradual and slow, ensuring a smooth game experience while also limiting the total number of Cosmic Signature NFTs.",
+    },
+    {
+      summary:
+        "What impact does limiting the number of Cosmic Signature NFTs have?",
+      detail:
+        "By limiting the total number of Cosmic Signature NFTs, we aim to maintain their exclusivity and potential value. As the time added per bid increases and the creation of new NFTs slows down, each Cosmic Signature NFT becomes a more exclusive asset. This limited supply could potentially make each NFT more valuable over time.",
+    },
+    {
+      summary: "Why was Cosmic Signature created?",
+      detail:
+        "Cosmic Signature was born out of a fascination with chaos theory and the unsolvable nature of the three-body problem. The idea of creating unique, dynamic art inspired by these principles felt intriguing and exciting. Our project is a blend of art, science, and blockchain technology.",
+    },
+    {
+      summary: "Is there a game theory element in Cosmic Signature?",
+      detail:
+        "Absolutely! We're eager to see how participants will compete with each other within the parameters of the game. It's not just about winning; it's about strategy, timing, and risk assessment. The social dynamics and game theory aspects of Cosmic Signature are some of its most interesting features.",
+    },
+    {
+      summary: "How does the Cosmic Signature team profit from this project?",
+      detail:
+        "We want to be transparent about this: our team doesn't pocket any money directly from the project. All the funds go into an immutable smart contract not controlled by us. Our interest lies in the Random Walk NFTs that we own, as we believe the success of Cosmic Signature will increase their value. That's our business interest, but our primary motivations are curiosity, creativity, and contribution to the blockchain community.",
+    },
+    {
+      summary: "Why is Cosmic Signature deployed on Arbitrum and not Ethereum?",
+      detail:
+        "Our choice to deploy on Arbitrum was strategic. We believe that in the long run, most activity on Ethereum will migrate to Layer 2 solutions like Arbitrum. This is due to the significantly lower gas fees on Arbitrum while maintaining the same level of security as Ethereum Layer 1.",
+    },
+    {
+      summary: "What makes Arbitrum as secure as Ethereum Layer 1?",
+      detail:
+        'Arbitrum is not a sidechain; it\'s a Rollup. This means that it bundles or "rolls up" multiple transfers into a single transaction, reducing the cost of transactions. But importantly, all its data and operations are still recorded on the Ethereum mainnet. This means that the security of Arbitrum is rooted in the Ethereum network, making it just as secure as Ethereum Layer 1.',
+    },
+    {
+      summary: "What makes Cosmic Signature NFTs unique?",
+      detail:
+        "Cosmic Signature NFTs are unique in that they are on-chain and self-sustaining. Each NFT is created with a randomly generated seed that's stored in the smart contract. The image and video of the NFT is produced from this seed using an open-source Rust program. The seed determines the starting positions and the number of planets displayed in the NFT, making every NFT unique and special.",
+    },
+    {
+      summary:
+        "What is the significance of generating NFTs with a random seed?",
+      detail:
+        "The seed-based creation process of Cosmic Signature NFTs ensures their long-lasting existence. Unlike other NFT projects where images are stored on centralized servers that can go down, making the NFT images unavailable, the seed for each Cosmic Signature NFT is stored on the blockchain. With our open-source Rust program, anyone can take the seed and generate the NFT image and video at any time.",
+    },
+    {
+      summary: "What if the team behind Cosmic Signature disappears?",
+      detail:
+        "Should anything happen to the team, the project is designed to be self-sustaining. Since the seeds for each NFT are stored on-chain, anyone can recreate the NFT images and videos using our open-source Rust program. This ensures the longevity and continued existence of your Cosmic Signature NFTs, irrespective of the project team's status.",
+    },
+    {
+      summary: "Can I create a competing site with the Cosmic Signature NFTs?",
+      detail:
+        "Absolutely! The open-source nature of our project allows anyone to generate the NFT images and videos based on the seeds. If you wish, you could create a competing site using the same mechanism. This open ecosystem encourages creativity and fosters a sense of community around the project.",
     },
   ];
 
@@ -81,7 +267,12 @@ const FAQ = () => {
         FAQ&#39;S
       </Typography>
       <Box textAlign="center" marginBottom="56px">
-        <Image src={"/images/divider.svg"} width={93} height={3} alt="divider" />
+        <Image
+          src={"/images/divider.svg"}
+          width={93}
+          height={3}
+          alt="divider"
+        />
       </Box>
       <Box mt={4}>
         {items.map(({ summary, detail }, i) => (

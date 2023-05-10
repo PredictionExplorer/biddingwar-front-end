@@ -144,16 +144,36 @@ export const CenterBox = styled(Box)(({ theme }) => ({
 export const CounterWrapper = styled(Box)({
   display: 'flex',
   flexDirection: isMobile ? 'column' : 'row',
-  justifyContent: isMobile ? 'center' : 'space-between',
+  justifyContent: isMobile ? 'center' : 'start',
   alignItems: 'center',
+})
+
+export const CounterItemWrapper = styled(Box)({
+  position: "relative",
+  width: "75px",
+  padding: "6px 16px",
+  margin: "0 auto 8px",
+  border: 0,
+  "--border": "1px",
+  "--radius": "4px",
+  "--t": 0,
+  "--path": "0 0,8px 0,100% 0,100% calc(100% - 14px),calc(100% - 16px) 100%,0 100%",
+  "-webkit-mask": "paint(rounded-shape)",
+  background: "transparent",
+  "&:before": {
+    content: '""',
+    position: "absolute",
+    inset: 0,
+    background: "linear-gradient(152.14deg, #15BFFD 9.96%, #9C37FD 100%)",
+    "--t": 1,
+    "-webkit-mask": "paint(rounded-shape)"
+  }
 })
 
 export const CounterItem = styled(Box)({
   width: isMobile ? '80%' : '20%',
   padding: '8px 0',
-  border: '2px solid #F4BFFF',
   boxSizing: 'border-box',
-  boxShadow: '0px 0px 10px #C676D7',
   marginBottom: isMobile ? 24 : 0,
 })
 
@@ -205,22 +225,22 @@ export const NFTImage = styled(CardMedia)({
 })
 
 export const NFTImageWrapper = styled(Box)({
-    position: "relative",
-    border: 0,
-    "--border": "1px",
-    "--radius": "8px",
-    "--t": 0,
-    "--path": "0 0,16px 0,100% 0,100% calc(100% - 16px),100% 100%,0 100%",
-    "-webkit-mask": "paint(rounded-shape)",
-    background: "transparent",
-    "&:before": {
-      content: '""',
-      position: "absolute",
-      inset: 0,
-      background: "linear-gradient(152.14deg, #15BFFD 9.96%, #9C37FD 100%)",
-      "--t": 1,
-      "-webkit-mask": "paint(rounded-shape)"
-    }
+  position: "relative",
+  border: 0,
+  "--border": "1px",
+  "--radius": "8px",
+  "--t": 0,
+  "--path": "0 0,16px 0,100% 0,100% calc(100% - 16px),100% 100%,0 100%",
+  "-webkit-mask": "paint(rounded-shape)",
+  background: "transparent",
+  "&:before": {
+    content: '""',
+    position: "absolute",
+    inset: 0,
+    background: "linear-gradient(152.14deg, #15BFFD 9.96%, #9C37FD 100%)",
+    "--t": 1,
+    "-webkit-mask": "paint(rounded-shape)"
+  }
 })
 
 export const NFTSkeleton = styled(Skeleton)({

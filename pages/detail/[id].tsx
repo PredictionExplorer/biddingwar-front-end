@@ -9,9 +9,11 @@ import api from "../../services/api";
 import Prize from "../../components/Prize";
 import Winners from "../../components/Winners";
 import BiddingHistory from "../../components/BiddingHistory";
+import { useNFT } from "../../hooks/useNFT";
 
-const Detail = ({ nft }) => {
+const Detail = ({ tokenId }) => {
   const router = useRouter();
+  const nft = useNFT(tokenId);
   if (!nft) return <></>;
 
   return (
@@ -63,9 +65,8 @@ const Detail = ({ nft }) => {
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const id = context.params!.id;
   const tokenId = Array.isArray(id) ? id[0] : id;
-  const nft = await api.get(tokenId);
   return {
-    props: { nft },
+    props: { tokenId: parseInt(tokenId) },
   };
 }
 

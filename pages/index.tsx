@@ -4,7 +4,6 @@ import {
   Button,
   Box,
   Typography,
-  Grid,
   TextField,
   CardActionArea,
   Accordion,
@@ -36,9 +35,13 @@ import useCosmicSignatureContract from "../hooks/useCosmicSignatureContract";
 import Winners from "../components/Winners";
 import Prize from "../components/Prize";
 import LatestNFTs from "../components/LatestNFTs";
+import router from "next/router";
+import Countdown from "react-countdown";
+import Counter from "../components/Counter";
 
 const NewHome = ({ biddingHistory, page, totalCount, data }) => {
   const [withdrawalSeconds, setWithdrawalSeconds] = useState(null);
+  const [countdownCompleted, setCountdownCompleted] = useState(false);
   // const [activationTime, setActivationTime] = useState(1702377200);
   const [message, setMessage] = useState("");
   const [nftDonateAddress, setNftDonateAddress] = useState("");
@@ -65,6 +68,14 @@ const NewHome = ({ biddingHistory, page, totalCount, data }) => {
       const token_id = receipt.events[0].args[2].toNumber();
       const seed = await cosmicSignatureContract.seeds(token_id);
       await api.create(token_id, seed);
+      setTimeout(() => {
+        router.push({
+          pathname: `/detail/${token_id}`,
+          query: {
+            message: "success",
+          },
+        });
+      }, 2000);
       getData();
     } catch (err) {
       console.log(err);
@@ -185,6 +196,13 @@ const NewHome = ({ biddingHistory, page, totalCount, data }) => {
           </Box>
           <Box sx={{ flex: 1 }}>
             <Typography variant="h4">Current Bid</Typography>
+            {!!(withdrawalSeconds && !countdownCompleted) && (
+              <Countdown
+                date={Date.now() + withdrawalSeconds * 1000}
+                renderer={Counter}
+                onComplete={() => setCountdownCompleted(true)}
+              />
+            )}
             <Box sx={{ display: "flex" }}>
               <Typography color="primary">BID PRICE:</Typography>
               &nbsp;

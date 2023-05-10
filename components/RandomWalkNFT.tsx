@@ -1,12 +1,12 @@
 import React from "react";
 import { Typography, CardActionArea, Card } from "@mui/material";
 
-import { useNFT } from "../hooks/useNFT";
+import { useRWLKNFT } from "../hooks/useRWLKNFT";
 import { formatId } from "../utils";
 import { NFTImage, NFTSkeleton, NFTInfoWrapper, NFTCheckMark } from "./styled";
 
 const RandomWalkNFT = ({ tokenId, selectable = false, selected = false }) => {
-  const nft = useNFT(tokenId);
+  const nft = useRWLKNFT(tokenId);
   return (
     <Card
       sx={{

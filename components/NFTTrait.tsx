@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/router";
 import {
   Box,
@@ -21,29 +21,26 @@ import ModalVideo from "react-modal-video";
 import "react-modal-video/css/modal-video.min.css";
 
 import NFTVideo from "./NFTVideo";
-import useRWLKNFTContract from "../hooks/useRWLKNFTContract";
+import useBiddingWarContract from "../hooks/useBiddingWarContract";
 import { useActiveWeb3React } from "../hooks/web3";
 import { formatId } from "../utils";
 import { StyledCard, SectionWrapper, NFTImage, NFTInfoWrapper } from "./styled";
-import { ArrowBack, ArrowForward, ExpandLess, ExpandMore } from "@mui/icons-material";
+import {
+  ArrowBack,
+  ArrowForward,
+  ExpandLess,
+  ExpandMore,
+} from "@mui/icons-material";
 
 const NFTTrait = ({ nft }) => {
-  const {
-    id,
-    name,
-    seed,
-    black_image_url,
-    black_image_thumb_url,
-    black_triple_video_url,
-  } = nft;
+  const { id, image, video, owner } = nft;
   const [open, setOpen] = useState(false);
   const [imageOpen, setImageOpen] = useState(false);
   const [videoPath, setVideoPath] = useState(null);
   const [address, setAddress] = useState("");
-  const [realOwner, setRealOwner] = useState("");
   const [anchorEl, setAnchorEl] = useState(null);
   const router = useRouter();
-  const nftContract = useRWLKNFTContract();
+  const nftContract = useBiddingWarContract();
   const { account } = useActiveWeb3React();
 
   const handlePlay = (videoPath) => {
@@ -69,9 +66,7 @@ const NFTTrait = ({ nft }) => {
     }
   };
 
-  const handleClaimPrize = () => {
-
-  };
+  const handleClaimPrize = () => {};
 
   const handlePrev = () => router.push(`/detail/${Math.max(id - 1, 0)}`);
 
@@ -111,25 +106,6 @@ const NFTTrait = ({ nft }) => {
     return result;
   };
 
-  useEffect(() => {
-    const getOwner = async () => {
-      if (nftContract) {
-        const owner = await nftContract.ownerOf(nft.id);
-        setRealOwner(owner);
-      }
-    };
-    getOwner();
-  }, [nftContract, nft]);
-
-  useEffect(() => {
-    const { hash } = location;
-    if (hash === "#black_image") {
-      setImageOpen(true);
-    } else if (hash === "#black_triple_video") {
-      handlePlay(black_triple_video_url);
-    }
-  }, [black_triple_video_url]);
-
   return (
     <Container>
       <SectionWrapper>
@@ -137,7 +113,7 @@ const NFTTrait = ({ nft }) => {
           <Grid item xs={12} sm={8} md={6}>
             <StyledCard>
               <CardActionArea onClick={() => setImageOpen(true)}>
-                <NFTImage image={black_image_thumb_url} />
+                <NFTImage image={image} />
                 <NFTInfoWrapper>
                   <Typography
                     variant="body1"
@@ -154,11 +130,7 @@ const NFTTrait = ({ nft }) => {
             <Box mt={2}>
               <Grid container spacing={2}>
                 <Grid item xs={4}>
-                  <Button
-                    variant="text"
-                    fullWidth
-                    onClick={handleMenuOpen}
-                  >
+                  <Button variant="text" fullWidth onClick={handleMenuOpen}>
                     Copy link
                     {anchorEl ? <ExpandLess /> : <ExpandMore />}
                   </Button>
@@ -178,10 +150,10 @@ const NFTTrait = ({ nft }) => {
                     open={Boolean(anchorEl)}
                     onClose={handleMenuClose}
                   >
-                    <CopyToClipboard text={black_triple_video_url}>
+                    <CopyToClipboard text={video}>
                       <MenuItem onClick={handleMenuClose}>Video</MenuItem>
                     </CopyToClipboard>
-                    <CopyToClipboard text={black_image_url}>
+                    <CopyToClipboard text={image}>
                       <MenuItem onClick={handleMenuClose}>Image</MenuItem>
                     </CopyToClipboard>
                     <CopyToClipboard text={window.location.href}>
@@ -215,16 +187,14 @@ const NFTTrait = ({ nft }) => {
             </Box>
           </Grid>
           <Grid item xs={12} sm={8} md={6}>
-            {nft.tokenHistory[0]?.Record?.TimeStamp && (
+            {nft.timestamp && (
               <Box>
                 <Typography color="primary" component="span">
                   Minted Date:
                 </Typography>
                 &nbsp;
                 <Typography component="span">
-                  {convertTimestampToDateTime(
-                    nft.tokenHistory[0]?.Record?.TimeStamp
-                  )}
+                  {convertTimestampToDateTime(nft.timestamp)}
                 </Typography>
               </Box>
             )}
@@ -243,9 +213,9 @@ const NFTTrait = ({ nft }) => {
               <Typography component="span">
                 <Link
                   style={{ color: "#fff" }}
-                  href={`/gallery?address=${realOwner}`}
+                  href={`/gallery?address=${owner}`}
                 >
-                  {realOwner}
+                  {owner}
                 </Link>
               </Typography>
             </Box>
@@ -263,7 +233,7 @@ const NFTTrait = ({ nft }) => {
               </Typography>
             </Box>
             <Box>
-              {account === realOwner && (
+              {account === owner && (
                 <>
                   <Box display="flex" mt={3}>
                     <TextField
@@ -280,7 +250,7 @@ const NFTTrait = ({ nft }) => {
                       variant="contained"
                       onClick={handleTransfer}
                       endIcon={<ArrowForward />}
-                      sx={{ml: 1}}
+                      sx={{ ml: 1 }}
                     >
                       Transfer
                     </Button>
@@ -292,7 +262,7 @@ const NFTTrait = ({ nft }) => {
             <Button
               variant="outlined"
               onClick={handleClaimPrize}
-              sx={{mt: 2}}
+              sx={{ mt: 2 }}
               endIcon={<ArrowForward />}
             >
               Claim Prize
@@ -301,15 +271,12 @@ const NFTTrait = ({ nft }) => {
         </Grid>
         <Box mt={2}>
           <NFTVideo
-            image_thumb={black_image_thumb_url}
-            onClick={() => handlePlay(black_triple_video_url)}
+            image_thumb={image}
+            onClick={() => handlePlay(video)}
           />
         </Box>
         {imageOpen && (
-          <Lightbox
-            image={black_image_url}
-            onClose={() => setImageOpen(false)}
-          />
+          <Lightbox image={image} onClose={() => setImageOpen(false)} />
         )}
         <ModalVideo
           channel="custom"

@@ -13,7 +13,7 @@ const NFT = ({ tokenId }) => {
         {!nft ? (
           <NFTSkeleton animation="wave" variant="rectangular" />
         ) : (
-          <NFTImage image={nft.black_image_thumb} />
+          <NFTImage image={nft.image} />
         )}
         {nft && (
           <NFTInfoWrapper>

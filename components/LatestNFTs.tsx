@@ -11,13 +11,17 @@ import {
 import { NFTImage, StyledCard } from "./styled";
 import { ArrowForward } from "@mui/icons-material";
 import useCosmicSignatureContract from "../hooks/useCosmicSignatureContract";
+import { useNFT } from "../hooks/useNFT";
+import { formatId } from "../utils";
 
-const CGNFT = ({ tokenId: number }) => {
+const CGNFT = ({ tokenId }) => {
+  const nft = useNFT(tokenId);
+  if (!nft) return;
   return (
     <>
       <StyledCard>
         <CardActionArea>
-          <NFTImage image="https://randomwalknft.s3.us-east-2.amazonaws.com/000496_black_thumb.jpg" />
+          <NFTImage image={nft.image} />
         </CardActionArea>
       </StyledCard>
       <Box
@@ -32,8 +36,8 @@ const CGNFT = ({ tokenId: number }) => {
         }}
       >
         <Box>
-          <Typography variant="caption" component="p">
-            #000176
+          <Typography variant="caption">
+            {formatId(nft.id)}
           </Typography>
           <Box sx={{ display: "flex" }}>
             <Image
@@ -42,8 +46,8 @@ const CGNFT = ({ tokenId: number }) => {
               height={16}
               alt="ethereum"
             />
-            <Typography variant="caption" color="primary" component="p">
-              3.2 NFT
+            <Typography variant="caption" color="primary">
+              {nft.amountEth.toFixed(1)} NFT
             </Typography>
           </Box>
         </Box>
@@ -110,51 +114,12 @@ const LatestNFTs = () => {
           />
         </Box>
         <Grid container spacing={2} marginTop="58px">
-          {!loading && collection.length && (
-            <Grid item xs={4} sx={{ position: "relative" }}>
-              <StyledCard>
-                <CardActionArea>
-                  <NFTImage image="https://randomwalknft.s3.us-east-2.amazonaws.com/000496_black_thumb.jpg" />
-                </CardActionArea>
-              </StyledCard>
-              <Box
-                sx={{
-                  display: "flex",
-                  position: "absolute",
-                  top: "32px",
-                  left: "32px",
-                  right: "16px",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                }}
-              >
-                <Box>
-                  <Typography variant="caption" component="p">
-                    #000176
-                  </Typography>
-                  <Box sx={{ display: "flex" }}>
-                    <Image
-                      src={"/images/Ethereum_small.svg"}
-                      width={16}
-                      height={16}
-                      alt="ethereum"
-                    />
-                    <Typography variant="caption" color="primary" component="p">
-                      3.2 NFT
-                    </Typography>
-                  </Box>
-                </Box>
-                <Button
-                  variant="contained"
-                  endIcon={<ArrowForward />}
-                  sx={{ width: "140px", fontSize: 14 }}
-                  size="large"
-                >
-                  Place Bid
-                </Button>
-              </Box>
-            </Grid>
-          )}
+          {!loading &&
+            collection.map((i) => (
+              <Grid item xs={4} sx={{ position: "relative" }} key={i}>
+                <CGNFT tokenId={i} />
+              </Grid>
+            ))}
         </Grid>
       </Container>
     </Box>
