@@ -5,7 +5,8 @@ const accountRequest = (ethereum: any) => {
 const switchRequest = (ethereum: any) => {
   return ethereum.request({
     method: 'wallet_switchEthereumChain',
-    params: [{ chainId: '0x66EED' }],
+    // params: [{ chainId: '0x66EED' }],
+    params: [{ chainId: '0x7A69' }],
   })
 }
 

@@ -2,20 +2,23 @@ export enum SupportedChainId {
   ARBITRUM_ONE = 42161,
   ARBITRUM_RINKEBY = 421611,
   ARBITRUM_GOERLI = 421613,
+  LOCAL_NETWORK = 31337,
 }
 
-export const DEFAULT_CHAIN_ID = SupportedChainId.ARBITRUM_GOERLI;
+export const DEFAULT_CHAIN_ID = SupportedChainId.LOCAL_NETWORK;
 
 export const ALL_SUPPORTED_CHAIN_IDS: SupportedChainId[] = [
   SupportedChainId.ARBITRUM_ONE,
   SupportedChainId.ARBITRUM_RINKEBY,
   SupportedChainId.ARBITRUM_GOERLI,
+  SupportedChainId.LOCAL_NETWORK,
 ];
 
 export const L2_CHAIN_IDS = [
   SupportedChainId.ARBITRUM_ONE,
   SupportedChainId.ARBITRUM_RINKEBY,
   SupportedChainId.ARBITRUM_GOERLI,
+  SupportedChainId.LOCAL_NETWORK,
 ] as const;
 
 export type SupportedL2ChainId = typeof L2_CHAIN_IDS[number];
@@ -55,5 +58,12 @@ export const CHAIN_INFO: ChainInfo = {
     explorer: "https://goerli.arbiscan.io/",
     infoLink: "https://info.uniswap.org/#/arbitrum/",
     label: "Arbitrum Goerli",
+  },
+  [SupportedChainId.LOCAL_NETWORK]: {
+    bridge: "https://bridge.arbitrum.io/",
+    docs: "https://offchainlabs.com/",
+    explorer: "https://goerli.arbiscan.io/",
+    infoLink: "https://info.uniswap.org/#/arbitrum/",
+    label: "Local Network",
   },
 };

@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const baseUrl = "https://randomwalknft-api.com/";
-const biddingwarBaseUrl = "http://170.187.142.12:9090/api/biddingwar/";
+const biddingwarBaseUrl = "http://170.187.142.12:9090/api/cosmicgame/";
 
 class ApiService {
   public async create(token_id: number, seed: string) {
@@ -11,7 +11,7 @@ class ApiService {
 
   public async biddingHistory(page: number) {
     let perPage = 20;
-    const { data } = await axios.get(biddingwarBaseUrl + "bids/0/1000000");
+    const { data } = await axios.get(biddingwarBaseUrl + "bid/list/0/1000000");
     const biddingHistory = data?.Bids.slice(perPage * (page - 1), perPage * page)
     return {
       biddingHistory,
@@ -19,31 +19,44 @@ class ApiService {
     };
   }
 
-  public async dashboardInfo() {
-    const { data } = await axios.get(biddingwarBaseUrl + "dashboard");
+  public async get_dashboard_info() {
+    const { data } = await axios.get(biddingwarBaseUrl + "statistics/dashboard");
     return data;
   }
 
-  public async donatedNFTs() {
-    const { data } = await axios.get(biddingwarBaseUrl + "nftdonations/0/1000000");
-    return data;
+  public async get_donation_nft_list() {
+    const { data } = await axios.get(biddingwarBaseUrl + "donations/nft/list/0/1000000");
+    return data.NFTDonations;
   }
 
-  public async getDonatedNFTbyIndex(index: number) {
-    const { data } = await axios.get(biddingwarBaseUrl + "donatednft_info/" + index);
-    return data;
+  public async get_donation_nft_info(index: number) {
+    const { data } = await axios.get(biddingwarBaseUrl + "donations/nft/info/" + index);
+    return data.NFTDonation;
   }
 
-  public async get_prizeinfo_all() {
-    const { data } = await axios.get(biddingwarBaseUrl + "prizes/0/1000000");
+  public async get_prize_list() {
+    const { data } = await axios.get(biddingwarBaseUrl + "prize/list/0/1000000");
     return data.PrizeClaims;
   }
 
-  public async get_prizeinfo(tokenId: number) {
-    const { data } = await axios.get(biddingwarBaseUrl + "prizes/0/1000000");
-    const prizeClaims = data.PrizeClaims;
-    return prizeClaims[tokenId];
+  public async get_prize_info(prizeNum: number) {
+    const { data } = await axios.get(biddingwarBaseUrl + `prize/info/${prizeNum}`);
+    const prizeInfo = data.PrizeInfo;
+    return prizeInfo;
   }
+
+  public async get_cst_list() {
+    const { data } = await axios.get(biddingwarBaseUrl + 'cst/list/0/1000000');
+    const cstList = data.CosmicSignatureTokenList;
+    return cstList;
+  }
+
+  public async get_cst_info(tokenId: number) {
+    const { data } = await axios.get(biddingwarBaseUrl + `cst/info/${tokenId}`);
+    const cstList = data.TokenInfo;
+    return cstList;
+  }
+
 
 
   public async get_info(token_id: number | string) {

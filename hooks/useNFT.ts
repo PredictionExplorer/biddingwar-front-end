@@ -7,18 +7,15 @@ export const useNFT = (tokenId) => {
   useEffect(() => {
     const getNFT = async () => {
       try {
-        const nft = await api.get_prizeinfo(tokenId);
+        const nft = await api.get_cst_info(tokenId);
         const fileName = tokenId.toString().padStart(6, "0");
         const image = `https://cosmic-game.s3.us-east-2.amazonaws.com/${fileName}.png`;
         const video = `https://cosmic-game.s3.us-east-2.amazonaws.com/${fileName}.mp4`;
 
         setNft({
           id: parseInt(tokenId),
-          name: nft.CurName,
           owner: nft.CurOwnerAddr,
           seed: nft.Seed,
-          amount: nft.Amount,
-          amountEth: nft.AmountEth,
           timestamp: nft.TimeStamp,
           image,
           video,

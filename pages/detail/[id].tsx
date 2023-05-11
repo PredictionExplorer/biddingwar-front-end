@@ -9,8 +9,9 @@ import Prize from "../../components/Prize";
 import Winners from "../../components/Winners";
 import BiddingHistory from "../../components/BiddingHistory";
 import { useNFT } from "../../hooks/useNFT";
+import api from "../../services/api";
 
-const Detail = ({ tokenId }) => {
+const Detail = ({ tokenId, data }) => {
   const router = useRouter();
   const nft = useNFT(tokenId);
   if (!nft) return <></>;
@@ -53,8 +54,8 @@ const Detail = ({ tokenId }) => {
           </Container>
         </Box>
         <Container>
-          <Prize />
-          <Winners />
+          <Prize prizeAmount={0} />
+          <Winners roundNum={data.CurRoundNum - 1} />
         </Container>
       </MainWrapper>
     </>
@@ -64,8 +65,9 @@ const Detail = ({ tokenId }) => {
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const id = context.params!.id;
   const tokenId = Array.isArray(id) ? id[0] : id;
+  const dashboardData = await api.get_dashboard_info();
   return {
-    props: { tokenId: parseInt(tokenId) },
+    props: { tokenId: parseInt(tokenId), data: dashboardData },
   };
 }
 

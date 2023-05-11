@@ -3,7 +3,7 @@ import Image from "next/image";
 import { Box, Typography, CardActionArea, Grid } from "@mui/material";
 import { GradientText, NFTImage, StyledCard } from "./styled";
 
-const Prize = () => {
+const Prize = ({ prizeAmount }) => {
   return (
     <Box mt="130px">
       <Box
@@ -62,7 +62,7 @@ const Prize = () => {
               alt="cosmic signture nft"
             />
             <GradientText variant="h5" marginLeft="16px">
-              1 Cosmic Signature NFT
+              {prizeAmount.toFixed(1)} ETH
             </GradientText>
           </CardActionArea>
         </StyledCard>

@@ -47,7 +47,7 @@ const CGNFT = ({ tokenId }) => {
               alt="ethereum"
             />
             <Typography variant="caption" color="primary">
-              {nft.amountEth.toFixed(1)} NFT
+              3.2 NFT
             </Typography>
           </Box>
         </Box>

@@ -190,7 +190,7 @@ const NewHome = ({ biddingHistory, page, totalCount, data }) => {
           <Box sx={{ flex: 1 }}>
             <StyledCard>
               <CardActionArea>
-                <NFTImage image="https://randomwalknft.s3.us-east-2.amazonaws.com/000496_black_thumb.jpg" />
+                <NFTImage image="https://cosmic-game.s3.us-east-2.amazonaws.com/000000.png" />
               </CardActionArea>
             </StyledCard>
           </Box>
@@ -350,7 +350,7 @@ const NewHome = ({ biddingHistory, page, totalCount, data }) => {
           </Box>
         </Box>
 
-        <Prize />
+        <Prize prizeAmount={data.PrizeAmountEth} />
 
         <Box mt="120px">
           <Box display="flex" alignItems="center" flexWrap="wrap">
@@ -431,7 +431,7 @@ const NewHome = ({ biddingHistory, page, totalCount, data }) => {
           </Box>
         </Box>
 
-        <Winners />
+        <Winners roundNum={data.CurRoundNum - 1} />
         <FAQ />
       </Container>
     </>
@@ -441,15 +441,13 @@ const NewHome = ({ biddingHistory, page, totalCount, data }) => {
 export async function getServerSideProps(context) {
   const page = context.query.page ?? 1;
   const res = await api.biddingHistory(page);
-  const dashboardData = await api.dashboardInfo();
-  const { NFTDonations: donatedNfts } = await api.donatedNFTs();
+  const dashboardData = await api.get_dashboard_info();
   return {
     props: {
       biddingHistory: res.biddingHistory,
       totalCount: res.totalCount,
       page,
       data: dashboardData,
-      donatedNfts,
     },
   };
 }
