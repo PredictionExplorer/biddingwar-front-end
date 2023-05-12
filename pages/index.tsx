@@ -438,8 +438,7 @@ const NewHome = ({
             </GradientBorder>
           </Box>
         </Box>
-
-        <Winners prizeInfo={prizeInfo} />
+        {prizeInfo && <Winners prizeInfo={prizeInfo} />}
         <FAQ />
       </Container>
     </>
@@ -452,7 +451,12 @@ export async function getServerSideProps(context) {
   const dashboardData = await api.get_dashboard_info();
   const nfts = await api.get_cst_list();
   const prizeList = await api.get_prize_list();
-  const prizeInfo = await api.get_prize_info(prizeList.length - 1);
+  let prizeInfo;
+  if (prizeList.length) {
+    prizeInfo = await api.get_prize_info(prizeList.length - 1);
+  } else {
+    prizeInfo = null;
+  }
   return {
     props: {
       biddingHistory: res.biddingHistory,

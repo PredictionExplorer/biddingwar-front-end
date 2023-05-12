@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const baseUrl = "https://randomwalknft-api.com/";
-const biddingwarBaseUrl = "http://170.187.142.12:9090/api/cosmicgame/";
+const biddingwarBaseUrl = "http://170.187.142.12:7070/api/cosmicgame/";
 
 class ApiService {
   public async create(token_id: number, seed: string) {
@@ -40,7 +40,8 @@ class ApiService {
   }
 
   public async get_prize_info(prizeNum: number) {
-    const { data } = await axios.get(biddingwarBaseUrl + `prize/info/${prizeNum}`);
+    const id = prizeNum < 0 ? 0 : prizeNum;
+    const { data } = await axios.get(biddingwarBaseUrl + `prize/info/${id}`);
     const prizeInfo = data.PrizeInfo;
     return prizeInfo;
   }

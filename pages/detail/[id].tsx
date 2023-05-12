@@ -51,7 +51,7 @@ const Detail = ({ nft, prizeInfo, data }) => {
         </Box>
         <Container>
           <Prize prizeAmount={data.PrizeAmountEth} />
-          <Winners prizeInfo={prizeInfo} />
+          {prizeInfo && <Winners prizeInfo={prizeInfo} />}
         </Container>
       </MainWrapper>
     </>
@@ -63,7 +63,12 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   const tokenId = Array.isArray(id) ? id[0] : id;
   const nft = await api.get_cst_info(parseInt(tokenId));
   const prizeList = await api.get_prize_list();
-  const prizeInfo = await api.get_prize_info(prizeList.length - 1);
+  let prizeInfo;
+  if (prizeList.length) {
+    prizeInfo = await api.get_prize_info(prizeList.length - 1);
+  } else {
+    prizeInfo = null;
+  }
   const dashboardData = await api.get_dashboard_info();
   return {
     props: { nft, prizeInfo, data: dashboardData },
