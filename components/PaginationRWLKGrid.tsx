@@ -14,8 +14,8 @@ import RandomWalkNFT from "./RandomWalkNFT";
 const PaginationRWLKGrid = ({
   loading,
   data,
-  selectedToken,
-  setSelectedToken,
+  selectedToken = 0,
+  setSelectedToken = null,
 }) => {
   const [collection, setCollection] = useState([]);
   const [perPage] = useState(6);

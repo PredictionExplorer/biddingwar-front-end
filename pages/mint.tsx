@@ -9,6 +9,7 @@ import useRWLKNFTContract from "../hooks/useRWLKNFTContract";
 import { parseBalance } from "../utils";
 import { useActiveWeb3React } from "../hooks/web3";
 import PaginationGrid from "../components/PaginationGrid";
+import PaginationRWLKGrid from "../components/PaginationRWLKGrid";
 
 const Mint = () => {
   const [mintPrice, setMintPrice] = useState("0");
@@ -29,14 +30,7 @@ const Mint = () => {
           .mint({ value: ethers.utils.parseEther(newPrice.toFixed(6)) })
           .then((tx) => tx.wait());
 
-        const token_id = receipt.events[0].args[2].toNumber();
-
-        router.push({
-          pathname: `/detail/${token_id}`,
-          query: {
-            message: "success",
-          },
-        });
+        receipt.events[0].args[2].toNumber();
       } catch (err) {
         const { data } = err;
         if (data && data.message) {
@@ -145,7 +139,7 @@ const Mint = () => {
             NFTS
           </Typography>
         </Box>
-        {/* <PaginationGrid loading={loading} data={nftIds} /> */}
+        <PaginationRWLKGrid loading={loading} data={nftIds} />
       </MainWrapper>
     </>
   );
