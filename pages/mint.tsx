@@ -8,7 +8,6 @@ import { MainWrapper, CenterBox } from "../components/styled";
 import useRWLKNFTContract from "../hooks/useRWLKNFTContract";
 import { parseBalance } from "../utils";
 import { useActiveWeb3React } from "../hooks/web3";
-import PaginationGrid from "../components/PaginationGrid";
 import PaginationRWLKGrid from "../components/PaginationRWLKGrid";
 
 const Mint = () => {
@@ -17,7 +16,6 @@ const Mint = () => {
   const [nftIds, setNftIds] = useState([]);
   const { account } = useActiveWeb3React();
   const nftContract = useRWLKNFTContract();
-  const router = useRouter();
 
   const handleMint = async () => {
     if (nftContract) {
