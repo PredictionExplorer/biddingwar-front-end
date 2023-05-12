@@ -68,14 +68,14 @@ function MyApp(props: MyAppProps) {
             <meta
               property="og:title"
               content={`Random Walk NFT: Details for ${formatId(
-                pageProps.nft.id,
+                pageProps.nft.TokenId,
               )}`}
             />
             <meta property="og:image" content={pageProps.nft.black_image_thumb_url} />
             <meta
               property="og:description"
               content={`Programmatically generated Random Walk image and video NFTs. ETH spent on minting goes back to the minters. These are the details for ${formatId(
-                pageProps.nft.id,
+                pageProps.nft.TokenId,
               )}`}
             />
 
@@ -83,7 +83,7 @@ function MyApp(props: MyAppProps) {
             <meta
               name="twitter:title"
               content={`Random Walk NFT: Details for ${formatId(
-                pageProps.nft.id,
+                pageProps.nft.TokenId,
               )}`}
             />
             <meta
@@ -93,7 +93,7 @@ function MyApp(props: MyAppProps) {
             <meta
               name="twitter:description"
               content={`Programmatically generated Random Walk image and video NFTs. ETH spent on minting goes back to the minters. These are the details for ${formatId(
-                pageProps.nft.id,
+                pageProps.nft.TokenId,
               )}`}
             />
           </>

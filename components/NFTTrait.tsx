@@ -190,14 +190,14 @@ const NFTTrait = ({ nft }) => {
             </Box>
           </Grid>
           <Grid item xs={12} sm={8} md={6}>
-            {nft.timestamp && (
+            {nft.Timestamp && (
               <Box>
                 <Typography color="primary" component="span">
                   Minted Date:
                 </Typography>
                 &nbsp;
                 <Typography component="span">
-                  {convertTimestampToDateTime(nft.timestamp)}
+                  {convertTimestampToDateTime(nft.Timestamp)}
                 </Typography>
               </Box>
             )}
