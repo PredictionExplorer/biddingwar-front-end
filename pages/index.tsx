@@ -65,7 +65,8 @@ const NewHome = ({ biddingHistory, page, totalCount, data }) => {
         .claimPrize()
         .then((tx) => tx.wait());
       console.log(receipt);
-      const token_id = receipt.events[0].args[2].toNumber();
+      const balance = await cosmicSignatureContract.totalSupply();
+      const token_id = balance.toNumber() - 1;
       const seed = await cosmicSignatureContract.seeds(token_id);
       await api.create(token_id, seed);
       setTimeout(() => {
@@ -226,9 +227,9 @@ const NewHome = ({ biddingHistory, page, totalCount, data }) => {
             <Box sx={{ my: "24px" }}>
               <Typography color="primary">Last Bidder Address:</Typography>
               <Typography>
-                <StyledLink href={`/gallery?address=${data.LastBidderAddr}`}>
-                  {data.LastBidderAddr}
-                </StyledLink>
+                {data.LastBidderAddr === "0x00000000000000000000000000000000"
+                  ? "There is no bidder yet."
+                  : data.LastBidderAddr}
               </Typography>
             </Box>
             <Accordion>
