@@ -13,11 +13,13 @@ import { ArrowForward } from "@mui/icons-material";
 import { formatId } from "../utils";
 
 const CGNFT = ({ nft }) => {
+  const fileName = nft.TokenId.toString().padStart(6, "0");
+  const image = `https://cosmic-game.s3.us-east-2.amazonaws.com/${fileName}.png`;
   return (
     <>
       <StyledCard>
         <CardActionArea>
-          <NFTImage image={nft.image} />
+          <NFTImage image={image} />
         </CardActionArea>
       </StyledCard>
       <Box
@@ -32,7 +34,7 @@ const CGNFT = ({ nft }) => {
         }}
       >
         <Box>
-          <Typography variant="caption">{formatId(nft.id)}</Typography>
+          <Typography variant="caption">{formatId(nft.TokenId)}</Typography>
           <Box sx={{ display: "flex" }}>
             <Image
               src={"/images/Ethereum_small.svg"}
