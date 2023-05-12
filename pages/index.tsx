@@ -99,7 +99,7 @@ const NewHome = ({
       if (!nftDonateAddress || nftId === -1) {
         receipt = await biddingWarContract
           .bid(message, {
-            value: ethers.utils.parseEther(newBidPrice.toString()),
+            value: ethers.utils.parseEther(newBidPrice.toFixed(10)),
           })
           .then((tx) => tx.wait());
       } else {
