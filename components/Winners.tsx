@@ -1,18 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Image from "next/image";
 import { Box, Typography, Grid, CardActionArea } from "@mui/material";
 import { NFTImage, StyledCard } from "./styled";
-import api from "../services/api";
 
-const Winners = ({ roundNum }) => {
-  const [raffleETHDeposits, setRaffleETHDeposits] = useState([]);
-  useEffect(() => {
-    const getWinners = async () => {
-      const { RaffleETHDeposits } = await api.get_prize_info(roundNum - 1);
-      setRaffleETHDeposits(RaffleETHDeposits);
-    };
-    getWinners();
-  }, []);
+const Winners = ({ prizeInfo }) => {
+  const { RaffleETHDeposits: raffleETHDeposits } = prizeInfo;
   return (
     <Box sx={{ marginTop: "70px" }}>
       <Typography variant="h4" width={500} textAlign="center" marginX="auto">

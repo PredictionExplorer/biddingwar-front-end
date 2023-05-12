@@ -39,7 +39,7 @@ import router from "next/router";
 import Countdown from "react-countdown";
 import Counter from "../components/Counter";
 
-const NewHome = ({ biddingHistory, page, totalCount, data, nfts }) => {
+const NewHome = ({ biddingHistory, page, totalCount, data, nfts, prizeList }) => {
   const [withdrawalSeconds, setWithdrawalSeconds] = useState(null);
   const [countdownCompleted, setCountdownCompleted] = useState(false);
   // const [activationTime, setActivationTime] = useState(1702377200);
@@ -433,7 +433,7 @@ const NewHome = ({ biddingHistory, page, totalCount, data, nfts }) => {
           </Box>
         </Box>
 
-        <Winners roundNum={data.CurRoundNum - 1} />
+        <Winners prizeInfo={prizeList[data.CurRoundNum - 2]} />
         <FAQ />
       </Container>
     </>
@@ -445,6 +445,7 @@ export async function getServerSideProps(context) {
   const res = await api.biddingHistory(page);
   const dashboardData = await api.get_dashboard_info();
   const nfts = await api.get_cst_list();
+  const prizeList = await api.get_prize_list();
   return {
     props: {
       biddingHistory: res.biddingHistory,
@@ -452,6 +453,7 @@ export async function getServerSideProps(context) {
       page,
       data: dashboardData,
       nfts,
+      prizeList
     },
   };
 }

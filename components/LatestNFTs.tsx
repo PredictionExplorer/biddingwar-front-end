@@ -61,6 +61,7 @@ const CGNFT = ({ nft }) => {
 };
 
 const LatestNFTs = ({ nfts }) => {
+  const data = nfts.sort((a, b) => Number(b.TokenId) - Number(a.TokenId));
   return (
     <Box
       sx={{
@@ -87,7 +88,7 @@ const LatestNFTs = ({ nfts }) => {
           />
         </Box>
         <Grid container spacing={2} marginTop="58px">
-          {nfts.slice(0, 6).map((nft, i) => (
+          {data.slice(0, 6).map((nft, i) => (
             <Grid item xs={4} sx={{ position: "relative" }} key={i}>
               <CGNFT nft={nft} />
             </Grid>
