@@ -67,6 +67,7 @@ const NewHome = ({ biddingHistory, page, totalCount, data }) => {
       console.log(receipt);
       const balance = await cosmicSignatureContract.totalSupply();
       const token_id = balance.toNumber() - 1;
+      console.log(balance.toNumber());
       const seed = await cosmicSignatureContract.seeds(token_id);
       await api.create(token_id, seed);
       setTimeout(() => {
