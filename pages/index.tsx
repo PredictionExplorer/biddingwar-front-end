@@ -228,7 +228,7 @@ const NewHome = ({ biddingHistory, page, totalCount, data }) => {
             <Box sx={{ my: "24px" }}>
               <Typography color="primary">Last Bidder Address:</Typography>
               <Typography>
-                {data.LastBidderAddr === "0x00000000000000000000000000000000"
+                {data.LastBidderAddr === "0x0000000000000000000000000000000000000000"
                   ? "There is no bidder yet."
                   : data.LastBidderAddr}
               </Typography>
