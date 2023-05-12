@@ -21,7 +21,6 @@ import ModalVideo from "react-modal-video";
 import "react-modal-video/css/modal-video.min.css";
 
 import NFTVideo from "./NFTVideo";
-import useBiddingWarContract from "../hooks/useBiddingWarContract";
 import { useActiveWeb3React } from "../hooks/web3";
 import { formatId } from "../utils";
 import { StyledCard, SectionWrapper, NFTImage, NFTInfoWrapper } from "./styled";
@@ -31,6 +30,7 @@ import {
   ExpandLess,
   ExpandMore,
 } from "@mui/icons-material";
+import useCosmicSignatureContract from "../hooks/useCosmicSignatureContract";
 
 const NFTTrait = ({ nft }) => {
   const fileName = nft.TokenId.toString().padStart(6, "0");
@@ -42,7 +42,7 @@ const NFTTrait = ({ nft }) => {
   const [address, setAddress] = useState("");
   const [anchorEl, setAnchorEl] = useState(null);
   const router = useRouter();
-  const nftContract = useBiddingWarContract();
+  const nftContract = useCosmicSignatureContract();
   const { account } = useActiveWeb3React();
 
   const handlePlay = (videoPath) => {
