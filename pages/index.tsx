@@ -17,7 +17,6 @@ import {
   MainWrapper,
   NFTImage,
   StyledCard,
-  StyledLink,
 } from "../components/styled";
 import BiddingHistory from "../components/BiddingHistory";
 import api from "../services/api";
@@ -39,7 +38,14 @@ import router from "next/router";
 import Countdown from "react-countdown";
 import Counter from "../components/Counter";
 
-const NewHome = ({ biddingHistory, page, totalCount, data, nfts, prizeList }) => {
+const NewHome = ({
+  biddingHistory,
+  page,
+  totalCount,
+  data,
+  nfts,
+  prizeInfo,
+}) => {
   const [withdrawalSeconds, setWithdrawalSeconds] = useState(null);
   const [countdownCompleted, setCountdownCompleted] = useState(false);
   // const [activationTime, setActivationTime] = useState(1702377200);
@@ -433,7 +439,7 @@ const NewHome = ({ biddingHistory, page, totalCount, data, nfts, prizeList }) =>
           </Box>
         </Box>
 
-        <Winners prizeInfo={prizeList[data.CurRoundNum - 2]} />
+        <Winners prizeInfo={prizeInfo} />
         <FAQ />
       </Container>
     </>
@@ -446,6 +452,7 @@ export async function getServerSideProps(context) {
   const dashboardData = await api.get_dashboard_info();
   const nfts = await api.get_cst_list();
   const prizeList = await api.get_prize_list();
+  const prizeInfo = await api.get_prize_info(prizeList.length - 1);
   return {
     props: {
       biddingHistory: res.biddingHistory,
@@ -453,7 +460,7 @@ export async function getServerSideProps(context) {
       page,
       data: dashboardData,
       nfts,
-      prizeList
+      prizeInfo,
     },
   };
 }
