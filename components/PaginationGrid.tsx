@@ -5,9 +5,9 @@ import Pagination from "@mui/material/Pagination";
 import { SearchBox, SearchField, SearchButton } from "./styled";
 import NFT from "./NFT";
 
-const PaginationGrid = ({ loading, data }) => {
+const PaginationGrid = ({ data }) => {
   const [nftId, setNftId] = useState("");
-  const [searchId, setSearchId] = useState(null);
+  const [searchNFT, setSearchNFT] = useState(null);
   const [searchResult, setSearchResult] = useState(false);
   const [collection, setCollection] = useState([]);
   const [perPage] = useState(12);
@@ -23,14 +23,19 @@ const PaginationGrid = ({ loading, data }) => {
   const handleSearchChange = async (e) => {
     setNftId(e.target.value);
     if (!e.target.value) {
-      setSearchId(null);
+      setSearchNFT(null);
       setSearchResult(false);
     }
   };
 
   const handleSearch = async () => {
-    setSearchId(nftId);
-    setSearchResult(collection.includes(nftId));
+    const filtered = collection.filter((nft) => nft.TokenId === nftId);
+    setSearchResult(!!filtered.length);
+    if (filtered.length) {
+      setSearchNFT(filtered[0]);
+    } else {
+      setSearchNFT(null);
+    }
   };
 
   useEffect(() => {
@@ -61,15 +66,10 @@ const PaginationGrid = ({ loading, data }) => {
           Search
         </SearchButton>
       </SearchBox>
-      {loading && (
-        <Box display="flex" justifyContent="center">
-          <CircularProgress color="secondary" />
-        </Box>
-      )}
       {data.length > 0 && (
         <>
           <Grid spacing={4} container>
-            {searchId ? (
+            {searchNFT ? (
               !searchResult ? (
                 <Grid item>
                   <Typography variant="h6" align="center">
@@ -78,20 +78,20 @@ const PaginationGrid = ({ loading, data }) => {
                 </Grid>
               ) : (
                 <Grid item xs={6} sm={4}>
-                  <NFT tokenId={searchId} />
+                  <NFT nft={searchNFT} />
                 </Grid>
               )
             ) : (
               collection
                 .slice((curPage - 1) * perPage, curPage * perPage)
-                .map((index) => (
+                .map((nft, index) => (
                   <Grid key={index} item xs={12} sm={6} md={4}>
-                    <NFT tokenId={index} />
+                    <NFT nft={nft} />
                   </Grid>
                 ))
             )}
           </Grid>
-          {!searchId && (
+          {!searchNFT && (
             <Box display="flex" justifyContent="center" mt={4}>
               <Pagination
                 color="primary"
@@ -106,7 +106,7 @@ const PaginationGrid = ({ loading, data }) => {
           )}
         </>
       )}
-      {!loading && !data.length && (
+      {!data.length && (
         <Typography variant="h6" align="center">
           Nothing Found!
         </Typography>

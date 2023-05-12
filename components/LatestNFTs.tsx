@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Image from "next/image";
 import {
   Box,
@@ -10,13 +10,9 @@ import {
 } from "@mui/material";
 import { NFTImage, StyledCard } from "./styled";
 import { ArrowForward } from "@mui/icons-material";
-import useCosmicSignatureContract from "../hooks/useCosmicSignatureContract";
-import { useNFT } from "../hooks/useNFT";
 import { formatId } from "../utils";
 
-const CGNFT = ({ tokenId }) => {
-  const nft = useNFT(tokenId);
-  if (!nft) return;
+const CGNFT = ({ nft }) => {
   return (
     <>
       <StyledCard>
@@ -36,9 +32,7 @@ const CGNFT = ({ tokenId }) => {
         }}
       >
         <Box>
-          <Typography variant="caption">
-            {formatId(nft.id)}
-          </Typography>
+          <Typography variant="caption">{formatId(nft.id)}</Typography>
           <Box sx={{ display: "flex" }}>
             <Image
               src={"/images/Ethereum_small.svg"}
@@ -64,30 +58,7 @@ const CGNFT = ({ tokenId }) => {
   );
 };
 
-const LatestNFTs = () => {
-  const [loading, setLoading] = useState(true);
-  const [collection, setCollection] = useState([]);
-  const contract = useCosmicSignatureContract();
-
-  useEffect(() => {
-    const getTokens = async () => {
-      try {
-        setLoading(true);
-        let tokenIds = [];
-        const balance = await contract.totalSupply();
-        tokenIds = Object.keys(new Array(balance.toNumber()).fill(0));
-        tokenIds = tokenIds.reverse().slice(0, 6);
-        setCollection(tokenIds);
-        setLoading(false);
-      } catch (err) {
-        console.log(err);
-        setLoading(false);
-      }
-    };
-
-    getTokens();
-  }, [contract]);
-
+const LatestNFTs = ({ nfts }) => {
   return (
     <Box
       sx={{
@@ -114,12 +85,11 @@ const LatestNFTs = () => {
           />
         </Box>
         <Grid container spacing={2} marginTop="58px">
-          {!loading &&
-            collection.map((i) => (
-              <Grid item xs={4} sx={{ position: "relative" }} key={i}>
-                <CGNFT tokenId={i} />
-              </Grid>
-            ))}
+          {nfts.slice(0, 6).map((nft, i) => (
+            <Grid item xs={4} sx={{ position: "relative" }} key={i}>
+              <CGNFT nft={nft} />
+            </Grid>
+          ))}
         </Grid>
       </Container>
     </Box>

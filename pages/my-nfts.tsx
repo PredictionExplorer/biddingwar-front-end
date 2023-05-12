@@ -64,7 +64,7 @@ const MyNFTs = () => {
             NFTS
           </Typography>
         </Box>
-        <PaginationGrid loading={loading} data={nftIds} />
+        {/* <PaginationGrid loading={loading} data={nftIds} /> */}
       </MainWrapper>
     </>
   );

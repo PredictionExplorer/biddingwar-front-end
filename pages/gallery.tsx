@@ -5,45 +5,33 @@ import Head from "next/head";
 
 import PaginationGrid from "../components/PaginationGrid";
 import { MainWrapper } from "../components/styled";
-import useCosmicSignatureContract from "../hooks/useCosmicSignatureContract";
+import { GetServerSidePropsContext } from "next";
+import api from "../services/api";
 
-const Gallery = () => {
+const Gallery = ({ nfts }) => {
   const router = useRouter();
-  const [loading, setLoading] = useState(true);
   const [collection, setCollection] = useState([]);
   const [address, setAddress] = useState(null);
-  const contract = useCosmicSignatureContract();
 
   useEffect(() => {
     const address = router.query["address"] as string;
 
     const getTokens = async () => {
       try {
-        setLoading(true);
-        let tokenIds = [];
         if (address) {
-          const tokens = await contract.walletOfOwner(address);
-          tokenIds = tokens.map((t) => t.toNumber());
-          tokenIds = tokenIds.sort((a, b) => {
-            return parseInt(b) - parseInt(a);
-          });
+          const filtered = nfts.filter((nft) => nft.CurOwnerAddr === address);
+          setCollection(filtered);
         } else {
-          const balance = await contract.totalSupply();
-          tokenIds = Object.keys(new Array(balance.toNumber()).fill(0));
-          tokenIds = tokenIds.reverse();
+          setCollection(nfts);
         }
-
         setAddress(address);
-        setCollection(tokenIds);
-        setLoading(false);
       } catch (err) {
         console.log(err);
-        setLoading(false);
       }
     };
 
     getTokens();
-  }, [contract, router]);
+  }, [router]);
 
   return (
     <>
@@ -80,10 +68,17 @@ const Gallery = () => {
           </Typography>
         )}
 
-        <PaginationGrid loading={loading} data={collection} />
+        <PaginationGrid data={nfts} />
       </MainWrapper>
     </>
   );
 };
+
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  const nfts = await api.get_cst_list();
+  return {
+    props: { nfts },
+  };
+}
 
 export default Gallery;

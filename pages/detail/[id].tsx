@@ -8,14 +8,10 @@ import { MainWrapper } from "../../components/styled";
 import Prize from "../../components/Prize";
 import Winners from "../../components/Winners";
 import BiddingHistory from "../../components/BiddingHistory";
-import { useNFT } from "../../hooks/useNFT";
 import api from "../../services/api";
 
-const Detail = ({ tokenId, data }) => {
+const Detail = ({ nft, data }) => {
   const router = useRouter();
-  const nft = useNFT(tokenId);
-  if (!nft) return <></>;
-
   return (
     <>
       <Head>
@@ -66,8 +62,9 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   const id = context.params!.id;
   const tokenId = Array.isArray(id) ? id[0] : id;
   const dashboardData = await api.get_dashboard_info();
+  const nft = await api.get_cst_info(parseInt(tokenId));
   return {
-    props: { tokenId: parseInt(tokenId), data: dashboardData },
+    props: { nft, data: dashboardData },
   };
 }
 

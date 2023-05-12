@@ -1,12 +1,10 @@
 import React from "react";
 import { Typography, CardActionArea } from "@mui/material";
-import { useNFT } from "../hooks/useNFT";
 import { formatId } from "../utils";
 import { NFTImage, NFTSkeleton, NFTInfoWrapper, StyledCard } from "./styled";
 import router from "next/router";
 
-const NFT = ({ tokenId }) => {
-  const nft = useNFT(tokenId);
+const NFT = ({ nft }) => {
   return (
     <StyledCard>
       <CardActionArea onClick={() => router.push(`/detail/${nft.id}`)}>
