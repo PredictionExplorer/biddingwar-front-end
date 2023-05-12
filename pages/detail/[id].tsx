@@ -10,7 +10,7 @@ import Winners from "../../components/Winners";
 import BiddingHistory from "../../components/BiddingHistory";
 import api from "../../services/api";
 
-const Detail = ({ nft, data }) => {
+const Detail = ({ nft, data, prizeList }) => {
   const router = useRouter();
   return (
     <>
@@ -51,7 +51,7 @@ const Detail = ({ nft, data }) => {
         </Box>
         <Container>
           <Prize prizeAmount={0} />
-          <Winners roundNum={data.CurRoundNum - 1} />
+          <Winners prizeInfo={prizeList[data.CurRoundNum - 2]} />
         </Container>
       </MainWrapper>
     </>
@@ -63,6 +63,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   const tokenId = Array.isArray(id) ? id[0] : id;
   const dashboardData = await api.get_dashboard_info();
   const nft = await api.get_cst_info(parseInt(tokenId));
+  const prizeList = await api.get_prize_list();
   return {
     props: { nft, data: dashboardData },
   };
