@@ -22,7 +22,7 @@ import {
 import BiddingHistory from "../components/BiddingHistory";
 import api from "../services/api";
 import useBiddingWarContract from "../hooks/useBiddingWarContract";
-import { Contract, ethers } from "ethers";
+import { Contract, constants, ethers } from "ethers";
 import useRWLKNFTContract from "../hooks/useRWLKNFTContract";
 import { useActiveWeb3React } from "../hooks/web3";
 import { BIDDINGWAR_ADDRESS } from "../config/app";
@@ -228,7 +228,7 @@ const NewHome = ({ biddingHistory, page, totalCount, data }) => {
             <Box sx={{ my: "24px" }}>
               <Typography color="primary">Last Bidder Address:</Typography>
               <Typography>
-                {data.LastBidderAddr === "0x0000000000000000000000000000000000000000"
+                {data.LastBidderAddr === constants.AddressZero
                   ? "There is no bidder yet."
                   : data.LastBidderAddr}
               </Typography>
