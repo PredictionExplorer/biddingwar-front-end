@@ -33,7 +33,9 @@ import {
 } from "@mui/icons-material";
 
 const NFTTrait = ({ nft }) => {
-  const { id, image, video, owner } = nft;
+  const fileName = nft.TokenId.toString().padStart(6, "0");
+  const image = `https://cosmic-game.s3.us-east-2.amazonaws.com/${fileName}.png`;
+  const video = `https://cosmic-game.s3.us-east-2.amazonaws.com/${fileName}.mp4`;
   const [open, setOpen] = useState(false);
   const [imageOpen, setImageOpen] = useState(false);
   const [videoPath, setVideoPath] = useState(null);
@@ -57,7 +59,7 @@ const NFTTrait = ({ nft }) => {
   const handleTransfer = async () => {
     try {
       await nftContract
-        .transferFrom(account, address, id)
+        .transferFrom(account, address, nft.TokenId)
         .then((tx) => tx.wait());
 
       router.push("/my-nfts");
@@ -66,13 +68,14 @@ const NFTTrait = ({ nft }) => {
     }
   };
 
-  const handleClaimPrize = () => {};
-
-  const handlePrev = () => router.push(`/detail/${Math.max(id - 1, 0)}`);
+  const handlePrev = () =>
+    router.push(`/detail/${Math.max(nft.TokenId - 1, 0)}`);
 
   const handleNext = async () => {
     const totalSupply = await nftContract.totalSupply();
-    router.push(`/detail/${Math.min(id + 1, totalSupply.toNumber() - 1)}`);
+    router.push(
+      `/detail/${Math.min(nft.TokenId + 1, totalSupply.toNumber() - 1)}`
+    );
   };
 
   const handleMenuOpen = (e) => {
@@ -122,7 +125,7 @@ const NFTTrait = ({ nft }) => {
                       color: "#FFFFFF",
                     }}
                   >
-                    {formatId(id)}
+                    {formatId(nft.TokenId)}
                   </Typography>
                 </NFTInfoWrapper>
               </CardActionArea>
@@ -213,9 +216,9 @@ const NFTTrait = ({ nft }) => {
               <Typography component="span">
                 <Link
                   style={{ color: "#fff" }}
-                  href={`/gallery?address=${owner}`}
+                  href={`/gallery?address=${nft.CurOwnerAddr}`}
                 >
-                  {owner}
+                  {nft.CurOwnerAddr}
                 </Link>
               </Typography>
             </Box>
@@ -233,7 +236,7 @@ const NFTTrait = ({ nft }) => {
               </Typography>
             </Box>
             <Box>
-              {account === owner && (
+              {account === nft.CurOwnerAddr && (
                 <>
                   <Box display="flex" mt={3}>
                     <TextField
@@ -261,10 +264,7 @@ const NFTTrait = ({ nft }) => {
           </Grid>
         </Grid>
         <Box mt={2}>
-          <NFTVideo
-            image_thumb={image}
-            onClick={() => handlePlay(video)}
-          />
+          <NFTVideo image_thumb={image} onClick={() => handlePlay(video)} />
         </Box>
         {imageOpen && (
           <Lightbox image={image} onClose={() => setImageOpen(false)} />

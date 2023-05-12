@@ -15,7 +15,7 @@ const Detail = ({ nft, data }) => {
   return (
     <>
       <Head>
-        <title>NFT #{nft.id} | Random Walk NFT</title>
+        <title>NFT #{nft.TokenId} | Random Walk NFT</title>
       </Head>
       <MainWrapper
         maxWidth={false}
