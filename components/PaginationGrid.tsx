@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
-import { Grid, Box, CircularProgress, Typography } from "@mui/material";
+import { Grid, Box, Typography } from "@mui/material";
 import Pagination from "@mui/material/Pagination";
 import { SearchBox, SearchField, SearchButton } from "./styled";
 import NFT from "./NFT";

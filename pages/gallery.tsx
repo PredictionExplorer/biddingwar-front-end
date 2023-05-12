@@ -22,7 +22,9 @@ const Gallery = ({ nfts }) => {
           const filtered = nfts.filter((nft) => nft.CurOwnerAddr === address);
           setCollection(filtered);
         } else {
-          const sorted = nfts.sort((a, b) => Number(b.TokenId) - Number(a.TokenId))
+          const sorted = nfts.sort(
+            (a, b) => Number(b.TokenId) - Number(a.TokenId)
+          );
           setCollection(sorted);
         }
         setAddress(address);

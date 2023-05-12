@@ -61,7 +61,9 @@ const CGNFT = ({ nft }) => {
 };
 
 const LatestNFTs = ({ nfts }) => {
-  const data = nfts.sort((a, b) => Number(b.TokenId) - Number(a.TokenId));
+  const data = nfts.sort(
+    (a, b) => Number(b.TokenId) - Number(a.TokenId)
+  );
   return (
     <Box
       sx={{
