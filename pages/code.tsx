@@ -10,7 +10,7 @@ const myTheme = createTheme({
   theme: "light",
   settings: {
     background: "transparent",
-    fontFamily: "Space Mono",
+    fontFamily: "monospace",
   },
   styles: [],
 });
