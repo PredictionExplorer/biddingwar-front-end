@@ -330,3 +330,24 @@ export const GradientBorder = styled(Box)({
     "-webkit-mask": "paint(rounded-shape)"
   }
 })
+
+export const CodeWrapper = styled(Box)({
+  position: "relative",
+  padding: "35px 16px 70px 70px",
+  border: 0,
+  "--border": "1px",
+  "--radius": "16px",
+  "--t": 0,
+  "--path": "0 0,32px 0,100% 0,100% 85%,80% 100%,0 100%",
+  "-webkit-mask": "paint(rounded-shape)",
+  background: "rgba(255, 255, 255, 0.05)",
+  "&:before": {
+    content: '""',
+    position: "absolute",
+    inset: 0,
+    background: "linear-gradient(152.14deg, rgba(156, 55, 253, 0.7) 9.96%, rgba(21, 191, 253, 0.7) 100%)",
+    "--t": 1,
+    "-webkit-mask": "paint(rounded-shape)"
+  }
+})
+
