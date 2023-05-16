@@ -333,7 +333,6 @@ export const GradientBorder = styled(Box)({
 
 export const CodeWrapper = styled(Box)({
   position: "relative",
-  padding: "35px 16px 70px 70px",
   border: 0,
   "--border": "1px",
   "--radius": "16px",
