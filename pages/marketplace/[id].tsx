@@ -3,12 +3,12 @@ import { useRouter } from "next/router";
 import React from "react";
 import { Box, Alert, Container, Typography } from "@mui/material";
 import Head from "next/head";
-import NFTTrait from "../../components/NFTTrait";
 import { MainWrapper } from "../../components/styled";
 import Prize from "../../components/Prize";
 import Winners from "../../components/Winners";
 import BiddingHistory from "../../components/BiddingHistory";
 import api from "../../services/api";
+import OnSaleNFTTrait from "../../components/OnSaleNFTTrait";
 
 const Detail = ({ nft, prizeInfo, data }) => {
   const router = useRouter();
@@ -33,7 +33,7 @@ const Detail = ({ nft, prizeInfo, data }) => {
             </Alert>
           </Box>
         )}
-        <NFTTrait nft={nft} />
+        <OnSaleNFTTrait nft={nft} />
         <Box sx={{ background: "#101441", padding: "80px 0" }}>
           <Container>
             <Box display="flex" alignItems="center" flexWrap="wrap">
