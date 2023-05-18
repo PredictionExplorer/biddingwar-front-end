@@ -15,25 +15,14 @@ const Gallery = ({ nfts }) => {
 
   useEffect(() => {
     const address = router.query["address"] as string;
-
-    const getTokens = async () => {
-      try {
-        if (address) {
-          const filtered = nfts.filter((nft) => nft.CurOwnerAddr === address);
-          setCollection(filtered);
-        } else {
-          const sorted = nfts.sort(
-            (a, b) => Number(b.TokenId) - Number(a.TokenId)
-          );
-          setCollection(sorted);
-        }
-        setAddress(address);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-
-    getTokens();
+    if (address) {
+      const filtered = nfts.filter((nft) => nft.CurOwnerAddr === address);
+      setCollection(filtered);
+    } else {
+      const sorted = nfts.sort((a, b) => Number(b.TokenId) - Number(a.TokenId));
+      setCollection(sorted);
+    }
+    setAddress(address);
   }, [router]);
 
   return (
