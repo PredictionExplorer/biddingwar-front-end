@@ -1,17 +1,14 @@
 import React, { useState } from "react";
+import Image from "next/image";
 import { useRouter } from "next/router";
 import {
   Box,
   Typography,
   CardActionArea,
-  Button,
   Grid,
   Container,
-  Menu,
-  MenuItem,
 } from "@mui/material";
 
-import { CopyToClipboard } from "react-copy-to-clipboard";
 import Lightbox from "react-awesome-lightbox";
 import "react-awesome-lightbox/build/style.css";
 
@@ -21,12 +18,6 @@ import "react-modal-video/css/modal-video.min.css";
 import NFTVideo from "./NFTVideo";
 import { formatId } from "../utils";
 import { StyledCard, SectionWrapper, NFTImage, NFTInfoWrapper } from "./styled";
-import {
-  ArrowBack,
-  ArrowForward,
-  ExpandLess,
-  ExpandMore,
-} from "@mui/icons-material";
 import useCosmicSignatureContract from "../hooks/useCosmicSignatureContract";
 
 const OnSaleNFTTrait = ({ nft }) => {
@@ -113,68 +104,10 @@ const OnSaleNFTTrait = ({ nft }) => {
                 </NFTInfoWrapper>
               </CardActionArea>
             </StyledCard>
-            <Box mt={2}>
-              <Grid container spacing={2}>
-                <Grid item xs={4}>
-                  <Button variant="text" fullWidth onClick={handleMenuOpen}>
-                    Copy link
-                    {anchorEl ? <ExpandLess /> : <ExpandMore />}
-                  </Button>
-
-                  <Menu
-                    elevation={0}
-                    anchorOrigin={{
-                      vertical: "bottom",
-                      horizontal: "center",
-                    }}
-                    transformOrigin={{
-                      vertical: "top",
-                      horizontal: "center",
-                    }}
-                    anchorEl={anchorEl}
-                    keepMounted
-                    open={Boolean(anchorEl)}
-                    onClose={handleMenuClose}
-                  >
-                    <CopyToClipboard text={video}>
-                      <MenuItem onClick={handleMenuClose}>Video</MenuItem>
-                    </CopyToClipboard>
-                    <CopyToClipboard text={image}>
-                      <MenuItem onClick={handleMenuClose}>Image</MenuItem>
-                    </CopyToClipboard>
-                    <CopyToClipboard text={window.location.href}>
-                      <MenuItem onClick={handleMenuClose}>Detail Page</MenuItem>
-                    </CopyToClipboard>
-                  </Menu>
-                </Grid>
-                <Grid item xs={4}>
-                  <Button
-                    variant="outlined"
-                    color="info"
-                    fullWidth
-                    startIcon={<ArrowBack />}
-                    onClick={handlePrev}
-                  >
-                    Prev
-                  </Button>
-                </Grid>
-                <Grid item xs={4}>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    style={{ width: "100%" }}
-                    endIcon={<ArrowForward />}
-                    onClick={handleNext}
-                  >
-                    Next
-                  </Button>
-                </Grid>
-              </Grid>
-            </Box>
           </Grid>
           <Grid item xs={12} sm={8} md={6}>
             <Typography variant="h4">Cosmic Signature Marketplace</Typography>
-            <Typography fontSize={19} color="secondary" component="span">
+            <Typography fontSize={19} component="span">
               Programmatically generated image and video Random Walk NFT. ETH
               spent on minting goes back to the minters through an
             </Typography>
@@ -182,7 +115,7 @@ const OnSaleNFTTrait = ({ nft }) => {
             <Typography fontSize={19} color="primary" component="span">
               interesting mechanism
             </Typography>
-            <Box>
+            <Box mt={2}>
               <Typography color="primary" component="span">
                 BID PRICE:
               </Typography>
@@ -215,6 +148,23 @@ const OnSaleNFTTrait = ({ nft }) => {
           </Grid>
         </Grid>
         <Box mt={2}>
+          <Typography variant="h4">Video Gallery</Typography>
+          <Box textAlign="center" marginBottom="56px">
+            <Image
+              src={"/images/divider.svg"}
+              width={93}
+              height={3}
+              alt="divider"
+            />
+          </Box>
+          <Typography fontSize={19} component="span">
+            Programmatically generated image and video Random Walk NFT. ETH
+            spent on minting goes back to the minters through an
+          </Typography>
+          &nbsp;
+          <Typography fontSize={19} color="primary" component="span">
+            interesting mechanism
+          </Typography>
           <NFTVideo image_thumb={image} onClick={() => handlePlay(video)} />
         </Box>
         {imageOpen && (
