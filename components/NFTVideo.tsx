@@ -8,7 +8,7 @@ const NFTVideo = ({ image_thumb, onClick }) => (
     <NFTImageWrapper>
       <NFTImage
         image={image_thumb}
-        style={{ opacity: 0.55, paddingTop: "33%" }}
+        style={{ opacity: 0.55, paddingTop: "320px" }}
       />
     </NFTImageWrapper>
     <div

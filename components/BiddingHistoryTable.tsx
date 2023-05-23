@@ -107,7 +107,7 @@ const HistoryTable = ({ biddingHistory }) => {
   );
 };
 
-const BiddingHistory = ({ curPage, biddingHistory, totalCount }) => {
+const BiddingHistoryTable = ({ curPage, biddingHistory, totalCount }) => {
   const perPage = 20;
   const router = useRouter();
   const handleNextPage = (page) => {
@@ -132,4 +132,4 @@ const BiddingHistory = ({ curPage, biddingHistory, totalCount }) => {
   );
 };
 
-export default BiddingHistory;
+export default BiddingHistoryTable;

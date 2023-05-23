@@ -4,11 +4,10 @@ import React from "react";
 import { Box, Alert, Container, Typography } from "@mui/material";
 import Head from "next/head";
 import { MainWrapper } from "../../components/styled";
-import Prize from "../../components/Prize";
-import Winners from "../../components/Winners";
-import BiddingHistory from "../../components/BiddingHistory";
 import api from "../../services/api";
 import OnSaleNFTTrait from "../../components/OnSaleNFTTrait";
+import BiddingHistoryTable from "../../components/BiddingHistoryTable";
+import BuyOfferTable from "../../components/BuyOfferTable";
 
 const Detail = ({ nft, prizeInfo, data }) => {
   const router = useRouter();
@@ -36,22 +35,29 @@ const Detail = ({ nft, prizeInfo, data }) => {
         <OnSaleNFTTrait nft={nft} />
         <Box sx={{ background: "#101441", padding: "80px 0" }}>
           <Container>
-            <Box display="flex" alignItems="center" flexWrap="wrap">
-              <Typography
-                variant="h6"
-                component="span"
-                color="primary"
-                sx={{ ml: 1.5 }}
-              >
-                BID HISTORY
+            <Box textAlign="center">
+              <Typography variant="h4" component="span" color="primary">
+                BID
+              </Typography>
+              &nbsp;
+              <Typography variant="h4" component="span">
+                HISTORY
               </Typography>
             </Box>
-            <BiddingHistory curPage={0} biddingHistory={[]} totalCount={0} />
+            <BuyOfferTable curPage={0} offers={[]} totalCount={0} />
           </Container>
         </Box>
-        <Container>
-          <Prize prizeAmount={data.PrizeAmountEth} />
-          {prizeInfo && <Winners prizeInfo={prizeInfo} />}
+        <Container sx={{ mt: "100px" }}>
+          <Box>
+            <Typography variant="h6" component="span" color="primary">
+              BID
+            </Typography>
+            &nbsp;
+            <Typography variant="h6" component="span">
+              HISTORY
+            </Typography>
+          </Box>
+          <BiddingHistoryTable curPage={0} biddingHistory={[]} totalCount={0} />
         </Container>
       </MainWrapper>
     </>

@@ -7,7 +7,7 @@ import NFTTrait from "../../components/NFTTrait";
 import { MainWrapper } from "../../components/styled";
 import Prize from "../../components/Prize";
 import Winners from "../../components/Winners";
-import BiddingHistory from "../../components/BiddingHistory";
+import BiddingHistory from "../../components/BiddingHistoryTable";
 import api from "../../services/api";
 
 const Detail = ({ nft, prizeInfo, data }) => {

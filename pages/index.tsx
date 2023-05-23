@@ -18,7 +18,7 @@ import {
   NFTImage,
   StyledCard,
 } from "../components/styled";
-import BiddingHistory from "../components/BiddingHistory";
+import BiddingHistory from "../components/BiddingHistoryTable";
 import api from "../services/api";
 import useBiddingWarContract from "../hooks/useBiddingWarContract";
 import { Contract, constants, ethers } from "ethers";
