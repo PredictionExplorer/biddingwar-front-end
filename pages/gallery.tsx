@@ -5,7 +5,6 @@ import Head from "next/head";
 
 import PaginationGrid from "../components/PaginationGrid";
 import { MainWrapper } from "../components/styled";
-import { GetServerSidePropsContext } from "next";
 import api from "../services/api";
 
 const Gallery = ({ nfts }) => {
@@ -66,7 +65,7 @@ const Gallery = ({ nfts }) => {
   );
 };
 
-export async function getServerSideProps(context: GetServerSidePropsContext) {
+export async function getServerSideProps() {
   const nfts = await api.get_cst_list();
   return {
     props: { nfts },

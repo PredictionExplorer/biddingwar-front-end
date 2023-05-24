@@ -36,7 +36,7 @@ const MyNFTs = () => {
   return (
     <>
       <Head>
-        <title>My NFTs | Bidding War</title>
+        <title>My NFTs | Cosmic Signature</title>
         <meta name="description" content="" />
       </Head>
       <MainWrapper>

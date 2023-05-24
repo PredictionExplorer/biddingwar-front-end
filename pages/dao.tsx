@@ -6,7 +6,7 @@ const Dao = () => {
   return (
     <>
       <Head>
-        <title>DAO | Bidding War</title>
+        <title>DAO | Cosmic Signature</title>
         <meta name="description" content="" />
       </Head>
       <MainWrapper>
@@ -17,7 +17,7 @@ const Dao = () => {
           flexWrap="wrap"
         >
           <Typography variant="h4" component="span">
-            BIDDING WAR DAO
+            COSMIC SIGNATURE DAO
           </Typography>
         </Box>
       </MainWrapper>

@@ -89,7 +89,7 @@ const FAQ = () => {
   return (
     <>
       <Head>
-        <title>FAQ | Bidding War</title>
+        <title>FAQ | Cosmic Signature</title>
         <meta name="description" content="" />
       </Head>
       <MainWrapper>

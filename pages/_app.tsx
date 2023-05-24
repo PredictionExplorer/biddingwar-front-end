@@ -48,7 +48,7 @@ function MyApp(props: MyAppProps) {
   return (
     <>
       <Head>
-        <title>Bidding War</title>
+        <title>Cosmic Signature</title>
         <meta name="viewport" content="width=device-width,initial-scale=1" />
         <meta name="theme-color" content={theme.palette.primary.main} />
         <meta

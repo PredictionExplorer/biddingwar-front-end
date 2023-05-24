@@ -52,10 +52,20 @@ const Footer = () => (
               href="https://twitter.com/RandomWalkNFT"
               target="_blank"
             >
-              <FontAwesomeIcon icon={faTwitter} size="xs" color="#A9AAB5" />
+              <FontAwesomeIcon
+                icon={faTwitter}
+                color="#A9AAB5"
+                width={24}
+                height={24}
+              />
             </IconButton>
             <IconButton href="https://discord.gg/bGnPn96Qwt" target="_blank">
-              <FontAwesomeIcon icon={faDiscord} size="xs" color="#A9AAB5" />
+              <FontAwesomeIcon
+                icon={faDiscord}
+                color="#A9AAB5"
+                width={24}
+                height={24}
+              />
             </IconButton>
           </Box>
         </Box>
