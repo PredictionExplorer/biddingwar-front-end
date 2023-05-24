@@ -9,14 +9,9 @@ class ApiService {
     return data?.task_id || -1;
   }
 
-  public async biddingHistory(page: number) {
-    let perPage = 20;
+  public async get_bid_list() {
     const { data } = await axios.get(biddingwarBaseUrl + "bid/list/0/1000000");
-    const biddingHistory = data?.Bids.slice(perPage * (page - 1), perPage * page)
-    return {
-      biddingHistory,
-      totalCount: data?.Bids.length
-    };
+    return data.Bids;
   }
 
   public async get_dashboard_info() {

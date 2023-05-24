@@ -23,7 +23,7 @@ const Winners = ({ prizeInfo }) => {
                 {winner.WinnerAddr}
               </Typography>
               <Box sx={{ display: "flex", justifyContent: "center" }}>
-                <Typography variant="caption" marginRight={1}>
+                <Typography fontSize={22} marginRight={1}>
                   Prize Won:
                 </Typography>
                 <Image
@@ -32,7 +32,7 @@ const Winners = ({ prizeInfo }) => {
                   height={16}
                   alt="ethereum"
                 />
-                <Typography variant="caption" color="primary">
+                <Typography fontSize={22} color="primary" marginLeft={1}>
                   {winner.Amount.toFixed(2)} NFT
                 </Typography>
               </Box>

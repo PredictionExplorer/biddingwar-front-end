@@ -7,8 +7,8 @@ import NFTTrait from "../../components/NFTTrait";
 import { MainWrapper } from "../../components/styled";
 import Prize from "../../components/Prize";
 import Winners from "../../components/Winners";
-import BiddingHistory from "../../components/BiddingHistoryTable";
 import api from "../../services/api";
+import BiddingHistoryTable from "../../components/BiddingHistoryTable";
 
 const Detail = ({ nft, prizeInfo, data }) => {
   const router = useRouter();
@@ -46,7 +46,7 @@ const Detail = ({ nft, prizeInfo, data }) => {
                 BID HISTORY
               </Typography>
             </Box>
-            <BiddingHistory curPage={0} biddingHistory={[]} totalCount={0} />
+            <BiddingHistoryTable biddingHistory={[]} />
           </Container>
         </Box>
         <Container>

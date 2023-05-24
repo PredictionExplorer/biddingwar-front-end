@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Box,
   Table,
@@ -14,7 +14,6 @@ import {
   TablePrimaryRow,
 } from "./styled";
 import Pagination from "@mui/material/Pagination";
-import { useRouter } from "next/router";
 
 const HistoryRow = ({ history }) => {
   const convertTimestampToDateTime = (timestamp: any) => {
@@ -74,7 +73,7 @@ const HistoryRow = ({ history }) => {
   );
 };
 
-const HistoryTable = ({ biddingHistory }) => {
+const HistoryTable = ({ biddingHistory, perPage, curPage }) => {
   return (
     <TablePrimaryContainer>
       <Table>
@@ -91,9 +90,9 @@ const HistoryTable = ({ biddingHistory }) => {
         </TablePrimaryHead>
         <TableBody>
           {biddingHistory.length > 0 ? (
-            biddingHistory.map((history, i) => (
-              <HistoryRow history={history} key={i} />
-            ))
+            biddingHistory
+              .slice((curPage - 1) * perPage, curPage * perPage)
+              .map((history, i) => <HistoryRow history={history} key={i} />)
           ) : (
             <TableRow>
               <TablePrimaryCell align="center" colSpan={8}>
@@ -107,23 +106,23 @@ const HistoryTable = ({ biddingHistory }) => {
   );
 };
 
-const BiddingHistoryTable = ({ curPage, biddingHistory, totalCount }) => {
-  const perPage = 20;
-  const router = useRouter();
-  const handleNextPage = (page) => {
-    router.query["page"] = page;
-    router.push({ pathname: router.pathname, query: router.query });
-  };
+const BiddingHistoryTable = ({ biddingHistory }) => {
+  const perPage = 5;
+  const [curPage, setCurrentPage] = useState(1);
 
   return (
     <Box mt={4}>
-      <HistoryTable biddingHistory={biddingHistory} />
+      <HistoryTable
+        biddingHistory={biddingHistory}
+        perPage={perPage}
+        curPage={curPage}
+      />
       <Box display="flex" justifyContent="center" mt={4}>
         <Pagination
           color="primary"
-          page={parseInt(curPage)}
-          onChange={(e, page) => handleNextPage(page)}
-          count={Math.ceil(totalCount / perPage)}
+          page={curPage}
+          onChange={(e, page) => setCurrentPage(page)}
+          count={Math.ceil(biddingHistory.length / perPage)}
           showFirstButton
           showLastButton
         />

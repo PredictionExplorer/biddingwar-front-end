@@ -57,7 +57,7 @@ const Detail = ({ nft, prizeInfo, data }) => {
               HISTORY
             </Typography>
           </Box>
-          <BiddingHistoryTable curPage={0} biddingHistory={[]} totalCount={0} />
+          <BiddingHistoryTable biddingHistory={[]} />
         </Container>
       </MainWrapper>
     </>
