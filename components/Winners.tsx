@@ -7,12 +7,20 @@ const Winners = ({ prizeInfo }) => {
   const { RaffleETHDeposits: raffleETHDeposits } = prizeInfo;
   return (
     <Box sx={{ marginTop: "70px" }}>
-      <Typography variant="h4" width={500} textAlign="center" marginX="auto">
+      <Typography variant="h4" textAlign="center" marginX="auto">
         Previous Round Raffle Winners
       </Typography>
       <Grid container spacing={2} marginTop="48px">
         {raffleETHDeposits.map((winner) => (
-          <Grid key={winner.EvtLogId} item xs={4} sx={{ position: "relative" }}>
+          <Grid
+            key={winner.EvtLogId}
+            sx={{ position: "relative" }}
+            item
+            xs={12}
+            sm={12}
+            md={4}
+            lg={4}
+          >
             <StyledCard>
               <CardActionArea>
                 <NFTImage image="https://randomwalknft.s3.us-east-2.amazonaws.com/000496_black_thumb.jpg" />

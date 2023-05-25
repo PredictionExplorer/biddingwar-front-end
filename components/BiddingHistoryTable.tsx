@@ -123,8 +123,6 @@ const BiddingHistoryTable = ({ biddingHistory }) => {
           page={curPage}
           onChange={(e, page) => setCurrentPage(page)}
           count={Math.ceil(biddingHistory.length / perPage)}
-          showFirstButton
-          showLastButton
         />
       </Box>
     </Box>

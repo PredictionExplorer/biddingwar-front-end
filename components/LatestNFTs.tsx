@@ -11,7 +11,7 @@ const LatestNFTs = ({ nfts }) => {
         backgroundColor: "#101441",
       }}
     >
-      <Container sx={{ padding: "80px 0 150px" }}>
+      <Container sx={{ padding: "80px 10px 150px" }}>
         <Box
           display="flex"
           alignItems="center"
@@ -32,7 +32,15 @@ const LatestNFTs = ({ nfts }) => {
         </Box>
         <Grid container spacing={2} marginTop="58px">
           {data.slice(0, 6).map((nft, i) => (
-            <Grid item xs={4} sx={{ position: "relative" }} key={i}>
+            <Grid
+              key={i}
+              sx={{ position: "relative" }}
+              item
+              xs={12}
+              sm={12}
+              md={4}
+              lg={4}
+            >
               <OnSaleNFT nft={nft} />
             </Grid>
           ))}

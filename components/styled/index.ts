@@ -37,7 +37,33 @@ export const StyledCard = styled(Card)({
     "--border": "1px",
     "--radius": "16px",
     "--t": 0,
-    "--path": "0 0px,32px 0,100% 0,100% 80%,70% 100%,0 100%",
+    "--path": "0 0px,32px 0,100% 0,100% 80%,75% 100%,0 100%",
+    "-webkit-mask": "paint(rounded-shape)",
+    background: "transparent",
+    boxShadow: "0px 2px 1px -1px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 1px 3px 0px rgba(0,0,0,0.12)",
+    "&:before": {
+      content: '""',
+      position: "absolute",
+      inset: 0,
+      background: "linear-gradient(-27.86deg, #15BFFD 9.96%, #9C37FD 100%)",
+      opacity: 0.7,
+      "--t": 1,
+      "-webkit-mask": "paint(rounded-shape)"
+    }
+  }
+})
+
+export const StyledCard2 = styled(Card)({
+  position: "relative",
+  background: "transparent",
+  boxShadow: "none",
+  button: {
+    position: "relative",
+    border: 0,
+    "--border": "1px",
+    "--radius": "16px",
+    "--t": 0,
+    "--path": "0 0px,32px 0,100% 0,100% 55%,88% 100%,0 100%",
     "-webkit-mask": "paint(rounded-shape)",
     background: "transparent",
     boxShadow: "0px 2px 1px -1px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 1px 3px 0px rgba(0,0,0,0.12)",
@@ -125,7 +151,6 @@ export const MainWrapper = styled(Container)(({ theme }) => ({
   overflow: 'hidden',
   lineHeight: 1,
   [theme.breakpoints.down('sm')]: {
-    textAlign: 'center',
     paddingTop: theme.spacing(18),
     paddingBottom: theme.spacing(18),
   },

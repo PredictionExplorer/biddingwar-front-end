@@ -10,6 +10,7 @@ import {
   AccordionSummary,
   AccordionDetails,
   Container,
+  Grid,
 } from "@mui/material";
 import {
   GradientBorder,
@@ -187,15 +188,15 @@ const NewHome = ({ biddingHistory, data, nfts, prizeInfo }) => {
   return (
     <>
       <MainWrapper>
-        <Box sx={{ display: "flex", gap: "70px" }}>
-          <Box sx={{ flex: 1 }}>
+        <Grid container spacing={4}>
+          <Grid item xs={12} sm={12} md={6} lg={6}>
             <StyledCard>
               <CardActionArea>
                 <NFTImage image="https://cosmic-game.s3.us-east-2.amazonaws.com/000000.png" />
               </CardActionArea>
             </StyledCard>
-          </Box>
-          <Box sx={{ flex: 1 }}>
+          </Grid>
+          <Grid item xs={12} sm={12} md={6} lg={6}>
             <Typography variant="h4">Current Bid</Typography>
             {!!(withdrawalSeconds && !countdownCompleted) && (
               <Countdown
@@ -204,25 +205,36 @@ const NewHome = ({ biddingHistory, data, nfts, prizeInfo }) => {
                 onComplete={() => setCountdownCompleted(true)}
               />
             )}
-            <Box sx={{ display: "flex" }}>
-              <Typography color="primary">BID PRICE:</Typography>
+            <Box>
+              <Typography color="primary" component="span">
+                BID PRICE:
+              </Typography>
               &nbsp;
-              <Typography>{data.BidPriceEth.toFixed(6)}</Typography>
+              <Typography component="span">
+                {data.BidPriceEth.toFixed(6)}
+              </Typography>
             </Box>
-            <Box sx={{ display: "flex" }}>
-              <Typography color="primary">REWARD:</Typography>
+            <Box>
+              <Typography color="primary" component="span">
+                REWARD:
+              </Typography>
               &nbsp;
-              <Typography>{data.PrizeAmountEth.toFixed(4)}</Typography>
+              <Typography component="span">
+                {data.PrizeAmountEth.toFixed(4)}
+              </Typography>
             </Box>
-            <Box sx={{ display: "flex" }}>
+            <Box>
               <Typography color="primary">Charity Address:</Typography>
-              &nbsp;
               <Typography>{data.CharityAddr}</Typography>
             </Box>
-            <Box sx={{ display: "flex" }}>
-              <Typography color="primary">Percentage of Donation:</Typography>
+            <Box>
+              <Typography color="primary" component="span">
+                Percentage of Donation:
+              </Typography>
               &nbsp;
-              <Typography>{data.CharityPercentage}%</Typography>
+              <Typography component="span">
+                {data.CharityPercentage}%
+              </Typography>
             </Box>
             <Box sx={{ my: "24px" }}>
               <Typography color="primary">Last Bidder Address:</Typography>
@@ -268,35 +280,43 @@ const NewHome = ({ biddingHistory, data, nfts, prizeInfo }) => {
               </AccordionDetails>
             </Accordion>
             <Box mb={2} position="relative">
-              <Box sx={{ display: "flex", mt: "45px" }}>
-                <Button
-                  variant="contained"
-                  size="large"
-                  endIcon={<ArrowForward />}
-                  sx={{ width: "33%", marginRight: "24px" }}
-                  onClick={onBid}
-                >
-                  Bid Now
-                </Button>
-                <Button
-                  variant="outlined"
-                  size="large"
-                  endIcon={<ArrowForward />}
-                  sx={{ flex: 1 }}
-                  onClick={() => setGalleryVisibility(!galleryVisibility)}
-                >
-                  Bid with Random Walk NFT
-                </Button>
-              </Box>
-              <Button
-                variant="outlined"
-                size="large"
-                endIcon={<ArrowForward />}
-                sx={{ width: "33%", mt: "20px" }}
-                onClick={onClaimPrize}
-              >
-                Claim Prize
-              </Button>
+              <Grid container spacing={2} mt="25px">
+                <Grid item xs={12} sm={12} md={4} lg={4}>
+                  <Button
+                    variant="contained"
+                    size="large"
+                    endIcon={<ArrowForward />}
+                    onClick={onBid}
+                    fullWidth
+                  >
+                    Bid Now
+                  </Button>
+                </Grid>
+                <Grid item xs={12} sm={12} md={8} lg={8}>
+                  <Button
+                    variant="outlined"
+                    size="large"
+                    endIcon={<ArrowForward />}
+                    onClick={() => setGalleryVisibility(!galleryVisibility)}
+                    fullWidth
+                  >
+                    Bid with Random Walk NFT
+                  </Button>
+                </Grid>
+              </Grid>
+              <Grid container columnSpacing={2} mt="20px">
+                <Grid item xs={12} sm={12} md={4} lg={4}>
+                  <Button
+                    variant="outlined"
+                    size="large"
+                    endIcon={<ArrowForward />}
+                    onClick={onClaimPrize}
+                    fullWidth
+                  >
+                    Claim Prize
+                  </Button>
+                </Grid>
+              </Grid>
               {/* Random Walk NFT list */}
               <Box
                 sx={{
@@ -348,8 +368,8 @@ const NewHome = ({ biddingHistory, data, nfts, prizeInfo }) => {
                 receive a Cosmic Signature NFT.
               </Typography>
             </Box>
-          </Box>
-        </Box>
+          </Grid>
+        </Grid>
 
         <Prize prizeAmount={data.PrizeAmountEth} />
 
@@ -394,38 +414,42 @@ const NewHome = ({ biddingHistory, data, nfts, prizeInfo }) => {
               alt="divider"
             />
           </Box>
-          <Box sx={{ display: "flex", gap: "28px" }}>
-            <GradientBorder sx={{ flex: 1, padding: "50px" }}>
-              <Typography fontSize={26} textAlign="center">
-                3 will receive
-              </Typography>
-              <GradientText variant="h4" fontSize={49} textAlign="center">
-                5% of the ETH
-              </GradientText>
-              <Typography
-                fontSize={22}
-                color="rgba(255, 255, 255, 0.68)"
-                textAlign="center"
-              >
-                in the pot each
-              </Typography>
-            </GradientBorder>
-            <GradientBorder sx={{ flex: 1, padding: "50px" }}>
-              <Typography fontSize={26} textAlign="center">
-                5 will receive
-              </Typography>
-              <GradientText variant="h4" fontSize={49} textAlign="center">
-                1 Cosmic NFT
-              </GradientText>
-              <Typography
-                fontSize={22}
-                color="rgba(255, 255, 255, 0.68)"
-                textAlign="center"
-              >
-                each
-              </Typography>
-            </GradientBorder>
-          </Box>
+          <Grid container spacing={4}>
+            <Grid item xs={12} sm={12} md={6} lg={6}>
+              <GradientBorder sx={{ padding: "50px" }}>
+                <Typography fontSize={26} textAlign="center">
+                  3 will receive
+                </Typography>
+                <GradientText variant="h4" fontSize={49} textAlign="center">
+                  5% of the ETH
+                </GradientText>
+                <Typography
+                  fontSize={22}
+                  color="rgba(255, 255, 255, 0.68)"
+                  textAlign="center"
+                >
+                  in the pot each
+                </Typography>
+              </GradientBorder>
+            </Grid>
+            <Grid item xs={12} sm={12} md={6} lg={6}>
+              <GradientBorder sx={{ padding: "50px" }}>
+                <Typography fontSize={26} textAlign="center">
+                  5 will receive
+                </Typography>
+                <GradientText variant="h4" fontSize={49} textAlign="center">
+                  1 Cosmic NFT
+                </GradientText>
+                <Typography
+                  fontSize={22}
+                  color="rgba(255, 255, 255, 0.68)"
+                  textAlign="center"
+                >
+                  each
+                </Typography>
+              </GradientBorder>
+            </Grid>
+          </Grid>
         </Box>
         {prizeInfo && <Winners prizeInfo={prizeInfo} />}
         <FAQ />

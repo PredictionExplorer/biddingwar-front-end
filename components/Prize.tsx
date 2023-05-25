@@ -1,7 +1,7 @@
 import React from "react";
 import Image from "next/image";
 import { Box, Typography, CardActionArea, Grid } from "@mui/material";
-import { GradientText, NFTImage, StyledCard } from "./styled";
+import { GradientText, NFTImage, StyledCard, StyledCard2 } from "./styled";
 
 const Prize = ({ prizeAmount }) => {
   return (
@@ -35,41 +35,46 @@ const Prize = ({ prizeAmount }) => {
           alt="divider"
         />
       </Box>
-      <Box sx={{ display: "flex", gap: "60px" }}>
-        <StyledCard sx={{ flex: 1 }}>
-          <CardActionArea
-            sx={{ display: "flex", justifyContent: "start", p: "16px" }}
-          >
-            <Image
-              src={"/images/CosmicSignatureNFT.png"}
-              width={88}
-              height={88}
-              alt="cosmic signature nft"
-            />
-            <GradientText variant="h5" marginLeft="16px">
-              1 Cosmic Signature NFT
-            </GradientText>
-          </CardActionArea>
-        </StyledCard>
-        <StyledCard sx={{ flex: 1 }}>
-          <CardActionArea
-            sx={{ display: "flex", justifyContent: "start", p: "16px" }}
-          >
-            <Image
-              src={"/images/Ethereum.png"}
-              width={88}
-              height={88}
-              alt="cosmic signture nft"
-            />
-            <GradientText variant="h5" marginLeft="16px">
-              {prizeAmount.toFixed(1)} ETH
-            </GradientText>
-          </CardActionArea>
-        </StyledCard>
-      </Box>
+
+      <Grid container spacing={4}>
+        <Grid item xs={12} sm={12} md={6} lg={6}>
+          <StyledCard2>
+            <CardActionArea
+              sx={{ display: "flex", justifyContent: "start", p: "16px" }}
+            >
+              <Image
+                src={"/images/CosmicSignatureNFT.png"}
+                width={88}
+                height={88}
+                alt="cosmic signature nft"
+              />
+              <GradientText variant="h5" marginLeft="16px">
+                1 Cosmic Signature NFT
+              </GradientText>
+            </CardActionArea>
+          </StyledCard2>
+        </Grid>
+        <Grid item xs={12} sm={12} md={6} lg={6}>
+          <StyledCard2>
+            <CardActionArea
+              sx={{ display: "flex", justifyContent: "start", p: "16px" }}
+            >
+              <Image
+                src={"/images/Ethereum.png"}
+                width={88}
+                height={88}
+                alt="cosmic signture nft"
+              />
+              <GradientText variant="h5" marginLeft="16px">
+                {prizeAmount.toFixed(1)} ETH
+              </GradientText>
+            </CardActionArea>
+          </StyledCard2>
+        </Grid>
+      </Grid>
 
       <Grid container spacing={2} marginTop="100px">
-        <Grid item xs={4}>
+        <Grid item xs={12} sm={12} md={4} lg={4}>
           <StyledCard>
             <CardActionArea>
               <NFTImage image="https://randomwalknft.s3.us-east-2.amazonaws.com/000496_black_thumb.jpg" />
@@ -87,7 +92,7 @@ const Prize = ({ prizeAmount }) => {
             </Box>
           </StyledCard>
         </Grid>
-        <Grid item xs={4}>
+        <Grid item xs={12} sm={12} md={4} lg={4}>
           <StyledCard>
             <CardActionArea>
               <NFTImage image="https://randomwalknft.s3.us-east-2.amazonaws.com/000496_black_thumb.jpg" />
@@ -105,7 +110,7 @@ const Prize = ({ prizeAmount }) => {
             </Box>
           </StyledCard>
         </Grid>
-        <Grid item xs={4}>
+        <Grid item xs={12} sm={12} md={4} lg={4}>
           <StyledCard>
             <CardActionArea>
               <NFTImage image="https://randomwalknft.s3.us-east-2.amazonaws.com/000496_black_thumb.jpg" />

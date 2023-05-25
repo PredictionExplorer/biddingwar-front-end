@@ -124,7 +124,7 @@ const theme = createTheme({
           "--radius": "4px",
           "--t": 0,
           "--path": "0 0px,20px 0,100% 0,100% calc(100% - 16px),calc(100% - 20px) 100%,0 100%",
-          "-webkit-mask": "paint(rounded-shape)",
+          "-webkit-mask": "-webkit-paint(rounded-shape)",
           mask: "paint(rounded-shape)",
           "background": "linear-gradient(92.49deg, #06AEEC 0.4%, #9C37FD 86.02%)",
 
