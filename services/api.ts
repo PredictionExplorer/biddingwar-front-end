@@ -14,6 +14,11 @@ class ApiService {
     return data.Bids;
   }
 
+  public async get_bid_list_by_round(round: number) {
+    const { data } = await axios.get(biddingwarBaseUrl + `bid/list_by_round/${round}/0/1000000`);
+    return data.BidsByRound;
+  }
+
   public async get_dashboard_info() {
     const { data } = await axios.get(biddingwarBaseUrl + "statistics/dashboard");
     return data;

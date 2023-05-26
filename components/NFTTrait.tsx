@@ -62,7 +62,7 @@ const NFTTrait = ({ nft }) => {
         .transferFrom(account, address, nft.TokenId)
         .then((tx) => tx.wait());
 
-      router.push("/my-nfts");
+      router.reload();
     } catch (err) {
       console.log(err);
     }

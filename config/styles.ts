@@ -116,20 +116,23 @@ const theme = createTheme({
         contained: {
           textTransform: "capitalize",
           position: "relative",
-          paddingLeft: "24px",
-          paddingRight: "24px",
           color: "#FFFFFF",
           border: 0,
-          "--border": "1px",
-          "--radius": "4px",
-          "--t": 0,
-          "--path": "0 0px,20px 0,100% 0,100% calc(100% - 16px),calc(100% - 20px) 100%,0 100%",
-          "-webkit-mask": "-webkit-paint(rounded-shape)",
-          mask: "paint(rounded-shape)",
-          "background": "linear-gradient(92.49deg, #06AEEC 0.4%, #9C37FD 86.02%)",
+          background: "none",
+          filter: "url(#round)",
+
+          "&:before": {
+            content: '""',
+            position: "absolute",
+            inset: 0,
+            clipPath: "polygon(0 0, 0 100%, 80% 100%, 100% 75%, 100% 0)",
+            background: "linear-gradient(92.49deg, #06AEEC 0.4%, #9C37FD 86.02%)",
+            zIndex: -1
+          },
 
           "&:hover": {
-            border: 0
+            border: 0,
+            background: "none"
           }
         },
       },

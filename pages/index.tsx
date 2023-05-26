@@ -39,21 +39,17 @@ import router from "next/router";
 import Countdown from "react-countdown";
 import Counter from "../components/Counter";
 
-const NewHome = ({ biddingHistory, data, nfts, prizeInfo }) => {
+const NewHome = ({ biddingHistory, data, nfts, prizeInfo, biddedRWLKIds }) => {
   const [withdrawalSeconds, setWithdrawalSeconds] = useState(null);
   const [countdownCompleted, setCountdownCompleted] = useState(false);
-  // const [activationTime, setActivationTime] = useState(1702377200);
   const [message, setMessage] = useState("");
   const [nftDonateAddress, setNftDonateAddress] = useState("");
   const [nftId, setNftId] = useState(-1);
   const [rwlkId, setRwlkId] = useState(-1);
   const [galleryVisibility, setGalleryVisibility] = useState(false);
+  const [isBidding, setIsBidding] = useState(false);
 
   const [rwlknftIds, setRwlknftIds] = useState([]);
-  // const [newActivationTime, setNewActivationTime] = useState<Dayjs | null>(
-  //   dayjs(Date.now() + 3600000)
-  // );
-  // const [contractOwner, setContractOwner] = useState("");
   const { library, account } = useActiveWeb3React();
   const biddingWarContract = useBiddingWarContract();
   const nftRWLKContract = useRWLKNFTContract();
@@ -70,15 +66,12 @@ const NewHome = ({ biddingHistory, data, nfts, prizeInfo }) => {
       console.log(balance.toNumber());
       const seed = await cosmicSignatureContract.seeds(token_id);
       await api.create(token_id, seed);
-      setTimeout(() => {
-        router.push({
-          pathname: `/detail/${token_id}`,
-          query: {
-            message: "success",
-          },
-        });
-      }, 2000);
-      getData();
+      router.push({
+        pathname: `/detail/${token_id}`,
+        query: {
+          message: "success",
+        },
+      });
     } catch (err) {
       console.log(err);
       alert(err.message);
@@ -87,6 +80,7 @@ const NewHome = ({ biddingHistory, data, nfts, prizeInfo }) => {
 
   const onBid = async () => {
     try {
+      setIsBidding(true);
       const bidPrice = await biddingWarContract.getBidPrice();
       const newBidPrice = parseFloat(ethers.utils.formatEther(bidPrice)) * 1.01;
       let receipt;
@@ -114,15 +108,19 @@ const NewHome = ({ biddingHistory, data, nfts, prizeInfo }) => {
           .then((tx) => tx.wait());
       }
       console.log(receipt);
-      getData();
+      setTimeout(() => {
+        router.reload();
+      }, 4000);
     } catch (err) {
       console.log(err);
+      setIsBidding(false);
     }
   };
 
   const onBidWithRWLK = async () => {
     try {
       let receipt;
+      setIsBidding(true);
       if (!nftDonateAddress || nftId === -1) {
         receipt = await biddingWarContract
           .bidWithRWLK(rwlkId, message)
@@ -144,9 +142,12 @@ const NewHome = ({ biddingHistory, data, nfts, prizeInfo }) => {
           .then((tx) => tx.wait());
       }
       console.log(receipt);
-      getData();
+      setTimeout(() => {
+        router.reload();
+      }, 4000);
     } catch (err) {
       console.log(err);
+      setIsBidding(false);
     }
   };
 
@@ -154,18 +155,13 @@ const NewHome = ({ biddingHistory, data, nfts, prizeInfo }) => {
     if (biddingWarContract) {
       const seconds = (await biddingWarContract.timeUntilPrize()).toNumber();
       setWithdrawalSeconds(seconds);
-
-      // const activationTime = (
-      //   await biddingWarContract.activationTime()
-      // ).toNumber();
-      // setActivationTime(activationTime);
-
-      // const owner = await biddingWarContract.owner();
-      // setContractOwner(owner);
     }
     if (nftRWLKContract && account) {
       const tokens = await nftRWLKContract.walletOfOwner(account);
-      const nftIds = tokens.map((t) => t.toNumber()).reverse();
+      const nftIds = tokens
+        .map((t) => t.toNumber())
+        .filter((t) => !biddedRWLKIds.includes(t))
+        .reverse();
       setRwlknftIds(nftIds);
     }
   };
@@ -175,15 +171,6 @@ const NewHome = ({ biddingHistory, data, nfts, prizeInfo }) => {
   }, [biddingWarContract, nftRWLKContract, account]);
 
   if (withdrawalSeconds === null) return null;
-  // if (activationTime * 1000 > Date.now()) {
-  //   return (
-  //     <MainWrapper>
-  //       <Box mb={2}>
-  //         <Countdown date={activationTime * 1000} renderer={Counter} />
-  //       </Box>
-  //     </MainWrapper>
-  //   );
-  // }
 
   return (
     <>
@@ -288,6 +275,7 @@ const NewHome = ({ biddingHistory, data, nfts, prizeInfo }) => {
                     endIcon={<ArrowForward />}
                     onClick={onBid}
                     fullWidth
+                    disabled={isBidding}
                   >
                     Bid Now
                   </Button>
@@ -299,6 +287,7 @@ const NewHome = ({ biddingHistory, data, nfts, prizeInfo }) => {
                     endIcon={<ArrowForward />}
                     onClick={() => setGalleryVisibility(!galleryVisibility)}
                     fullWidth
+                    disabled={isBidding}
                   >
                     Bid with Random Walk NFT
                   </Button>
@@ -461,8 +450,12 @@ const NewHome = ({ biddingHistory, data, nfts, prizeInfo }) => {
 };
 
 export async function getServerSideProps() {
-  const biddingHistory = await api.get_bid_list();
   const dashboardData = await api.get_dashboard_info();
+  const bidList = await api.get_bid_list();
+  const biddedRWLKIds = bidList.map((bid) => bid.RWalkNFTId);
+  const biddingHistory = await api.get_bid_list_by_round(
+    dashboardData.CurRoundNum - 1
+  );
   const nfts = await api.get_cst_list();
   const prizeList = await api.get_prize_list();
   let prizeInfo;
@@ -477,6 +470,7 @@ export async function getServerSideProps() {
       data: dashboardData,
       nfts,
       prizeInfo,
+      biddedRWLKIds,
     },
   };
 }

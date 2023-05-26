@@ -1,11 +1,8 @@
-import React, { useCallback, useState } from "react";
-import { MenuItem, Menu, Box } from "@mui/material";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-
+import React, { useCallback } from "react";
+import { Box } from "@mui/material";
 import { isMobile } from "react-device-detect";
 
 import {
-  NavLink,
   MobileWallet,
   Wallet,
   ConnectButton,
@@ -18,7 +15,6 @@ import { switchNetwork } from "../utils/switchNetwork";
 
 const ConnectWalletButton = ({ isMobileView }) => {
   const { account, activate } = useActiveWeb3React();
-  const [anchorEl, setAnchorEl] = useState(null);
 
   const handleConnectWallet = useCallback(async () => {
     const connector = isMobile ? walletconnect : injected;
@@ -33,14 +29,6 @@ const ConnectWalletButton = ({ isMobileView }) => {
     });
   }, [activate]);
 
-  const handleMenuOpen = (e) => {
-    setAnchorEl(e.currentTarget);
-  };
-
-  const handleMenuClose = (e) => {
-    setAnchorEl(null);
-  };
-
   if (account) {
     return isMobileView ? (
       <MobileWallet
@@ -51,7 +39,6 @@ const ConnectWalletButton = ({ isMobileView }) => {
             {shortenHex(account)}
           </Box>
         }
-        onClick={handleMenuOpen}
       />
     ) : (
       <>
@@ -60,31 +47,10 @@ const ConnectWalletButton = ({ isMobileView }) => {
           color="secondary"
           label={
             <Box display="flex" alignItems="center">
-              {shortenHex(account)} <ExpandMoreIcon />
+              {shortenHex(account)}
             </Box>
           }
-          deleteIcon={<ExpandMoreIcon />}
-          onClick={handleMenuOpen}
         />
-        <Menu
-          elevation={0}
-          anchorOrigin={{
-            vertical: "bottom",
-            horizontal: "center",
-          }}
-          transformOrigin={{
-            vertical: "top",
-            horizontal: "center",
-          }}
-          anchorEl={anchorEl}
-          keepMounted
-          open={Boolean(anchorEl)}
-          onClose={handleMenuClose}
-        >
-          <MenuItem style={{ minWidth: 166 }} onClick={handleMenuClose}>
-            <NavLink href="/my-nfts">MY NFTS</NavLink>
-          </MenuItem>
-        </Menu>
       </>
     );
   }
