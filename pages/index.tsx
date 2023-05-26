@@ -304,19 +304,21 @@ const NewHome = ({ biddingHistory, data, nfts, prizeInfo }) => {
                   </Button>
                 </Grid>
               </Grid>
-              <Grid container columnSpacing={2} mt="20px">
-                <Grid item xs={12} sm={12} md={4} lg={4}>
-                  <Button
-                    variant="outlined"
-                    size="large"
-                    endIcon={<ArrowForward />}
-                    onClick={onClaimPrize}
-                    fullWidth
-                  >
-                    Claim Prize
-                  </Button>
+              {!(withdrawalSeconds && !countdownCompleted) && (
+                <Grid container columnSpacing={2} mt="20px">
+                  <Grid item xs={12} sm={12} md={4} lg={4}>
+                    <Button
+                      variant="outlined"
+                      size="large"
+                      endIcon={<ArrowForward />}
+                      onClick={onClaimPrize}
+                      fullWidth
+                    >
+                      Claim Prize
+                    </Button>
+                  </Grid>
                 </Grid>
-              </Grid>
+              )}
               {/* Random Walk NFT list */}
               <Box
                 sx={{
