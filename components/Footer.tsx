@@ -15,7 +15,7 @@ import { faDiscord, faTwitter } from "@fortawesome/free-brands-svg-icons";
 import { FooterWrapper } from "./styled";
 
 const Footer = () => (
-  <FooterWrapper position="fixed" color="primary">
+  <FooterWrapper position="relative" color="primary">
     <Toolbar>
       <Container maxWidth="lg">
         <Box

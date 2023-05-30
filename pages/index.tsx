@@ -11,6 +11,7 @@ import {
   AccordionDetails,
   Container,
   Grid,
+  Popover,
 } from "@mui/material";
 import {
   GradientBorder,
@@ -38,8 +39,23 @@ import LatestNFTs from "../components/LatestNFTs";
 import router from "next/router";
 import Countdown from "react-countdown";
 import Counter from "../components/Counter";
+import {
+  Chart,
+  ChartLegend,
+  ChartSeries,
+  ChartSeriesItem,
+} from "@progress/kendo-react-charts";
+import "@progress/kendo-theme-default/dist/all.css";
+import "@egjs/hammerjs";
 
-const NewHome = ({ biddingHistory, data, nfts, prizeInfo, biddedRWLKIds }) => {
+const NewHome = ({
+  biddingHistory,
+  data,
+  nfts,
+  prizeInfo,
+  biddedRWLKIds,
+  nftDonations,
+}) => {
   const [withdrawalSeconds, setWithdrawalSeconds] = useState(null);
   const [countdownCompleted, setCountdownCompleted] = useState(false);
   const [message, setMessage] = useState("");
@@ -54,6 +70,28 @@ const NewHome = ({ biddingHistory, data, nfts, prizeInfo, biddedRWLKIds }) => {
   const biddingWarContract = useBiddingWarContract();
   const nftRWLKContract = useRWLKNFTContract();
   const cosmicSignatureContract = useCosmicSignatureContract();
+  const [anchorEl, setAnchorEl] = React.useState(null);
+
+  const series = [
+    { category: "Prize", value: 25 },
+    { category: "Raffle", value: 5 },
+    { category: "Charity", value: 10 },
+    { category: "Next round", value: 60 },
+  ];
+
+  const labelContent = (props) => {
+    return `${props.dataItem.category}: ${props.dataItem.value}`;
+  };
+
+  const open = Boolean(anchorEl);
+
+  const handlePopoverOpen = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handlePopoverClose = () => {
+    setAnchorEl(null);
+  };
 
   const onClaimPrize = async () => {
     try {
@@ -215,13 +253,47 @@ const NewHome = ({ biddingHistory, data, nfts, prizeInfo, biddedRWLKIds }) => {
               <Typography>{data.CharityAddr}</Typography>
             </Box>
             <Box>
-              <Typography color="primary" component="span">
+              <Typography
+                color="primary"
+                component="span"
+                onMouseEnter={handlePopoverOpen}
+              >
                 Percentage of Donation:
               </Typography>
               &nbsp;
               <Typography component="span">
                 {data.CharityPercentage}%
               </Typography>
+              <Popover
+                id="mouse-over-popover"
+                open={open}
+                anchorEl={anchorEl}
+                anchorOrigin={{
+                  vertical: "bottom",
+                  horizontal: "left",
+                }}
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "left",
+                }}
+                onClose={handlePopoverClose}
+                disableRestoreFocus
+              >
+                <Box sx={{ width: "540px", height: "420px" }}>
+                  <Chart>
+                    <ChartLegend position="bottom" />
+                    <ChartSeries>
+                      <ChartSeriesItem
+                        type="pie"
+                        data={series}
+                        field="value"
+                        categoryField="category"
+                        labels={{ visible: true, content: labelContent }}
+                      />
+                    </ChartSeries>
+                  </Chart>
+                </Box>
+              </Popover>
             </Box>
             <Box sx={{ my: "24px" }}>
               <Typography color="primary">Last Bidder Address:</Typography>
@@ -364,6 +436,30 @@ const NewHome = ({ biddingHistory, data, nfts, prizeInfo, biddedRWLKIds }) => {
 
         <Prize prizeAmount={data.PrizeAmountEth} />
 
+        <Grid container spacing={2} marginTop="100px">
+          {nftDonations &&
+            nftDonations.slice(-3).map((nft) => (
+              <Grid key={nft.RecordId} item xs={12} sm={12} md={4} lg={4}>
+                <StyledCard>
+                  <CardActionArea>
+                    <NFTImage image={nft.NFTTokenURI} />
+                  </CardActionArea>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      position: "absolute",
+                      inset: "16px",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <Typography variant="caption">#{nft.NFTTokenId}</Typography>
+                    <Typography color="primary">Donated</Typography>
+                  </Box>
+                </StyledCard>
+              </Grid>
+            ))}
+        </Grid>
+
         <Box mt="120px">
           <Box display="flex" alignItems="center" flexWrap="wrap">
             <Typography variant="h6" component="span">
@@ -464,6 +560,8 @@ export async function getServerSideProps() {
   } else {
     prizeInfo = null;
   }
+  const nftDonations = await api.get_donations_nft_list();
+
   return {
     props: {
       biddingHistory,
@@ -471,6 +569,7 @@ export async function getServerSideProps() {
       nfts,
       prizeInfo,
       biddedRWLKIds,
+      nftDonations,
     },
   };
 }

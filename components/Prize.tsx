@@ -72,63 +72,6 @@ const Prize = ({ prizeAmount }) => {
           </StyledCard2>
         </Grid>
       </Grid>
-
-      <Grid container spacing={2} marginTop="100px">
-        <Grid item xs={12} sm={12} md={4} lg={4}>
-          <StyledCard>
-            <CardActionArea>
-              <NFTImage image="https://randomwalknft.s3.us-east-2.amazonaws.com/000496_black_thumb.jpg" />
-            </CardActionArea>
-            <Box
-              sx={{
-                display: "flex",
-                position: "absolute",
-                inset: "16px",
-                justifyContent: "space-between",
-              }}
-            >
-              <Typography variant="caption">#000176</Typography>
-              <Typography color="primary">Donated</Typography>
-            </Box>
-          </StyledCard>
-        </Grid>
-        <Grid item xs={12} sm={12} md={4} lg={4}>
-          <StyledCard>
-            <CardActionArea>
-              <NFTImage image="https://randomwalknft.s3.us-east-2.amazonaws.com/000496_black_thumb.jpg" />
-            </CardActionArea>
-            <Box
-              sx={{
-                display: "flex",
-                position: "absolute",
-                inset: "16px",
-                justifyContent: "space-between",
-              }}
-            >
-              <Typography variant="caption">#000176</Typography>
-              <Typography color="primary">Donated</Typography>
-            </Box>
-          </StyledCard>
-        </Grid>
-        <Grid item xs={12} sm={12} md={4} lg={4}>
-          <StyledCard>
-            <CardActionArea>
-              <NFTImage image="https://randomwalknft.s3.us-east-2.amazonaws.com/000496_black_thumb.jpg" />
-            </CardActionArea>
-            <Box
-              sx={{
-                display: "flex",
-                position: "absolute",
-                inset: "16px",
-                justifyContent: "space-between",
-              }}
-            >
-              <Typography variant="caption">#000176</Typography>
-              <Typography color="primary">Donated</Typography>
-            </Box>
-          </StyledCard>
-        </Grid>
-      </Grid>
     </Box>
   );
 };

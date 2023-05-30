@@ -86,8 +86,8 @@ const theme = createTheme({
           "--radius": "4px",
           "--t": 0,
           "--path": "0 0px,20px 0,100% 0,100% calc(100% - 16px),calc(100% - 20px) 100%,0 100%",
-          "-webkit-mask": "paint(rounded-shape)",
-          "background": "transparent",
+          mask: "paint(rounded-shape)",
+          background: "transparent",
 
           "&:before": {
             content: '""',
@@ -95,7 +95,7 @@ const theme = createTheme({
             inset: 0,
             "--t": 1,
             background: "linear-gradient(152.14deg, #15BFFD 9.96%, #9C37FD 100%)",
-            "-webkit-mask": "paint(rounded-shape)"
+            mask: "paint(rounded-shape)"
           },
           "&:hover": {
             border: 0
@@ -118,21 +118,15 @@ const theme = createTheme({
           position: "relative",
           color: "#FFFFFF",
           border: 0,
-          background: "none",
-          filter: "url(#round)",
-
-          "&:before": {
-            content: '""',
-            position: "absolute",
-            inset: 0,
-            clipPath: "polygon(0 0, 0 100%, 80% 100%, 100% 75%, 100% 0)",
-            background: "linear-gradient(92.49deg, #06AEEC 0.4%, #9C37FD 86.02%)",
-            zIndex: -1
-          },
+          "--border": "1px",
+          "--radius": "4px",
+          "--t": 0,
+          "--path": "0 0px,20px 0,100% 0,100% calc(100% - 16px),calc(100% - 20px) 100%,0 100%",
+          mask: "paint(rounded-shape)",
+          background: "linear-gradient(92.49deg, #06AEEC 0.4%, #9C37FD 86.02%)",
 
           "&:hover": {
-            border: 0,
-            background: "none"
+            border: 0
           }
         },
       },

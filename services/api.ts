@@ -15,7 +15,7 @@ class ApiService {
   }
 
   public async get_bid_list_by_round(round: number) {
-    const { data } = await axios.get(biddingwarBaseUrl + `bid/list_by_round/${round}/0/1000000`);
+    const { data } = await axios.get(biddingwarBaseUrl + `bid/list_by_round/${round}/0/0/1000000`);
     return data.BidsByRound;
   }
 
@@ -24,7 +24,7 @@ class ApiService {
     return data;
   }
 
-  public async get_donation_nft_list() {
+  public async get_donations_nft_list() {
     const { data } = await axios.get(biddingwarBaseUrl + "donations/nft/list/0/1000000");
     return data.NFTDonations;
   }
