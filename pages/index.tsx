@@ -57,6 +57,8 @@ const NewHome = ({
   nftDonations,
 }) => {
   const [withdrawalSeconds, setWithdrawalSeconds] = useState(null);
+  const [prizeTime, setPrizeTime] = useState(0);
+  const [claimableSeconds, setClaimableSeconds] = useState(0);
   const [countdownCompleted, setCountdownCompleted] = useState(false);
   const [message, setMessage] = useState("");
   const [nftDonateAddress, setNftDonateAddress] = useState("");
@@ -64,13 +66,13 @@ const NewHome = ({
   const [rwlkId, setRwlkId] = useState(-1);
   const [galleryVisibility, setGalleryVisibility] = useState(false);
   const [isBidding, setIsBidding] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
 
   const [rwlknftIds, setRwlknftIds] = useState([]);
   const { library, account } = useActiveWeb3React();
   const biddingWarContract = useBiddingWarContract();
   const nftRWLKContract = useRWLKNFTContract();
   const cosmicSignatureContract = useCosmicSignatureContract();
-  const [anchorEl, setAnchorEl] = React.useState(null);
 
   const series = [
     { category: "Prize", value: 25 },
@@ -193,6 +195,9 @@ const NewHome = ({
     if (biddingWarContract) {
       const seconds = (await biddingWarContract.timeUntilPrize()).toNumber();
       setWithdrawalSeconds(seconds);
+
+      const result = (await biddingWarContract.prizeTime()).toNumber();
+      setPrizeTime(result * 1000);
     }
     if (nftRWLKContract && account) {
       const tokens = await nftRWLKContract.walletOfOwner(account);
@@ -207,6 +212,18 @@ const NewHome = ({
   useEffect(() => {
     getData();
   }, [biddingWarContract, nftRWLKContract, account]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setClaimableSeconds(Math.floor((prizeTime - Date.now()) / 1000));
+    }, 1000);
+
+    if (claimableSeconds < 0) {
+      clearInterval(interval);
+    }
+
+    return () => clearInterval(interval);
+  }, [claimableSeconds]);
 
   if (withdrawalSeconds === null) return null;
 
@@ -279,7 +296,9 @@ const NewHome = ({
                 onClose={handlePopoverClose}
                 disableRestoreFocus
               >
-                <Box sx={{ width: "540px", height: "420px" }}>
+                <Box
+                  sx={{ width: "540px", height: "400px", overflow: "hidden" }}
+                >
                   <Chart>
                     <ChartLegend position="bottom" />
                     <ChartSeries>
@@ -367,7 +386,7 @@ const NewHome = ({
               </Grid>
               {!(withdrawalSeconds && !countdownCompleted) && (
                 <Grid container columnSpacing={2} mt="20px">
-                  <Grid item xs={12} sm={12} md={4} lg={4}>
+                  <Grid item xs={12} sm={12} md={12} lg={12}>
                     <Button
                       variant="outlined"
                       size="large"
@@ -375,7 +394,8 @@ const NewHome = ({
                       onClick={onClaimPrize}
                       fullWidth
                     >
-                      Claim Prize
+                      Claim Prize &nbsp; (
+                      <Countdown date={Date.now() + claimableSeconds * 1000} />)
                     </Button>
                   </Grid>
                 </Grid>
