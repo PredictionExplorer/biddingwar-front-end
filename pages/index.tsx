@@ -42,6 +42,7 @@ import Counter from "../components/Counter";
 import DonatedNFT from "../components/DonatedNFT";
 import {
   Chart,
+  ChartArea,
   ChartLegend,
   ChartSeries,
   ChartSeriesItem,
@@ -252,6 +253,30 @@ const NewHome = ({
                 <NFTImage image="https://cosmic-game.s3.us-east-2.amazonaws.com/000000.png" />
               </CardActionArea>
             </StyledCard>
+            <Box>
+              <Typography color="primary" mt={4}>
+                Distribution Map of Prize funds
+              </Typography>
+
+              <Chart transitions={false} style={{ width: "100%", height: 300 }}>
+                <ChartLegend position="bottom" labels={{ color: "white" }} />
+                <ChartArea background="transparent" />
+                <ChartSeries>
+                  <ChartSeriesItem
+                    type="pie"
+                    data={series}
+                    field="value"
+                    categoryField="category"
+                    labels={{
+                      visible: true,
+                      content: labelContent,
+                      color: "white",
+                      background: "none",
+                    }}
+                  />
+                </ChartSeries>
+              </Chart>
+            </Box>
           </Grid>
           <Grid item xs={12} sm={12} md={6} lg={6}>
             <Typography variant="h4">Current Bid</Typography>
@@ -283,51 +308,6 @@ const NewHome = ({
             <Box>
               <Typography color="primary">Charity Address:</Typography>
               <Typography>{data.CharityAddr}</Typography>
-            </Box>
-            <Box>
-              <Typography
-                color="primary"
-                component="span"
-                onMouseEnter={handlePopoverOpen}
-              >
-                Percentage of Donation:
-              </Typography>
-              &nbsp;
-              <Typography component="span">
-                {data.CharityPercentage}%
-              </Typography>
-              <Popover
-                id="mouse-over-popover"
-                open={open}
-                anchorEl={anchorEl}
-                anchorOrigin={{
-                  vertical: "bottom",
-                  horizontal: "left",
-                }}
-                transformOrigin={{
-                  vertical: "top",
-                  horizontal: "left",
-                }}
-                onClose={handlePopoverClose}
-                disableRestoreFocus
-              >
-                <Box
-                  sx={{ width: "540px", height: "400px", overflow: "hidden" }}
-                >
-                  <Chart>
-                    <ChartLegend position="bottom" />
-                    <ChartSeries>
-                      <ChartSeriesItem
-                        type="pie"
-                        data={series}
-                        field="value"
-                        categoryField="category"
-                        labels={{ visible: true, content: labelContent }}
-                      />
-                    </ChartSeries>
-                  </Chart>
-                </Box>
-              </Popover>
             </Box>
             <Box sx={{ my: "24px" }}>
               <Typography color="primary">Last Bidder Address:</Typography>
