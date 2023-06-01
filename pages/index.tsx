@@ -39,6 +39,7 @@ import LatestNFTs from "../components/LatestNFTs";
 import router from "next/router";
 import Countdown from "react-countdown";
 import Counter from "../components/Counter";
+import DonatedNFT from "../components/DonatedNFT";
 import {
   Chart,
   ChartLegend,
@@ -50,15 +51,16 @@ import "@egjs/hammerjs";
 
 const NewHome = ({
   biddingHistory,
-  data,
+  initialData,
   nfts,
   prizeInfo,
   biddedRWLKIds,
   nftDonations,
 }) => {
+  const [data, setData] = useState(initialData);
+  const [curBidList, setCurBidList] = useState(biddingHistory);
   const [withdrawalSeconds, setWithdrawalSeconds] = useState(null);
   const [prizeTime, setPrizeTime] = useState(0);
-  const [claimableSeconds, setClaimableSeconds] = useState(0);
   const [countdownCompleted, setCountdownCompleted] = useState(false);
   const [message, setMessage] = useState("");
   const [nftDonateAddress, setNftDonateAddress] = useState("");
@@ -97,13 +99,9 @@ const NewHome = ({
 
   const onClaimPrize = async () => {
     try {
-      const receipt = await biddingWarContract
-        .claimPrize()
-        .then((tx) => tx.wait());
-      console.log(receipt);
+      await biddingWarContract.claimPrize().then((tx) => tx.wait());
       const balance = await cosmicSignatureContract.totalSupply();
       const token_id = balance.toNumber() - 1;
-      console.log(balance.toNumber());
       const seed = await cosmicSignatureContract.seeds(token_id);
       await api.create(token_id, seed);
       router.push({
@@ -137,10 +135,9 @@ const NewHome = ({
           NFT_ABI,
           library.getSigner(account)
         );
-        const response = await nftDonateContract
+        await nftDonateContract
           .setApprovalForAll(BIDDINGWAR_ADDRESS, true)
           .then((tx) => tx.wait());
-        console.log(response);
         receipt = await biddingWarContract
           .bidAndDonateNFT(message, nftDonateAddress, nftId, {
             value: ethers.utils.parseEther(newBidPrice.toFixed(6)),
@@ -149,8 +146,8 @@ const NewHome = ({
       }
       console.log(receipt);
       setTimeout(() => {
-        router.reload();
-      }, 4000);
+        setIsBidding(false);
+      }, 3000);
     } catch (err) {
       console.log(err);
       setIsBidding(false);
@@ -172,32 +169,34 @@ const NewHome = ({
           NFT_ABI,
           library.getSigner(account)
         );
-        const response = await nftDonateContract
+        await nftDonateContract
           .setApprovalForAll(BIDDINGWAR_ADDRESS, true)
           .then((tx) => tx.wait());
-        console.log(response);
-
         receipt = await biddingWarContract
           .bidWithRWLKAndDonateNFT(rwlkId, message, nftDonateAddress, nftId)
           .then((tx) => tx.wait());
       }
       console.log(receipt);
       setTimeout(() => {
-        router.reload();
-      }, 4000);
+        setIsBidding(false);
+      }, 3000);
     } catch (err) {
       console.log(err);
       setIsBidding(false);
     }
   };
 
-  const getData = async () => {
+  const getTimeUntilPrize = async () => {
     if (biddingWarContract) {
       const seconds = (await biddingWarContract.timeUntilPrize()).toNumber();
       setWithdrawalSeconds(seconds);
+    }
+  };
 
+  const getData = async () => {
+    if (biddingWarContract) {
       const result = (await biddingWarContract.prizeTime()).toNumber();
-      setPrizeTime(result * 1000);
+      setPrizeTime((result + 24 * 3600) * 1000);
     }
     if (nftRWLKContract && account) {
       const tokens = await nftRWLKContract.walletOfOwner(account);
@@ -210,20 +209,36 @@ const NewHome = ({
   };
 
   useEffect(() => {
+    getTimeUntilPrize();
     getData();
   }, [biddingWarContract, nftRWLKContract, account]);
 
   useEffect(() => {
+    const fetchDashboardData = async () => {
+      const response = await fetch("/api/dashboard");
+      const newData = await response.json();
+      setData(newData);
+    };
+    const fetchBidData = async () => {
+      const response = await fetch(
+        `/api/bid/?round=${data.CurRoundNum - 1}&sortDir=desc`
+      );
+      const newData = await response.json();
+      setCurBidList(newData);
+    };
+
+    // Fetch data every 30 seconds
     const interval = setInterval(() => {
-      setClaimableSeconds(Math.floor((prizeTime - Date.now()) / 1000));
-    }, 1000);
+      fetchDashboardData();
+      fetchBidData();
+      getTimeUntilPrize();
+    }, 15000);
 
-    if (claimableSeconds < 0) {
+    // Clean up the interval when the component is unmounted
+    return () => {
       clearInterval(interval);
-    }
-
-    return () => clearInterval(interval);
-  }, [claimableSeconds]);
+    };
+  }, []);
 
   if (withdrawalSeconds === null) return null;
 
@@ -395,7 +410,7 @@ const NewHome = ({
                       fullWidth
                     >
                       Claim Prize &nbsp; (
-                      <Countdown date={Date.now() + claimableSeconds * 1000} />)
+                      <Countdown date={prizeTime} />)
                     </Button>
                   </Grid>
                 </Grid>
@@ -460,22 +475,7 @@ const NewHome = ({
           {nftDonations &&
             nftDonations.slice(-3).map((nft) => (
               <Grid key={nft.RecordId} item xs={12} sm={12} md={4} lg={4}>
-                <StyledCard>
-                  <CardActionArea>
-                    <NFTImage image={nft.NFTTokenURI} />
-                  </CardActionArea>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      position: "absolute",
-                      inset: "16px",
-                      justifyContent: "space-between",
-                    }}
-                  >
-                    <Typography variant="caption">#{nft.NFTTokenId}</Typography>
-                    <Typography color="primary">Donated</Typography>
-                  </Box>
-                </StyledCard>
+                <DonatedNFT nft={nft} />
               </Grid>
             ))}
         </Grid>
@@ -494,7 +494,7 @@ const NewHome = ({
               BID HISTORY
             </Typography>
           </Box>
-          <BiddingHistory biddingHistory={biddingHistory} />
+          <BiddingHistory biddingHistory={curBidList} />
         </Box>
       </MainWrapper>
 
@@ -570,7 +570,8 @@ export async function getServerSideProps() {
   const bidList = await api.get_bid_list();
   const biddedRWLKIds = bidList.map((bid) => bid.RWalkNFTId);
   const biddingHistory = await api.get_bid_list_by_round(
-    dashboardData.CurRoundNum - 1
+    dashboardData.CurRoundNum - 1,
+    "desc"
   );
   const nfts = await api.get_cst_list();
   const prizeList = await api.get_prize_list();
@@ -585,7 +586,7 @@ export async function getServerSideProps() {
   return {
     props: {
       biddingHistory,
-      data: dashboardData,
+      initialData: dashboardData,
       nfts,
       prizeInfo,
       biddedRWLKIds,
