@@ -6,6 +6,7 @@ import {
   TableBody,
   Link,
   TableCell,
+  Typography,
 } from "@mui/material";
 import {
   TablePrimaryContainer,
@@ -16,6 +17,7 @@ import {
 import Pagination from "@mui/material/Pagination";
 
 const HistoryRow = ({ history }) => {
+  const [expanded, setExpanded] = useState(false);
   const convertTimestampToDateTime = (timestamp: any) => {
     var date_ob = new Date(timestamp * 1000);
     var year = date_ob.getFullYear();
@@ -69,6 +71,25 @@ const HistoryRow = ({ history }) => {
       <TablePrimaryCell>
         {history.NFTDonationTokenId < 0 ? "" : history.NFTDonationTokenId}
       </TablePrimaryCell>
+      <TablePrimaryCell>
+        <Link
+          sx={{ textDecoration: "none", color: "rgba(255, 255, 255, 0.68)" }}
+          onClick={() => setExpanded((expanded) => !expanded)}
+        >
+          <Typography
+            sx={{
+              maxWidth: expanded ? "auto" : "100px",
+              overflow: "hidden",
+              whiteSpace: expanded ? "normal" : "nowrap",
+              display: "inline-block",
+              textOverflow: "ellipsis",
+            }}
+            component="span"
+          >
+            {history.Message}
+          </Typography>
+        </Link>
+      </TablePrimaryCell>
     </TablePrimaryRow>
   );
 };
@@ -86,6 +107,7 @@ const HistoryTable = ({ biddingHistory, perPage, curPage }) => {
             <TableCell>ERC20 Amount</TableCell>
             <TableCell>Donated NFT Address</TableCell>
             <TableCell>Donated NFT ID</TableCell>
+            <TableCell>Message</TableCell>
           </TableRow>
         </TablePrimaryHead>
         <TableBody>

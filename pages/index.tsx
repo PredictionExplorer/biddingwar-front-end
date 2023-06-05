@@ -11,7 +11,6 @@ import {
   AccordionDetails,
   Container,
   Grid,
-  Popover,
 } from "@mui/material";
 import {
   GradientBorder,
@@ -69,7 +68,6 @@ const NewHome = ({
   const [rwlkId, setRwlkId] = useState(-1);
   const [galleryVisibility, setGalleryVisibility] = useState(false);
   const [isBidding, setIsBidding] = useState(false);
-  const [anchorEl, setAnchorEl] = useState(null);
 
   const [rwlknftIds, setRwlknftIds] = useState([]);
   const { library, account } = useActiveWeb3React();
@@ -85,17 +83,7 @@ const NewHome = ({
   ];
 
   const labelContent = (props) => {
-    return `${props.dataItem.category}: ${props.dataItem.value}`;
-  };
-
-  const open = Boolean(anchorEl);
-
-  const handlePopoverOpen = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handlePopoverClose = () => {
-    setAnchorEl(null);
+    return `${props.dataItem.category}: ${props.dataItem.value}%`;
   };
 
   const onClaimPrize = async () => {
@@ -118,10 +106,11 @@ const NewHome = ({
   };
 
   const onBid = async () => {
+    let bidPrice, newBidPrice;
+    setIsBidding(true);
     try {
-      setIsBidding(true);
-      const bidPrice = await biddingWarContract.getBidPrice();
-      const newBidPrice = parseFloat(ethers.utils.formatEther(bidPrice)) * 1.01;
+      bidPrice = await biddingWarContract.getBidPrice();
+      newBidPrice = parseFloat(ethers.utils.formatEther(bidPrice)) * 1.01;
       let receipt;
       if (!nftDonateAddress || nftId === -1) {
         receipt = await biddingWarContract
@@ -129,7 +118,54 @@ const NewHome = ({
             value: ethers.utils.parseEther(newBidPrice.toFixed(10)),
           })
           .then((tx) => tx.wait());
-      } else {
+        console.log(receipt);
+        setTimeout(() => {
+          router.push("/");
+        }, 3000);
+        return;
+      }
+    } catch (err) {
+      console.log(err);
+      setIsBidding(false);
+      return;
+    }
+
+    // check if the contract exists
+    try {
+      const byteCode = await library.getCode(nftDonateAddress);
+      if (byteCode === "0x") {
+        alert("You selected address that doesn't belong to a contract address");
+        setIsBidding(false);
+        return;
+      }
+    } catch (err) {
+      alert("You selected address that doesn't belong to a contract address");
+      setIsBidding(false);
+      return;
+    }
+
+    // owner of
+    try {
+      const nftDonateContract = new Contract(
+        nftDonateAddress,
+        NFT_ABI,
+        library.getSigner(account)
+      );
+      const addr = await nftDonateContract.ownerOf(nftId);
+      if (addr !== account) {
+        alert("You aren't the owner of the token");
+        setIsBidding(false);
+        return;
+      }
+    } catch (err) {
+      alert(err);
+      console.log(err);
+      setIsBidding(false);
+    }
+
+    try {
+      let receipt;
+      if (nftDonateAddress && nftId !== -1) {
         // setApprovalForAll
         const nftDonateContract = new Contract(
           nftDonateAddress,
@@ -144,12 +180,13 @@ const NewHome = ({
             value: ethers.utils.parseEther(newBidPrice.toFixed(6)),
           })
           .then((tx) => tx.wait());
+        console.log(receipt);
+        setTimeout(() => {
+          router.push("/");
+        }, 3000);
       }
-      console.log(receipt);
-      setTimeout(() => {
-        setIsBidding(false);
-      }, 3000);
     } catch (err) {
+      alert(err);
       console.log(err);
       setIsBidding(false);
     }
@@ -179,7 +216,7 @@ const NewHome = ({
       }
       console.log(receipt);
       setTimeout(() => {
-        setIsBidding(false);
+        router.push("/");
       }, 3000);
     } catch (err) {
       console.log(err);
@@ -197,7 +234,7 @@ const NewHome = ({
   const getData = async () => {
     if (biddingWarContract) {
       const result = (await biddingWarContract.prizeTime()).toNumber();
-      setPrizeTime((result + 24 * 3600) * 1000);
+      setPrizeTime((result + 300) * 1000);
     }
     if (nftRWLKContract && account) {
       const tokens = await nftRWLKContract.walletOfOwner(account);
@@ -228,11 +265,10 @@ const NewHome = ({
       setCurBidList(newData);
     };
 
-    // Fetch data every 30 seconds
+    // Fetch data every 15 seconds
     const interval = setInterval(() => {
       fetchDashboardData();
       fetchBidData();
-      getTimeUntilPrize();
     }, 15000);
 
     // Clean up the interval when the component is unmounted
@@ -255,7 +291,7 @@ const NewHome = ({
             </StyledCard>
             <Box>
               <Typography color="primary" mt={4}>
-                Distribution Map of Prize funds
+                Distribution of Prize funds
               </Typography>
 
               <Chart transitions={false} style={{ width: "100%", height: 300 }}>
@@ -309,12 +345,21 @@ const NewHome = ({
               <Typography color="primary">Charity Address:</Typography>
               <Typography>{data.CharityAddr}</Typography>
             </Box>
-            <Box sx={{ my: "24px" }}>
+            <Box sx={{ mt: "24px" }}>
               <Typography color="primary">Last Bidder Address:</Typography>
               <Typography>
                 {data.LastBidderAddr === constants.AddressZero
                   ? "There is no bidder yet."
                   : data.LastBidderAddr}
+              </Typography>
+            </Box>
+            <Box sx={{ mb: "24px" }}>
+              <Typography color="primary" component="span">
+                Last Bidder Message:
+              </Typography>
+              &nbsp;
+              <Typography component="span">
+                {curBidList[curBidList.length - 1].Message}
               </Typography>
             </Box>
             <Accordion>
@@ -347,6 +392,7 @@ const NewHome = ({
                   multiline
                   fullWidth
                   rows={4}
+                  inputProps={{ maxLength: 280 }}
                   sx={{ marginTop: 2 }}
                   onChange={(e) => setMessage(e.target.value)}
                 />
@@ -379,7 +425,10 @@ const NewHome = ({
                   </Button>
                 </Grid>
               </Grid>
-              {!(withdrawalSeconds && !countdownCompleted) && (
+              {!(
+                (withdrawalSeconds && !countdownCompleted) ||
+                data.LastBidderAddr === constants.AddressZero
+              ) && (
                 <Grid container columnSpacing={2} mt="20px">
                   <Grid item xs={12} sm={12} md={12} lg={12}>
                     <Button
@@ -388,9 +437,18 @@ const NewHome = ({
                       endIcon={<ArrowForward />}
                       onClick={onClaimPrize}
                       fullWidth
+                      disabled={
+                        data.LastBidderAddr !== account &&
+                        prizeTime >= Date.now()
+                      }
                     >
-                      Claim Prize &nbsp; (
-                      <Countdown date={prizeTime} />)
+                      Claim Prize
+                      {prizeTime >= Date.now() && (
+                        <>
+                          &nbsp;
+                          <Countdown date={prizeTime} />
+                        </>
+                      )}
                     </Button>
                   </Grid>
                 </Grid>
