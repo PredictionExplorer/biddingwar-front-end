@@ -282,8 +282,6 @@ const NewHome = ({
     };
   }, []);
 
-  if (withdrawalSeconds === null) return null;
-
   return (
     <>
       <MainWrapper>
@@ -372,133 +370,143 @@ const NewHome = ({
                   : "There is no message yet!"}
               </Typography>
             </Box>
-            <Accordion>
-              <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                <Typography>Advanced Options</Typography>
-              </AccordionSummary>
-              <AccordionDetails>
-                <Typography variant="body2">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Suspendisse malesuada lacus ex, sit amet blandit leo lobortis
-                  eget.
-                </Typography>
-                <TextField
-                  placeholder="NFT contract address"
-                  size="small"
-                  fullWidth
-                  sx={{ marginTop: 2 }}
-                  onChange={(e) => setNftDonateAddress(e.target.value)}
-                />
-                <TextField
-                  placeholder="NFT number"
-                  size="small"
-                  fullWidth
-                  sx={{ marginTop: 2 }}
-                  onChange={(e) => setNftId(Number(e.target.value))}
-                />
-                <TextField
-                  placeholder="Message (280 characters)"
-                  size="small"
-                  multiline
-                  fullWidth
-                  rows={4}
-                  inputProps={{ maxLength: 280 }}
-                  sx={{ marginTop: 2 }}
-                  onChange={(e) => setMessage(e.target.value)}
-                />
-              </AccordionDetails>
-            </Accordion>
-            <Box mb={2} position="relative">
-              <Grid container spacing={2} mt="25px">
-                <Grid item xs={12} sm={12} md={4} lg={4}>
-                  <Button
-                    variant="contained"
-                    size="large"
-                    endIcon={<ArrowForward />}
-                    onClick={onBid}
-                    fullWidth
-                    disabled={isBidding}
-                  >
-                    Bid Now
-                  </Button>
-                </Grid>
-                <Grid item xs={12} sm={12} md={8} lg={8}>
-                  <Button
-                    variant="outlined"
-                    size="large"
-                    endIcon={<ArrowForward />}
-                    onClick={() => setGalleryVisibility(!galleryVisibility)}
-                    fullWidth
-                    disabled={isBidding}
-                  >
-                    Bid with Random Walk NFT
-                  </Button>
-                </Grid>
-              </Grid>
-              {!(
-                (withdrawalSeconds && !countdownCompleted) ||
-                data.LastBidderAddr === constants.AddressZero
-              ) && (
-                <Grid container columnSpacing={2} mt="20px">
-                  <Grid item xs={12} sm={12} md={12} lg={12}>
-                    <Button
-                      variant="outlined"
-                      size="large"
-                      endIcon={<ArrowForward />}
-                      onClick={onClaimPrize}
+            {account !== null && (
+              <>
+                <Accordion>
+                  <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                    <Typography>Advanced Options</Typography>
+                  </AccordionSummary>
+                  <AccordionDetails>
+                    <Typography variant="body2">
+                      Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                      Suspendisse malesuada lacus ex, sit amet blandit leo
+                      lobortis eget.
+                    </Typography>
+                    <TextField
+                      placeholder="NFT contract address"
+                      size="small"
                       fullWidth
-                      disabled={
-                        data.LastBidderAddr !== account &&
-                        prizeTime >= Date.now()
-                      }
-                    >
-                      Claim Prize
-                      {prizeTime >= Date.now() && (
-                        <>
-                          &nbsp;
-                          <Countdown date={prizeTime} />
-                        </>
-                      )}
-                    </Button>
+                      sx={{ marginTop: 2 }}
+                      onChange={(e) => setNftDonateAddress(e.target.value)}
+                    />
+                    <TextField
+                      placeholder="NFT number"
+                      size="small"
+                      fullWidth
+                      sx={{ marginTop: 2 }}
+                      onChange={(e) => setNftId(Number(e.target.value))}
+                    />
+                    <TextField
+                      placeholder="Message (280 characters)"
+                      size="small"
+                      multiline
+                      fullWidth
+                      rows={4}
+                      inputProps={{ maxLength: 280 }}
+                      sx={{ marginTop: 2 }}
+                      onChange={(e) => setMessage(e.target.value)}
+                    />
+                  </AccordionDetails>
+                </Accordion>
+                <Box mb={2} position="relative">
+                  <Grid container spacing={2} mt="25px">
+                    <Grid item xs={12} sm={12} md={4} lg={4}>
+                      <Button
+                        variant="contained"
+                        size="large"
+                        endIcon={<ArrowForward />}
+                        onClick={onBid}
+                        fullWidth
+                        disabled={isBidding}
+                      >
+                        Bid Now
+                      </Button>
+                    </Grid>
+                    <Grid item xs={12} sm={12} md={8} lg={8}>
+                      <Button
+                        variant="outlined"
+                        size="large"
+                        endIcon={<ArrowForward />}
+                        onClick={() => setGalleryVisibility(!galleryVisibility)}
+                        fullWidth
+                        disabled={isBidding}
+                      >
+                        Bid with Random Walk NFT
+                      </Button>
+                    </Grid>
                   </Grid>
-                </Grid>
-              )}
-              {/* Random Walk NFT list */}
-              <Box
-                sx={{
-                  border: "1px solid rgba(255, 255, 255, 0.09)",
-                  borderRadius: "5px",
-                  background: "#101441",
-                  padding: "24px",
-                  position: "absolute",
-                  zIndex: 1,
-                  top: "64px",
-                }}
-                visibility={galleryVisibility ? "visible" : "hidden"}
-              >
-                <Typography variant="h6">Random Walk NFT Gallery</Typography>
-                <Typography variant="body2">
-                  If you own some RandomWalkNFTs, you can use them to bid for
-                  free! Each NFT can be used only once!
-                </Typography>
-                <PaginationRWLKGrid
-                  loading={false}
-                  data={rwlknftIds}
-                  selectedToken={rwlkId}
-                  setSelectedToken={setRwlkId}
-                />
-                {rwlkId !== -1 && (
-                  <Button
-                    variant="outlined"
-                    size="small"
-                    sx={{ position: "absolute", bottom: "24px", right: "24px" }}
-                    onClick={onBidWithRWLK}
+                  {!(
+                    (withdrawalSeconds && !countdownCompleted) ||
+                    data.LastBidderAddr === constants.AddressZero
+                  ) && (
+                    <Grid container columnSpacing={2} mt="20px">
+                      <Grid item xs={12} sm={12} md={12} lg={12}>
+                        <Button
+                          variant="outlined"
+                          size="large"
+                          endIcon={<ArrowForward />}
+                          onClick={onClaimPrize}
+                          fullWidth
+                          disabled={
+                            data.LastBidderAddr !== account &&
+                            prizeTime >= Date.now()
+                          }
+                        >
+                          Claim Prize
+                          {prizeTime >= Date.now() && (
+                            <>
+                              &nbsp;
+                              <Countdown date={prizeTime} />
+                            </>
+                          )}
+                        </Button>
+                      </Grid>
+                    </Grid>
+                  )}
+                  {/* Random Walk NFT list */}
+                  <Box
+                    sx={{
+                      border: "1px solid rgba(255, 255, 255, 0.09)",
+                      borderRadius: "5px",
+                      background: "#101441",
+                      padding: "24px",
+                      position: "absolute",
+                      zIndex: 1,
+                      top: "64px",
+                    }}
+                    visibility={galleryVisibility ? "visible" : "hidden"}
                   >
-                    Done
-                  </Button>
-                )}
-              </Box>
-            </Box>
+                    <Typography variant="h6">
+                      Random Walk NFT Gallery
+                    </Typography>
+                    <Typography variant="body2">
+                      If you own some RandomWalkNFTs, you can use them to bid
+                      for free! Each NFT can be used only once!
+                    </Typography>
+                    <PaginationRWLKGrid
+                      loading={false}
+                      data={rwlknftIds}
+                      selectedToken={rwlkId}
+                      setSelectedToken={setRwlkId}
+                    />
+                    {rwlkId !== -1 && (
+                      <Button
+                        variant="outlined"
+                        size="small"
+                        sx={{
+                          position: "absolute",
+                          bottom: "24px",
+                          right: "24px",
+                        }}
+                        onClick={onBidWithRWLK}
+                      >
+                        Done
+                      </Button>
+                    )}
+                  </Box>
+                </Box>
+              </>
+            )}
             <Typography variant="body2">
               When you bid, you will get 100 tokens as a reward. These tokens
               allow you to participate in the DAO.
