@@ -80,6 +80,7 @@ const LatestNFTs = ({ nfts }) => {
           >
             {data.slice(0, 6).map((nft, i) => (
               <li
+                key={i}
                 style={{
                   width: "90%",
                   flexShrink: 0,
