@@ -11,7 +11,7 @@ const switchRequest = (ethereum: any) => {
 }
 
 const addChainRequest = (ethereum: any) => {
-  ethereum.request({
+  return ethereum.request({
     method: 'wallet_addEthereumChain',
     params: [
       {
@@ -25,23 +25,23 @@ const addChainRequest = (ethereum: any) => {
         },
       },
     ],
-  });
-  return ethereum.request({
-    method: 'wallet_addEthereumChain',
-    params: [
-      {
-        chainId: '0xa4b1',
-        chainName: 'Arbitrum One',
-        rpcUrls: ['https://arb1.arbitrum.io/rpc'],
-        blockExplorerUrls: ['https://arbiscan.io'],
-        nativeCurrency: {
-          name: 'AETH',
-          symbol: 'AETH',
-          decimals: 18,
-        },
-      },
-    ],
   })
+  // return ethereum.request({
+  //   method: 'wallet_addEthereumChain',
+  //   params: [
+  //     {
+  //       chainId: '0xa4b1',
+  //       chainName: 'Arbitrum One',
+  //       rpcUrls: ['https://arb1.arbitrum.io/rpc'],
+  //       blockExplorerUrls: ['https://arbiscan.io'],
+  //       nativeCurrency: {
+  //         name: 'AETH',
+  //         symbol: 'AETH',
+  //         decimals: 18,
+  //       },
+  //     },
+  //   ],
+  // })
 }
 
 export const switchNetwork = async () => {
