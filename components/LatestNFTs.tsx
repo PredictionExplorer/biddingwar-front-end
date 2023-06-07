@@ -16,13 +16,7 @@ import { ArrowForward, ArrowBack } from "@mui/icons-material";
 const LatestNFTs = ({ nfts }) => {
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up("md"));
-  const {
-    scrollRef,
-    pages,
-    activePageIndex,
-    next,
-    prev
-  } = useSnapCarousel();
+  const { scrollRef, pages, activePageIndex, next, prev } = useSnapCarousel();
 
   const data = nfts.sort((a, b) => Number(b.TokenId) - Number(a.TokenId));
   return (
@@ -93,10 +87,19 @@ const LatestNFTs = ({ nfts }) => {
             ))}
           </ul>
           <Box textAlign="center">
-            <Button variant="contained" sx={{ mr: 1 }} onClick={() => prev()} disabled={activePageIndex === 0}>
+            <Button
+              variant="contained"
+              sx={{ mr: 1 }}
+              onClick={() => prev()}
+              disabled={activePageIndex === 0}
+            >
               <ArrowBack />
             </Button>
-            <Button variant="contained" onClick={() => next()} disabled={activePageIndex === pages.length - 1}>
+            <Button
+              variant="contained"
+              onClick={() => next()}
+              disabled={activePageIndex === pages.length - 1}
+            >
               <ArrowForward />
             </Button>
           </Box>
