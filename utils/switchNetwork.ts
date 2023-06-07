@@ -11,6 +11,21 @@ const switchRequest = (ethereum: any) => {
 }
 
 const addChainRequest = (ethereum: any) => {
+  ethereum.request({
+    method: 'wallet_addEthereumChain',
+    params: [
+      {
+        chainId: '0x7A69',
+        chainName: 'Localhost 11845',
+        rpcUrls: ['http://170.187.142.12:11845'],
+        nativeCurrency: {
+          name: 'AGOR',
+          symbol: 'AGOR',
+          decimals: 18,
+        },
+      },
+    ],
+  });
   return ethereum.request({
     method: 'wallet_addEthereumChain',
     params: [
