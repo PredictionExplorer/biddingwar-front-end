@@ -367,7 +367,9 @@ const NewHome = ({
               </Typography>
               &nbsp;
               <Typography component="span">
-                {curBidList[curBidList.length - 1].Message}
+                {curBidList.length
+                  ? curBidList[curBidList.length - 1].Message
+                  : "There is no message yet!"}
               </Typography>
             </Box>
             <Accordion>
