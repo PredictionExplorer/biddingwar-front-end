@@ -1,12 +1,14 @@
 import React from "react";
 import Image from "next/image";
-import { Typography, CardActionArea, Box, Button } from "@mui/material";
+import { Typography, CardActionArea, Box, Button, useTheme, useMediaQuery } from "@mui/material";
 import { formatId } from "../utils";
 import { NFTImage, StyledCard } from "./styled";
 import router from "next/router";
 import { ArrowForward } from "@mui/icons-material";
 
 const OnSaleNFT = ({ nft }) => {
+  const theme = useTheme();
+  const matches = useMediaQuery(theme.breakpoints.up("md"));
   const fileName = nft.TokenId.toString().padStart(6, "0");
   const image = `https://cosmic-game.s3.us-east-2.amazonaws.com/${fileName}.png`;
   return (
@@ -20,8 +22,8 @@ const OnSaleNFT = ({ nft }) => {
         sx={{
           display: "flex",
           position: "absolute",
-          top: "32px",
-          left: "32px",
+          top: matches ? "32px" : "16px",
+          left: matches ? "32px" : "16px",
           right: "16px",
           justifyContent: "space-between",
           alignItems: "center",

@@ -11,6 +11,8 @@ import {
   AccordionDetails,
   Container,
   Grid,
+  useTheme,
+  useMediaQuery,
 } from "@mui/material";
 import {
   GradientBorder,
@@ -74,6 +76,9 @@ const NewHome = ({
   const biddingWarContract = useBiddingWarContract();
   const nftRWLKContract = useRWLKNFTContract();
   const cosmicSignatureContract = useCosmicSignatureContract();
+
+  const theme = useTheme();
+  const matches = useMediaQuery(theme.breakpoints.up("md"));
 
   const series = [
     { category: "Prize", value: 25 },
@@ -294,7 +299,10 @@ const NewHome = ({
                 Distribution of Prize funds
               </Typography>
 
-              <Chart transitions={false} style={{ width: "100%", height: 300 }}>
+              <Chart
+                transitions={false}
+                style={{ width: "100%", height: matches ? 300 : 200 }}
+              >
                 <ChartLegend position="bottom" labels={{ color: "white" }} />
                 <ChartArea background="transparent" />
                 <ChartSeries>
@@ -544,7 +552,7 @@ const NewHome = ({
             Every time you bid
           </Typography>
           <Typography
-            fontSize={22}
+            fontSize={matches ? 22 : 18}
             color="rgba(255, 255, 255, 0.68)"
             textAlign="center"
           >
@@ -565,7 +573,7 @@ const NewHome = ({
                 <Typography fontSize={26} textAlign="center">
                   3 will receive
                 </Typography>
-                <GradientText variant="h4" fontSize={49} textAlign="center">
+                <GradientText variant="h3" textAlign="center">
                   5% of the ETH
                 </GradientText>
                 <Typography
@@ -582,7 +590,7 @@ const NewHome = ({
                 <Typography fontSize={26} textAlign="center">
                   5 will receive
                 </Typography>
-                <GradientText variant="h4" fontSize={49} textAlign="center">
+                <GradientText variant="h3" textAlign="center">
                   1 Cosmic NFT
                 </GradientText>
                 <Typography

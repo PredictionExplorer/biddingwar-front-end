@@ -7,11 +7,11 @@ type NavItem = {
 const NAVS: NavItem[] = [
   { title: "Home", route: "/" },
   { title: "Gallery", route: "/gallery" },
-  { title: "RWLK Mint", route: "/mint" },
-  { title: "My NFTs", route: "/my-nfts" },
+  { title: "Marketplace", route: "/marketplace" },
+  { title: "Giveaway", route: "/giveaway" },
+  { title: "Withdraw", route: "/withdraw" },
   { title: "FAQ", route: "/faq" },
-  // { title: "Marketplace", route: "/marketplace" },
-  // { title: "DAO", route: "/dao" },
+  { title: "RWLK Mint", route: "/mint" },
 ];
 
 export default NAVS;

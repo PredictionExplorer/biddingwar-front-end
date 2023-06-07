@@ -1,4 +1,7 @@
 import { createTheme } from "@mui/material/styles";
+import createBreakpoints from "@mui/system/createTheme/createBreakpoints";
+
+const breakpoints = createBreakpoints({})
 
 // Create a theme instance.
 const theme = createTheme({
@@ -41,12 +44,26 @@ const theme = createTheme({
     MuiTypography: {
       styleOverrides: {
         root: {
-          fontSize: 16,
+          fontSize: 12,
+          [breakpoints.up('md')]: {
+            fontSize: 16,
+          },
+        },
+        h3: {
+          fontFamily: "ClashDisplay-Variable",
+          fontWeight: 600,
+          fontSize: 40,
+          [breakpoints.up('md')]: {
+            fontSize: 49,
+          },
         },
         h4: {
           fontFamily: "ClashDisplay-Variable",
           fontWeight: 600,
-          fontSize: 45,
+          fontSize: 40,
+          [breakpoints.up('md')]: {
+            fontSize: 45,
+          },
         },
         h5: {
           fontFamily: "ClashDisplay-Variable",
@@ -68,8 +85,11 @@ const theme = createTheme({
           fontSize: 14,
         },
         body2: {
-          fontSize: 13,
-          color: "rgba(255, 255, 255, 0.68)"
+          fontSize: 12,
+          color: "rgba(255, 255, 255, 0.68)",
+          [breakpoints.up('md')]: {
+            fontSize: 13,
+          },
         }
       },
     },

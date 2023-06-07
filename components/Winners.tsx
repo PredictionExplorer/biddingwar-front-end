@@ -32,7 +32,7 @@ const Winners = ({ prizeInfo }) => {
               </Typography>
               <Box sx={{ display: "flex", justifyContent: "center" }}>
                 <Typography fontSize={22} marginRight={1}>
-                  Prize Won:
+                  CST Won:
                 </Typography>
                 <Image
                   src={"/images/Ethereum_small.svg"}
@@ -41,7 +41,7 @@ const Winners = ({ prizeInfo }) => {
                   alt="ethereum"
                 />
                 <Typography fontSize={22} color="primary" marginLeft={1}>
-                  {winner.Amount.toFixed(2)} NFT
+                  {winner.Amount.toFixed(2)}
                 </Typography>
               </Box>
             </Box>

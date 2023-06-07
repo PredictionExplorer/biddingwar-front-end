@@ -1,9 +1,29 @@
 import React from "react";
 import Image from "next/image";
-import { Box, Typography, Container, Grid } from "@mui/material";
+import {
+  Box,
+  Typography,
+  Container,
+  Grid,
+  useTheme,
+  useMediaQuery,
+  Button,
+} from "@mui/material";
 import OnSaleNFT from "./OnSaleNFT";
+import { useSnapCarousel } from "react-snap-carousel";
+import { ArrowForward, ArrowBack } from "@mui/icons-material";
 
 const LatestNFTs = ({ nfts }) => {
+  const theme = useTheme();
+  const matches = useMediaQuery(theme.breakpoints.up("md"));
+  const {
+    scrollRef,
+    pages,
+    activePageIndex,
+    next,
+    prev
+  } = useSnapCarousel();
+
   const data = nfts.sort((a, b) => Number(b.TokenId) - Number(a.TokenId));
   return (
     <Box
@@ -30,21 +50,56 @@ const LatestNFTs = ({ nfts }) => {
             alt="divider"
           />
         </Box>
-        <Grid container spacing={2} marginTop="58px">
-          {data.slice(0, 6).map((nft, i) => (
-            <Grid
-              key={i}
-              sx={{ position: "relative" }}
-              item
-              xs={12}
-              sm={12}
-              md={4}
-              lg={4}
-            >
-              <OnSaleNFT nft={nft} />
-            </Grid>
-          ))}
-        </Grid>
+        {matches && (
+          <Grid container spacing={2} marginTop="58px">
+            {data.slice(0, 6).map((nft, i) => (
+              <Grid
+                key={i}
+                sx={{ position: "relative" }}
+                item
+                xs={12}
+                sm={12}
+                md={4}
+                lg={4}
+              >
+                <OnSaleNFT nft={nft} />
+              </Grid>
+            ))}
+          </Grid>
+        )}
+        <Box display={matches ? "none" : "block"}>
+          <ul
+            ref={scrollRef}
+            style={{
+              listStyle: "none",
+              display: "flex",
+              overflow: "hidden",
+              scrollSnapType: "x mandatory",
+              padding: 0,
+            }}
+          >
+            {data.slice(0, 6).map((nft, i) => (
+              <li
+                style={{
+                  width: "90%",
+                  flexShrink: 0,
+                  marginRight: "10px",
+                  position: "relative",
+                }}
+              >
+                <OnSaleNFT nft={nft} />
+              </li>
+            ))}
+          </ul>
+          <Box textAlign="center">
+            <Button variant="contained" sx={{ mr: 1 }} onClick={() => prev()} disabled={activePageIndex === 0}>
+              <ArrowBack />
+            </Button>
+            <Button variant="contained" onClick={() => next()} disabled={activePageIndex === pages.length - 1}>
+              <ArrowForward />
+            </Button>
+          </Box>
+        </Box>
       </Container>
     </Box>
   );
