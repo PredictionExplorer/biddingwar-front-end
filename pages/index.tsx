@@ -13,6 +13,7 @@ import {
   Grid,
   useTheme,
   useMediaQuery,
+  Tooltip,
 } from "@mui/material";
 import {
   GradientBorder,
@@ -125,7 +126,7 @@ const NewHome = ({
           .then((tx) => tx.wait());
         console.log(receipt);
         setTimeout(() => {
-          router.push("/");
+          router.reload();
         }, 3000);
         return;
       }
@@ -187,7 +188,7 @@ const NewHome = ({
           .then((tx) => tx.wait());
         console.log(receipt);
         setTimeout(() => {
-          router.push("/");
+          router.reload();
         }, 3000);
       }
     } catch (err) {
@@ -221,7 +222,7 @@ const NewHome = ({
       }
       console.log(receipt);
       setTimeout(() => {
-        router.push("/");
+        router.reload();
       }, 3000);
     } catch (err) {
       console.log(err);
@@ -232,14 +233,15 @@ const NewHome = ({
   const getTimeUntilPrize = async () => {
     if (biddingWarContract) {
       const seconds = (await biddingWarContract.timeUntilPrize()).toNumber();
-      setWithdrawalSeconds(seconds);
+      console.log(seconds);
+      setWithdrawalSeconds(Date.now() + seconds * 1000);
     }
   };
 
   const getData = async () => {
     if (biddingWarContract) {
       const result = (await biddingWarContract.prizeTime()).toNumber();
-      setPrizeTime((result + 300) * 1000);
+      setPrizeTime(result * 1000);
     }
     if (nftRWLKContract && account) {
       const tokens = await nftRWLKContract.walletOfOwner(account);
@@ -324,7 +326,7 @@ const NewHome = ({
             <Typography variant="h4">Current Bid</Typography>
             {!!(withdrawalSeconds && !countdownCompleted) && (
               <Countdown
-                date={Date.now() + withdrawalSeconds * 1000}
+                date={withdrawalSeconds}
                 renderer={Counter}
                 onComplete={() => setCountdownCompleted(true)}
               />
@@ -359,17 +361,20 @@ const NewHome = ({
                   : data.LastBidderAddr}
               </Typography>
             </Box>
-            <Box sx={{ mb: "24px" }}>
-              <Typography color="primary" component="span">
-                Last Bidder Message:
-              </Typography>
-              &nbsp;
-              <Typography component="span">
-                {curBidList.length
-                  ? curBidList[curBidList.length - 1].Message
-                  : "There is no message yet!"}
-              </Typography>
-            </Box>
+            {!!(
+              curBidList.length &&
+              curBidList[curBidList.length - 1].Message !== ""
+            ) && (
+              <Box sx={{ mb: "24px" }}>
+                <Typography color="primary" component="span">
+                  Last Bidder Message:
+                </Typography>
+                &nbsp;
+                <Typography component="span">
+                  {curBidList[curBidList.length - 1].Message}
+                </Typography>
+              </Box>
+            )}
             {account !== null && (
               <>
                 <Accordion>
@@ -436,7 +441,7 @@ const NewHome = ({
                     </Grid>
                   </Grid>
                   {!(
-                    (withdrawalSeconds && !countdownCompleted) ||
+                    (withdrawalSeconds > Date.now() && !countdownCompleted) ||
                     data.LastBidderAddr === constants.AddressZero
                   ) && (
                     <Grid container columnSpacing={2} mt="20px">
@@ -444,22 +449,37 @@ const NewHome = ({
                         <Button
                           variant="outlined"
                           size="large"
-                          endIcon={<ArrowForward />}
                           onClick={onClaimPrize}
                           fullWidth
                           disabled={
                             data.LastBidderAddr !== account &&
                             prizeTime >= Date.now()
                           }
+                          sx={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                          }}
                         >
                           Claim Prize
-                          {prizeTime >= Date.now() && (
-                            <>
-                              &nbsp;
-                              <Countdown date={prizeTime} />
-                            </>
-                          )}
+                          <Box sx={{ display: "flex", alignItems: "center" }}>
+                            {prizeTime >= Date.now() && (
+                              <>
+                                available in &nbsp;
+                                <Countdown date={prizeTime} />
+                              </>
+                            )}
+                            &nbsp;
+                            <ArrowForward sx={{ width: 22, height: 22 }} />
+                          </Box>
                         </Button>
+                        {!!(
+                          data.LastBidderAddr !== account &&
+                          prizeTime >= Date.now()
+                        ) && (
+                          <Typography variant="body2" fontStyle="italic">
+                            Please wait until the last bidder claims the prize.
+                          </Typography>
+                        )}
                       </Grid>
                     </Grid>
                   )}
