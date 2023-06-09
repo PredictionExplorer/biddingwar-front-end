@@ -38,7 +38,7 @@ export const StyledCard = styled(Card)({
     "--radius": "16px",
     "--t": 0,
     "--path": "0 0px,32px 0,100% 0,100% 80%,75% 100%,0 100%",
-    "-webkit-mask": "paint(rounded-shape)",
+    WebkitMask: "paint(rounded-shape)",
     background: "transparent",
     boxShadow: "0px 2px 1px -1px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 1px 3px 0px rgba(0,0,0,0.12)",
     "&:before": {
@@ -48,7 +48,7 @@ export const StyledCard = styled(Card)({
       background: "linear-gradient(-27.86deg, #15BFFD 9.96%, #9C37FD 100%)",
       opacity: 0.7,
       "--t": 1,
-      "-webkit-mask": "paint(rounded-shape)"
+      WebkitMask: "paint(rounded-shape)"
     }
   }
 })
@@ -64,7 +64,7 @@ export const StyledCard2 = styled(Card)({
     "--radius": "16px",
     "--t": 0,
     "--path": "0 0px,32px 0,100% 0,100% 55%,88% 100%,0 100%",
-    "-webkit-mask": "paint(rounded-shape)",
+    WebkitMask: "paint(rounded-shape)",
     background: "transparent",
     boxShadow: "0px 2px 1px -1px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 1px 3px 0px rgba(0,0,0,0.12)",
     "&:before": {
@@ -74,7 +74,7 @@ export const StyledCard2 = styled(Card)({
       background: "linear-gradient(-27.86deg, #15BFFD 9.96%, #9C37FD 100%)",
       opacity: 0.7,
       "--t": 1,
-      "-webkit-mask": "paint(rounded-shape)"
+      WebkitMask: "paint(rounded-shape)"
     }
   }
 })
@@ -183,7 +183,7 @@ export const CounterItemWrapper = styled(Box)({
   "--radius": "4px",
   "--t": 0,
   "--path": "0 0,8px 0,100% 0,100% calc(100% - 14px),calc(100% - 16px) 100%,0 100%",
-  "-webkit-mask": "paint(rounded-shape)",
+  WebkitMask: "paint(rounded-shape)",
   background: "transparent",
   "&:before": {
     content: '""',
@@ -191,7 +191,7 @@ export const CounterItemWrapper = styled(Box)({
     inset: 0,
     background: "linear-gradient(152.14deg, #15BFFD 9.96%, #9C37FD 100%)",
     "--t": 1,
-    "-webkit-mask": "paint(rounded-shape)"
+    WebkitMask: "paint(rounded-shape)"
   }
 })
 
@@ -228,8 +228,8 @@ export const FaqAccordion = styled(Accordion)({
     padding: "1px",
     height: "100%",
     background: "linear-gradient(152.14deg, rgba(21, 191, 253, 0.49) 9.96%, rgba(156, 55, 253, 0.49) 100%)",
-    "-webkit-mask": "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
-    "-webkit-mask-composite": "xor",
+    WebkitMask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
+    WebkitMaskComposite: "xor",
     opacity: "1 !important"
   },
   '&:first-of-type': {
@@ -256,7 +256,7 @@ export const NFTImageWrapper = styled(Box)({
   "--radius": "8px",
   "--t": 0,
   "--path": "0 0,16px 0,100% 0,100% calc(100% - 16px),100% 100%,0 100%",
-  "-webkit-mask": "paint(rounded-shape)",
+  WebkitMask: "paint(rounded-shape)",
   background: "transparent",
   "&:before": {
     content: '""',
@@ -264,7 +264,7 @@ export const NFTImageWrapper = styled(Box)({
     inset: 0,
     background: "linear-gradient(152.14deg, #15BFFD 9.96%, #9C37FD 100%)",
     "--t": 1,
-    "-webkit-mask": "paint(rounded-shape)"
+    WebkitMask: "paint(rounded-shape)"
   }
 })
 
@@ -317,9 +317,6 @@ export const VideoCard = styled(StyledCard)({
   borderRadius: "16px",
   border: "6px solid transparent",
   padding: "21px 16px",
-
-  ".MuiCardMedia-root": {
-  }
 })
 
 export const SectionWrapper = styled(Box)(({ theme }) => ({
@@ -333,8 +330,8 @@ export const SectionWrapper = styled(Box)(({ theme }) => ({
 
 export const GradientText = styled(Typography)({
   background: "linear-gradient(117.76deg, #35C9FF 3.35%, #1D9BEF 3.35%, #AC56FF 82.8%)",
-  "-webkit-background-clip": "text",
-  "-webkit-text-fill-color": "transparent"
+  WebkitBackgroundClip: "text",
+  WebkitTextFillColor: "transparent"
 })
 
 export const GradientBorder = styled(Box)({
@@ -344,7 +341,7 @@ export const GradientBorder = styled(Box)({
   "--radius": "16px",
   "--t": 0,
   "--path": "0 0,32px 0,100% 0,100% calc(100% - 32px),100% 100%,0 100%",
-  "-webkit-mask": "paint(rounded-shape)",
+  WebkitMask: "paint(rounded-shape)",
   background: "transparent",
   "&:before": {
     content: '""',
@@ -352,7 +349,7 @@ export const GradientBorder = styled(Box)({
     inset: 0,
     background: "linear-gradient(152.14deg, rgba(21, 191, 253, 0.7) 9.96%, rgba(156, 55, 253, 0.7) 100%)",
     "--t": 1,
-    "-webkit-mask": "paint(rounded-shape)"
+    WebkitMask: "paint(rounded-shape)"
   }
 })
 
@@ -363,7 +360,7 @@ export const CodeWrapper = styled(Box)({
   "--radius": "16px",
   "--t": 0,
   "--path": "0 0,32px 0,100% 0,100% 85%,80% 100%,0 100%",
-  "-webkit-mask": "paint(rounded-shape)",
+  WebkitMask: "paint(rounded-shape)",
   background: "rgba(255, 255, 255, 0.05)",
   "&:before": {
     content: '""',
@@ -371,7 +368,7 @@ export const CodeWrapper = styled(Box)({
     inset: 0,
     background: "linear-gradient(152.14deg, rgba(156, 55, 253, 0.7) 9.96%, rgba(21, 191, 253, 0.7) 100%)",
     "--t": 1,
-    "-webkit-mask": "paint(rounded-shape)"
+    WebkitMask: "paint(rounded-shape)"
   }
 })
 

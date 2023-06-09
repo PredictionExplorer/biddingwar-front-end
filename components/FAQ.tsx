@@ -304,6 +304,7 @@ const FAQ = () => {
               <Typography
                 variant="body1"
                 align="left"
+                color="rgba(255, 255, 255, 0.68)"
                 dangerouslySetInnerHTML={{ __html: detail }}
               />
             </FaqAccordionDetails>

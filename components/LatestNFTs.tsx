@@ -17,7 +17,6 @@ const LatestNFTs = ({ nfts }) => {
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up("md"));
   const { scrollRef, pages, activePageIndex, next, prev } = useSnapCarousel();
-
   const data = nfts.sort((a, b) => Number(b.TokenId) - Number(a.TokenId));
   return (
     <Box

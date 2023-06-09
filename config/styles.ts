@@ -44,6 +44,9 @@ const theme = createTheme({
     MuiTypography: {
       styleOverrides: {
         root: {
+          fontSize: 16,
+        },
+        body1: {
           fontSize: 12,
           [breakpoints.up('md')]: {
             fontSize: 16,
@@ -78,8 +81,11 @@ const theme = createTheme({
         },
         subtitle1: {
           fontFamily: "ClashDisplay-Variable",
-          fontSize: 20,
+          fontSize: 18,
           fontWeight: 500,
+          [breakpoints.up('md')]: {
+            fontSize: 20,
+          },
         },
         caption: {
           fontSize: 14,

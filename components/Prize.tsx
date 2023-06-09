@@ -1,9 +1,11 @@
 import React from "react";
 import Image from "next/image";
-import { Box, Typography, CardActionArea, Grid } from "@mui/material";
-import { GradientText, NFTImage, StyledCard, StyledCard2 } from "./styled";
+import { Box, Typography, CardActionArea, Grid, useTheme, useMediaQuery } from "@mui/material";
+import { GradientText, StyledCard2 } from "./styled";
 
 const Prize = ({ prizeAmount }) => {
+  const theme = useTheme();
+  const matches = useMediaQuery(theme.breakpoints.up("md"));
   return (
     <Box mt="130px">
       <Box
@@ -49,7 +51,9 @@ const Prize = ({ prizeAmount }) => {
                 alt="cosmic signature nft"
               />
               <GradientText variant="h5" marginLeft="16px">
-                1 Cosmic Signature NFT
+                1 Cosmic
+                {matches ? " " : <br />}
+                Signature NFT
               </GradientText>
             </CardActionArea>
           </StyledCard2>

@@ -233,7 +233,6 @@ const NewHome = ({
   const getTimeUntilPrize = async () => {
     if (biddingWarContract) {
       const seconds = (await biddingWarContract.timeUntilPrize()).toNumber();
-      console.log(seconds);
       setWithdrawalSeconds(Date.now() + seconds * 1000);
     }
   };

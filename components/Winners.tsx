@@ -12,24 +12,22 @@ const Winners = ({ prizeInfo }) => {
       </Typography>
       <Grid container spacing={2} marginTop="48px">
         {raffleETHDeposits.map((winner) => (
-          <Grid
-            key={winner.EvtLogId}
-            sx={{ position: "relative" }}
-            item
-            xs={12}
-            sm={12}
-            md={4}
-            lg={4}
-          >
+          <Grid key={winner.EvtLogId} item xs={12} sm={12} md={4} lg={4}>
             <StyledCard>
               <CardActionArea>
                 <NFTImage image="https://randomwalknft.s3.us-east-2.amazonaws.com/000496_black_thumb.jpg" />
               </CardActionArea>
             </StyledCard>
             <Box mt={2}>
-              <Typography variant="body2" textAlign="center">
-                {winner.WinnerAddr}
-              </Typography>
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  overflow: "hidden",
+                }}
+              >
+                <Typography variant="body2">{winner.WinnerAddr}</Typography>
+              </Box>
               <Box sx={{ display: "flex", justifyContent: "center" }}>
                 <Typography fontSize={22} marginRight={1}>
                   CST Won:
