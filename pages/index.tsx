@@ -62,8 +62,9 @@ const NewHome = ({
 }) => {
   const [data, setData] = useState(initialData);
   const [curBidList, setCurBidList] = useState(biddingHistory);
-  const [withdrawalSeconds, setWithdrawalSeconds] = useState(null);
+  const [timeUntilPrize, setTimeUntilPrize] = useState(null);
   const [prizeTime, setPrizeTime] = useState(0);
+  const [claimableTime, setClaimableTime] = useState(0);
   const [countdownCompleted, setCountdownCompleted] = useState(false);
   const [message, setMessage] = useState("");
   const [nftDonateAddress, setNftDonateAddress] = useState("");
@@ -230,30 +231,25 @@ const NewHome = ({
     }
   };
 
-  const getTimeUntilPrize = async () => {
-    if (biddingWarContract) {
-      const seconds = (await biddingWarContract.timeUntilPrize()).toNumber();
-      setWithdrawalSeconds(Date.now() + seconds * 1000);
-    }
-  };
-
-  const getData = async () => {
-    if (biddingWarContract) {
-      const result = (await biddingWarContract.prizeTime()).toNumber();
-      setPrizeTime(result * 1000);
-    }
-    if (nftRWLKContract && account) {
-      const tokens = await nftRWLKContract.walletOfOwner(account);
-      const nftIds = tokens
-        .map((t) => t.toNumber())
-        .filter((t) => !biddedRWLKIds.includes(t))
-        .reverse();
-      setRwlknftIds(nftIds);
-    }
-  };
-
   useEffect(() => {
-    getTimeUntilPrize();
+    console.log(data);
+    const getData = async () => {
+      if (biddingWarContract) {
+        const result = (await biddingWarContract.prizeTime()).toNumber();
+        setPrizeTime(result * 1000);
+        setClaimableTime((result + 3600 * 12) * 1000);
+        const seconds = (await biddingWarContract.timeUntilPrize()).toNumber();
+        setTimeUntilPrize(seconds);
+      }
+      if (nftRWLKContract && account) {
+        const tokens = await nftRWLKContract.walletOfOwner(account);
+        const nftIds = tokens
+          .map((t) => t.toNumber())
+          .filter((t) => !biddedRWLKIds.includes(t))
+          .reverse();
+        setRwlknftIds(nftIds);
+      }
+    };
     getData();
   }, [biddingWarContract, nftRWLKContract, account]);
 
@@ -322,10 +318,12 @@ const NewHome = ({
             </Box>
           </Grid>
           <Grid item xs={12} sm={12} md={6} lg={6}>
-            <Typography variant="h4">Current Bid</Typography>
-            {!!(withdrawalSeconds && !countdownCompleted) && (
+            <Typography variant="h4">
+              Current Bid (Round #{data.CurRoundNum})
+            </Typography>
+            {!!(timeUntilPrize && !countdownCompleted) && (
               <Countdown
-                date={withdrawalSeconds}
+                date={prizeTime}
                 renderer={Counter}
                 onComplete={() => setCountdownCompleted(true)}
               />
@@ -360,17 +358,14 @@ const NewHome = ({
                   : data.LastBidderAddr}
               </Typography>
             </Box>
-            {!!(
-              curBidList.length &&
-              curBidList[curBidList.length - 1].Message !== ""
-            ) && (
+            {!!(curBidList.length && curBidList[0].Message !== "") && (
               <Box sx={{ mb: "24px" }}>
                 <Typography color="primary" component="span">
                   Last Bidder Message:
                 </Typography>
                 &nbsp;
                 <Typography component="span">
-                  {curBidList[curBidList.length - 1].Message}
+                  {curBidList[0].Message}
                 </Typography>
               </Box>
             )}
@@ -440,7 +435,7 @@ const NewHome = ({
                     </Grid>
                   </Grid>
                   {!(
-                    (withdrawalSeconds > Date.now() && !countdownCompleted) ||
+                    (timeUntilPrize && !countdownCompleted) ||
                     data.LastBidderAddr === constants.AddressZero
                   ) && (
                     <Grid container columnSpacing={2} mt="20px">
@@ -452,7 +447,7 @@ const NewHome = ({
                           fullWidth
                           disabled={
                             data.LastBidderAddr !== account &&
-                            prizeTime >= Date.now()
+                            claimableTime >= Date.now()
                           }
                           sx={{
                             display: "flex",
@@ -461,10 +456,10 @@ const NewHome = ({
                         >
                           Claim Prize
                           <Box sx={{ display: "flex", alignItems: "center" }}>
-                            {prizeTime >= Date.now() && (
+                            {claimableTime >= Date.now() && (
                               <>
                                 available in &nbsp;
-                                <Countdown date={prizeTime} />
+                                <Countdown date={claimableTime} />
                               </>
                             )}
                             &nbsp;
@@ -473,9 +468,14 @@ const NewHome = ({
                         </Button>
                         {!!(
                           data.LastBidderAddr !== account &&
-                          prizeTime >= Date.now()
+                          claimableTime >= Date.now()
                         ) && (
-                          <Typography variant="body2" fontStyle="italic">
+                          <Typography
+                            variant="body2"
+                            fontStyle="italic"
+                            textAlign="right"
+                            color="primary"
+                          >
                             Please wait until the last bidder claims the prize.
                           </Typography>
                         )}
