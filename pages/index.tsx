@@ -141,12 +141,12 @@ const NewHome = ({
     try {
       const byteCode = await library.getCode(nftDonateAddress);
       if (byteCode === "0x") {
-        alert("You selected address that doesn't belong to a contract address");
+        alert("You selected address that doesn't belong to a contract address!");
         setIsBidding(false);
         return;
       }
     } catch (err) {
-      alert("You selected address that doesn't belong to a contract address");
+      alert("You selected address that doesn't belong to a contract address!");
       setIsBidding(false);
       return;
     }
@@ -160,12 +160,11 @@ const NewHome = ({
       );
       const addr = await nftDonateContract.ownerOf(nftId);
       if (addr !== account) {
-        alert("You aren't the owner of the token");
+        alert("You aren't the owner of the token!");
         setIsBidding(false);
         return;
       }
     } catch (err) {
-      alert(err);
       console.log(err);
       setIsBidding(false);
     }
@@ -179,9 +178,12 @@ const NewHome = ({
           NFT_ABI,
           library.getSigner(account)
         );
-        await nftDonateContract
-          .setApprovalForAll(BIDDINGWAR_ADDRESS, true)
-          .then((tx) => tx.wait());
+        const isApprovedForAll = nftDonateContract.isApprovedForAll(account, BIDDINGWAR_ADDRESS);
+        if (!isApprovedForAll) {
+          await nftDonateContract
+            .setApprovalForAll(BIDDINGWAR_ADDRESS, true)
+            .then((tx) => tx.wait());
+        }
         receipt = await biddingWarContract
           .bidAndDonateNFT(message, nftDonateAddress, nftId, {
             value: ethers.utils.parseEther(newBidPrice.toFixed(6)),
@@ -193,7 +195,7 @@ const NewHome = ({
         }, 3000);
       }
     } catch (err) {
-      alert(err);
+      alert(err.data.message);
       console.log(err);
       setIsBidding(false);
     }
