@@ -112,6 +112,36 @@ const NewHome = ({
     }
   };
 
+  const checkIfContractExist = async (address) => {
+    try {
+      const byteCode = await library.getCode(address);
+      if (byteCode === "0x") {
+        return false;
+      }
+    } catch (err) {
+      return false;
+    }
+    return true;
+  };
+
+  const checkTokenOwnership = async (address, tokenId) => {
+    try {
+      const nftDonateContract = new Contract(
+        address,
+        NFT_ABI,
+        library.getSigner(account)
+      );
+      const addr = await nftDonateContract.ownerOf(tokenId);
+      if (addr !== account) {
+        alert("You aren't the owner of the token!");
+        return false;
+      }
+    } catch (err) {
+      console.log(err);
+      return false;
+    }
+  };
+
   const onBid = async () => {
     let bidPrice, newBidPrice;
     setIsBidding(true);
@@ -138,35 +168,18 @@ const NewHome = ({
     }
 
     // check if the contract exists
-    try {
-      const byteCode = await library.getCode(nftDonateAddress);
-      if (byteCode === "0x") {
-        alert("You selected address that doesn't belong to a contract address!");
-        setIsBidding(false);
-        return;
-      }
-    } catch (err) {
+    const isExist = await checkIfContractExist(nftDonateAddress);
+    if (!isExist) {
       alert("You selected address that doesn't belong to a contract address!");
       setIsBidding(false);
       return;
     }
 
     // owner of
-    try {
-      const nftDonateContract = new Contract(
-        nftDonateAddress,
-        NFT_ABI,
-        library.getSigner(account)
-      );
-      const addr = await nftDonateContract.ownerOf(nftId);
-      if (addr !== account) {
-        alert("You aren't the owner of the token!");
-        setIsBidding(false);
-        return;
-      }
-    } catch (err) {
-      console.log(err);
+    const isOwner = await checkTokenOwnership(nftDonateAddress, nftId);
+    if (!isOwner) {
       setIsBidding(false);
+      return;
     }
 
     try {
@@ -178,7 +191,10 @@ const NewHome = ({
           NFT_ABI,
           library.getSigner(account)
         );
-        const isApprovedForAll = nftDonateContract.isApprovedForAll(account, BIDDINGWAR_ADDRESS);
+        const isApprovedForAll = nftDonateContract.isApprovedForAll(
+          account,
+          BIDDINGWAR_ADDRESS
+        );
         if (!isApprovedForAll) {
           await nftDonateContract
             .setApprovalForAll(BIDDINGWAR_ADDRESS, true)
@@ -192,7 +208,7 @@ const NewHome = ({
         console.log(receipt);
         setTimeout(() => {
           router.reload();
-        }, 3000);
+        }, 4000);
       }
     } catch (err) {
       alert(err.data.message);
@@ -202,31 +218,65 @@ const NewHome = ({
   };
 
   const onBidWithRWLK = async () => {
+    setIsBidding(true);
     try {
       let receipt;
-      setIsBidding(true);
       if (!nftDonateAddress || nftId === -1) {
         receipt = await biddingWarContract
           .bidWithRWLK(rwlkId, message)
           .then((tx) => tx.wait());
-      } else {
-        // setApprovalForAll
-        const nftDonateContract = new Contract(
-          nftDonateAddress,
-          NFT_ABI,
-          library.getSigner(account)
-        );
+        console.log(receipt);
+        setTimeout(() => {
+          router.reload();
+        }, 5000);
+        return;
+      }
+    } catch (err) {
+      console.log(err);
+      setIsBidding(false);
+      return;
+    }
+
+    // check if the contract exists
+    const isExist = await checkIfContractExist(nftDonateAddress);
+    if (!isExist) {
+      alert("You selected address that doesn't belong to a contract address!");
+      setIsBidding(false);
+      return;
+    }
+
+    // owner of
+    const isOwner = await checkTokenOwnership(nftDonateAddress, nftId);
+    if (!isOwner) {
+      setIsBidding(false);
+      return;
+    }
+
+    try {
+      let receipt;
+      setIsBidding(true);
+      // setApprovalForAll
+      const nftDonateContract = new Contract(
+        nftDonateAddress,
+        NFT_ABI,
+        library.getSigner(account)
+      );
+      const isApprovedForAll = nftDonateContract.isApprovedForAll(
+        account,
+        BIDDINGWAR_ADDRESS
+      );
+      if (!isApprovedForAll) {
         await nftDonateContract
           .setApprovalForAll(BIDDINGWAR_ADDRESS, true)
           .then((tx) => tx.wait());
-        receipt = await biddingWarContract
-          .bidWithRWLKAndDonateNFT(rwlkId, message, nftDonateAddress, nftId)
-          .then((tx) => tx.wait());
       }
+      receipt = await biddingWarContract
+        .bidWithRWLKAndDonateNFT(rwlkId, message, nftDonateAddress, nftId)
+        .then((tx) => tx.wait());
       console.log(receipt);
       setTimeout(() => {
         router.reload();
-      }, 3000);
+      }, 5000);
     } catch (err) {
       console.log(err);
       setIsBidding(false);
