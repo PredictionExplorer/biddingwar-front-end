@@ -13,7 +13,6 @@ import {
   Grid,
   useTheme,
   useMediaQuery,
-  Tooltip,
 } from "@mui/material";
 import {
   GradientBorder,
@@ -188,7 +187,7 @@ const NewHome = ({
       setIsBidding(false);
       return;
     }
-  
+
     try {
       let receipt;
       if (nftDonateAddress && nftId !== -1) {
@@ -612,14 +611,25 @@ const NewHome = ({
 
         <Prize prizeAmount={data.PrizeAmountEth} />
 
-        <Grid container spacing={2} marginTop="100px">
-          {nftDonations &&
-            nftDonations.slice(-3).map((nft) => (
-              <Grid key={nft.RecordId} item xs={12} sm={12} md={4} lg={4}>
-                <DonatedNFT nft={nft} />
-              </Grid>
-            ))}
-        </Grid>
+        <Box marginTop="80px">
+          <Typography variant="h6" component="span">
+            DONATED
+          </Typography>
+          <Typography variant="h6" color="primary" component="span" mx={1}>
+            ERC721 TOKENS
+          </Typography>
+          <Typography variant="h6" component="span">
+            FOR CURRENT ROUND
+          </Typography>
+          <Grid container spacing={2} mt={2}>
+            {nftDonations &&
+              nftDonations.slice(-3).map((nft) => (
+                <Grid key={nft.RecordId} item xs={12} sm={12} md={4} lg={4}>
+                  <DonatedNFT nft={nft} />
+                </Grid>
+              ))}
+          </Grid>
+        </Box>
 
         <Box mt="120px">
           <Box display="flex" alignItems="center" flexWrap="wrap">

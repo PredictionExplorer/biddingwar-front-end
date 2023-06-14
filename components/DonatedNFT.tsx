@@ -19,7 +19,7 @@ const DonatedNFT = ({ nft }) => {
   return (
     <StyledCard>
       <CardActionArea>
-        <NFTImage image={tokenURI?.image} />
+        <NFTImage image={tokenURI?.image} sx={{ backgroundSize: "contain" }} />
       </CardActionArea>
       <Box
         sx={{
@@ -30,8 +30,18 @@ const DonatedNFT = ({ nft }) => {
           pointerEvents: "none",
         }}
       >
-        <Typography variant="caption">#{nft.NFTTokenId}</Typography>
-        <Typography color="primary">Donated</Typography>
+        <Typography
+          variant="caption"
+          style={{ textShadow: "0px 0px 2px #080B2A" }}
+        >
+          #{nft.NFTTokenId}
+        </Typography>
+        <Typography
+          color="primary"
+          style={{ textShadow: "0px 0px 2px #080B2A" }}
+        >
+          Donated
+        </Typography>
       </Box>
     </StyledCard>
   );
