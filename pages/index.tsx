@@ -137,10 +137,13 @@ const NewHome = ({
         return false;
       }
     } catch (err) {
+      if (err?.data?.message) {
+        alert(err.data.message);
+      }
       console.log(err);
-      alert(err.data.message);
       return false;
     }
+    return true;
   };
 
   const onBid = async () => {
@@ -163,6 +166,9 @@ const NewHome = ({
         return;
       }
     } catch (err) {
+      if (err?.data?.message) {
+        alert(err.data.message);
+      }
       console.log(err);
       setIsBidding(false);
       return;
@@ -182,7 +188,7 @@ const NewHome = ({
       setIsBidding(false);
       return;
     }
-
+  
     try {
       let receipt;
       if (nftDonateAddress && nftId !== -1) {
@@ -212,7 +218,9 @@ const NewHome = ({
         }, 4000);
       }
     } catch (err) {
-      alert(err.data.message);
+      if (err?.data?.message) {
+        alert(err.data.message);
+      }
       console.log(err);
       setIsBidding(false);
     }
@@ -233,6 +241,9 @@ const NewHome = ({
         return;
       }
     } catch (err) {
+      if (err?.data?.message) {
+        alert(err.data.message);
+      }
       console.log(err);
       setIsBidding(false);
       return;
@@ -279,6 +290,9 @@ const NewHome = ({
         router.reload();
       }, 5000);
     } catch (err) {
+      if (err?.data?.message) {
+        alert(err.data.message);
+      }
       console.log(err);
       setIsBidding(false);
     }
