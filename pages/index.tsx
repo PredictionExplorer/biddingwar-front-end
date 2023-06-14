@@ -138,6 +138,7 @@ const NewHome = ({
       }
     } catch (err) {
       console.log(err);
+      alert(err.data.message);
       return false;
     }
   };
@@ -284,7 +285,6 @@ const NewHome = ({
   };
 
   useEffect(() => {
-    console.log(data);
     const getData = async () => {
       if (biddingWarContract) {
         const result = (await biddingWarContract.prizeTime()).toNumber();
