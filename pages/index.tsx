@@ -289,7 +289,7 @@ const NewHome = ({
       if (biddingWarContract) {
         const result = (await biddingWarContract.prizeTime()).toNumber();
         setPrizeTime(result * 1000);
-        setClaimableTime((result + 3600 * 12) * 1000);
+        setClaimableTime((result + 300) * 1000);
         const seconds = (await biddingWarContract.timeUntilPrize()).toNumber();
         setTimeUntilPrize(seconds);
       }
