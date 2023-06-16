@@ -50,7 +50,7 @@ import {
 } from "@progress/kendo-react-charts";
 import "@progress/kendo-theme-default/dist/all.css";
 import "@egjs/hammerjs";
-import getErrorMessage from '../utils/alert';
+import getErrorMessage from "../utils/alert";
 
 const NewHome = ({
   biddingHistory,
@@ -138,7 +138,7 @@ const NewHome = ({
       }
     } catch (err) {
       if (err?.data?.message) {
-        const msg = getErrorMessage(err?.data?.message)
+        const msg = getErrorMessage(err?.data?.message);
         alert(msg);
       }
       console.log(err);
@@ -385,8 +385,11 @@ const NewHome = ({
             </Box>
           </Grid>
           <Grid item xs={12} sm={12} md={6} lg={6}>
-            <Typography variant="h4">
-              Current Bid (Round #{data.CurRoundNum})
+            <Typography variant="h4" mr={1} component="span">
+              Current Bid
+            </Typography>
+            <Typography variant="h5" component="span">
+              (Round #{data.CurRoundNum})
             </Typography>
             {!!(timeUntilPrize && !countdownCompleted) && (
               <Countdown

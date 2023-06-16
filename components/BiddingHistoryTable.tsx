@@ -20,25 +20,26 @@ import { shortenHex } from "../utils";
 const HistoryRow = ({ history }) => {
   const [expanded, setExpanded] = useState(false);
   const convertTimestampToDateTime = (timestamp: any) => {
-    var date_ob = new Date(timestamp * 1000);
-    var year = date_ob.getFullYear();
-    var month = ("0" + (date_ob.getMonth() + 1)).slice(-2);
-    var date = ("0" + date_ob.getDate()).slice(-2);
-    var hours = ("0" + date_ob.getHours()).slice(-2);
-    var minutes = ("0" + date_ob.getMinutes()).slice(-2);
-    var seconds = ("0" + date_ob.getSeconds()).slice(-2);
-    var result =
-      year +
-      "-" +
-      month +
-      "-" +
-      date +
-      " " +
-      hours +
-      ":" +
-      minutes +
-      ":" +
-      seconds;
+    let month_names = [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
+    ];
+    let date_ob = new Date(timestamp * 1000);
+    let month = month_names[date_ob.getMonth()];
+    let date = ("0" + date_ob.getDate()).slice(-2);
+    let hours = ("0" + date_ob.getHours()).slice(-2);
+    let minutes = ("0" + date_ob.getMinutes()).slice(-2);
+    let result = month + " " + date + ", " + hours + ":" + minutes;
     return result;
   };
 
@@ -48,13 +49,13 @@ const HistoryRow = ({ history }) => {
 
   return (
     <TablePrimaryRow>
-      <TablePrimaryCell>
+      <TablePrimaryCell sx={{ whiteSpace: "nowrap" }}>
         {convertTimestampToDateTime(history.TimeStamp)}
       </TablePrimaryCell>
       <TablePrimaryCell>
         <Link
           href={`/gallery?address=${history.BidderAddr}`}
-          style={{ color: "rgba(255, 255, 255, 0.68)" }}
+          style={{ color: "rgba(255, 255, 255, 0.68)", fontSize: 14 }}
         >
           {shortenHex(history.BidderAddr, 6)}
         </Link>
@@ -71,9 +72,10 @@ const HistoryRow = ({ history }) => {
         {history.RWalkNFTId < 0 ? "" : history.RWalkNFTId}
       </TablePrimaryCell>
       <TablePrimaryCell>
-        {history.ERC20_AmountEth && history.ERC20_AmountEth?.toFixed(3)}
+        {history.NFTDonationTokenAddr
+          ? shortenHex(history.NFTDonationTokenAddr)
+          : ""}
       </TablePrimaryCell>
-      <TablePrimaryCell>{history.NFTDonationTokenAddr}</TablePrimaryCell>
       <TablePrimaryCell>
         {history.NFTDonationTokenId < 0 ? "" : history.NFTDonationTokenId}
       </TablePrimaryCell>
@@ -84,7 +86,7 @@ const HistoryRow = ({ history }) => {
         >
           <Typography
             sx={{
-              maxWidth: expanded ? "auto" : "100px",
+              maxWidth: expanded ? "auto" : "400px",
               overflow: "hidden",
               whiteSpace: expanded ? "normal" : "nowrap",
               display: "inline-block",
@@ -110,7 +112,6 @@ const HistoryTable = ({ biddingHistory, perPage, curPage }) => {
             <TableCell>Bidder</TableCell>
             <TableCell>Price</TableCell>
             <TableCell>RWLK ID</TableCell>
-            <TableCell>ERC20 Amount</TableCell>
             <TableCell>Donated NFT Address</TableCell>
             <TableCell>Donated NFT ID</TableCell>
             <TableCell>Message</TableCell>
