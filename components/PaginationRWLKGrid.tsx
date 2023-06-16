@@ -64,7 +64,7 @@ const PaginationRWLKGrid = ({
                 <Grid
                   key={index}
                   item
-                  xs={12}
+                  xs={6}
                   sm={6}
                   md={4}
                   onClick={() => {

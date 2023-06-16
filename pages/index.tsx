@@ -561,7 +561,7 @@ const NewHome = ({
                       padding: "24px",
                       position: "absolute",
                       zIndex: 1,
-                      top: "64px",
+                      top: matches ? "64px" : "128px",
                     }}
                     visibility={galleryVisibility ? "visible" : "hidden"}
                   >

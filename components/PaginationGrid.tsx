@@ -68,7 +68,7 @@ const PaginationGrid = ({ data }) => {
       </SearchBox>
       {data.length > 0 && (
         <>
-          <Grid spacing={4} container>
+          <Grid spacing={2} container>
             {searchNFT ? (
               !searchResult ? (
                 <Grid item>
@@ -85,7 +85,7 @@ const PaginationGrid = ({ data }) => {
               collection
                 .slice((curPage - 1) * perPage, curPage * perPage)
                 .map((nft, index) => (
-                  <Grid key={index} item xs={12} sm={6} md={4}>
+                  <Grid key={index} item xs={6} sm={6} md={4}>
                     <NFT nft={nft} />
                   </Grid>
                 ))
