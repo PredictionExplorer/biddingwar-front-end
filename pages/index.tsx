@@ -50,6 +50,7 @@ import {
 } from "@progress/kendo-react-charts";
 import "@progress/kendo-theme-default/dist/all.css";
 import "@egjs/hammerjs";
+import getErrorMessage from '../utils/alert';
 
 const NewHome = ({
   biddingHistory,
@@ -137,7 +138,8 @@ const NewHome = ({
       }
     } catch (err) {
       if (err?.data?.message) {
-        alert(err.data.message);
+        const msg = getErrorMessage(err?.data?.message)
+        alert(msg);
       }
       console.log(err);
       return false;

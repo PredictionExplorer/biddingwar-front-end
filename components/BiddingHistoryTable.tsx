@@ -15,6 +15,7 @@ import {
   TablePrimaryRow,
 } from "./styled";
 import Pagination from "@mui/material/Pagination";
+import { shortenHex } from "../utils";
 
 const HistoryRow = ({ history }) => {
   const [expanded, setExpanded] = useState(false);
@@ -55,11 +56,16 @@ const HistoryRow = ({ history }) => {
           href={`/gallery?address=${history.BidderAddr}`}
           style={{ color: "rgba(255, 255, 255, 0.68)" }}
         >
-          {history.BidderAddr}
+          {shortenHex(history.BidderAddr, 6)}
         </Link>
       </TablePrimaryCell>
       <TablePrimaryCell>
-        {history.BidPriceEth && `${history.BidPriceEth?.toFixed(6)}Ξ`}
+        {history.BidPriceEth &&
+          `${
+            history.BidPriceEth < 1
+              ? history.BidPriceEth?.toFixed(7)
+              : history.BidPriceEth?.toFixed(2)
+          }Ξ`}
       </TablePrimaryCell>
       <TablePrimaryCell>
         {history.RWalkNFTId < 0 ? "" : history.RWalkNFTId}
