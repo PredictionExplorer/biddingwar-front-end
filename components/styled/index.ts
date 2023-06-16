@@ -246,7 +246,7 @@ export const FaqAccordionDetails = styled(AccordionDetails)({
 
 export const NFTImage = styled(CardMedia)({
   width: '100%',
-  paddingTop: '64%',
+  paddingTop: '100%',
 })
 
 export const NFTImageWrapper = styled(Box)({

@@ -37,13 +37,13 @@ const DonatedNFT = ({ nft }) => {
       >
         <Typography
           variant="caption"
-          style={{ textShadow: "0px 0px 2px #080B2A" }}
+          style={{ textShadow: "0px 0px 8px #080B2A" }}
         >
           #{nft.NFTTokenId}
         </Typography>
         <Typography
           color="primary"
-          style={{ textShadow: "0px 0px 2px #080B2A" }}
+          style={{ textShadow: "0px 0px 8px #080B2A" }}
         >
           Donated
         </Typography>

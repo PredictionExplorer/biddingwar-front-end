@@ -349,7 +349,7 @@ const NewHome = ({
   return (
     <>
       <MainWrapper>
-        <Grid container spacing={4}>
+        <Grid container spacing={8}>
           <Grid item xs={12} sm={12} md={6} lg={6}>
             <StyledCard>
               <CardActionArea>
