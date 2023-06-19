@@ -11,6 +11,7 @@ import {
   Container,
   Menu,
   MenuItem,
+  useMediaQuery,
 } from "@mui/material";
 
 import { CopyToClipboard } from "react-copy-to-clipboard";
@@ -31,6 +32,7 @@ import {
   ExpandMore,
 } from "@mui/icons-material";
 import useCosmicSignatureContract from "../hooks/useCosmicSignatureContract";
+import theme from "../config/styles";
 
 const NFTTrait = ({ nft }) => {
   const fileName = nft.TokenId.toString().padStart(6, "0");
@@ -44,6 +46,7 @@ const NFTTrait = ({ nft }) => {
   const router = useRouter();
   const nftContract = useCosmicSignatureContract();
   const { account } = useActiveWeb3React();
+  const matches = useMediaQuery(theme.breakpoints.up("md"));
 
   const handlePlay = (videoPath) => {
     fetch(videoPath).then((res) => {
@@ -190,39 +193,39 @@ const NFTTrait = ({ nft }) => {
             </Box>
           </Grid>
           <Grid item xs={12} sm={8} md={6}>
-            {nft.Timestamp && (
-              <Box>
+            {nft.TimeStamp && (
+              <Box mb={1}>
                 <Typography color="primary" component="span">
                   Minted Date:
                 </Typography>
                 &nbsp;
                 <Typography component="span">
-                  {convertTimestampToDateTime(nft.Timestamp)}
+                  {convertTimestampToDateTime(nft.TimeStamp)}
                 </Typography>
               </Box>
             )}
-            <Box>
+            <Box mb={1}>
               <Typography color="primary" component="span">
                 Beauty Score:
               </Typography>
               &nbsp;
               <Typography component="span">1200</Typography>
             </Box>
-            <Box>
+            <Box mb={1}>
               <Typography color="primary" component="span">
                 Owner:
               </Typography>
               &nbsp;
               <Typography component="span">
                 <Link
-                  style={{ color: "#fff" }}
+                  style={{ color: "#fff", fontSize: matches ? '16px' : '12px' }}
                   href={`/gallery?address=${nft.CurOwnerAddr}`}
                 >
                   {nft.CurOwnerAddr}
                 </Link>
               </Typography>
             </Box>
-            <Box>
+            <Box mb={1}>
               <Typography color="primary" component="span">
                 Percentage of Donation:
               </Typography>

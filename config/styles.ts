@@ -1,5 +1,6 @@
 import { createTheme } from "@mui/material/styles";
 import createBreakpoints from "@mui/system/createTheme/createBreakpoints";
+import { isSafari } from "react-device-detect";
 
 const breakpoints = createBreakpoints({})
 
@@ -101,7 +102,7 @@ const theme = createTheme({
     },
     MuiButton: {
       styleOverrides: {
-        outlined: {
+        outlined: !isSafari && {
           textTransform: "capitalize",
           position: "relative",
           paddingLeft: "24px",
@@ -139,7 +140,7 @@ const theme = createTheme({
           background: "rgba(255, 255, 255, 0.02)",
           borderRadius: 0
         },
-        contained: {
+        contained: !isSafari && {
           textTransform: "capitalize",
           position: "relative",
           color: "#FFFFFF",
@@ -171,7 +172,7 @@ const theme = createTheme({
     },
     MuiPaginationItem: {
       styleOverrides: {
-        rounded: {
+        rounded: !isSafari && {
           position: "relative",
           border: 0,
           backgroundColor: "#1B2262",

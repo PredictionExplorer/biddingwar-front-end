@@ -46,7 +46,7 @@ const OnSaleNFT = ({ nft }) => {
         <Button
           variant="contained"
           endIcon={<ArrowForward />}
-          sx={{ width: "140px", fontSize: 14 }}
+          sx={{ fontSize: 14 }}
           size="large"
         >
           Place Bid

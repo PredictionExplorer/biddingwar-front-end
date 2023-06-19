@@ -20,14 +20,14 @@ import {
   Typography,
 } from '@mui/material'
 import { styled } from '@mui/material/styles'
-import { isMobile } from 'react-device-detect'
+import { isMobile, isSafari } from 'react-device-detect'
 
 export const StyledLink = styled(Link)({
   color: '#fff',
   textDecoration: 'underline',
 })
 
-export const StyledCard = styled(Card)({
+export const StyledCard = styled(Card)(!isSafari ? {
   position: "relative",
   background: "transparent",
   boxShadow: "none",
@@ -51,9 +51,18 @@ export const StyledCard = styled(Card)({
       WebkitMask: "paint(rounded-shape)"
     }
   }
+} : {
+  position: "relative",
+  background: "transparent",
+  boxShadow: "none",
+  button: {
+    border: "1px solid rgba(21, 191, 253, 0.5)",
+    borderRadius: "16px",
+    overflow: "hidden"
+  }
 })
 
-export const StyledCard2 = styled(Card)({
+export const StyledCard2 = styled(Card)(!isSafari ? {
   position: "relative",
   background: "transparent",
   boxShadow: "none",
@@ -76,6 +85,15 @@ export const StyledCard2 = styled(Card)({
       "--t": 1,
       WebkitMask: "paint(rounded-shape)"
     }
+  }
+} : {
+  position: "relative",
+  background: "transparent",
+  boxShadow: "none",
+  button: {
+    border: "1px solid rgba(21, 191, 253, 0.5)",
+    borderRadius: "16px",
+    overflow: "hidden"
   }
 })
 
@@ -173,7 +191,7 @@ export const CounterWrapper = styled(Box)({
   alignItems: 'center',
 })
 
-export const CounterItemWrapper = styled(Box)({
+export const CounterItemWrapper = styled(Box)(!isSafari ? {
   position: "relative",
   width: "75px",
   padding: "6px 16px",
@@ -193,6 +211,10 @@ export const CounterItemWrapper = styled(Box)({
     "--t": 1,
     WebkitMask: "paint(rounded-shape)"
   }
+} : {
+  border: "1px solid rgba(21, 191, 253, 0.5)",
+  borderRadius: "4px",
+  overflow: "hidden"
 })
 
 export const CounterItem = styled(Box)({
@@ -249,7 +271,7 @@ export const NFTImage = styled(CardMedia)({
   paddingTop: '100%',
 })
 
-export const NFTImageWrapper = styled(Box)({
+export const NFTImageWrapper = styled(Box)(!isSafari ? {
   position: "relative",
   border: 0,
   "--border": "1px",
@@ -266,6 +288,10 @@ export const NFTImageWrapper = styled(Box)({
     "--t": 1,
     WebkitMask: "paint(rounded-shape)"
   }
+} : {
+  border: "1px solid rgba(21, 191, 253, 0.5)",
+  borderRadius: "8px",
+  overflow: "hidden"
 })
 
 export const NFTSkeleton = styled(Skeleton)({
@@ -334,7 +360,7 @@ export const GradientText = styled(Typography)({
   WebkitTextFillColor: "transparent"
 })
 
-export const GradientBorder = styled(Box)({
+export const GradientBorder = styled(Box)(!isSafari ? {
   position: "relative",
   border: 0,
   "--border": "1px",
@@ -351,9 +377,13 @@ export const GradientBorder = styled(Box)({
     "--t": 1,
     WebkitMask: "paint(rounded-shape)"
   }
+} : {
+  border: "1px solid rgba(21, 191, 253, 0.5)",
+  borderRadius: "16px",
+  overflow: "hidden"
 })
 
-export const CodeWrapper = styled(Box)({
+export const CodeWrapper = styled(Box)(!isSafari ? {
   position: "relative",
   border: 0,
   "--border": "1px",
@@ -370,5 +400,9 @@ export const CodeWrapper = styled(Box)({
     "--t": 1,
     WebkitMask: "paint(rounded-shape)"
   }
+} : {
+  border: "1px solid rgba(21, 191, 253, 0.5)",
+  borderRadius: "16px",
+  overflow: "hidden"
 })
 

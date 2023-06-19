@@ -680,14 +680,17 @@ const NewHome = ({
           <Grid container spacing={4}>
             <Grid item xs={12} sm={12} md={6} lg={6}>
               <GradientBorder sx={{ padding: "50px" }}>
-                <Typography fontSize={26} textAlign="center">
+                <Typography
+                  sx={{ fontSize: "26px !important" }}
+                  textAlign="center"
+                >
                   3 will receive
                 </Typography>
                 <GradientText variant="h3" textAlign="center">
                   5% of the ETH
                 </GradientText>
                 <Typography
-                  fontSize={22}
+                  sx={{ fontSize: "22px !important" }}
                   color="rgba(255, 255, 255, 0.68)"
                   textAlign="center"
                 >
@@ -697,14 +700,17 @@ const NewHome = ({
             </Grid>
             <Grid item xs={12} sm={12} md={6} lg={6}>
               <GradientBorder sx={{ padding: "50px" }}>
-                <Typography fontSize={26} textAlign="center">
+                <Typography
+                  sx={{ fontSize: "26px !important" }}
+                  textAlign="center"
+                >
                   5 will receive
                 </Typography>
                 <GradientText variant="h3" textAlign="center">
                   1 Cosmic NFT
                 </GradientText>
                 <Typography
-                  fontSize={22}
+                  sx={{ fontSize: "22px !important" }}
                   color="rgba(255, 255, 255, 0.68)"
                   textAlign="center"
                 >

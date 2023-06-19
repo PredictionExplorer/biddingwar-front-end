@@ -5,9 +5,11 @@ import { MainWrapper } from "../components/styled";
 import { ArrowForward } from "@mui/icons-material";
 import Countdown from "react-countdown";
 import Counter from "../components/Counter";
-import { styled } from '@mui/material/styles'
+import { styled } from "@mui/material/styles";
+import { isSafari } from "react-device-detect";
 
-const GradientWrapper = styled(Box)({
+const GradientWrapper = styled(Box)(
+  !isSafari && {
     position: "relative",
     padding: "60px",
     border: 0,
@@ -21,11 +23,13 @@ const GradientWrapper = styled(Box)({
       content: '""',
       position: "absolute",
       inset: 0,
-      background: "linear-gradient(152.14deg, rgba(156, 55, 253, 0.7) 9.96%, rgba(21, 191, 253, 0.7) 100%)",
+      background:
+        "linear-gradient(152.14deg, rgba(156, 55, 253, 0.7) 9.96%, rgba(21, 191, 253, 0.7) 100%)",
       "--t": 1,
-      WebkitMask: "paint(rounded-shape)"
-    }
-  })
+      WebkitMask: "paint(rounded-shape)",
+    },
+  }
+);
 
 const Withdraw = () => (
   <>
