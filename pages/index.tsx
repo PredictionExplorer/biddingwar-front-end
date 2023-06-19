@@ -721,7 +721,21 @@ const NewHome = ({
           </Grid>
         </Box>
         {prizeInfo && <Winners prizeInfo={prizeInfo} />}
-        <FAQ />
+
+        <Box sx={{ padding: "90px 0 80px" }}>
+          <Typography variant="h4" textAlign="center">
+            FAQ&#39;S
+          </Typography>
+          <Box textAlign="center" marginBottom="56px">
+            <Image
+              src={"/images/divider.svg"}
+              width={93}
+              height={3}
+              alt="divider"
+            />
+          </Box>
+          <FAQ />
+        </Box>
       </Container>
     </>
   );

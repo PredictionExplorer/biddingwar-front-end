@@ -262,55 +262,42 @@ const FAQ = () => {
   };
 
   return (
-    <Box sx={{ padding: "90px 0 80px" }}>
-      <Typography variant="h4" textAlign="center">
-        FAQ&#39;S
-      </Typography>
-      <Box textAlign="center" marginBottom="56px">
-        <Image
-          src={"/images/divider.svg"}
-          width={93}
-          height={3}
-          alt="divider"
-        />
-      </Box>
-      <Box mt={4}>
-        {items.map(({ summary, detail }, i) => (
-          <FaqAccordion
-            key={i}
-            expanded={expanded === i}
-            onChange={handleChange(i)}
+    <Box mt={4}>
+      {items.map(({ summary, detail }, i) => (
+        <FaqAccordion
+          key={i}
+          expanded={expanded === i}
+          onChange={handleChange(i)}
+        >
+          <AccordionSummary
+            expandIcon={
+              expanded === i ? (
+                <RemoveIcon color="primary" fontSize="small" />
+              ) : (
+                <AddIcon color="primary" fontSize="small" />
+              )
+            }
           >
-            <AccordionSummary
-              expandIcon={
-                expanded === i ? (
-                  <RemoveIcon color="primary" fontSize="small" />
-                ) : (
-                  <AddIcon color="primary" fontSize="small" />
-                )
-              }
-            >
-              <Box display="flex" alignItems="center">
-                <QuestionIcon src="images/question.svg" />
-                <Typography
-                  variant="subtitle1"
-                  color={expanded === i ? "primary" : "info"}
-                >
-                  {summary}
-                </Typography>
-              </Box>
-            </AccordionSummary>
-            <FaqAccordionDetails>
+            <Box display="flex" alignItems="center">
+              <QuestionIcon src="images/question.svg" />
               <Typography
-                variant="body1"
-                align="left"
-                color="rgba(255, 255, 255, 0.68)"
-                dangerouslySetInnerHTML={{ __html: detail }}
-              />
-            </FaqAccordionDetails>
-          </FaqAccordion>
-        ))}
-      </Box>
+                variant="subtitle1"
+                color={expanded === i ? "primary" : "info"}
+              >
+                {summary}
+              </Typography>
+            </Box>
+          </AccordionSummary>
+          <FaqAccordionDetails>
+            <Typography
+              variant="body1"
+              align="left"
+              color="rgba(255, 255, 255, 0.68)"
+              dangerouslySetInnerHTML={{ __html: detail }}
+            />
+          </FaqAccordionDetails>
+        </FaqAccordion>
+      ))}
     </Box>
   );
 };

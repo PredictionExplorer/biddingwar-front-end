@@ -1,7 +1,7 @@
 import { GetServerSidePropsContext } from "next";
 import { useRouter } from "next/router";
 import React from "react";
-import { Box, Alert, Container, Typography } from "@mui/material";
+import { Box, Alert, Container, Typography, Grid } from "@mui/material";
 import Head from "next/head";
 import NFTTrait from "../../components/NFTTrait";
 import { MainWrapper } from "../../components/styled";
@@ -9,8 +9,9 @@ import Prize from "../../components/Prize";
 import Winners from "../../components/Winners";
 import api from "../../services/api";
 import BiddingHistoryTable from "../../components/BiddingHistoryTable";
+import DonatedNFT from "../../components/DonatedNFT";
 
-const Detail = ({ nft, prizeInfo, data }) => {
+const Detail = ({ nft, prizeInfo, data, nftDonations }) => {
   const router = useRouter();
   return (
     <>
@@ -51,6 +52,14 @@ const Detail = ({ nft, prizeInfo, data }) => {
         </Box>
         <Container>
           <Prize prizeAmount={data.PrizeAmountEth} />
+          <Grid container spacing={2} mt={2}>
+            {nftDonations &&
+              nftDonations.slice(-3).map((nft) => (
+                <Grid key={nft.RecordId} item xs={12} sm={12} md={4} lg={4}>
+                  <DonatedNFT nft={nft} />
+                </Grid>
+              ))}
+          </Grid>
           {prizeInfo && <Winners prizeInfo={prizeInfo} />}
         </Container>
       </MainWrapper>
@@ -70,8 +79,9 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     prizeInfo = null;
   }
   const dashboardData = await api.get_dashboard_info();
+  const nftDonations = await api.get_donations_nft_list();
   return {
-    props: { nft, prizeInfo, data: dashboardData },
+    props: { nft, prizeInfo, data: dashboardData, nftDonations },
   };
 }
 
