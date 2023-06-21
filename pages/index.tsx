@@ -62,9 +62,7 @@ const NewHome = ({
 }) => {
   const [data, setData] = useState(initialData);
   const [curBidList, setCurBidList] = useState(biddingHistory);
-  const [timeUntilPrize, setTimeUntilPrize] = useState(null);
   const [prizeTime, setPrizeTime] = useState(0);
-  const [claimableTime, setClaimableTime] = useState(0);
   const [countdownCompleted, setCountdownCompleted] = useState(false);
   const [message, setMessage] = useState("");
   const [nftDonateAddress, setNftDonateAddress] = useState("");
@@ -301,13 +299,6 @@ const NewHome = ({
 
   useEffect(() => {
     const getData = async () => {
-      if (biddingWarContract) {
-        const result = (await biddingWarContract.prizeTime()).toNumber();
-        setPrizeTime(result * 1000);
-        setClaimableTime((result + 300) * 1000);
-        const seconds = (await biddingWarContract.timeUntilPrize()).toNumber();
-        setTimeUntilPrize(seconds);
-      }
       if (nftRWLKContract && account) {
         const tokens = await nftRWLKContract.walletOfOwner(account);
         const nftIds = tokens
@@ -318,7 +309,7 @@ const NewHome = ({
       }
     };
     getData();
-  }, [biddingWarContract, nftRWLKContract, account]);
+  }, [nftRWLKContract, account]);
 
   useEffect(() => {
     const fetchDashboardData = async () => {
@@ -334,10 +325,22 @@ const NewHome = ({
       setCurBidList(newData);
     };
 
+    const fetchPrizeTime = async () => {
+      if (biddingWarContract) {
+        const response = await fetch("/api/currentTimeStamp");
+        const curtime = await response.json();
+        const offset = curtime - Math.floor(Date.now() / 1000);
+        const t = (await biddingWarContract.prizeTime()).toNumber();
+        setPrizeTime((t - offset) * 1000);
+      }
+    };
+
+    fetchPrizeTime();
     // Fetch data every 15 seconds
     const interval = setInterval(() => {
       fetchDashboardData();
       fetchBidData();
+      fetchPrizeTime();
     }, 15000);
 
     // Clean up the interval when the component is unmounted
@@ -391,7 +394,7 @@ const NewHome = ({
             <Typography variant="h5" component="span">
               (Round #{data.CurRoundNum})
             </Typography>
-            {!!(timeUntilPrize && !countdownCompleted) && (
+            {prizeTime > Date.now() && !countdownCompleted && (
               <Countdown
                 date={prizeTime}
                 renderer={Counter}
@@ -505,7 +508,7 @@ const NewHome = ({
                     </Grid>
                   </Grid>
                   {!(
-                    (timeUntilPrize && !countdownCompleted) ||
+                    (prizeTime > Date.now() && !countdownCompleted) ||
                     data.LastBidderAddr === constants.AddressZero
                   ) && (
                     <Grid container columnSpacing={2} mt="20px">
@@ -517,7 +520,7 @@ const NewHome = ({
                           fullWidth
                           disabled={
                             data.LastBidderAddr !== account &&
-                            claimableTime >= Date.now()
+                            prizeTime + 300000 > Date.now()
                           }
                           sx={{
                             display: "flex",
@@ -526,29 +529,28 @@ const NewHome = ({
                         >
                           Claim Prize
                           <Box sx={{ display: "flex", alignItems: "center" }}>
-                            {claimableTime >= Date.now() && (
+                            {prizeTime + 300000 > Date.now() && (
                               <>
                                 available in &nbsp;
-                                <Countdown date={claimableTime} />
+                                <Countdown date={prizeTime + 300000} />
                               </>
                             )}
                             &nbsp;
                             <ArrowForward sx={{ width: 22, height: 22 }} />
                           </Box>
                         </Button>
-                        {!!(
-                          data.LastBidderAddr !== account &&
-                          claimableTime >= Date.now()
-                        ) && (
-                          <Typography
-                            variant="body2"
-                            fontStyle="italic"
-                            textAlign="right"
-                            color="primary"
-                          >
-                            Please wait until the last bidder claims the prize.
-                          </Typography>
-                        )}
+                        {data.LastBidderAddr !== account &&
+                          prizeTime + 300000 > Date.now() && (
+                            <Typography
+                              variant="body2"
+                              fontStyle="italic"
+                              textAlign="right"
+                              color="primary"
+                            >
+                              Please wait until the last bidder claims the
+                              prize.
+                            </Typography>
+                          )}
                       </Grid>
                     </Grid>
                   )}
