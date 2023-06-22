@@ -30,6 +30,11 @@ class ApiService {
     return data;
   }
 
+  public async get_donations_nft_by_round(round: number) {
+    const { data } = await axios.get(biddingwarBaseUrl + `donations/nft/by_prize/${round}`);
+    return data.NFTDonations;
+  }
+
   public async get_donations_nft_list() {
     const { data } = await axios.get(biddingwarBaseUrl + "donations/nft/list/0/1000000");
     return data.NFTDonations;

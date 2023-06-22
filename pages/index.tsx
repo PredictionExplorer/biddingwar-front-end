@@ -81,10 +81,17 @@ const NewHome = ({
   const matches = useMediaQuery(theme.breakpoints.up("md"));
 
   const series = [
-    { category: "Prize", value: 25 },
-    { category: "Raffle", value: 5 },
-    { category: "Charity", value: 10 },
-    { category: "Next round", value: 60 },
+    { category: "Prize", value: data.PrizePercentage },
+    { category: "Raffle", value: data.RafflePercentage },
+    { category: "Charity", value: data.CharityPercentage },
+    {
+      category: "Next round",
+      value:
+        100 -
+        data.CharityPercentage -
+        data.RafflePercentage -
+        data.PrizePercentage,
+    },
   ];
 
   const labelContent = (props) => {
@@ -668,8 +675,10 @@ const NewHome = ({
             color="rgba(255, 255, 255, 0.68)"
             textAlign="center"
           >
-            you are also buying a raffle ticket. When the round ends, there are
-            8 raffle winners:
+            you are also buying a raffle ticket. When the round ends, there
+            are&nbsp;
+            {data.NumRaffleEthWinners + data.NumRaffleNFTWinners} raffle
+            winners:
           </Typography>
           <Box textAlign="center" marginBottom="56px">
             <Image
@@ -686,10 +695,10 @@ const NewHome = ({
                   sx={{ fontSize: "26px !important" }}
                   textAlign="center"
                 >
-                  3 will receive
+                  {data.NumRaffleEthWinners} will receive
                 </Typography>
                 <GradientText variant="h3" textAlign="center">
-                  5% of the ETH
+                  {data.RafflePercentage}% of the ETH
                 </GradientText>
                 <Typography
                   sx={{ fontSize: "22px !important" }}
@@ -706,7 +715,7 @@ const NewHome = ({
                   sx={{ fontSize: "26px !important" }}
                   textAlign="center"
                 >
-                  5 will receive
+                  {data.NumRaffleNFTWinners} will receive
                 </Typography>
                 <GradientText variant="h3" textAlign="center">
                   1 Cosmic NFT
@@ -759,7 +768,9 @@ export async function getServerSideProps() {
   } else {
     prizeInfo = null;
   }
-  const nftDonations = await api.get_donations_nft_list();
+  const nftDonations = await api.get_donations_nft_by_round(
+    dashboardData.CurRoundNum - 1
+  );
 
   return {
     props: {

@@ -1,10 +1,9 @@
 import React from "react";
 import Image from "next/image";
-import { Typography, CardActionArea, Box, Button, useTheme, useMediaQuery } from "@mui/material";
+import { Typography, CardActionArea, Box, useTheme, useMediaQuery } from "@mui/material";
 import { formatId } from "../utils";
 import { NFTImage, StyledCard } from "./styled";
 import router from "next/router";
-import { ArrowForward } from "@mui/icons-material";
 
 const OnSaleNFT = ({ nft }) => {
   const theme = useTheme();
@@ -31,7 +30,7 @@ const OnSaleNFT = ({ nft }) => {
       >
         <Box>
           <Typography variant="caption">{formatId(nft.TokenId)}</Typography>
-          <Box sx={{ display: "flex" }}>
+          {/* <Box sx={{ display: "flex" }}>
             <Image
               src={"/images/Ethereum_small.svg"}
               width={16}
@@ -41,16 +40,16 @@ const OnSaleNFT = ({ nft }) => {
             <Typography variant="caption" color="primary">
               3.2 NFT
             </Typography>
-          </Box>
+          </Box> */}
         </Box>
-        <Button
+        {/* <Button
           variant="contained"
           endIcon={<ArrowForward />}
           sx={{ fontSize: 14 }}
           size="large"
         >
           Place Bid
-        </Button>
+        </Button> */}
       </Box>
     </>
   );
