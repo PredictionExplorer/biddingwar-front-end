@@ -6,6 +6,8 @@ import {
   CardActionArea,
   Grid,
   Container,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 
 import Lightbox from "react-awesome-lightbox";
@@ -25,6 +27,10 @@ const OnSaleNFTTrait = ({ nft }) => {
   const [open, setOpen] = useState(false);
   const [imageOpen, setImageOpen] = useState(false);
   const [videoPath, setVideoPath] = useState(null);
+  const [notification, setNotification] = useState({
+    text: "",
+    visible: false,
+  });
 
   const handlePlay = (videoPath) => {
     fetch(videoPath).then((res) => {
@@ -40,6 +46,16 @@ const OnSaleNFTTrait = ({ nft }) => {
   return (
     <Container>
       <SectionWrapper>
+        <Snackbar
+          anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+          autoHideDuration={10000}
+          open={notification.visible}
+          onClose={() => setNotification({ text: "", visible: false })}
+        >
+          <Alert severity="error" variant="filled">
+            {notification.text}
+          </Alert>
+        </Snackbar>
         <Grid container spacing={4} justifyContent="center">
           <Grid item xs={12} sm={8} md={6}>
             <StyledCard>

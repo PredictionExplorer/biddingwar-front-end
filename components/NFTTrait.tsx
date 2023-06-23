@@ -12,6 +12,8 @@ import {
   Menu,
   MenuItem,
   useMediaQuery,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 
 import { CopyToClipboard } from "react-copy-to-clipboard";
@@ -43,6 +45,10 @@ const NFTTrait = ({ nft }) => {
   const [videoPath, setVideoPath] = useState(null);
   const [address, setAddress] = useState("");
   const [anchorEl, setAnchorEl] = useState(null);
+  const [notification, setNotification] = useState({
+    text: "",
+    visible: false,
+  });
   const router = useRouter();
   const nftContract = useCosmicSignatureContract();
   const { account } = useActiveWeb3React();
@@ -54,7 +60,10 @@ const NFTTrait = ({ nft }) => {
         setVideoPath(videoPath);
         setOpen(true);
       } else {
-        alert("Video is being generated, come back later");
+        setNotification({
+          visible: true,
+          text: "Video is being generated, come back later",
+        });
       }
     });
   };
@@ -115,6 +124,16 @@ const NFTTrait = ({ nft }) => {
   return (
     <Container>
       <SectionWrapper>
+        <Snackbar
+          anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+          autoHideDuration={10000}
+          open={notification.visible}
+          onClose={() => setNotification({ text: "", visible: false })}
+        >
+          <Alert severity="error" variant="filled">
+            {notification.text}
+          </Alert>
+        </Snackbar>
         <Grid container spacing={4} justifyContent="center">
           <Grid item xs={12} sm={8} md={6}>
             <StyledCard>
@@ -218,7 +237,7 @@ const NFTTrait = ({ nft }) => {
               &nbsp;
               <Typography component="span">
                 <Link
-                  style={{ color: "#fff", fontSize: matches ? '16px' : '12px' }}
+                  style={{ color: "#fff", fontSize: matches ? "16px" : "12px" }}
                   href={`/gallery?address=${nft.CurOwnerAddr}`}
                 >
                   {nft.CurOwnerAddr}

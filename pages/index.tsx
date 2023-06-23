@@ -13,6 +13,8 @@ import {
   Grid,
   useTheme,
   useMediaQuery,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import {
   GradientBorder,
@@ -70,6 +72,10 @@ const NewHome = ({
   const [rwlkId, setRwlkId] = useState(-1);
   const [galleryVisibility, setGalleryVisibility] = useState(false);
   const [isBidding, setIsBidding] = useState(false);
+  const [notification, setNotification] = useState({
+    text: "",
+    visible: false,
+  });
 
   const [rwlknftIds, setRwlknftIds] = useState([]);
   const { library, account } = useActiveWeb3React();
@@ -113,7 +119,10 @@ const NewHome = ({
       });
     } catch (err) {
       console.log(err);
-      alert(err.message);
+      setNotification({
+        visible: true,
+        text: err.message,
+      });
     }
   };
 
@@ -138,13 +147,19 @@ const NewHome = ({
       );
       const addr = await nftDonateContract.ownerOf(tokenId);
       if (addr !== account) {
-        alert("You aren't the owner of the token!");
+        setNotification({
+          visible: true,
+          text: "You aren't the owner of the token!",
+        });
         return false;
       }
     } catch (err) {
       if (err?.data?.message) {
         const msg = getErrorMessage(err?.data?.message);
-        alert(msg);
+        setNotification({
+          visible: true,
+          text: msg,
+        });
       }
       console.log(err);
       return false;
@@ -173,7 +188,11 @@ const NewHome = ({
       }
     } catch (err) {
       if (err?.data?.message) {
-        alert(err.data.message);
+        const msg = getErrorMessage(err?.data?.message);
+        setNotification({
+          visible: true,
+          text: msg,
+        });
       }
       console.log(err);
       setIsBidding(false);
@@ -183,7 +202,10 @@ const NewHome = ({
     // check if the contract exists
     const isExist = await checkIfContractExist(nftDonateAddress);
     if (!isExist) {
-      alert("You selected address that doesn't belong to a contract address!");
+      setNotification({
+        visible: true,
+        text: "You selected address that doesn't belong to a contract address!",
+      });
       setIsBidding(false);
       return;
     }
@@ -225,7 +247,11 @@ const NewHome = ({
       }
     } catch (err) {
       if (err?.data?.message) {
-        alert(err.data.message);
+        const msg = getErrorMessage(err?.data?.message);
+        setNotification({
+          visible: true,
+          text: msg,
+        });
       }
       console.log(err);
       setIsBidding(false);
@@ -248,7 +274,11 @@ const NewHome = ({
       }
     } catch (err) {
       if (err?.data?.message) {
-        alert(err.data.message);
+        const msg = getErrorMessage(err?.data?.message);
+        setNotification({
+          visible: true,
+          text: msg,
+        });
       }
       console.log(err);
       setIsBidding(false);
@@ -258,7 +288,10 @@ const NewHome = ({
     // check if the contract exists
     const isExist = await checkIfContractExist(nftDonateAddress);
     if (!isExist) {
-      alert("You selected address that doesn't belong to a contract address!");
+      setNotification({
+        visible: true,
+        text: "You selected address that doesn't belong to a contract address!",
+      });
       setIsBidding(false);
       return;
     }
@@ -297,7 +330,11 @@ const NewHome = ({
       }, 5000);
     } catch (err) {
       if (err?.data?.message) {
-        alert(err.data.message);
+        const msg = getErrorMessage(err?.data?.message);
+        setNotification({
+          visible: true,
+          text: msg,
+        });
       }
       console.log(err);
       setIsBidding(false);
@@ -359,6 +396,16 @@ const NewHome = ({
   return (
     <>
       <MainWrapper>
+        <Snackbar
+          anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+          autoHideDuration={10000}
+          open={notification.visible}
+          onClose={() => setNotification({ text: "", visible: false })}
+        >
+          <Alert severity="error" variant="filled">
+            {notification.text}
+          </Alert>
+        </Snackbar>
         <Grid container spacing={8}>
           <Grid item xs={12} sm={12} md={6} lg={6}>
             <StyledCard>

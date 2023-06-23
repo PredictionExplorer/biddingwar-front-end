@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { useRouter } from "next/router";
 import { ethers } from "ethers";
 import { Typography, Box, Button } from "@mui/material";
 import "react-slideshow-image/dist/styles.css";
