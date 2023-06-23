@@ -226,7 +226,7 @@ const NewHome = ({
           NFT_ABI,
           library.getSigner(account)
         );
-        const isApprovedForAll = nftDonateContract.isApprovedForAll(
+        const isApprovedForAll = await nftDonateContract.isApprovedForAll(
           account,
           BIDDINGWAR_ADDRESS
         );
