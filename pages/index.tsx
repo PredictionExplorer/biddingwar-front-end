@@ -661,10 +661,11 @@ const NewHome = ({
                 *
               </Typography>
               <Typography variant="body2" component="span">
-                When you bid, you are also buying a raffle ticket. 3 raffle
-                tickets will be chosen and these people will win 5% of the pot
-                each. Also, 5 additional winners will be chosen which will
-                receive a Cosmic Signature NFT.
+                When you bid, you are also buying a raffle ticket.{" "}
+                {data.NumRaffleEthWinners} raffle tickets will be chosen and
+                these people will win {data.RafflePercentage}% of the pot each.
+                Also, {data.NumRaffleNFTWinners} additional winners will be
+                chosen which will receive a Cosmic Signature NFT.
               </Typography>
             </Box>
           </Grid>
