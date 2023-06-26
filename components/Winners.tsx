@@ -15,7 +15,7 @@ const Winners = ({ prizeInfo }) => {
           <Grid key={winner.EvtLogId} item xs={12} sm={12} md={4} lg={4}>
             <StyledCard>
               <CardActionArea>
-                <NFTImage image="https://randomwalknft.s3.us-east-2.amazonaws.com/000496_black_thumb.jpg" />
+                <NFTImage src="https://randomwalknft.s3.us-east-2.amazonaws.com/000496_black_thumb.jpg" />
               </CardActionArea>
             </StyledCard>
             <Box mt={2}>

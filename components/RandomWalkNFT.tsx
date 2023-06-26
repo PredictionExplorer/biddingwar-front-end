@@ -7,6 +7,9 @@ import { NFTImage, NFTSkeleton, NFTInfoWrapper, NFTCheckMark } from "./styled";
 
 const RandomWalkNFT = ({ tokenId, selectable = false, selected = false }) => {
   const nft = useRWLKNFT(tokenId);
+  const handleImageError = (event) => {
+    event.target.src = "/images/qmark.png";
+  };
   return (
     <Card
       sx={{
@@ -18,7 +21,7 @@ const RandomWalkNFT = ({ tokenId, selectable = false, selected = false }) => {
         {!nft ? (
           <NFTSkeleton animation="wave" variant="rectangular" />
         ) : (
-          <NFTImage image={nft.black_image_thumb} />
+          <NFTImage src={nft.black_image_thumb} onError={handleImageError} />
         )}
         {nft && (
           <NFTInfoWrapper>

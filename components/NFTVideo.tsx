@@ -3,12 +3,16 @@ import Image from "next/image";
 
 import { VideoCard, NFTImage, NFTImageWrapper } from "./styled";
 
+const handleImageError = (event) => {
+  event.target.src = "/images/qmark.png";
+};
 const NFTVideo = ({ image_thumb, onClick }) => (
   <VideoCard sx={{ width: "90%", margin: "80px auto" }}>
     <NFTImageWrapper>
       <NFTImage
-        image={image_thumb}
+        src={image_thumb}
         style={{ opacity: 0.55, paddingTop: "320px" }}
+        onError={handleImageError}
       />
     </NFTImageWrapper>
     <div

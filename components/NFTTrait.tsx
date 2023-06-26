@@ -121,6 +121,10 @@ const NFTTrait = ({ nft }) => {
     return result;
   };
 
+  const handleImageError = (event) => {
+    event.target.src = "/images/qmark.png";
+  };
+
   return (
     <Container>
       <SectionWrapper>
@@ -138,7 +142,7 @@ const NFTTrait = ({ nft }) => {
           <Grid item xs={12} sm={8} md={6}>
             <StyledCard>
               <CardActionArea onClick={() => setImageOpen(true)}>
-                <NFTImage image={image} />
+                <NFTImage src={image} onError={handleImageError} />
                 <NFTInfoWrapper>
                   <Typography
                     variant="body1"

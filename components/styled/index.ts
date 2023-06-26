@@ -266,10 +266,11 @@ export const FaqAccordionDetails = styled(AccordionDetails)({
   padding: "0 40px 12px"
 })
 
-export const NFTImage = styled(CardMedia)({
-  width: '100%',
-  paddingTop: '100%',
-})
+export const NFTImage = styled('img')`
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: contain;
+`
 
 export const NFTImageWrapper = styled(Box)(!isSafari ? {
   position: "relative",

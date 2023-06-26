@@ -6,6 +6,10 @@ import axios from "axios";
 const DonatedNFT = ({ nft }) => {
   const [tokenURI, setTokenURI] = useState(null);
 
+  const handleImageError = (event) => {
+    event.target.src = "/images/qmark.png";
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       const { data } = await axios.get(nft.NFTTokenURI);
@@ -21,8 +25,9 @@ const DonatedNFT = ({ nft }) => {
       <CardActionArea>
         {tokenURI && (
           <NFTImage
-            image={tokenURI?.image}
+            src={tokenURI?.image}
             sx={{ backgroundSize: "contain" }}
+            onError={handleImageError}
           />
         )}
       </CardActionArea>

@@ -1,6 +1,12 @@
 import React from "react";
 import Image from "next/image";
-import { Typography, CardActionArea, Box, useTheme, useMediaQuery } from "@mui/material";
+import {
+  Typography,
+  CardActionArea,
+  Box,
+  useTheme,
+  useMediaQuery,
+} from "@mui/material";
 import { formatId } from "../utils";
 import { NFTImage, StyledCard } from "./styled";
 import router from "next/router";
@@ -10,11 +16,16 @@ const OnSaleNFT = ({ nft }) => {
   const matches = useMediaQuery(theme.breakpoints.up("md"));
   const fileName = nft.TokenId.toString().padStart(6, "0");
   const image = `https://cosmic-game.s3.us-east-2.amazonaws.com/${fileName}.png`;
+  const handleImageError = (event) => {
+    event.target.src = "/images/qmark.png";
+  };
   return (
     <>
       <StyledCard>
-        <CardActionArea onClick={() => router.push(`/marketplace/${nft.TokenId}`)}>
-          <NFTImage image={image} />
+        <CardActionArea
+          onClick={() => router.push(`/marketplace/${nft.TokenId}`)}
+        >
+          <NFTImage src={image} onError={handleImageError} />
         </CardActionArea>
       </StyledCard>
       <Box
