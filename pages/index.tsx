@@ -473,10 +473,10 @@ const NewHome = ({
                 {data.PrizeAmountEth.toFixed(4)}
               </Typography>
             </Box>
-            <Box>
+            {/* <Box>
               <Typography color="primary">Charity Address:</Typography>
               <Typography>{data.CharityAddr}</Typography>
-            </Box>
+            </Box> */}
             <Box sx={{ mt: "24px" }}>
               <Typography color="primary">Last Bidder Address:</Typography>
               <Typography>

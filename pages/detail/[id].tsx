@@ -34,7 +34,7 @@ const Detail = ({ nft, prizeInfo, data, nftDonations }) => {
             </Alert>
           </Box>
         )}
-        <NFTTrait nft={nft} />
+        <NFTTrait nft={nft} prizeInfo={prizeInfo} />
         <Box sx={{ background: "#101441", padding: "80px 0" }}>
           <Container>
             <Box display="flex" alignItems="center" flexWrap="wrap">
@@ -71,10 +71,9 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   const id = context.params!.id;
   const tokenId = Array.isArray(id) ? id[0] : id;
   const nft = await api.get_cst_info(parseInt(tokenId));
-  const prizeList = await api.get_prize_list();
   let prizeInfo;
-  if (prizeList.length) {
-    prizeInfo = await api.get_prize_info(prizeList.length - 1);
+  if (nft.PrizeNum >= 0) {
+    prizeInfo = await api.get_prize_info(nft.PrizeNum);
   } else {
     prizeInfo = null;
   }

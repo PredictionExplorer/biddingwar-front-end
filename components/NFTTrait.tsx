@@ -14,6 +14,8 @@ import {
   useMediaQuery,
   Snackbar,
   Alert,
+  List,
+  ListItem,
 } from "@mui/material";
 
 import { CopyToClipboard } from "react-copy-to-clipboard";
@@ -36,7 +38,7 @@ import {
 import useCosmicSignatureContract from "../hooks/useCosmicSignatureContract";
 import theme from "../config/styles";
 
-const NFTTrait = ({ nft }) => {
+const NFTTrait = ({ nft, prizeInfo }) => {
   const fileName = nft.TokenId.toString().padStart(6, "0");
   const image = `https://cosmic-game.s3.us-east-2.amazonaws.com/${fileName}.png`;
   const video = `https://cosmic-game.s3.us-east-2.amazonaws.com/${fileName}.mp4`;
@@ -49,6 +51,9 @@ const NFTTrait = ({ nft }) => {
     text: "",
     visible: false,
   });
+  const [showRaffleTokenWinners, setShowRaffleTokenWinners] = useState(false);
+  const [showRaffleETHWinners, setShowRaffleETHWinners] = useState(false);
+
   const router = useRouter();
   const nftContract = useCosmicSignatureContract();
   const { account } = useActiveWeb3React();
@@ -192,8 +197,7 @@ const NFTTrait = ({ nft }) => {
                 </Grid>
                 <Grid item xs={4}>
                   <Button
-                    variant="outlined"
-                    color="info"
+                    variant="contained"
                     fullWidth
                     startIcon={<ArrowBack />}
                     onClick={handlePrev}
@@ -205,7 +209,7 @@ const NFTTrait = ({ nft }) => {
                   <Button
                     variant="contained"
                     color="primary"
-                    style={{ width: "100%" }}
+                    fullWidth
                     endIcon={<ArrowForward />}
                     onClick={handleNext}
                   >
@@ -227,16 +231,30 @@ const NFTTrait = ({ nft }) => {
                 </Typography>
               </Box>
             )}
-            <Box mb={1}>
+            {/* <Box mb={1}>
               <Typography color="primary" component="span">
                 Beauty Score:
               </Typography>
               &nbsp;
               <Typography component="span">1200</Typography>
+            </Box> */}
+            <Box mb={1}>
+              <Typography color="primary" component="span">
+                Winner:
+              </Typography>
+              &nbsp;
+              <Typography component="span">
+                <Link
+                  style={{ color: "#fff", fontSize: matches ? "16px" : "12px" }}
+                  href={`/gallery?address=${nft.WinnerAddr}`}
+                >
+                  {nft.WinnerAddr}
+                </Link>
+              </Typography>
             </Box>
             <Box mb={1}>
               <Typography color="primary" component="span">
-                Owner:
+                Current Owner:
               </Typography>
               &nbsp;
               <Typography component="span">
@@ -250,17 +268,114 @@ const NFTTrait = ({ nft }) => {
             </Box>
             <Box mb={1}>
               <Typography color="primary" component="span">
-                Percentage of Donation:
+                Prize Type:
               </Typography>
               &nbsp;
-              <Typography component="span">10.00%</Typography>
-            </Box>
-            <Box>
-              <Typography color="primary">ETH donated to:</Typography>
-              <Typography>
-                0xA867454690CA5142917165FB2dBb08ccaEb303df
+              <Typography component="span">
+                {nft.PrizeNum === -1 ? "Raffle Winner" : "Round Winner"}
               </Typography>
             </Box>
+            {nft.PrizeNum >= 0 && (
+              <>
+                <Box mb={3}>
+                  <Typography color="primary" component="span">
+                    Prize Amount:
+                  </Typography>
+                  &nbsp;
+                  <Typography component="span">
+                    {prizeInfo.AmountEth}
+                  </Typography>
+                </Box>
+                <Box mb={1}>
+                  <Typography color="primary" component="span">
+                    Donation Amount:
+                  </Typography>
+                  &nbsp;
+                  <Typography component="span">
+                    {prizeInfo.CharityAmountETH}
+                  </Typography>
+                </Box>
+                <Box mb={2}>
+                  <Typography color="primary" component="span">
+                    Charity Address:
+                  </Typography>
+                  &nbsp;
+                  <Typography component="span">
+                    {prizeInfo.CharityAddress}
+                  </Typography>
+                </Box>
+                <Grid container spacing={2} mt={2}>
+                  <Grid item xs={6}>
+                    <Button
+                      variant="contained"
+                      onClick={() =>
+                        setShowRaffleTokenWinners(!showRaffleTokenWinners)
+                      }
+                    >
+                      Raffle Token Winners
+                    </Button>
+                  </Grid>
+                  <Grid item xs={6}>
+                    <Button
+                      variant="contained"
+                      onClick={() =>
+                        setShowRaffleETHWinners(!showRaffleETHWinners)
+                      }
+                    >
+                      Raffle ETH Winners
+                    </Button>
+                  </Grid>
+                </Grid>
+                {showRaffleTokenWinners && (
+                  <Box mt={2}>
+                    <Typography color="primary">
+                      Raffle Token Winners:
+                    </Typography>
+                    <List>
+                      <ListItem sx={{ padding: "0 16px" }}>
+                        <Typography>
+                          0x15d34AAf54267DB7D7c367839AAf71A00a2C6A65
+                        </Typography>
+                      </ListItem>
+                      <ListItem sx={{ padding: "0 16px" }}>
+                        <Typography>
+                          0x15d34AAf54267DB7D7c367839AAf71A00a2C6A65
+                        </Typography>
+                      </ListItem>
+                      <ListItem sx={{ padding: "0 16px" }}>
+                        <Typography>
+                          0x15d34AAf54267DB7D7c367839AAf71A00a2C6A65
+                        </Typography>
+                      </ListItem>
+                      <ListItem sx={{ padding: "0 16px" }}>
+                        <Typography>
+                          0x15d34AAf54267DB7D7c367839AAf71A00a2C6A65
+                        </Typography>
+                      </ListItem>
+                    </List>
+                  </Box>
+                )}
+                {showRaffleETHWinners && (
+                  <Box mt={2}>
+                    <Typography color="primary">Raffle ETH Winners:</Typography>
+                    <List>
+                      <ListItem>
+                        0x15d34AAf54267DB7D7c367839AAf71A00a2C6A65
+                      </ListItem>
+                      <ListItem>
+                        0x15d34AAf54267DB7D7c367839AAf71A00a2C6A65
+                      </ListItem>
+                      <ListItem>
+                        0x15d34AAf54267DB7D7c367839AAf71A00a2C6A65
+                      </ListItem>
+                      <ListItem>
+                        0x15d34AAf54267DB7D7c367839AAf71A00a2C6A65
+                      </ListItem>
+                    </List>
+                  </Box>
+                )}
+              </>
+            )}
             <Box>
               {account === nft.CurOwnerAddr && (
                 <>
