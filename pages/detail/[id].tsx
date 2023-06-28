@@ -11,7 +11,14 @@ import api from "../../services/api";
 import BiddingHistoryTable from "../../components/BiddingHistoryTable";
 import DonatedNFT from "../../components/DonatedNFT";
 
-const Detail = ({ nft, prizeInfo, data, nftDonations }) => {
+const Detail = ({
+  nft,
+  prizeInfo,
+  data,
+  nftDonations,
+  raffleDeposits,
+  raffleNFTWinners,
+}) => {
   const router = useRouter();
   return (
     <>
@@ -34,7 +41,12 @@ const Detail = ({ nft, prizeInfo, data, nftDonations }) => {
             </Alert>
           </Box>
         )}
-        <NFTTrait nft={nft} prizeInfo={prizeInfo} />
+        <NFTTrait
+          nft={nft}
+          prizeInfo={prizeInfo}
+          raffleDeposits={raffleDeposits}
+          raffleNFTWinners={raffleNFTWinners}
+        />
         <Box sx={{ background: "#101441", padding: "80px 0" }}>
           <Container>
             <Box display="flex" alignItems="center" flexWrap="wrap">
@@ -79,8 +91,19 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   }
   const dashboardData = await api.get_dashboard_info();
   const nftDonations = await api.get_donations_nft_list();
+  const raffleDeposits = await api.get_raffle_deposits_by_round(nft.PrizeNum);
+  const raffleNFTWinners = await api.get_raffle_nft_winners_by_round(
+    nft.PrizeNum
+  );
   return {
-    props: { nft, prizeInfo, data: dashboardData, nftDonations },
+    props: {
+      nft,
+      prizeInfo,
+      data: dashboardData,
+      nftDonations,
+      raffleDeposits,
+      raffleNFTWinners,
+    },
   };
 }
 

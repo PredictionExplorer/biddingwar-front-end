@@ -38,7 +38,7 @@ import {
 import useCosmicSignatureContract from "../hooks/useCosmicSignatureContract";
 import theme from "../config/styles";
 
-const NFTTrait = ({ nft, prizeInfo }) => {
+const NFTTrait = ({ nft, prizeInfo, raffleDeposits, raffleNFTWinners }) => {
   const fileName = nft.TokenId.toString().padStart(6, "0");
   const image = `https://cosmic-game.s3.us-east-2.amazonaws.com/${fileName}.png`;
   const video = `https://cosmic-game.s3.us-east-2.amazonaws.com/${fileName}.mp4`;
@@ -332,26 +332,14 @@ const NFTTrait = ({ nft, prizeInfo }) => {
                       Raffle Token Winners:
                     </Typography>
                     <List>
-                      <ListItem sx={{ padding: "0 16px" }}>
-                        <Typography>
-                          0x15d34AAf54267DB7D7c367839AAf71A00a2C6A65
-                        </Typography>
-                      </ListItem>
-                      <ListItem sx={{ padding: "0 16px" }}>
-                        <Typography>
-                          0x15d34AAf54267DB7D7c367839AAf71A00a2C6A65
-                        </Typography>
-                      </ListItem>
-                      <ListItem sx={{ padding: "0 16px" }}>
-                        <Typography>
-                          0x15d34AAf54267DB7D7c367839AAf71A00a2C6A65
-                        </Typography>
-                      </ListItem>
-                      <ListItem sx={{ padding: "0 16px" }}>
-                        <Typography>
-                          0x15d34AAf54267DB7D7c367839AAf71A00a2C6A65
-                        </Typography>
-                      </ListItem>
+                      {raffleNFTWinners.map((winner) => (
+                        <ListItem
+                          key={winner.EvtLogId}
+                          sx={{ padding: "0 16px" }}
+                        >
+                          <Typography>{winner.WinnerAddr}</Typography>
+                        </ListItem>
+                      ))}
                     </List>
                   </Box>
                 )}
@@ -359,18 +347,16 @@ const NFTTrait = ({ nft, prizeInfo }) => {
                   <Box mt={2}>
                     <Typography color="primary">Raffle ETH Winners:</Typography>
                     <List>
-                      <ListItem>
-                        0x15d34AAf54267DB7D7c367839AAf71A00a2C6A65
-                      </ListItem>
-                      <ListItem>
-                        0x15d34AAf54267DB7D7c367839AAf71A00a2C6A65
-                      </ListItem>
-                      <ListItem>
-                        0x15d34AAf54267DB7D7c367839AAf71A00a2C6A65
-                      </ListItem>
-                      <ListItem>
-                        0x15d34AAf54267DB7D7c367839AAf71A00a2C6A65
-                      </ListItem>
+                      {raffleDeposits.map((winner) => (
+                        <ListItem
+                          key={winner.EvtLogId}
+                          sx={{ padding: "0 16px" }}
+                        >
+                          <Typography>
+                            {winner.WinnerAddr} ({winner.Amount.toFixed(6)}ETH)
+                          </Typography>
+                        </ListItem>
+                      ))}
                     </List>
                   </Box>
                 )}

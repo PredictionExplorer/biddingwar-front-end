@@ -69,7 +69,15 @@ class ApiService {
     return cstList;
   }
 
+  public async get_raffle_deposits_by_round(round: number) {
+    const { data } = await axios.get(biddingwarBaseUrl + `raffle/deposits/by_round/${round}`);
+    return data.RaffleDeposits;
+  }
 
+  public async get_raffle_nft_winners_by_round(round: number) {
+    const { data } = await axios.get(biddingwarBaseUrl + `raffle/nft_winners/by_round/${round}`);
+    return data.RaffleNFTWinners;
+  }
 
   public async get_info(token_id: number | string) {
     const { data } = await axios.get(baseUrl + "token_info/" + token_id);
