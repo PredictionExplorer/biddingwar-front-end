@@ -684,12 +684,15 @@ const NewHome = ({
             FOR CURRENT ROUND
           </Typography>
           <Grid container spacing={2} mt={2}>
-            {nftDonations &&
+            {nftDonations.length ? (
               nftDonations.slice(-3).map((nft) => (
                 <Grid key={nft.RecordId} item xs={12} sm={12} md={4} lg={4}>
                   <DonatedNFT nft={nft} />
                 </Grid>
-              ))}
+              ))
+            ) : (
+              <Grid item>No Tokens</Grid>
+            )}
           </Grid>
         </Box>
 

@@ -57,21 +57,21 @@ function MyApp(props: MyAppProps) {
         />
         <meta
           name="description"
-          content="Programmatically generated Random Walk image and video NFTs. ETH spent on minting goes back to the minters."
+          content="Programmatically generated CosmicSignature image and video NFTs. ETH spent on minting goes back to the minters."
         />
         <link rel="canonical" href={canonicalUrl} />
         {pageProps.nft && (
           <>
             <meta
               property="og:title"
-              content={`Random Walk NFT: Details for ${formatId(
+              content={`CosmicSignature NFT: Details for ${formatId(
                 pageProps.nft.TokenId,
               )}`}
             />
             <meta property="og:image" content={pageProps.nft.black_image_thumb_url} />
             <meta
               property="og:description"
-              content={`Programmatically generated Random Walk image and video NFTs. ETH spent on minting goes back to the minters. These are the details for ${formatId(
+              content={`Programmatically generated CosmicSignature image and video NFTs. ETH spent on minting goes back to the minters. These are the details for ${formatId(
                 pageProps.nft.TokenId,
               )}`}
             />
@@ -79,7 +79,7 @@ function MyApp(props: MyAppProps) {
             <meta name="twitter:card" content="summary" />
             <meta
               name="twitter:title"
-              content={`Random Walk NFT: Details for ${formatId(
+              content={`CosmicSignature NFT: Details for ${formatId(
                 pageProps.nft.TokenId,
               )}`}
             />
@@ -89,7 +89,7 @@ function MyApp(props: MyAppProps) {
             />
             <meta
               name="twitter:description"
-              content={`Programmatically generated Random Walk image and video NFTs. ETH spent on minting goes back to the minters. These are the details for ${formatId(
+              content={`Programmatically generated CosmicSignature image and video NFTs. ETH spent on minting goes back to the minters. These are the details for ${formatId(
                 pageProps.nft.TokenId,
               )}`}
             />

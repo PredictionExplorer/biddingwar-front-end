@@ -87,7 +87,7 @@ const OnSaleNFTTrait = ({ nft }) => {
               component="span"
               lineHeight={2}
             >
-              Programmatically generated image and video Random Walk NFT. ETH
+              Programmatically generated image and video CosmicSignature NFT. ETH
               spent on minting goes back to the minters through an
             </Typography>
             &nbsp;
@@ -145,7 +145,7 @@ const OnSaleNFTTrait = ({ nft }) => {
               component="span"
               lineHeight={2}
             >
-              Programmatically generated image and video Random Walk NFT. ETH
+              Programmatically generated image and video CosmicSignature NFT. ETH
               spent on minting goes back to the minters through an
             </Typography>
             &nbsp;

@@ -14,7 +14,7 @@ const Detail = ({ nft, prizeInfo, data }) => {
   return (
     <>
       <Head>
-        <title>NFT #{nft.TokenId} | Random Walk NFT</title>
+        <title>NFT #{nft.TokenId} | CosmicSignature NFT</title>
       </Head>
       <MainWrapper
         maxWidth={false}

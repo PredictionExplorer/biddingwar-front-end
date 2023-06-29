@@ -34,10 +34,10 @@ const GradientWrapper = styled(Box)(
 const Withdraw = () => (
   <>
     <Head>
-      <title>Withdraw | Random Walk NFT</title>
+      <title>Withdraw | CosmicSignature NFT</title>
       <meta
         name="description"
-        content="Programmatically generated Random Walk image and video NFTs. ETH spent on minting goes back to the minters."
+        content="Programmatically generated CosmicSignature image and video NFTs. ETH spent on minting goes back to the minters."
       />
     </Head>
     <MainWrapper>

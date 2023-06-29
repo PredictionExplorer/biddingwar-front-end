@@ -81,7 +81,7 @@ const Footer = () => (
             </Box>
             <Box ml={{ xs: 0, sm: 0, md: 0, lg: 6 }}>
               <IconButton
-                href="https://twitter.com/RandomWalkNFT"
+                href="https://twitter.com/CosmicSignatureNFT"
                 target="_blank"
               >
                 <FontAwesomeIcon

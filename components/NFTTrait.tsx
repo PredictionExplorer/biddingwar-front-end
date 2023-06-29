@@ -272,7 +272,9 @@ const NFTTrait = ({ nft, prizeInfo, raffleDeposits, raffleNFTWinners }) => {
               </Typography>
               &nbsp;
               <Typography component="span">
-                {nft.PrizeNum === -1 ? "Raffle Winner" : "Round Winner"}
+                {nft.PrizeNum === -1
+                  ? "Raffle Winner"
+                  : `Round Winner (round #${nft.PrizeNum})`}
               </Typography>
             </Box>
             {nft.PrizeNum >= 0 && (
@@ -292,7 +294,7 @@ const NFTTrait = ({ nft, prizeInfo, raffleDeposits, raffleNFTWinners }) => {
                   </Typography>
                   &nbsp;
                   <Typography component="span">
-                    {prizeInfo.CharityAmountETH}
+                    {prizeInfo.CharityAmountETH.toFixed(4)} ETH
                   </Typography>
                 </Box>
                 <Box mb={2}>
@@ -333,10 +335,7 @@ const NFTTrait = ({ nft, prizeInfo, raffleDeposits, raffleNFTWinners }) => {
                     </Typography>
                     <List>
                       {raffleNFTWinners.map((winner) => (
-                        <ListItem
-                          key={winner.EvtLogId}
-                          sx={{ padding: "0 16px" }}
-                        >
+                        <ListItem key={winner.EvtLogId} sx={{ padding: 0 }}>
                           <Typography>{winner.WinnerAddr}</Typography>
                         </ListItem>
                       ))}
@@ -348,10 +347,7 @@ const NFTTrait = ({ nft, prizeInfo, raffleDeposits, raffleNFTWinners }) => {
                     <Typography color="primary">Raffle ETH Winners:</Typography>
                     <List>
                       {raffleDeposits.map((winner) => (
-                        <ListItem
-                          key={winner.EvtLogId}
-                          sx={{ padding: "0 16px" }}
-                        >
+                        <ListItem key={winner.EvtLogId} sx={{ padding: 0 }}>
                           <Typography>
                             {winner.WinnerAddr} ({winner.Amount.toFixed(6)}ETH)
                           </Typography>

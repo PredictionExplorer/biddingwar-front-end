@@ -23,7 +23,7 @@ const Detail = ({
   return (
     <>
       <Head>
-        <title>NFT #{nft.TokenId} | Random Walk NFT</title>
+        <title>NFT #{nft.TokenId} | CosmicSignature Token</title>
       </Head>
       <MainWrapper
         maxWidth={false}
