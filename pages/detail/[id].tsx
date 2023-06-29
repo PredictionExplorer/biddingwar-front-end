@@ -47,21 +47,6 @@ const Detail = ({
           raffleDeposits={raffleDeposits}
           raffleNFTWinners={raffleNFTWinners}
         />
-        <Box sx={{ background: "#101441", padding: "80px 0" }}>
-          <Container>
-            <Box display="flex" alignItems="center" flexWrap="wrap">
-              <Typography
-                variant="h6"
-                component="span"
-                color="primary"
-                sx={{ ml: 1.5 }}
-              >
-                BID HISTORY
-              </Typography>
-            </Box>
-            <BiddingHistoryTable biddingHistory={[]} />
-          </Container>
-        </Box>
         <Container>
           <Prize prizeAmount={data.PrizeAmountEth} />
           <Grid container spacing={2} mt={2}>
@@ -72,7 +57,6 @@ const Detail = ({
                 </Grid>
               ))}
           </Grid>
-          {prizeInfo && <Winners prizeInfo={prizeInfo} />}
         </Container>
       </MainWrapper>
     </>

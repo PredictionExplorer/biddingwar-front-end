@@ -226,11 +226,12 @@ const NewHome = ({
           NFT_ABI,
           library.getSigner(account)
         );
+        const approvedBy = await nftDonateContract.getApproved(nftId);
         const isApprovedForAll = await nftDonateContract.isApprovedForAll(
           account,
           BIDDINGWAR_ADDRESS
         );
-        if (!isApprovedForAll) {
+        if (!isApprovedForAll || approvedBy !== BIDDINGWAR_ADDRESS) {
           await nftDonateContract
             .setApprovalForAll(BIDDINGWAR_ADDRESS, true)
             .then((tx) => tx.wait());
