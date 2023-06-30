@@ -285,7 +285,7 @@ const NFTTrait = ({ nft, prizeInfo }) => {
                   </Typography>
                   &nbsp;
                   <Typography component="span">
-                    {prizeInfo.AmountEth}
+                    {prizeInfo.AmountEth.toFixed(4)} ETH
                   </Typography>
                 </Box>
                 <Box mb={1}>
