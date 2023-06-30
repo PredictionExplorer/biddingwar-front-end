@@ -36,7 +36,7 @@ import { ArrowForward } from "@mui/icons-material";
 import NFT_ABI from "../contracts/NFT.json";
 import PaginationRWLKGrid from "../components/PaginationRWLKGrid";
 import useCosmicSignatureContract from "../hooks/useCosmicSignatureContract";
-import Winners from "../components/Winners";
+import RaffleWinners from "../components/RaffleWinners";
 import Prize from "../components/Prize";
 import LatestNFTs from "../components/LatestNFTs";
 import router from "next/router";
@@ -231,7 +231,7 @@ const NewHome = ({
           account,
           BIDDINGWAR_ADDRESS
         );
-        if (!isApprovedForAll || approvedBy !== BIDDINGWAR_ADDRESS) {
+        if (!isApprovedForAll && approvedBy !== BIDDINGWAR_ADDRESS) {
           await nftDonateContract
             .setApprovalForAll(BIDDINGWAR_ADDRESS, true)
             .then((tx) => tx.wait());
@@ -783,7 +783,7 @@ const NewHome = ({
             </Grid>
           </Grid>
         </Box>
-        {prizeInfo && <Winners prizeInfo={prizeInfo} />}
+        {prizeInfo && <RaffleWinners prizeInfo={prizeInfo} />}
 
         <Box sx={{ padding: "90px 0 80px" }}>
           <Typography variant="h4" textAlign="center">

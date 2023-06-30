@@ -1,15 +1,15 @@
 import React from "react";
 import { Box, Typography } from "@mui/material";
-import WinnerTable from "./WinnerTable";
+import RaffleWinnerTable from "./RaffleWinnerTable";
 
-const Winners = ({ prizeInfo }) => {
+const RaffleWinners = ({ prizeInfo }) => {
   const { RaffleETHDeposits, RaffleNFTWinners } = prizeInfo;
   return (
     <Box sx={{ marginTop: "70px" }}>
       <Typography variant="h4" textAlign="center" mb={4}>
         Previous Round Raffle Winners
       </Typography>
-      <WinnerTable
+      <RaffleWinnerTable
         RaffleETHDeposits={RaffleETHDeposits}
         RaffleNFTWinners={RaffleNFTWinners}
       />
@@ -17,4 +17,4 @@ const Winners = ({ prizeInfo }) => {
   );
 };
 
-export default Winners;
+export default RaffleWinners;

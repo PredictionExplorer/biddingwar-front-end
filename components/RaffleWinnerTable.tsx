@@ -23,7 +23,7 @@ const WinnerRow = ({ winner, type }) => {
   );
 };
 
-const WinnerTable = ({ RaffleETHDeposits, RaffleNFTWinners }) => {
+const RaffleWinnerTable = ({ RaffleETHDeposits, RaffleNFTWinners }) => {
   return (
     <TablePrimaryContainer>
       <Table>
@@ -65,4 +65,4 @@ const WinnerTable = ({ RaffleETHDeposits, RaffleNFTWinners }) => {
   );
 };
 
-export default WinnerTable;
+export default RaffleWinnerTable;
