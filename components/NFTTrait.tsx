@@ -39,6 +39,7 @@ import useCosmicSignatureContract from "../hooks/useCosmicSignatureContract";
 import theme from "../config/styles";
 
 const NFTTrait = ({ nft, prizeInfo }) => {
+  console.log(prizeInfo);
   const fileName = nft.TokenId.toString().padStart(6, "0");
   const image = `https://cosmic-game.s3.us-east-2.amazonaws.com/${fileName}.png`;
   const video = `https://cosmic-game.s3.us-east-2.amazonaws.com/${fileName}.mp4`;
@@ -346,7 +347,7 @@ const NFTTrait = ({ nft, prizeInfo }) => {
                   <Box mt={2}>
                     <Typography color="primary">Raffle ETH Winners:</Typography>
                     <List>
-                      {prizeInfo.RaffleDeposits.map((winner) => (
+                      {prizeInfo.RaffleETHDeposits.map((winner) => (
                         <ListItem key={winner.EvtLogId} sx={{ padding: 0 }}>
                           <Typography>
                             {winner.WinnerAddr} ({winner.Amount.toFixed(6)}ETH)
