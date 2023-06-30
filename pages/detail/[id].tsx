@@ -1,24 +1,15 @@
 import { GetServerSidePropsContext } from "next";
 import { useRouter } from "next/router";
 import React from "react";
-import { Box, Alert, Container, Typography, Grid } from "@mui/material";
+import { Box, Alert, Container, Grid } from "@mui/material";
 import Head from "next/head";
 import NFTTrait from "../../components/NFTTrait";
 import { MainWrapper } from "../../components/styled";
 import Prize from "../../components/Prize";
-import Winners from "../../components/Winners";
 import api from "../../services/api";
-import BiddingHistoryTable from "../../components/BiddingHistoryTable";
 import DonatedNFT from "../../components/DonatedNFT";
 
-const Detail = ({
-  nft,
-  prizeInfo,
-  data,
-  nftDonations,
-  raffleDeposits,
-  raffleNFTWinners,
-}) => {
+const Detail = ({ nft, prizeInfo, data, nftDonations }) => {
   const router = useRouter();
   return (
     <>
@@ -41,12 +32,7 @@ const Detail = ({
             </Alert>
           </Box>
         )}
-        <NFTTrait
-          nft={nft}
-          prizeInfo={prizeInfo}
-          raffleDeposits={raffleDeposits}
-          raffleNFTWinners={raffleNFTWinners}
-        />
+        <NFTTrait nft={nft} prizeInfo={prizeInfo} />
         <Container>
           <Prize prizeAmount={data.PrizeAmountEth} />
           <Grid container spacing={2} mt={2}>
@@ -75,18 +61,12 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   }
   const dashboardData = await api.get_dashboard_info();
   const nftDonations = await api.get_donations_nft_list();
-  const raffleDeposits = await api.get_raffle_deposits_by_round(nft.PrizeNum);
-  const raffleNFTWinners = await api.get_raffle_nft_winners_by_round(
-    nft.PrizeNum
-  );
   return {
     props: {
       nft,
       prizeInfo,
       data: dashboardData,
       nftDonations,
-      raffleDeposits,
-      raffleNFTWinners,
     },
   };
 }
