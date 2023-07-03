@@ -40,3 +40,27 @@ export const parseBalance = (
 export const formatId = (id: number | string) => {
   return `#${id.toString().padStart(6, '0')}`
 }
+
+export const convertTimestampToDateTime = (timestamp: any) => {
+  let month_names = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
+  let date_ob = new Date(timestamp * 1000);
+  let month = month_names[date_ob.getMonth()];
+  let date = ("0" + date_ob.getDate()).slice(-2);
+  let hours = ("0" + date_ob.getHours()).slice(-2);
+  let minutes = ("0" + date_ob.getMinutes()).slice(-2);
+  let result = month + " " + date + ", " + hours + ":" + minutes;
+  return result;
+};

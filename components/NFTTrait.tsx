@@ -337,7 +337,9 @@ const NFTTrait = ({ nft, prizeInfo }) => {
                     <List>
                       {prizeInfo.RaffleNFTWinners.map((winner) => (
                         <ListItem key={winner.EvtLogId} sx={{ padding: 0 }}>
-                          <Typography>{winner.WinnerAddr}</Typography>
+                          <Typography fontFamily="monospace">
+                            {winner.WinnerAddr}
+                          </Typography>
                         </ListItem>
                       ))}
                     </List>
@@ -345,12 +347,18 @@ const NFTTrait = ({ nft, prizeInfo }) => {
                 )}
                 {showRaffleETHWinners && (
                   <Box mt={2}>
-                    <Typography color="primary">Raffle ETH Winners:</Typography>
+                    <Typography color="primary" component="span" mr={1}>
+                      Raffle ETH Winners:
+                    </Typography>
+                    <Typography component="span">
+                      {prizeInfo.RaffleETHDeposits[0].Amount.toFixed(4)} ETH
+                      (for each winner)
+                    </Typography>
                     <List>
                       {prizeInfo.RaffleETHDeposits.map((winner) => (
                         <ListItem key={winner.EvtLogId} sx={{ padding: 0 }}>
-                          <Typography>
-                            {winner.WinnerAddr} ({winner.Amount.toFixed(6)}ETH)
+                          <Typography fontFamily="monospace">
+                            {winner.WinnerAddr}
                           </Typography>
                         </ListItem>
                       ))}

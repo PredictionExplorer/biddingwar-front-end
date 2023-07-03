@@ -14,7 +14,9 @@ const WinnerRow = ({ winner, type }) => {
 
   return (
     <TablePrimaryRow>
-      <TablePrimaryCell>{winner.WinnerAddr}</TablePrimaryCell>
+      <TablePrimaryCell sx={{ fontFamily: "monospace" }}>
+        {winner.WinnerAddr}
+      </TablePrimaryCell>
       <TablePrimaryCell>{type}</TablePrimaryCell>
       <TablePrimaryCell>
         {winner.Amount ? `${winner.Amount.toFixed(2)}Ξ` : ""}
