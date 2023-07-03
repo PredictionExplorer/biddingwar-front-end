@@ -112,12 +112,15 @@ const PrizeInfo = ({ prizeNum, nftDonations, prizeInfo }) => {
           Donated NFTs
         </Typography>
         <Grid container spacing={2}>
-          {nftDonations &&
+          {nftDonations.length ? (
             nftDonations.map((nft) => (
               <Grid key={nft.RecordId} item xs={12} sm={12} md={4} lg={4}>
                 <DonatedNFT nft={nft} />
               </Grid>
-            ))}
+            ))
+          ) : (
+            <Grid item>No Tokens</Grid>
+          )}
         </Grid>
       </MainWrapper>
     </>
