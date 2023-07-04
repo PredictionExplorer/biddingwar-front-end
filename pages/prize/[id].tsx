@@ -1,19 +1,14 @@
 import React from "react";
-
-import { Box, Grid, Pagination, Typography } from "@mui/material";
-
+import { Box, Grid, Typography } from "@mui/material";
 import Head from "next/head";
-
 import { MainWrapper } from "../../components/styled";
-import { useRouter } from "next/router";
 import { GetServerSidePropsContext } from "next";
 import api from "../../services/api";
-import { convertTimestampToDateTime, shortenHex } from "../../utils";
+import { convertTimestampToDateTime } from "../../utils";
 import DonatedNFT from "../../components/DonatedNFT";
 import RaffleWinnerTable from "../../components/RaffleWinnerTable";
 
 const PrizeInfo = ({ prizeNum, nftDonations, prizeInfo }) => {
-  console.log(prizeInfo);
   return (
     <>
       <Head>
