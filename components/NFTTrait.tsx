@@ -232,13 +232,6 @@ const NFTTrait = ({ nft, prizeInfo }) => {
                 </Typography>
               </Box>
             )}
-            {/* <Box mb={1}>
-              <Typography color="primary" component="span">
-                Beauty Score:
-              </Typography>
-              &nbsp;
-              <Typography component="span">1200</Typography>
-            </Box> */}
             <Box mb={1}>
               <Typography color="primary" component="span">
                 Winner:

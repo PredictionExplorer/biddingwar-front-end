@@ -1,51 +1,52 @@
 import React, { useState } from "react";
 import {
-  Table,
-  TableRow,
-  TableBody,
-  TableCell,
   Box,
   Pagination,
-  Link,
+  Table,
+  TableBody,
+  TableCell,
+  TableRow,
 } from "@mui/material";
 import {
-  TablePrimaryContainer,
   TablePrimaryCell,
+  TablePrimaryContainer,
   TablePrimaryHead,
   TablePrimaryRow,
-} from "./styled";
+} from "../components/styled";
 import { convertTimestampToDateTime, shortenHex } from "../utils";
+import { useRouter } from "next/router";
 
-const WinnerRow = ({ winner, type }) => {
-  if (!winner) {
+const PrizeRow = ({ prize }) => {
+  const router = useRouter();
+  if (!prize) {
     return <TablePrimaryRow></TablePrimaryRow>;
   }
 
   return (
-    <TablePrimaryRow>
+    <TablePrimaryRow
+      sx={{ cursor: "pointer" }}
+      onClick={() => {
+        router.push(`/prize/${prize.PrizeNum}`);
+      }}
+    >
       <TablePrimaryCell>
-        {convertTimestampToDateTime(winner.TimeStamp)}
+        {convertTimestampToDateTime(prize.TimeStamp)}
       </TablePrimaryCell>
+      <TablePrimaryCell>{shortenHex(prize.WinnerAddr, 6)}</TablePrimaryCell>
+      <TablePrimaryCell>{prize.PrizeNum}</TablePrimaryCell>
+      <TablePrimaryCell>{prize.AmountEth.toFixed(4)} ETH</TablePrimaryCell>
+      <TablePrimaryCell>{prize.RoundStats.TotalBids}</TablePrimaryCell>
+      <TablePrimaryCell>{prize.RoundStats.TotalDonatedNFTs}</TablePrimaryCell>
       <TablePrimaryCell>
-        <Link
-          href={`/user/${winner.WinnerAddr}`}
-          style={{ color: "rgba(255, 255, 255, 0.68)", fontSize: 14 }}
-        >
-          {shortenHex(winner.WinnerAddr, 6)}
-        </Link>
+        {prize.RoundStats.TotalRaffleEthDepositsEth.toFixed(4)} ETH
       </TablePrimaryCell>
-      <TablePrimaryCell>{winner.RoundNum}</TablePrimaryCell>
-      <TablePrimaryCell>{type}</TablePrimaryCell>
-      <TablePrimaryCell>
-        {winner.Amount ? `${winner.Amount.toFixed(4)}Ξ` : ""}
-      </TablePrimaryCell>
+      <TablePrimaryCell>{prize.RoundStats.TotalRaffleNFTs}</TablePrimaryCell>
     </TablePrimaryRow>
   );
 };
 
-const RaffleWinnerTable = ({ RaffleETHDeposits, RaffleNFTWinners }) => {
+export const PrizeTable = ({ list }) => {
   const perPage = 5;
-  const list = [...RaffleETHDeposits, ...RaffleNFTWinners];
   const [page, setPage] = useState(1);
   return (
     <>
@@ -56,25 +57,18 @@ const RaffleWinnerTable = ({ RaffleETHDeposits, RaffleNFTWinners }) => {
               <TableCell>Datetime</TableCell>
               <TableCell>Winner</TableCell>
               <TableCell>Round #</TableCell>
-              <TableCell>Type</TableCell>
-              <TableCell>Amount</TableCell>
+              <TableCell>Prize Amount</TableCell>
+              <TableCell>Bids</TableCell>
+              <TableCell>Donated NFTs</TableCell>
+              <TableCell>Raffle Deposits</TableCell>
+              <TableCell>Raffle NFTs</TableCell>
             </TableRow>
           </TablePrimaryHead>
           <TableBody>
             {list.length > 0 ? (
-              <>
-                {list
-                  .slice((page - 1) * perPage, page * perPage)
-                  .map((winner, i) => (
-                    <WinnerRow
-                      key={winner.EvtLogId}
-                      winner={winner}
-                      type={
-                        winner.Amount ? "ETH Deposits" : "CosmicSignature Token"
-                      }
-                    />
-                  ))}
-              </>
+              list
+                .slice((page - 1) * perPage, page * perPage)
+                .map((prize) => <PrizeRow prize={prize} key={prize.EvtLogId} />)
             ) : (
               <TableRow>
                 <TablePrimaryCell align="center" colSpan={8}>
@@ -99,5 +93,3 @@ const RaffleWinnerTable = ({ RaffleETHDeposits, RaffleNFTWinners }) => {
     </>
   );
 };
-
-export default RaffleWinnerTable;

@@ -31,7 +31,7 @@ const HistoryRow = ({ history }) => {
       </TablePrimaryCell>
       <TablePrimaryCell>
         <Link
-          href={`/gallery?address=${history.BidderAddr}`}
+          href={`/user/${history.BidderAddr}`}
           style={{ color: "rgba(255, 255, 255, 0.68)", fontSize: 14 }}
         >
           {shortenHex(history.BidderAddr, 6)}
@@ -129,6 +129,9 @@ const BiddingHistoryTable = ({ biddingHistory }) => {
           page={curPage}
           onChange={(e, page) => setCurrentPage(page)}
           count={Math.ceil(biddingHistory.length / perPage)}
+          hideNextButton
+          hidePrevButton
+          shape="rounded"
         />
       </Box>
     </Box>

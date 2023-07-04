@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Grid, Typography } from "@mui/material";
+import { Box, Grid, Link, Typography } from "@mui/material";
 import Head from "next/head";
 import { MainWrapper } from "../../components/styled";
 import { GetServerSidePropsContext } from "next";
@@ -48,7 +48,12 @@ const PrizeInfo = ({ prizeNum, nftDonations, prizeInfo }) => {
           </Typography>
           &nbsp;
           <Typography fontFamily="monospace" component="span">
-            {prizeInfo.WinnerAddr}
+            <Link
+              href={`/user/${prizeInfo.WinnerAddr}`}
+              style={{ color: "rgb(255, 255, 255)" }}
+            >
+              {prizeInfo.WinnerAddr}
+            </Link>
           </Typography>
         </Box>
         <Box mb={1}>
