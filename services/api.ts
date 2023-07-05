@@ -20,6 +20,11 @@ class ApiService {
     return data.BidsByRound;
   }
 
+  public async get_bid_info(evtLogID: number) {
+    const { data } = await axios.get(biddingwarBaseUrl + `bid/info/${evtLogID}`);
+    return data.BidInfo;
+  }
+
   public async get_dashboard_info() {
     const { data } = await axios.get(biddingwarBaseUrl + "statistics/dashboard");
     return data;

@@ -39,7 +39,6 @@ import useCosmicSignatureContract from "../hooks/useCosmicSignatureContract";
 import theme from "../config/styles";
 
 const NFTTrait = ({ nft, prizeInfo }) => {
-  console.log(prizeInfo);
   const fileName = nft.TokenId.toString().padStart(6, "0");
   const image = `https://cosmic-game.s3.us-east-2.amazonaws.com/${fileName}.png`;
   const video = `https://cosmic-game.s3.us-east-2.amazonaws.com/${fileName}.mp4`;
@@ -240,7 +239,7 @@ const NFTTrait = ({ nft, prizeInfo }) => {
               <Typography component="span">
                 <Link
                   style={{ color: "#fff", fontSize: matches ? "16px" : "12px" }}
-                  href={`/gallery?address=${nft.WinnerAddr}`}
+                  href={`/user/${nft.WinnerAddr}`}
                 >
                   {nft.WinnerAddr}
                 </Link>
@@ -254,7 +253,7 @@ const NFTTrait = ({ nft, prizeInfo }) => {
               <Typography component="span">
                 <Link
                   style={{ color: "#fff", fontSize: matches ? "16px" : "12px" }}
-                  href={`/gallery?address=${nft.CurOwnerAddr}`}
+                  href={`/user/${nft.CurOwnerAddr}`}
                 >
                   {nft.CurOwnerAddr}
                 </Link>

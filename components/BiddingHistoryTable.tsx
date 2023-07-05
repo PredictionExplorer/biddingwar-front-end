@@ -16,6 +16,7 @@ import {
 } from "./styled";
 import Pagination from "@mui/material/Pagination";
 import { shortenHex, convertTimestampToDateTime } from "../utils";
+import router from "next/router";
 
 const HistoryRow = ({ history }) => {
   const [expanded, setExpanded] = useState(false);
@@ -25,18 +26,16 @@ const HistoryRow = ({ history }) => {
   }
 
   return (
-    <TablePrimaryRow>
+    <TablePrimaryRow
+      sx={{ cursor: "pointer" }}
+      onClick={() => {
+        router.push(`/bid/${history.EvtLogId}`);
+      }}
+    >
       <TablePrimaryCell sx={{ whiteSpace: "nowrap" }}>
         {convertTimestampToDateTime(history.TimeStamp)}
       </TablePrimaryCell>
-      <TablePrimaryCell>
-        <Link
-          href={`/user/${history.BidderAddr}`}
-          style={{ color: "rgba(255, 255, 255, 0.68)", fontSize: 14 }}
-        >
-          {shortenHex(history.BidderAddr, 6)}
-        </Link>
-      </TablePrimaryCell>
+      <TablePrimaryCell>{shortenHex(history.BidderAddr, 6)}</TablePrimaryCell>
       <TablePrimaryCell>
         {history.BidPriceEth &&
           `${
