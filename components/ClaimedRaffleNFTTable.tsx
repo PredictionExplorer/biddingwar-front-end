@@ -36,7 +36,9 @@ const NFTRow = ({ nft }) => {
       </TablePrimaryCell>
       <TablePrimaryCell>{nft.WinningRoundNum}</TablePrimaryCell>
       <TablePrimaryCell>{nft.TokenId}</TablePrimaryCell>
-      <TablePrimaryCell>{nft.WinningTimestamp}</TablePrimaryCell>
+      <TablePrimaryCell>
+        {convertTimestampToDateTime(nft.WinningTimestamp)}
+      </TablePrimaryCell>
       <TablePrimaryCell>{nft.WinningIndex}</TablePrimaryCell>
     </TablePrimaryRow>
   );

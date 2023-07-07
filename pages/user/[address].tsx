@@ -124,7 +124,7 @@ const UserInfo = ({
         </Box> */}
         <Box>
           <Typography variant="h6" lineHeight={1} mt={8} mb={4}>
-            Raffle won by the User
+            Raffles won by the User
           </Typography>
           <RaffleWinnerTable
             RaffleETHDeposits={RaffleETHDeposits}

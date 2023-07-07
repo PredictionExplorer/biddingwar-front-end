@@ -1,11 +1,33 @@
 import React, { useEffect, useState } from "react";
-import { Box, Link, Typography } from "@mui/material";
+import { Box, Grid, Link, Typography } from "@mui/material";
 import Head from "next/head";
 import { MainWrapper, NFTImage } from "../../components/styled";
 import { GetServerSidePropsContext } from "next";
 import api from "../../services/api";
-import { convertTimestampToDateTime } from "../../utils";
 import axios from "axios";
+
+const convertTimestampToDateTime = (timestamp: any) => {
+  var date_ob = new Date(timestamp * 1000);
+  var year = date_ob.getFullYear();
+  var month = ("0" + (date_ob.getMonth() + 1)).slice(-2);
+  var date = ("0" + date_ob.getDate()).slice(-2);
+  var hours = ("0" + date_ob.getHours()).slice(-2);
+  var minutes = ("0" + date_ob.getMinutes()).slice(-2);
+  var seconds = ("0" + date_ob.getSeconds()).slice(-2);
+  var result =
+    year +
+    "-" +
+    month +
+    "-" +
+    date +
+    " " +
+    hours +
+    ":" +
+    minutes +
+    ":" +
+    seconds;
+  return result;
+};
 
 const BidInfo = ({ BidInfo }) => {
   const [tokenURI, setTokenURI] = useState(null);
@@ -34,10 +56,18 @@ const BidInfo = ({ BidInfo }) => {
         </Typography>
         <Box mb={1}>
           <Typography color="primary" component="span">
-            EvtLog ID:
+            Transaction Hash:
           </Typography>
           &nbsp;
-          <Typography component="span">{BidInfo.EvtLogId}</Typography>
+          <Typography component="span">
+            <Link
+              href={`https://arbiscan.io/tx/${BidInfo.TxHash}`}
+              style={{ color: "rgb(255, 255, 255)" }}
+              target="_blank"
+            >
+              {BidInfo.TxHash}
+            </Link>
+          </Typography>
         </Box>
         <Box mb={1}>
           <Typography color="primary" component="span">
@@ -80,7 +110,7 @@ const BidInfo = ({ BidInfo }) => {
         </Box>
         <Box mb={1}>
           <Typography color="primary" component="span">
-            Is bidded with RandomWalkNFT:
+            Was bid with RandomWalkNFT:
           </Typography>
           &nbsp;
           <Typography component="span">
@@ -129,13 +159,53 @@ const BidInfo = ({ BidInfo }) => {
                 <Typography color="primary" component="span">
                   Image:
                 </Typography>
-                <Box width="300px">
-                  <NFTImage
-                    src={tokenURI?.image}
-                    sx={{ backgroundSize: "contain" }}
-                    onError={handleImageError}
-                  />
-                </Box>
+                <Grid container spacing={4}>
+                  <Grid item xs={12} md={4}>
+                    <NFTImage
+                      src={tokenURI?.image}
+                      sx={{ backgroundSize: "contain" }}
+                      onError={handleImageError}
+                    />
+                  </Grid>
+                  <Grid item xs={12} md={8}>
+                    <Box mb={1}>
+                      <Typography color="primary" component="span">
+                        Collection Name:
+                      </Typography>
+                      &nbsp;
+                      <Typography component="span">
+                        {tokenURI?.collection_name}
+                      </Typography>
+                    </Box>
+                    <Box mb={1}>
+                      <Typography color="primary" component="span">
+                        Artist:
+                      </Typography>
+                      &nbsp;
+                      <Typography component="span">
+                        {tokenURI?.artist}
+                      </Typography>
+                    </Box>
+                    <Box mb={1}>
+                      <Typography color="primary" component="span">
+                        Platform:
+                      </Typography>
+                      &nbsp;
+                      <Typography component="span">
+                        {tokenURI?.platform}
+                      </Typography>
+                    </Box>
+                    <Box mb={1}>
+                      <Typography color="primary" component="span">
+                        Description:
+                      </Typography>
+                      &nbsp;
+                      <Typography component="span">
+                        {tokenURI?.description}
+                      </Typography>
+                    </Box>
+                  </Grid>
+                </Grid>
               </Box>
             </>
           )}
