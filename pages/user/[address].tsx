@@ -8,6 +8,7 @@ import BiddingHistoryTable from "../../components/BiddingHistoryTable";
 import { PrizeTable } from "../../components/PrizeTable";
 import RaffleWinnerTable from "../../components/RaffleWinnerTable";
 import { ClaimedRaffleNFTTable } from "../../components/ClaimedRaffleNFTTable";
+import { shortenHex } from "../../utils";
 
 const UserInfo = ({
   address,
@@ -30,7 +31,7 @@ const UserInfo = ({
             User
           </Typography>
           <Typography variant="h5" component="span">
-            {address}
+            {shortenHex(address, 6)}
           </Typography>
         </Box>
         <Box mb={1}>

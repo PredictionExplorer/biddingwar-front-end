@@ -6,8 +6,6 @@ import Head from "next/head";
 import { MainWrapper } from "../../components/styled";
 import api from "../../services/api";
 import OnSaleNFTTrait from "../../components/OnSaleNFTTrait";
-import BiddingHistoryTable from "../../components/BiddingHistoryTable";
-import BuyOfferTable from "../../components/BuyOfferTable";
 
 const Detail = ({ nft, prizeInfo, data }) => {
   const router = useRouter();
@@ -44,7 +42,6 @@ const Detail = ({ nft, prizeInfo, data }) => {
                 HISTORY
               </Typography>
             </Box>
-            <BuyOfferTable curPage={0} offers={[]} totalCount={0} />
           </Container>
         </Box>
         <Container sx={{ mt: "100px" }}>
@@ -57,7 +54,6 @@ const Detail = ({ nft, prizeInfo, data }) => {
               HISTORY
             </Typography>
           </Box>
-          <BiddingHistoryTable biddingHistory={[]} />
         </Container>
       </MainWrapper>
     </>

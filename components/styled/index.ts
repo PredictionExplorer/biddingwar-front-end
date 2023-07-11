@@ -141,7 +141,6 @@ export const DrawerList = styled(List)(({ theme }) => ({
   width: 265,
   height: '100%',
   backgroundColor: '#080B2A',
-  borderLeft: '1px solid #F4BFFF',
 }))
 
 export const Wallet = styled(Chip)(({ theme }) => ({
