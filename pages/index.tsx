@@ -411,7 +411,7 @@ const NewHome = ({
           <Grid item xs={12} sm={12} md={6} lg={6}>
             <StyledCard>
               <CardActionArea>
-                <NFTImage src="https://cosmic-game.s3.us-east-2.amazonaws.com/000000.png" />
+                <NFTImage src="/images/qmark.png" />
               </CardActionArea>
             </StyledCard>
             <Box>

@@ -27,11 +27,11 @@ const UserInfo = ({
       </Head>
       <MainWrapper>
         <Box mb={4}>
-          <Typography variant="h5" color="primary" component="span" mr={2}>
+          <Typography variant="h6" color="primary" component="span" mr={2}>
             User
           </Typography>
-          <Typography variant="h5" component="span">
-            {shortenHex(address, 6)}
+          <Typography variant="h6" component="span">
+            {address}
           </Typography>
         </Box>
         <Box mb={1}>

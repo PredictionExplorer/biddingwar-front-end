@@ -9,6 +9,7 @@ import DonatedNFT from "../../components/DonatedNFT";
 import RaffleWinnerTable from "../../components/RaffleWinnerTable";
 
 const PrizeInfo = ({ prizeNum, nftDonations, prizeInfo }) => {
+  console.log(nftDonations);
   return (
     <>
       <Head>
@@ -119,7 +120,7 @@ const PrizeInfo = ({ prizeNum, nftDonations, prizeInfo }) => {
               </Grid>
             ))
           ) : (
-            <Grid item>No Tokens</Grid>
+            <Grid item>No ERC721 tokens were donated on this round</Grid>
           )}
         </Grid>
       </MainWrapper>

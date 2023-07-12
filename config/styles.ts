@@ -76,9 +76,13 @@ const theme = createTheme({
         },
         h6: {
           fontFamily: "ClashDisplay-Variable",
-          fontWeight: 600,
-          fontSize: 21,
-          lineHeight: "60px"
+          fontWeight: 500,
+          fontSize: 13,
+          [breakpoints.up('md')]: {
+            fontSize: 21,
+            fontWeight: 600,
+            lineHeight: "60px",
+          },
         },
         subtitle1: {
           fontFamily: "ClashDisplay-Variable",
