@@ -370,13 +370,9 @@ const NewHome = ({
     };
 
     const fetchPrizeTime = async () => {
-      if (biddingWarContract) {
-        const response = await fetch("/api/currentTimeStamp");
-        const curtime = await response.json();
-        const offset = curtime - Math.floor(Date.now() / 1000);
-        const t = (await biddingWarContract.prizeTime()).toNumber();
-        setPrizeTime((t - offset) * 1000);
-      }
+      const response = await fetch("/api/timeUntilPrize");
+      const untilPrize = await response.json();
+      setPrizeTime(new Date().getTime() + untilPrize * 1000);
     };
 
     fetchPrizeTime();
@@ -449,10 +445,7 @@ const NewHome = ({
               (Round #{data.CurRoundNum})
             </Typography>
             {prizeTime > Date.now() && (
-              <Countdown
-                date={prizeTime}
-                renderer={Counter}
-              />
+              <Countdown date={prizeTime} renderer={Counter} />
             )}
             <Box>
               <Typography color="primary" component="span">
@@ -561,7 +554,7 @@ const NewHome = ({
                     </Grid>
                   </Grid>
                   {!(
-                    (prizeTime > Date.now()) ||
+                    prizeTime > Date.now() ||
                     data.LastBidderAddr === constants.AddressZero
                   ) && (
                     <Grid container columnSpacing={2} mt="20px">
@@ -690,7 +683,11 @@ const NewHome = ({
                 </Grid>
               ))
             ) : (
-              <Grid item>No ERC721 tokens were donated on this round</Grid>
+              <Grid item>
+                <Typography>
+                  No ERC721 tokens were donated on this round
+                </Typography>
+              </Grid>
             )}
           </Grid>
         </Box>

@@ -119,7 +119,11 @@ const PrizeInfo = ({ prizeNum, nftDonations, prizeInfo }) => {
               </Grid>
             ))
           ) : (
-            <Grid item>No ERC721 tokens were donated on this round</Grid>
+            <Grid item>
+              <Typography>
+                No ERC721 tokens were donated on this round
+              </Typography>
+            </Grid>
           )}
         </Grid>
       </MainWrapper>
