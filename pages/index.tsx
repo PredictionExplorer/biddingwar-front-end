@@ -65,7 +65,6 @@ const NewHome = ({
   const [data, setData] = useState(initialData);
   const [curBidList, setCurBidList] = useState(biddingHistory);
   const [prizeTime, setPrizeTime] = useState(0);
-  const [countdownCompleted, setCountdownCompleted] = useState(false);
   const [message, setMessage] = useState("");
   const [nftDonateAddress, setNftDonateAddress] = useState("");
   const [nftId, setNftId] = useState(-1);
@@ -449,11 +448,10 @@ const NewHome = ({
             <Typography variant="h5" component="span">
               (Round #{data.CurRoundNum})
             </Typography>
-            {prizeTime > Date.now() && !countdownCompleted && (
+            {prizeTime > Date.now() && (
               <Countdown
                 date={prizeTime}
                 renderer={Counter}
-                onComplete={() => setCountdownCompleted(true)}
               />
             )}
             <Box>
@@ -563,7 +561,7 @@ const NewHome = ({
                     </Grid>
                   </Grid>
                   {!(
-                    (prizeTime > Date.now() && !countdownCompleted) ||
+                    (prizeTime > Date.now()) ||
                     data.LastBidderAddr === constants.AddressZero
                   ) && (
                     <Grid container columnSpacing={2} mt="20px">
