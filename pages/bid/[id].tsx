@@ -5,6 +5,7 @@ import { MainWrapper, NFTImage } from "../../components/styled";
 import { GetServerSidePropsContext } from "next";
 import api from "../../services/api";
 import axios from "axios";
+import RandomWalkNFT from "../../components/RandomWalkNFT";
 
 const convertTimestampToDateTime = (timestamp: any) => {
   var date_ob = new Date(timestamp * 1000);
@@ -217,6 +218,9 @@ const BidInfo = ({ BidInfo }) => {
           <Typography component="span">
             {BidInfo.Message === "" ? "No message!" : BidInfo.Message}
           </Typography>
+        </Box>
+        <Box width="400px" mt={4}>
+          <RandomWalkNFT tokenId={BidInfo.RWalkNFTId} />
         </Box>
       </MainWrapper>
     </>

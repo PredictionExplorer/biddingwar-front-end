@@ -73,7 +73,6 @@ const PaginationRWLKGrid = ({
                 >
                   <RandomWalkNFT
                     tokenId={index}
-                    selectable={true}
                     selected={index === selectedToken}
                   />
                 </Grid>

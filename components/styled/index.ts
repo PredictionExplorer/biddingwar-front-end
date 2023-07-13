@@ -270,6 +270,7 @@ export const NFTImage = styled('img')`
   width: 100%;
   aspect-ratio: 1;
   object-fit: contain;
+  vertical-align: middle;
 `
 
 export const NFTImageWrapper = styled(Box)(!isSafari ? {

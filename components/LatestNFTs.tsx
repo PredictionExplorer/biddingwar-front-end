@@ -9,9 +9,9 @@ import {
   useMediaQuery,
   Button,
 } from "@mui/material";
-import OnSaleNFT from "./OnSaleNFT";
 import { useSnapCarousel } from "react-snap-carousel";
 import { ArrowForward, ArrowBack } from "@mui/icons-material";
+import NFT from "./NFT";
 
 const LatestNFTs = ({ nfts }) => {
   const theme = useTheme();
@@ -55,7 +55,7 @@ const LatestNFTs = ({ nfts }) => {
                 md={4}
                 lg={4}
               >
-                <OnSaleNFT nft={nft} />
+                <NFT nft={nft} />
               </Grid>
             ))}
           </Grid>
@@ -81,7 +81,7 @@ const LatestNFTs = ({ nfts }) => {
                   position: "relative",
                 }}
               >
-                <OnSaleNFT nft={nft} />
+                <NFT nft={nft} />
               </li>
             ))}
           </ul>

@@ -3,9 +3,9 @@ import { Typography, CardActionArea, Card } from "@mui/material";
 
 import { useRWLKNFT } from "../hooks/useRWLKNFT";
 import { formatId } from "../utils";
-import { NFTImage, NFTSkeleton, NFTInfoWrapper, NFTCheckMark } from "./styled";
+import { NFTImage, NFTSkeleton, NFTInfoWrapper } from "./styled";
 
-const RandomWalkNFT = ({ tokenId, selectable = false, selected = false }) => {
+const RandomWalkNFT = ({ tokenId, selected = false }) => {
   const nft = useRWLKNFT(tokenId);
   const handleImageError = (event) => {
     event.target.src = "/images/qmark.png";
@@ -17,7 +17,7 @@ const RandomWalkNFT = ({ tokenId, selectable = false, selected = false }) => {
         borderColor: selected ? "#FFFFFF" : "#181F64",
       }}
     >
-      <CardActionArea href={nft && !selectable ? `/detail/${nft.id}` : ""}>
+      <CardActionArea>
         {!nft ? (
           <NFTSkeleton animation="wave" variant="rectangular" />
         ) : (

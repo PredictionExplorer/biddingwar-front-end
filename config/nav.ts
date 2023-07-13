@@ -10,7 +10,6 @@ const NAVS: NavItem[] = [
   { title: "Contracts", route: "/contracts" },
   { title: "Prizes", route: "/prize" },
   { title: "FAQ", route: "/faq" },
-  { title: "RWLK Mint", route: "/mint" },
 ];
 
 export default NAVS;

@@ -686,13 +686,13 @@ const NewHome = ({
           </Typography>
           <Grid container spacing={2} mt={2}>
             {nftDonations.length ? (
-              nftDonations.slice(-3).map((nft) => (
+              nftDonations.map((nft) => (
                 <Grid key={nft.RecordId} item xs={12} sm={12} md={4} lg={4}>
                   <DonatedNFT nft={nft} />
                 </Grid>
               ))
             ) : (
-              <Grid item>No Tokens</Grid>
+              <Grid item>No ERC721 tokens were donated on this round</Grid>
             )}
           </Grid>
         </Box>

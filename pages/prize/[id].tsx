@@ -9,7 +9,6 @@ import DonatedNFT from "../../components/DonatedNFT";
 import RaffleWinnerTable from "../../components/RaffleWinnerTable";
 
 const PrizeInfo = ({ prizeNum, nftDonations, prizeInfo }) => {
-  console.log(nftDonations);
   return (
     <>
       <Head>
