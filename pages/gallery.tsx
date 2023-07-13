@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { useRouter } from "next/router";
 import { Box, Typography } from "@mui/material";
 import Head from "next/head";
 
@@ -8,21 +7,12 @@ import { MainWrapper } from "../components/styled";
 import api from "../services/api";
 
 const Gallery = ({ nfts }) => {
-  const router = useRouter();
   const [collection, setCollection] = useState([]);
-  const [address, setAddress] = useState(null);
 
   useEffect(() => {
-    const address = router.query["address"] as string;
-    if (address) {
-      const filtered = nfts.filter((nft) => nft.CurOwnerAddr === address);
-      setCollection(filtered);
-    } else {
-      const sorted = nfts.sort((a, b) => Number(b.TokenId) - Number(a.TokenId));
-      setCollection(sorted);
-    }
-    setAddress(address);
-  }, [router]);
+    const sorted = nfts.sort((a, b) => Number(b.TokenId) - Number(a.TokenId));
+    setCollection(sorted);
+  }, []);
 
   return (
     <>
@@ -45,19 +35,6 @@ const Gallery = ({ nfts }) => {
             NFT Gallery
           </Typography>
         </Box>
-        {address && (
-          <Typography
-            variant="body2"
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              flexWrap: "wrap",
-            }}
-          >
-            Owned by {address}
-          </Typography>
-        )}
 
         <PaginationGrid data={collection} />
       </MainWrapper>

@@ -29,8 +29,9 @@ const PaginationGrid = ({ data }) => {
   };
 
   const handleSearch = async () => {
-    const filtered = collection.filter((nft) => nft.TokenId === nftId);
-    setSearchResult(!!filtered.length);
+    if (nftId === "") return;
+    const filtered = collection.filter((nft) => nft.TokenId === Number(nftId));
+    setSearchResult(true);
     if (filtered.length) {
       setSearchNFT(filtered[0]);
     } else {
@@ -69,8 +70,8 @@ const PaginationGrid = ({ data }) => {
       {data.length > 0 && (
         <>
           <Grid spacing={2} container>
-            {searchNFT ? (
-              !searchResult ? (
+            {!!(nftId && searchResult) ? (
+              !searchNFT ? (
                 <Grid item>
                   <Typography variant="h6" align="center">
                     Nothing Found!
@@ -91,7 +92,7 @@ const PaginationGrid = ({ data }) => {
                 ))
             )}
           </Grid>
-          {!searchNFT && (
+          {!nftId && (
             <Box display="flex" justifyContent="center" mt={4}>
               <Pagination
                 color="primary"
