@@ -370,9 +370,16 @@ const NewHome = ({
     };
 
     const fetchPrizeTime = async () => {
-      const response = await fetch("/api/timeUntilPrize");
-      const untilPrize = await response.json();
-      setPrizeTime(new Date().getTime() + untilPrize * 1000);
+      let response;
+      // response = await fetch("/api/prizeTime");
+      // const t = await response.json();
+      const t = (await biddingWarContract.prizeTime()).toNumber();
+
+      response = await fetch("/api/currentTimeStamp");
+      const current = await response.json();
+      const offset = current * 1000 - Date.now();
+      console.log(current, Date.now());
+      setPrizeTime(t * 1000 - offset);
     };
 
     fetchPrizeTime();
