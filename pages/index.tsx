@@ -378,7 +378,6 @@ const NewHome = ({
       response = await fetch("/api/currentTimeStamp");
       const current = await response.json();
       const offset = current * 1000 - Date.now();
-      console.log(current, Date.now());
       setPrizeTime(t * 1000 - offset);
     };
 
