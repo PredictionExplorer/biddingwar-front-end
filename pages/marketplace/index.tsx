@@ -2,10 +2,10 @@ import React, { useState, useEffect } from "react";
 import { Box, Typography } from "@mui/material";
 import Head from "next/head";
 
-import PaginationMarketplaceGrid from "../components/PaginationMarketplaceGrid";
-import { MainWrapper } from "../components/styled";
+import PaginationMarketplaceGrid from "../../components/PaginationMarketplaceGrid";
+import { MainWrapper } from "../../components/styled";
 import { GetServerSidePropsContext } from "next";
-import api from "../services/api";
+import api from "../../services/api";
 
 const Marketplace = ({ nfts }) => {
   const [collection, setCollection] = useState([]);
@@ -27,13 +27,13 @@ const Marketplace = ({ nfts }) => {
           justifyContent="center"
           alignItems="center"
           flexWrap="wrap"
+          mb="60px"
         >
-          <Typography variant="h4" component="span" color="primary">
+          <Typography variant="h4" component="span" color="primary" mx={1}>
             CosmicSignature
           </Typography>
-          &nbsp;
-          <Typography variant="h4" component="span">
-            NFT for Marketplace
+          <Typography variant="h4" component="span" textAlign="center">
+            NFT Gallery Marketplace
           </Typography>
         </Box>
         <PaginationMarketplaceGrid data={collection} />

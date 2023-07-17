@@ -186,6 +186,7 @@ const theme = createTheme({
           "--t": 0,
           "--path": "0 0px,0 0,100% 0,100% calc(100% - 8px),calc(100% -12px) 100%,0 100%",
           WebkitMask: "paint(rounded-shape)",
+          height: "32px",
 
           "&:hover": {
             border: 0

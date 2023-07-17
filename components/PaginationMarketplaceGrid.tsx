@@ -29,7 +29,7 @@ const PaginationMarketplaceGrid = ({ data }) => {
     <Box mt={4}>
       {data.length > 0 && (
         <>
-          <Grid spacing={4} container>
+          <Grid spacing={2} container>
             {collection
               .slice((curPage - 1) * perPage, curPage * perPage)
               .map((nft, index) => (
