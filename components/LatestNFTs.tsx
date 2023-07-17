@@ -19,11 +19,7 @@ const LatestNFTs = ({ nfts }) => {
   const { scrollRef, pages, activePageIndex, next, prev } = useSnapCarousel();
   const data = nfts.sort((a, b) => Number(b.TokenId) - Number(a.TokenId));
   return (
-    <Box
-      sx={{
-        backgroundColor: "#101441",
-      }}
-    >
+    <Box sx={{ backgroundColor: "#101441" }}>
       <Container sx={{ padding: "80px 10px 150px" }}>
         <Box
           display="flex"
@@ -92,14 +88,14 @@ const LatestNFTs = ({ nfts }) => {
               onClick={() => prev()}
               disabled={activePageIndex === 0}
             >
-              <ArrowBack />
+              <ArrowBack fontSize="small" />
             </Button>
             <Button
               variant="contained"
               onClick={() => next()}
               disabled={activePageIndex === pages.length - 1}
             >
-              <ArrowForward />
+              <ArrowForward fontSize="small" />
             </Button>
           </Box>
         </Box>

@@ -111,18 +111,7 @@ const NFTTrait = ({ nft, prizeInfo }) => {
     var hours = ("0" + date_ob.getHours()).slice(-2);
     var minutes = ("0" + date_ob.getMinutes()).slice(-2);
     var seconds = ("0" + date_ob.getSeconds()).slice(-2);
-    var result =
-      year +
-      "-" +
-      month +
-      "-" +
-      date +
-      " " +
-      hours +
-      ":" +
-      minutes +
-      ":" +
-      seconds;
+    var result = `${month}/${date}/${year} ${hours}:${minutes}:${seconds}`;
     return result;
   };
 
@@ -163,7 +152,7 @@ const NFTTrait = ({ nft, prizeInfo }) => {
             </StyledCard>
             <Box mt={2}>
               <Grid container spacing={2}>
-                <Grid item xs={4}>
+                <Grid item xs={6}>
                   <Button variant="text" fullWidth onClick={handleMenuOpen}>
                     Copy link
                     {anchorEl ? <ExpandLess /> : <ExpandMore />}
@@ -195,26 +184,30 @@ const NFTTrait = ({ nft, prizeInfo }) => {
                     </CopyToClipboard>
                   </Menu>
                 </Grid>
-                <Grid item xs={4}>
-                  <Button
-                    variant="contained"
-                    fullWidth
-                    startIcon={<ArrowBack />}
-                    onClick={handlePrev}
-                  >
-                    Prev
-                  </Button>
-                </Grid>
-                <Grid item xs={4}>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    fullWidth
-                    endIcon={<ArrowForward />}
-                    onClick={handleNext}
-                  >
-                    Next
-                  </Button>
+                <Grid item xs={6}>
+                  <Grid container spacing={2}>
+                    <Grid item xs={6}>
+                      <Button
+                        variant="contained"
+                        fullWidth
+                        startIcon={<ArrowBack />}
+                        onClick={handlePrev}
+                      >
+                        Prev
+                      </Button>
+                    </Grid>
+                    <Grid item xs={6}>
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        fullWidth
+                        endIcon={<ArrowForward />}
+                        onClick={handleNext}
+                      >
+                        Next
+                      </Button>
+                    </Grid>
+                  </Grid>
                 </Grid>
               </Grid>
             </Box>
@@ -247,7 +240,7 @@ const NFTTrait = ({ nft, prizeInfo }) => {
             </Box>
             <Box mb={1}>
               <Typography color="primary" component="span">
-                Current Owner:
+                Owner:
               </Typography>
               &nbsp;
               <Typography component="span">
