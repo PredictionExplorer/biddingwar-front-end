@@ -6,8 +6,9 @@ import Head from "next/head";
 import { MainWrapper } from "../../components/styled";
 import api from "../../services/api";
 import OnSaleNFTTrait from "../../components/OnSaleNFTTrait";
+import BuyOfferTable from "../../components/BuyOfferTable";
 
-const Detail = ({ nft, prizeInfo, data }) => {
+const Detail = ({ nft }) => {
   const router = useRouter();
   return (
     <>
@@ -35,13 +36,33 @@ const Detail = ({ nft, prizeInfo, data }) => {
           <Container>
             <Box textAlign="center">
               <Typography variant="h4" component="span" color="primary">
-                BID
+                Buy
               </Typography>
               &nbsp;
               <Typography variant="h4" component="span">
-                HISTORY
+                Offer
               </Typography>
             </Box>
+            <BuyOfferTable
+              offers={[
+                {
+                  buyer: "0x0172d21913da8aca9e0037dc2349c82f701efefc",
+                  price: 0.3,
+                },
+                {
+                  buyer: "0x0172d21913da8aca9e0037dc2349c82f701efefc",
+                  price: 0.3,
+                },
+                {
+                  buyer: "0x0172d21913da8aca9e0037dc2349c82f701efefc",
+                  price: 0.3,
+                },
+                {
+                  buyer: "0x0172d21913da8aca9e0037dc2349c82f701efefc",
+                  price: 0.3,
+                },
+              ]}
+            />
           </Container>
         </Box>
         <Container sx={{ mt: "100px" }}>
@@ -53,6 +74,26 @@ const Detail = ({ nft, prizeInfo, data }) => {
             <Typography variant="h6" component="span">
               HISTORY
             </Typography>
+            <BuyOfferTable
+              offers={[
+                {
+                  buyer: "0x0172d21913da8aca9e0037dc2349c82f701efefc",
+                  price: 0.3,
+                },
+                {
+                  buyer: "0x0172d21913da8aca9e0037dc2349c82f701efefc",
+                  price: 0.3,
+                },
+                {
+                  buyer: "0x0172d21913da8aca9e0037dc2349c82f701efefc",
+                  price: 0.3,
+                },
+                {
+                  buyer: "0x0172d21913da8aca9e0037dc2349c82f701efefc",
+                  price: 0.3,
+                },
+              ]}
+            />
           </Box>
         </Container>
       </MainWrapper>
@@ -64,17 +105,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   const id = context.params!.id;
   const tokenId = Array.isArray(id) ? id[0] : id;
   const nft = await api.get_cst_info(parseInt(tokenId));
-  const prizeList = await api.get_prize_list();
-  let prizeInfo;
-  if (prizeList.length) {
-    prizeInfo = await api.get_prize_info(prizeList.length - 1);
-  } else {
-    prizeInfo = null;
-  }
-  const dashboardData = await api.get_dashboard_info();
-  return {
-    props: { nft, prizeInfo, data: dashboardData },
-  };
+  return { props: { nft } };
 }
 
 export default Detail;

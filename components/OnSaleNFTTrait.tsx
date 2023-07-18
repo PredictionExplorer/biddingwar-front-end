@@ -8,6 +8,8 @@ import {
   Container,
   Snackbar,
   Alert,
+  useTheme,
+  useMediaQuery,
 } from "@mui/material";
 
 import Lightbox from "react-awesome-lightbox";
@@ -21,6 +23,8 @@ import { formatId } from "../utils";
 import { StyledCard, SectionWrapper, NFTImage, NFTInfoWrapper } from "./styled";
 
 const OnSaleNFTTrait = ({ nft }) => {
+  const theme = useTheme();
+  const matches = useMediaQuery(theme.breakpoints.up("md"));
   const fileName = nft.TokenId.toString().padStart(6, "0");
   const image = `https://cosmic-game.s3.us-east-2.amazonaws.com/${fileName}.png`;
   const video = `https://cosmic-game.s3.us-east-2.amazonaws.com/${fileName}.mp4`;
@@ -82,52 +86,81 @@ const OnSaleNFTTrait = ({ nft }) => {
           <Grid item xs={12} sm={8} md={6}>
             <Typography variant="h4">Cosmic Signature Marketplace</Typography>
             <Typography
-              fontSize={19}
+              fontSize={matches ? 19 : 16}
               color="textSecondary"
               component="span"
               lineHeight={2}
             >
-              Programmatically generated image and video CosmicSignature NFT. ETH
-              spent on minting goes back to the minters through an
+              Programmatically generated image and video CosmicSignature NFT.
+              ETH spent on minting goes back to the minters through an
             </Typography>
             &nbsp;
-            <Typography fontSize={19} color="primary" component="span">
+            <Typography
+              fontSize={matches ? 19 : 16}
+              color="primary"
+              component="span"
+            >
               interesting mechanism
             </Typography>
             <Box mt={2}>
-              <Typography color="primary" component="span">
+              <Typography
+                fontSize={matches ? 16 : 14}
+                color="primary"
+                component="span"
+              >
                 BID PRICE:
               </Typography>
               &nbsp;
-              <Typography component="span">0.002084</Typography>
+              <Typography fontSize={matches ? 16 : 14} component="span">
+                0.002084
+              </Typography>
             </Box>
             <Box>
-              <Typography color="primary" component="span">
+              <Typography
+                fontSize={matches ? 16 : 14}
+                color="primary"
+                component="span"
+              >
                 REWARD:
               </Typography>
               &nbsp;
-              <Typography component="span">0.8024</Typography>
+              <Typography fontSize={matches ? 16 : 14} component="span">
+                0.8024
+              </Typography>
             </Box>
-            <Box sx={{ display: "flex" }}>
-              <Typography color="primary">Charity Address:</Typography>
-              &nbsp;
-              <Typography>0xB9A66Fe7C1B7b8b3f14F68399AD1202</Typography>
+            <Box display="flex" flexDirection={matches ? "row" : "column"}>
+              <Typography fontSize={matches ? 16 : 14} color="primary" mr={1}>
+                Charity Address:
+              </Typography>
+              <Typography fontSize={matches ? 16 : 14}>
+                0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266
+              </Typography>
             </Box>
-            <Box sx={{ display: "flex" }}>
-              <Typography color="primary">Percentage of Donation:</Typography>
+            <Box>
+              <Typography
+                fontSize={matches ? 16 : 14}
+                color="primary"
+                component="span"
+              >
+                Percentage of Donation:
+              </Typography>
               &nbsp;
-              <Typography>10.00%</Typography>
+              <Typography fontSize={matches ? 16 : 14} component="span">
+                10.00%
+              </Typography>
             </Box>
             <Box sx={{ my: "24px" }}>
-              <Typography color="primary">Last Bidder Address:</Typography>
-              <Typography>
+              <Typography fontSize={matches ? 16 : 14} color="primary">
+                Last Bidder Address:
+              </Typography>
+              <Typography fontSize={matches ? 16 : 14}>
                 0xA867454690CA5142917165FB2dBb08ccaEb303df
               </Typography>
             </Box>
           </Grid>
         </Grid>
         <Box mt="100px">
-          <Box width="60%" mx="auto">
+          <Box width={matches ? "60%" : "100%"} mx="auto">
             <Typography variant="h4" textAlign="center">
               Video Gallery
             </Typography>
@@ -139,24 +172,34 @@ const OnSaleNFTTrait = ({ nft }) => {
                 alt="divider"
               />
             </Box>
-            <Typography
-              fontSize={19}
-              color="textSecondary"
-              component="span"
-              lineHeight={2}
-            >
-              Programmatically generated image and video CosmicSignature NFT. ETH
-              spent on minting goes back to the minters through an
-            </Typography>
-            &nbsp;
-            <Typography fontSize={19} color="primary" component="span">
-              interesting mechanism
-            </Typography>
+            <Box textAlign="center">
+              <Typography
+                fontSize={matches ? 19 : 16}
+                color="textSecondary"
+                component="span"
+                lineHeight={2}
+              >
+                Programmatically generated image and video CosmicSignature NFT.
+                ETH spent on minting goes back to the minters through an
+              </Typography>
+              &nbsp;
+              <Typography
+                fontSize={matches ? 19 : 16}
+                color="primary"
+                component="span"
+              >
+                interesting mechanism
+              </Typography>
+            </Box>
           </Box>
-          <Box sx={{ display: "flex", gap: "24px" }}>
-            <NFTVideo image_thumb={image} onClick={() => handlePlay(video)} />
-            <NFTVideo image_thumb={image} onClick={() => handlePlay(video)} />
-          </Box>
+          <Grid container spacing={2} mt="40px">
+            <Grid item xs={12} md={6}>
+              <NFTVideo image_thumb={image} onClick={() => handlePlay(video)} />
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <NFTVideo image_thumb={image} onClick={() => handlePlay(video)} />
+            </Grid>
+          </Grid>
         </Box>
         {imageOpen && (
           <Lightbox image={image} onClose={() => setImageOpen(false)} />

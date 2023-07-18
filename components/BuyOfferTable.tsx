@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
+import Image from "next/image";
 import {
   Box,
   Table,
   TableRow,
   TableBody,
   TableCell,
+  Typography,
 } from "@mui/material";
 import {
   TablePrimaryContainer,
@@ -13,7 +15,6 @@ import {
   TablePrimaryRow,
 } from "./styled";
 import Pagination from "@mui/material/Pagination";
-import { useRouter } from "next/router";
 
 const OfferRow = ({ offer }) => {
   if (!offer) {
@@ -23,7 +24,17 @@ const OfferRow = ({ offer }) => {
   return (
     <TablePrimaryRow>
       <TablePrimaryCell>{offer.buyer}</TablePrimaryCell>
-      <TablePrimaryCell>{offer.price}</TablePrimaryCell>
+      <TablePrimaryCell sx={{ display: "flex" }}>
+        <Image
+          src={"/images/Ethereum_small.svg"}
+          width={16}
+          height={16}
+          alt="ethereum"
+        />
+        <Typography component="span" color="primary" ml={1}>
+          {offer.price}
+        </Typography>
+      </TablePrimaryCell>
     </TablePrimaryRow>
   );
 };
@@ -54,23 +65,21 @@ const OfferTable = ({ offers }) => {
   );
 };
 
-const BuyOfferTable = ({ curPage, offers, totalCount }) => {
+const BuyOfferTable = ({ offers }) => {
   const perPage = 20;
-  const router = useRouter();
-  const handleNextPage = (page) => {
-    router.query["page"] = page;
-    router.push({ pathname: router.pathname, query: router.query });
-  };
+  const [curPage, setCurPage] = useState(1);
 
   return (
     <Box mt={4}>
-      <OfferTable offers={offers} />
+      <OfferTable
+        offers={offers.slice((curPage - 1) * perPage, curPage * perPage)}
+      />
       <Box display="flex" justifyContent="center" mt={4}>
         <Pagination
           color="primary"
-          page={parseInt(curPage)}
-          onChange={(e, page) => handleNextPage(page)}
-          count={Math.ceil(totalCount / perPage)}
+          page={curPage}
+          onChange={(e, page) => setCurPage(page)}
+          count={Math.ceil(offers.length / perPage)}
           showFirstButton
           showLastButton
         />

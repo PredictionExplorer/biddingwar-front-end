@@ -7,7 +7,7 @@ const handleImageError = (event) => {
   event.target.src = "/images/qmark.png";
 };
 const NFTVideo = ({ image_thumb, onClick }) => (
-  <VideoCard sx={{ width: "90%", margin: "80px auto" }}>
+  <VideoCard>
     <NFTImageWrapper>
       <NFTImage
         src={image_thumb}

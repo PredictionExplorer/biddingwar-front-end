@@ -380,7 +380,7 @@ const NFTTrait = ({ nft, prizeInfo }) => {
             </Box>
           </Grid>
         </Grid>
-        <Box mt={2}>
+        <Box mt="80px">
           <NFTVideo image_thumb={image} onClick={() => handlePlay(video)} />
         </Box>
         {imageOpen && (
