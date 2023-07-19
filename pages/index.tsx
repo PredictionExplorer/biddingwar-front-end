@@ -75,7 +75,6 @@ const NewHome = ({
     text: "",
     visible: false,
   });
-
   const [rwlknftIds, setRwlknftIds] = useState([]);
   const { library, account } = useActiveWeb3React();
   const biddingWarContract = useBiddingWarContract();
@@ -84,6 +83,13 @@ const NewHome = ({
 
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up("md"));
+
+  const gridLayout =
+    nftDonations.length > 16
+      ? { xs: 6, sm: 3, md: 2, lg: 2 }
+      : nftDonations.length > 9
+      ? { xs: 6, sm: 4, md: 3, lg: 3 }
+      : { xs: 12, sm: 6, md: 4, lg: 4 };
 
   const series = [
     { category: "Prize", value: data.PrizePercentage },
@@ -659,7 +665,9 @@ const NewHome = ({
                 When you bid, you are also buying a raffle ticket.{" "}
                 {data.NumRaffleEthWinners} raffle tickets will be chosen and
                 these people will win {data.RafflePercentage}% of the pot each.
-                Also, {data.NumRaffleNFTWinners} additional winners will be
+                Also, {data.NumRaffleNFTWinners} additional winners and{" "}
+                {data.NumHolderNFTWinners} Random Walk NFT holders and{" "}
+                {data.NumHolderNFTWinners} CosmicSignature token holders will be
                 chosen which will receive a Cosmic Signature NFT.
               </Typography>
             </Box>
@@ -681,7 +689,14 @@ const NewHome = ({
           <Grid container spacing={2} mt={2}>
             {nftDonations.length ? (
               nftDonations.map((nft) => (
-                <Grid key={nft.RecordId} item xs={12} sm={12} md={4} lg={4}>
+                <Grid
+                  item
+                  key={nft.RecordId}
+                  xs={gridLayout.xs}
+                  sm={gridLayout.sm}
+                  md={gridLayout.md}
+                  lg={gridLayout.lg}
+                >
                   <DonatedNFT nft={nft} />
                 </Grid>
               ))
@@ -727,8 +742,10 @@ const NewHome = ({
           >
             you are also buying a raffle ticket. When the round ends, there
             are&nbsp;
-            {data.NumRaffleEthWinners + data.NumRaffleNFTWinners} raffle
-            winners:
+            {data.NumRaffleEthWinners +
+              data.NumRaffleNFTWinners +
+              data.NumHolderNFTWinners * 2}
+            &nbsp; raffle winners:
           </Typography>
           <Box textAlign="center" marginBottom="56px">
             <Image
@@ -765,7 +782,8 @@ const NewHome = ({
                   sx={{ fontSize: "26px !important" }}
                   textAlign="center"
                 >
-                  {data.NumRaffleNFTWinners} will receive
+                  {data.NumRaffleNFTWinners + data.NumHolderNFTWinners * 2} will
+                  receive
                 </Typography>
                 <GradientText variant="h3" textAlign="center">
                   1 Cosmic NFT
