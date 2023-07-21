@@ -347,6 +347,15 @@ const NewHome = ({
     }
   };
 
+  const playAudio = async () => {
+    try {
+      const audioElement = new Audio('/audio/notification.wav');
+      await audioElement.play();
+    } catch (error) {
+      console.error("Error requesting sound permission:", error);
+    }
+  };
+
   useEffect(() => {
     const getData = async () => {
       if (nftRWLKContract && account) {
@@ -365,7 +374,12 @@ const NewHome = ({
     const fetchDashboardData = async () => {
       const response = await fetch("/api/dashboard");
       const newData = await response.json();
-      setData(newData);
+      setData((prevData) => {
+        if (prevData.BidPriceEth !== newData.BidPriceEth) {
+          playAudio();
+        }
+        return newData;
+      });
     };
     const fetchBidData = async () => {
       const response = await fetch(
@@ -385,12 +399,12 @@ const NewHome = ({
     };
 
     fetchPrizeTime();
-    // Fetch data every 15 seconds
+    // Fetch data every 12 seconds
     const interval = setInterval(() => {
       fetchDashboardData();
       fetchBidData();
       fetchPrizeTime();
-    }, 15000);
+    }, 12000);
 
     // Clean up the interval when the component is unmounted
     return () => {
@@ -673,9 +687,7 @@ const NewHome = ({
             </Box>
           </Grid>
         </Grid>
-
         <Prize prizeAmount={data.PrizeAmountEth} />
-
         <Box marginTop="80px">
           <Typography variant="h6" component="span">
             DONATED
@@ -709,7 +721,6 @@ const NewHome = ({
             )}
           </Grid>
         </Box>
-
         <Box mt="120px">
           <Box display="flex" alignItems="center" flexWrap="wrap">
             <Typography variant="h6" component="span">
