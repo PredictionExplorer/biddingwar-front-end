@@ -376,7 +376,7 @@ const NewHome = ({
       const newData = await response.json();
       setData((prevData) => {
         if (
-          prevData.BidPriceEth !== newData.BidPriceEth &&
+          prevData.CurNumBids !== newData.CurNumBids &&
           prevData.CurRoundNum === newData.CurRoundNum
         ) {
           playAudio();
