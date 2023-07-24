@@ -68,7 +68,7 @@ const UserInfo = ({
         </Box>
         <Box mb={1}>
           <Typography color="primary" component="span">
-            Unclaimed NFTs:
+            Unclaimed donated NFTs:
           </Typography>
           &nbsp;
           <Typography component="span">{UserInfo.UnclaimedNFTs}</Typography>

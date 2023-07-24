@@ -349,7 +349,7 @@ const NewHome = ({
 
   const playAudio = async () => {
     try {
-      const audioElement = new Audio('/audio/notification.wav');
+      const audioElement = new Audio("/audio/notification.wav");
       await audioElement.play();
     } catch (error) {
       console.error("Error requesting sound permission:", error);
@@ -375,7 +375,10 @@ const NewHome = ({
       const response = await fetch("/api/dashboard");
       const newData = await response.json();
       setData((prevData) => {
-        if (prevData.BidPriceEth !== newData.BidPriceEth) {
+        if (
+          prevData.BidPriceEth !== newData.BidPriceEth &&
+          prevData.CurRoundNum === newData.CurRoundNum
+        ) {
           playAudio();
         }
         return newData;
@@ -488,10 +491,6 @@ const NewHome = ({
                 {data.PrizeAmountEth.toFixed(4)}
               </Typography>
             </Box>
-            {/* <Box>
-              <Typography color="primary">Charity Address:</Typography>
-              <Typography>{data.CharityAddr}</Typography>
-            </Box> */}
             <Box sx={{ mt: "24px" }}>
               <Typography color="primary">Last Bidder Address:</Typography>
               <Typography>
