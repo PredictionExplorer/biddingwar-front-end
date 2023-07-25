@@ -215,12 +215,10 @@ const BidInfo = ({ BidInfo }) => {
             Message:
           </Typography>
           &nbsp;
-          <Typography component="span">
-            {BidInfo.Message === "" ? "No message!" : BidInfo.Message}
-          </Typography>
+          <Typography component="span">{BidInfo.Message}</Typography>
         </Box>
         <Box width="400px" mt={4}>
-          <RandomWalkNFT tokenId={BidInfo.RWalkNFTId} />
+          <RandomWalkNFT tokenId={BidInfo.RWalkNFTId} selectable={false} />
         </Box>
       </MainWrapper>
     </>

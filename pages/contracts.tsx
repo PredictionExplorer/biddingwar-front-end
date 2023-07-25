@@ -17,16 +17,20 @@ export const ContractListItem = styled(ListItem)({
 
 const ContractItem = ({ name, value }) => {
   const theme = useTheme();
-  const matches = useMediaQuery(theme.breakpoints.up("md"));
+  const md = useMediaQuery(theme.breakpoints.up("md"));
+  const sm = useMediaQuery(theme.breakpoints.up("sm"));
   return (
     <ContractListItem>
       <Typography
         color="primary"
-        sx={{ mr: 2, minWidth: matches ? "200px" : "100px" }}
+        sx={{ mr: 2, width: md ? "300px" : sm ? "150px" : "100px" }}
+        variant={sm ? "subtitle1" : "body1"}
       >
         {name}:
       </Typography>
-      <Typography fontFamily="monospace">{value}</Typography>
+      <Typography fontFamily="monospace" variant={sm ? "subtitle1" : "body1"}>
+        {value}
+      </Typography>
     </ContractListItem>
   );
 };

@@ -83,9 +83,6 @@ const Header = () => {
                 <NavLink href={nav.route}>{nav.title}</NavLink>
               </ListItemButton>
             ))}
-            <ListItem>
-              <NavLink href="/my-nfts">My NFTs</NavLink>
-            </ListItem>
           </DrawerList>
         </Drawer>
       </Toolbar>

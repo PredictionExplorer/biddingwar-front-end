@@ -186,7 +186,6 @@ export const CenterBox = styled(Box)(({ theme }) => ({
 
 export const CounterWrapper = styled(Box)({
   display: 'flex',
-  flexDirection: isMobile ? 'column' : 'row',
   justifyContent: isMobile ? 'center' : 'start',
   alignItems: 'center',
 })

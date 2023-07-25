@@ -5,7 +5,7 @@ import { useRWLKNFT } from "../hooks/useRWLKNFT";
 import { formatId } from "../utils";
 import { NFTImage, NFTSkeleton, NFTInfoWrapper } from "./styled";
 
-const RandomWalkNFT = ({ tokenId, selected = false }) => {
+const RandomWalkNFT = ({ tokenId, selected = false, selectable = true }) => {
   const nft = useRWLKNFT(tokenId);
   const handleImageError = (event) => {
     event.target.src = "/images/qmark.png";
@@ -17,7 +17,11 @@ const RandomWalkNFT = ({ tokenId, selected = false }) => {
         borderColor: selected ? "#FFFFFF" : "#181F64",
       }}
     >
-      <CardActionArea>
+      <CardActionArea
+        href={
+          selectable ? "" : `https://www.randomwalknft.com/detail/${tokenId}`
+        }
+      >
         {!nft ? (
           <NFTSkeleton animation="wave" variant="rectangular" />
         ) : (

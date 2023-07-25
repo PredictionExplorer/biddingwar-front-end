@@ -69,6 +69,7 @@ const NewHome = ({
   const [nftDonateAddress, setNftDonateAddress] = useState("");
   const [nftId, setNftId] = useState(-1);
   const [rwlkId, setRwlkId] = useState(-1);
+  const [bidPricePlus, setBidPricePlus] = useState(1);
   const [galleryVisibility, setGalleryVisibility] = useState(false);
   const [isBidding, setIsBidding] = useState(false);
   const [notification, setNotification] = useState({
@@ -177,7 +178,10 @@ const NewHome = ({
     setIsBidding(true);
     try {
       bidPrice = await biddingWarContract.getBidPrice();
-      newBidPrice = parseFloat(ethers.utils.formatEther(bidPrice)) * 1.01;
+      newBidPrice =
+        parseFloat(ethers.utils.formatEther(bidPrice)) *
+        1.01 *
+        (1 + bidPricePlus / 100);
       let receipt;
       if (!nftDonateAddress || nftId === -1) {
         receipt = await biddingWarContract
@@ -374,6 +378,13 @@ const NewHome = ({
     const fetchDashboardData = async () => {
       const response = await fetch("/api/dashboard");
       const newData = await response.json();
+
+      const bidResponse = await fetch(
+        `/api/bid/?round=${newData.CurRoundNum - 1}&sortDir=desc`
+      );
+      const newBidData = await bidResponse.json();
+      setCurBidList(newBidData);
+
       setData((prevData) => {
         if (
           prevData.CurNumBids !== newData.CurNumBids &&
@@ -383,13 +394,6 @@ const NewHome = ({
         }
         return newData;
       });
-    };
-    const fetchBidData = async () => {
-      const response = await fetch(
-        `/api/bid/?round=${data.CurRoundNum - 1}&sortDir=desc`
-      );
-      const newData = await response.json();
-      setCurBidList(newData);
     };
 
     const fetchPrizeTime = async () => {
@@ -405,7 +409,6 @@ const NewHome = ({
     // Fetch data every 12 seconds
     const interval = setInterval(() => {
       fetchDashboardData();
-      fetchBidData();
       fetchPrizeTime();
     }, 12000);
 
@@ -545,6 +548,15 @@ const NewHome = ({
                       inputProps={{ maxLength: 280 }}
                       sx={{ marginTop: 2 }}
                       onChange={(e) => setMessage(e.target.value)}
+                    />
+                    <TextField
+                      type="number"
+                      placeholder="Bid Price Plus"
+                      value={bidPricePlus}
+                      size="small"
+                      fullWidth
+                      sx={{ marginTop: 2 }}
+                      onChange={(e) => setBidPricePlus(Number(e.target.value))}
                     />
                   </AccordionDetails>
                 </Accordion>
