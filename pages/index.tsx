@@ -484,7 +484,7 @@ const NewHome = ({
               </Typography>
               &nbsp;
               <Typography component="span">
-                {data.BidPriceEth.toFixed(6)}
+                {data.BidPriceEth.toFixed(6)} ETH
               </Typography>
             </Box>
             <Box>
@@ -493,7 +493,7 @@ const NewHome = ({
               </Typography>
               &nbsp;
               <Typography component="span">
-                {data.PrizeAmountEth.toFixed(4)}
+                {data.PrizeAmountEth.toFixed(4)} ETH
               </Typography>
             </Box>
             <Box sx={{ mt: "24px" }}>
