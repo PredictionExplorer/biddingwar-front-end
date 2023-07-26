@@ -523,9 +523,8 @@ const NewHome = ({
                   </AccordionSummary>
                   <AccordionDetails>
                     <Typography variant="body2">
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                      Suspendisse malesuada lacus ex, sit amet blandit leo
-                      lobortis eget.
+                      If you want to donate one of your NFTs while bidding, you
+                      can put the contract address, NFT id, and comment here.
                     </Typography>
                     <TextField
                       placeholder="NFT contract address"
