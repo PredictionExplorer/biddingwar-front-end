@@ -15,6 +15,7 @@ import {
   useMediaQuery,
   Snackbar,
   Alert,
+  InputAdornment,
 } from "@mui/material";
 import {
   GradientBorder,
@@ -32,7 +33,7 @@ import { useActiveWeb3React } from "../hooks/web3";
 import { BIDDINGWAR_ADDRESS } from "../config/app";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import FAQ from "../components/FAQ";
-import { ArrowForward } from "@mui/icons-material";
+import { ArrowForward, Label } from "@mui/icons-material";
 import NFT_ABI from "../contracts/NFT.json";
 import PaginationRWLKGrid from "../components/PaginationRWLKGrid";
 import useCosmicSignatureContract from "../hooks/useCosmicSignatureContract";
@@ -69,7 +70,7 @@ const NewHome = ({
   const [nftDonateAddress, setNftDonateAddress] = useState("");
   const [nftId, setNftId] = useState(-1);
   const [rwlkId, setRwlkId] = useState(-1);
-  const [bidPricePlus, setBidPricePlus] = useState(1);
+  const [bidPricePlus, setBidPricePlus] = useState(0);
   const [galleryVisibility, setGalleryVisibility] = useState(false);
   const [isBidding, setIsBidding] = useState(false);
   const [notification, setNotification] = useState({
@@ -352,6 +353,7 @@ const NewHome = ({
   };
 
   const playAudio = async () => {
+    console.log("play sounds");
     try {
       const audioElement = new Audio("/audio/notification.wav");
       await audioElement.play();
@@ -387,8 +389,8 @@ const NewHome = ({
 
       setData((prevData) => {
         if (
-          prevData.CurNumBids !== newData.CurNumBids &&
-          prevData.CurRoundNum === newData.CurRoundNum
+          account !== newData.LastBidderAddr &&
+          prevData.CurNumBids < newData.CurNumBids
         ) {
           playAudio();
         }
@@ -549,15 +551,47 @@ const NewHome = ({
                       sx={{ marginTop: 2 }}
                       onChange={(e) => setMessage(e.target.value)}
                     />
-                    <TextField
-                      type="number"
-                      placeholder="Bid Price Plus"
-                      value={bidPricePlus}
-                      size="small"
-                      fullWidth
-                      sx={{ marginTop: 2 }}
-                      onChange={(e) => setBidPricePlus(Number(e.target.value))}
-                    />
+                    <Box
+                      sx={{
+                        display: "flex",
+                        marginTop: 2,
+                        alignItems: "center",
+                      }}
+                    >
+                      <Typography
+                        whiteSpace="nowrap"
+                        color="rgba(255, 255, 255, 0.68)"
+                        mr={2}
+                      >
+                        Rise bid price by
+                      </Typography>
+                      <TextField
+                        type="number"
+                        placeholder="Bid Price Plus"
+                        value={bidPricePlus}
+                        size="small"
+                        fullWidth
+                        InputProps={{
+                          endAdornment: (
+                            <InputAdornment position="end">%</InputAdornment>
+                          ),
+                          inputProps: { min: 0 },
+                        }}
+                        onChange={(e) =>
+                          setBidPricePlus(Number(e.target.value))
+                        }
+                      />
+                      <Typography
+                        whiteSpace="nowrap"
+                        color="rgba(255, 255, 255, 0.68)"
+                        ml={2}
+                      >
+                        {(data.BidPriceEth * (1 + bidPricePlus / 100)).toFixed(
+                          6
+                        )}{" "}
+                        ETH
+                      </Typography>
+                    </Box>
                   </AccordionDetails>
                 </Accordion>
                 <Box mb={2} position="relative">
