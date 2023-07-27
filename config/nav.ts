@@ -5,7 +5,6 @@ type NavItem = {
 };
 
 const NAVS: NavItem[] = [
-  { title: "Home", route: "/" },
   { title: "Gallery", route: "/gallery" },
   { title: "Contracts", route: "/contracts" },
   { title: "Prizes", route: "/prize" },

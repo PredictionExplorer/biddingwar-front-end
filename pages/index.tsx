@@ -77,6 +77,7 @@ const NewHome = ({
     text: "",
     visible: false,
   });
+  const [bannerTokenId, setBannerTokenId] = useState("");
   const [rwlknftIds, setRwlknftIds] = useState([]);
   const { library, account } = useActiveWeb3React();
   const biddingWarContract = useBiddingWarContract();
@@ -408,6 +409,8 @@ const NewHome = ({
     };
 
     fetchPrizeTime();
+    const bannerId = Math.floor(Math.random() * nfts.length);
+    setBannerTokenId(bannerId.toString().padStart(6, "0"));
     // Fetch data every 12 seconds
     const interval = setInterval(() => {
       fetchDashboardData();
@@ -437,7 +440,13 @@ const NewHome = ({
           <Grid item xs={12} sm={12} md={6} lg={6}>
             <StyledCard>
               <CardActionArea>
-                <NFTImage src="/images/qmark.png" />
+                <NFTImage
+                  src={
+                    bannerTokenId === ""
+                      ? "/images/qmark.png"
+                      : `https://cosmic-game.s3.us-east-2.amazonaws.com/${bannerTokenId}.png`
+                  }
+                />
               </CardActionArea>
             </StyledCard>
             <Box>
@@ -732,60 +741,7 @@ const NewHome = ({
           </Grid>
         </Grid>
         <Prize prizeAmount={data.PrizeAmountEth} />
-        <Box marginTop="80px">
-          <Typography variant="h6" component="span">
-            DONATED
-          </Typography>
-          <Typography variant="h6" color="primary" component="span" mx={1}>
-            ERC721 TOKENS
-          </Typography>
-          <Typography variant="h6" component="span">
-            FOR CURRENT ROUND
-          </Typography>
-          <Grid container spacing={2} mt={2}>
-            {nftDonations.length ? (
-              nftDonations.map((nft) => (
-                <Grid
-                  item
-                  key={nft.RecordId}
-                  xs={gridLayout.xs}
-                  sm={gridLayout.sm}
-                  md={gridLayout.md}
-                  lg={gridLayout.lg}
-                >
-                  <DonatedNFT nft={nft} />
-                </Grid>
-              ))
-            ) : (
-              <Grid item>
-                <Typography>
-                  No ERC721 tokens were donated on this round
-                </Typography>
-              </Grid>
-            )}
-          </Grid>
-        </Box>
-        <Box mt="120px">
-          <Box display="flex" alignItems="center" flexWrap="wrap">
-            <Typography variant="h6" component="span">
-              CURRENT ROUND
-            </Typography>
-            <Typography
-              variant="h6"
-              component="span"
-              color="primary"
-              sx={{ ml: 1.5 }}
-            >
-              BID HISTORY
-            </Typography>
-          </Box>
-          <BiddingHistory biddingHistory={curBidList} />
-        </Box>
-      </MainWrapper>
 
-      <LatestNFTs nfts={nfts} />
-
-      <Container>
         <Box margin="100px 0">
           <Typography variant="h4" textAlign="center">
             Every time you bid
@@ -854,6 +810,60 @@ const NewHome = ({
             </Grid>
           </Grid>
         </Box>
+        <Box marginTop="80px">
+          <Typography variant="h6" component="span">
+            DONATED
+          </Typography>
+          <Typography variant="h6" color="primary" component="span" mx={1}>
+            ERC721 TOKENS
+          </Typography>
+          <Typography variant="h6" component="span">
+            FOR CURRENT ROUND
+          </Typography>
+          <Grid container spacing={2} mt={2}>
+            {nftDonations.length ? (
+              nftDonations.map((nft) => (
+                <Grid
+                  item
+                  key={nft.RecordId}
+                  xs={gridLayout.xs}
+                  sm={gridLayout.sm}
+                  md={gridLayout.md}
+                  lg={gridLayout.lg}
+                >
+                  <DonatedNFT nft={nft} />
+                </Grid>
+              ))
+            ) : (
+              <Grid item>
+                <Typography>
+                  No ERC721 tokens were donated on this round
+                </Typography>
+              </Grid>
+            )}
+          </Grid>
+        </Box>
+        <Box mt="120px">
+          <Box display="flex" alignItems="center" flexWrap="wrap">
+            <Typography variant="h6" component="span">
+              CURRENT ROUND
+            </Typography>
+            <Typography
+              variant="h6"
+              component="span"
+              color="primary"
+              sx={{ ml: 1.5 }}
+            >
+              BID HISTORY
+            </Typography>
+          </Box>
+          <BiddingHistory biddingHistory={curBidList} />
+        </Box>
+      </MainWrapper>
+
+      <LatestNFTs nfts={nfts} />
+
+      <Container>
         {prizeInfo && <RaffleWinners prizeInfo={prizeInfo} />}
 
         <Box sx={{ padding: "90px 0 80px" }}>

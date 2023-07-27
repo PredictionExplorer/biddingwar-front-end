@@ -7,6 +7,7 @@ import {
   Drawer,
   ListItem,
   Container,
+  Link,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 
@@ -14,8 +15,8 @@ import NAV_SECTIONS from "../config/nav";
 import ConnectWalletButton from "../components/ConnectWalletButton";
 
 import { NavLink, AppBarWrapper, DrawerList } from "./styled";
-import ListNavItem from  "./ListNavItem";
-import ListItemButton from  "./ListItemButton";
+import ListNavItem from "./ListNavItem";
+import ListItemButton from "./ListItemButton";
 
 const Header = () => {
   const [state, setState] = useState({
@@ -44,7 +45,9 @@ const Header = () => {
   const renderDesktop = () => {
     return (
       <Toolbar disableGutters>
-        <Image src="/images/logo2.svg" width={240} height={48} alt="logo" />
+        <Link href="/">
+          <Image src="/images/logo2.svg" width={240} height={48} alt="logo" />
+        </Link>
         {NAV_SECTIONS.map((nav, i) => (
           <ListNavItem key={i} nav={nav} />
         ))}
@@ -79,7 +82,11 @@ const Header = () => {
               <ConnectWalletButton isMobileView />
             </ListItem>
             {NAV_SECTIONS.map((nav, i) => (
-              <ListItemButton key={i} nav={nav} sx={{ justifyContent: "center" }}>
+              <ListItemButton
+                key={i}
+                nav={nav}
+                sx={{ justifyContent: "center" }}
+              >
                 <NavLink href={nav.route}>{nav.title}</NavLink>
               </ListItemButton>
             ))}
