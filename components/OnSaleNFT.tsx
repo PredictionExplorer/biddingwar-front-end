@@ -2,23 +2,21 @@ import React from "react";
 import Image from "next/image";
 import { Typography, CardActionArea, Box, Button } from "@mui/material";
 import { formatId } from "../utils";
-import { NFTImage, StyledCard } from "./styled";
+import { StyledCard } from "./styled";
 import router from "next/router";
 import { ArrowForward } from "@mui/icons-material";
+import NFTImage from "./NFTImage";
 
 const OnSaleNFT = ({ nft }) => {
   const fileName = nft.TokenId.toString().padStart(6, "0");
   const image = `https://cosmic-game.s3.us-east-2.amazonaws.com/${fileName}.png`;
-  const handleImageError = (event) => {
-    event.target.src = "/images/qmark.png";
-  };
   return (
     <Box sx={{ position: "relative" }}>
       <StyledCard>
         <CardActionArea
           onClick={() => router.push(`/marketplace/${nft.TokenId}`)}
         >
-          <NFTImage src={image} onError={handleImageError} />
+          <NFTImage src={image} />
         </CardActionArea>
       </StyledCard>
       <Box

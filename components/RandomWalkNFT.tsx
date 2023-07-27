@@ -3,13 +3,11 @@ import { Typography, CardActionArea, Card } from "@mui/material";
 
 import { useRWLKNFT } from "../hooks/useRWLKNFT";
 import { formatId } from "../utils";
-import { NFTImage, NFTSkeleton, NFTInfoWrapper } from "./styled";
+import { NFTSkeleton, NFTInfoWrapper } from "./styled";
+import NFTImage from "./NFTImage";
 
 const RandomWalkNFT = ({ tokenId, selected = false, selectable = true }) => {
   const nft = useRWLKNFT(tokenId);
-  const handleImageError = (event) => {
-    event.target.src = "/images/qmark.png";
-  };
   return (
     <Card
       sx={{
@@ -25,7 +23,7 @@ const RandomWalkNFT = ({ tokenId, selected = false, selectable = true }) => {
         {!nft ? (
           <NFTSkeleton animation="wave" variant="rectangular" />
         ) : (
-          <NFTImage src={nft.black_image_thumb} onError={handleImageError} />
+          <NFTImage src={nft.black_image_thumb} />
         )}
         {nft && (
           <NFTInfoWrapper>

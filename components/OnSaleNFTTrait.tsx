@@ -20,7 +20,8 @@ import "react-modal-video/css/modal-video.min.css";
 
 import NFTVideo from "./NFTVideo";
 import { formatId } from "../utils";
-import { StyledCard, SectionWrapper, NFTImage, NFTInfoWrapper } from "./styled";
+import { StyledCard, SectionWrapper, NFTInfoWrapper } from "./styled";
+import NFTImage from "./NFTImage";
 
 const OnSaleNFTTrait = ({ nft }) => {
   const theme = useTheme();
@@ -47,10 +48,6 @@ const OnSaleNFTTrait = ({ nft }) => {
     });
   };
 
-  const handleImageError = (event) => {
-    event.target.src = "/images/qmark.png";
-  };
-
   return (
     <Container>
       <SectionWrapper>
@@ -68,7 +65,7 @@ const OnSaleNFTTrait = ({ nft }) => {
           <Grid item xs={12} sm={8} md={6}>
             <StyledCard>
               <CardActionArea onClick={() => setImageOpen(true)}>
-                <NFTImage src={image} onError={handleImageError} />
+                <NFTImage src={image} />
                 <NFTInfoWrapper>
                   <Typography
                     variant="body1"

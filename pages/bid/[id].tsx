@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Box, Grid, Link, Typography } from "@mui/material";
 import Head from "next/head";
-import { MainWrapper, NFTImage } from "../../components/styled";
+import { MainWrapper } from "../../components/styled";
 import { GetServerSidePropsContext } from "next";
 import api from "../../services/api";
 import axios from "axios";
 import RandomWalkNFT from "../../components/RandomWalkNFT";
+import NFTImage from "../../components/NFTImage";
 
 const convertTimestampToDateTime = (timestamp: any) => {
   var date_ob = new Date(timestamp * 1000);
@@ -32,10 +33,6 @@ const convertTimestampToDateTime = (timestamp: any) => {
 
 const BidInfo = ({ BidInfo }) => {
   const [tokenURI, setTokenURI] = useState(null);
-  const handleImageError = (event) => {
-    event.target.src = "/images/qmark.png";
-  };
-
   useEffect(() => {
     const fetchData = async () => {
       const { data } = await axios.get(BidInfo.NFTTokenURI);
@@ -165,7 +162,6 @@ const BidInfo = ({ BidInfo }) => {
                     <NFTImage
                       src={tokenURI?.image}
                       sx={{ backgroundSize: "contain" }}
-                      onError={handleImageError}
                     />
                   </Grid>
                   <Grid item xs={12} md={8}>

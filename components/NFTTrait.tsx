@@ -28,7 +28,7 @@ import "react-modal-video/css/modal-video.min.css";
 import NFTVideo from "./NFTVideo";
 import { useActiveWeb3React } from "../hooks/web3";
 import { formatId } from "../utils";
-import { StyledCard, SectionWrapper, NFTImage, NFTInfoWrapper } from "./styled";
+import { StyledCard, SectionWrapper, NFTInfoWrapper } from "./styled";
 import {
   ArrowBack,
   ArrowForward,
@@ -37,6 +37,7 @@ import {
 } from "@mui/icons-material";
 import useCosmicSignatureContract from "../hooks/useCosmicSignatureContract";
 import theme from "../config/styles";
+import NFTImage from "./NFTImage";
 
 const NFTTrait = ({ nft, prizeInfo }) => {
   const fileName = nft.TokenId.toString().padStart(6, "0");
@@ -115,10 +116,6 @@ const NFTTrait = ({ nft, prizeInfo }) => {
     return result;
   };
 
-  const handleImageError = (event) => {
-    event.target.src = "/images/qmark.png";
-  };
-
   return (
     <Container>
       <SectionWrapper>
@@ -136,7 +133,7 @@ const NFTTrait = ({ nft, prizeInfo }) => {
           <Grid item xs={12} sm={8} md={6}>
             <StyledCard>
               <CardActionArea onClick={() => setImageOpen(true)}>
-                <NFTImage src={image} onError={handleImageError} />
+                <NFTImage src={image} />
                 <NFTInfoWrapper>
                   <Typography
                     variant="body1"

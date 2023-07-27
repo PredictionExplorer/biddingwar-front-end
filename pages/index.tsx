@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import {
   Button,
@@ -21,7 +21,6 @@ import {
   GradientBorder,
   GradientText,
   MainWrapper,
-  NFTImage,
   StyledCard,
 } from "../components/styled";
 import BiddingHistory from "../components/BiddingHistoryTable";
@@ -33,7 +32,7 @@ import { useActiveWeb3React } from "../hooks/web3";
 import { BIDDINGWAR_ADDRESS } from "../config/app";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import FAQ from "../components/FAQ";
-import { ArrowForward, Label } from "@mui/icons-material";
+import { ArrowForward } from "@mui/icons-material";
 import NFT_ABI from "../contracts/NFT.json";
 import PaginationRWLKGrid from "../components/PaginationRWLKGrid";
 import useCosmicSignatureContract from "../hooks/useCosmicSignatureContract";
@@ -54,6 +53,7 @@ import {
 import "@progress/kendo-theme-default/dist/all.css";
 import "@egjs/hammerjs";
 import getErrorMessage from "../utils/alert";
+import NFTImage from "../components/NFTImage";
 
 const NewHome = ({
   biddingHistory,
@@ -79,11 +79,13 @@ const NewHome = ({
   });
   const [bannerTokenId, setBannerTokenId] = useState("");
   const [rwlknftIds, setRwlknftIds] = useState([]);
+  // const [blackVideo, setBlackVideo] = useState(null);
+
   const { library, account } = useActiveWeb3React();
   const biddingWarContract = useBiddingWarContract();
   const nftRWLKContract = useRWLKNFTContract();
   const cosmicSignatureContract = useCosmicSignatureContract();
-
+  // const ref = useRef(null);
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up("md"));
 
@@ -377,6 +379,12 @@ const NewHome = ({
     getData();
   }, [nftRWLKContract, account]);
 
+  // useEffect(() => {
+  //   if (blackVideo) {
+  //     ref.current.load();
+  //   }
+  // }, [blackVideo]);
+
   useEffect(() => {
     const fetchDashboardData = async () => {
       const response = await fetch("/api/dashboard");
@@ -410,7 +418,11 @@ const NewHome = ({
 
     fetchPrizeTime();
     const bannerId = Math.floor(Math.random() * nfts.length);
-    setBannerTokenId(bannerId.toString().padStart(6, "0"));
+    const fileName = bannerId.toString().padStart(6, "0");
+    setBannerTokenId(fileName);
+    // setBlackVideo(
+    //   `https://cosmic-game.s3.us-east-2.amazonaws.com/${fileName}.mp4`
+    // );
     // Fetch data every 12 seconds
     const interval = setInterval(() => {
       fetchDashboardData();
@@ -425,6 +437,34 @@ const NewHome = ({
 
   return (
     <>
+      {/* {blackVideo && (
+        <div
+          style={{
+            position: "fixed",
+            top: 125,
+            bottom: 64,
+            left: 0,
+            right: 0,
+            zIndex: -1,
+          }}
+        >
+          <video
+            autoPlay
+            muted
+            playsInline
+            style={{
+              position: "absolute",
+              width: "100%",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+            }}
+            ref={ref}
+          >
+            <source src={blackVideo} type="video/mp4"></source>
+          </video>
+        </div>
+      )} */}
       <MainWrapper>
         <Snackbar
           anchorOrigin={{ vertical: "bottom", horizontal: "left" }}

@@ -1,14 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Typography, CardActionArea, Box } from "@mui/material";
-import { NFTImage, StyledCard } from "./styled";
+import { StyledCard } from "./styled";
 import axios from "axios";
+import NFTImage from "./NFTImage";
 
 const DonatedNFT = ({ nft }) => {
   const [tokenURI, setTokenURI] = useState(null);
-
-  const handleImageError = (event) => {
-    event.target.src = "/images/qmark.png";
-  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -24,11 +21,7 @@ const DonatedNFT = ({ nft }) => {
     <StyledCard>
       <CardActionArea>
         {tokenURI && (
-          <NFTImage
-            src={tokenURI?.image}
-            sx={{ backgroundSize: "contain" }}
-            onError={handleImageError}
-          />
+          <NFTImage src={tokenURI?.image} sx={{ backgroundSize: "contain" }} />
         )}
       </CardActionArea>
       <Box
