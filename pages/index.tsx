@@ -524,8 +524,10 @@ const NewHome = ({
             <Typography variant="h5" component="span">
               (Round #{data.CurRoundNum})
             </Typography>
-            {prizeTime > Date.now() && (
-              <Countdown date={prizeTime} renderer={Counter} />
+            {prizeTime > Date.now() ? (
+              <Countdown key={0} date={prizeTime} renderer={Counter} />
+            ) : (
+              <Countdown key={1} date={Date.now()} renderer={Counter} />
             )}
             <Box>
               <Typography color="primary" component="span">
