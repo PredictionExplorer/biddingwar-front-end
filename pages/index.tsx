@@ -54,6 +54,7 @@ import "@progress/kendo-theme-default/dist/all.css";
 import "@egjs/hammerjs";
 import getErrorMessage from "../utils/alert";
 import NFTImage from "../components/NFTImage";
+import { calculateTimeDiff } from "../utils";
 
 const NewHome = ({
   biddingHistory,
@@ -79,6 +80,7 @@ const NewHome = ({
   });
   const [bannerTokenId, setBannerTokenId] = useState("");
   const [rwlknftIds, setRwlknftIds] = useState([]);
+  const [roundStartedAgo, setRoundStartedAgo] = useState("");
   // const [blackVideo, setBlackVideo] = useState(null);
 
   const { library, account } = useActiveWeb3React();
@@ -435,6 +437,22 @@ const NewHome = ({
     };
   }, []);
 
+  useEffect(() => {
+    const interval = setInterval(async () => {
+      if (data.TsRoundStart) {
+        const response = await fetch("/api/currentTimeStamp");
+        const current = await response.json();
+        const timeDiff = calculateTimeDiff(data.TsRoundStart, current);
+        setRoundStartedAgo(timeDiff);
+      } else {
+        setRoundStartedAgo("");
+      }
+    }, 1000);
+    return () => {
+      clearInterval(interval);
+    };
+  }, []);
+
   return (
     <>
       {/* {blackVideo && (
@@ -547,6 +565,15 @@ const NewHome = ({
                 {data.PrizeAmountEth.toFixed(4)} ETH
               </Typography>
             </Box>
+            {roundStartedAgo && (
+              <Box>
+                <Typography color="primary" component="span">
+                  Round Started:
+                </Typography>
+                &nbsp;
+                <Typography component="span">{roundStartedAgo} ago</Typography>
+              </Box>
+            )}
             <Box sx={{ mt: "24px" }}>
               <Typography color="primary">Last Bidder Address:</Typography>
               <Typography>

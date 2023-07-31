@@ -7,7 +7,7 @@ import {
   CounterItemWrapper,
 } from "./styled";
 
-const Counter = ({ days, hours, minutes, seconds, completed }) => {
+const Counter = ({ days, hours, minutes, seconds }) => {
   const padZero = (x) => x.toString().padStart(2, "0");
 
   return (
