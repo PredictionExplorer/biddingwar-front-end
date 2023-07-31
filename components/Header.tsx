@@ -64,7 +64,9 @@ const Header = () => {
 
     return (
       <Toolbar>
-        <Image src="/images/logo2.svg" width={240} height={48} alt="logo" />
+        <Link href="/">
+          <Image src="/images/logo2.svg" width={240} height={48} alt="logo" />
+        </Link>
         <IconButton
           aria-label="menu"
           aria-haspopup="true"

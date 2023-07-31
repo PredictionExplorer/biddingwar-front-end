@@ -71,7 +71,7 @@ const LatestNFTs = ({ nfts }) => {
               <li
                 key={i}
                 style={{
-                  width: "90%",
+                  width: "100%",
                   flexShrink: 0,
                   marginRight: "10px",
                   position: "relative",
