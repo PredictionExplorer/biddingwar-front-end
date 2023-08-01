@@ -90,14 +90,8 @@ const Statistics = ({ data }) => {
             title="RandomWalk Tokens Used"
             value={data.NumRwalkTokensUsed}
           />
-          <StatisticsItem
-            title="Price Increase"
-            value="1%"
-          />
-          <StatisticsItem
-            title="Time Increase"
-            value="0.01%"
-          />
+          <StatisticsItem title="Price Increase" value="1%" />
+          <StatisticsItem title="Time Increase" value="0.01%" />
           <StatisticsItem
             title="Prize Percentage"
             value={`${data.PrizePercentage} %`}

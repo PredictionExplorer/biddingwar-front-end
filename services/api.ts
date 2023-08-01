@@ -37,6 +37,7 @@ class ApiService {
 
   public async get_donations_nft_by_round(round: number) {
     const { data } = await axios.get(biddingwarBaseUrl + `donations/nft/by_prize/${round}`);
+    if (data.status === 0) return [];
     return data.NFTDonations;
   }
 
@@ -57,9 +58,13 @@ class ApiService {
 
   public async get_prize_info(prizeNum: number) {
     const id = prizeNum < 0 ? 0 : prizeNum;
-    const { data } = await axios.get(biddingwarBaseUrl + `prize/info/${id}`);
-    const prizeInfo = data.PrizeInfo;
-    return prizeInfo;
+    try {
+      const { data } = await axios.get(biddingwarBaseUrl + `prize/info/${id}`);
+      const prizeInfo = data.PrizeInfo;
+      return prizeInfo;
+    } catch(err) {
+      return null;
+    }
   }
 
   public async get_cst_list() {

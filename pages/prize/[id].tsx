@@ -24,108 +24,114 @@ const PrizeInfo = ({ prizeNum, nftDonations, prizeInfo }) => {
             Prize Information
           </Typography>
         </Box>
-        <Box mb={1}>
-          <Typography color="primary" component="span">
-            Datetime:
-          </Typography>
-          &nbsp;
-          <Typography component="span">
-            {convertTimestampToDateTime(prizeInfo.TimeStamp)}
-          </Typography>
-        </Box>
-        <Box mb={1}>
-          <Typography color="primary" component="span">
-            Prize Amount:
-          </Typography>
-          &nbsp;
-          <Typography component="span">
-            {prizeInfo.AmountEth.toFixed(4)} ETH
-          </Typography>
-        </Box>
-        <Box mb={1}>
-          <Typography color="primary" component="span">
-            Winner Address:
-          </Typography>
-          &nbsp;
-          <Typography fontFamily="monospace" component="span">
-            <Link
-              href={`/user/${prizeInfo.WinnerAddr}`}
-              style={{ color: "rgb(255, 255, 255)" }}
-            >
-              {prizeInfo.WinnerAddr}
-            </Link>
-          </Typography>
-        </Box>
-        <Box mb={1}>
-          <Typography color="primary" component="span">
-            Charity Address:
-          </Typography>
-          &nbsp;
-          <Typography fontFamily="monospace" component="span">
-            {prizeInfo.CharityAddress}
-          </Typography>
-        </Box>
-        <Box mb={1}>
-          <Typography color="primary" component="span">
-            Charity Amount:
-          </Typography>
-          &nbsp;
-          <Typography component="span">
-            {prizeInfo.CharityAmountETH.toFixed(4)} ETH
-          </Typography>
-        </Box>
-        <Box mb={1}>
-          <Typography color="primary" component="span">
-            Total Bids:
-          </Typography>
-          &nbsp;
-          <Typography component="span">
-            {prizeInfo.RoundStats.TotalBids}
-          </Typography>
-        </Box>
-        <Box mb={1}>
-          <Typography color="primary" component="span">
-            Total Raffle Eth Deposits:
-          </Typography>
-          &nbsp;
-          <Typography component="span">
-            {prizeInfo.RoundStats.TotalRaffleEthDepositsEth.toFixed(4)}
-          </Typography>
-        </Box>
-        <Box mb={1}>
-          <Typography color="primary" component="span">
-            Total Raffle NFTs:
-          </Typography>
-          &nbsp;
-          <Typography component="span">
-            {prizeInfo.RoundStats.TotalRaffleNFTs}
-          </Typography>
-        </Box>
-        <Typography variant="h6" mt={4}>
-          Raffle Winners
-        </Typography>
-        <RaffleWinnerTable
-          RaffleETHDeposits={prizeInfo.RaffleETHDeposits}
-          RaffleNFTWinners={prizeInfo.RaffleNFTWinners}
-        />
-        <Typography variant="h6" mt={4}>
-          Donated NFTs
-        </Typography>
-        <Grid container spacing={2}>
-          {nftDonations.length ? (
-            nftDonations.map((nft) => (
-              <Grid key={nft.RecordId} item xs={12} sm={12} md={4} lg={4}>
-                <DonatedNFT nft={nft} />
-              </Grid>
-            ))
-          ) : (
-            <Grid item>
-              <Typography>
-                No ERC721 tokens were donated on this round
+        {prizeInfo ? (
+          <Box>
+            <Box mb={1}>
+              <Typography color="primary" component="span">
+                Datetime:
               </Typography>
+              &nbsp;
+              <Typography component="span">
+                {convertTimestampToDateTime(prizeInfo.TimeStamp)}
+              </Typography>
+            </Box>
+            <Box mb={1}>
+              <Typography color="primary" component="span">
+                Prize Amount:
+              </Typography>
+              &nbsp;
+              <Typography component="span">
+                {prizeInfo.AmountEth.toFixed(4)} ETH
+              </Typography>
+            </Box>
+            <Box mb={1}>
+              <Typography color="primary" component="span">
+                Winner Address:
+              </Typography>
+              &nbsp;
+              <Typography fontFamily="monospace" component="span">
+                <Link
+                  href={`/user/${prizeInfo.WinnerAddr}`}
+                  style={{ color: "rgb(255, 255, 255)" }}
+                >
+                  {prizeInfo.WinnerAddr}
+                </Link>
+              </Typography>
+            </Box>
+            <Box mb={1}>
+              <Typography color="primary" component="span">
+                Charity Address:
+              </Typography>
+              &nbsp;
+              <Typography fontFamily="monospace" component="span">
+                {prizeInfo.CharityAddress}
+              </Typography>
+            </Box>
+            <Box mb={1}>
+              <Typography color="primary" component="span">
+                Charity Amount:
+              </Typography>
+              &nbsp;
+              <Typography component="span">
+                {prizeInfo.CharityAmountETH.toFixed(4)} ETH
+              </Typography>
+            </Box>
+            <Box mb={1}>
+              <Typography color="primary" component="span">
+                Total Bids:
+              </Typography>
+              &nbsp;
+              <Typography component="span">
+                {prizeInfo.RoundStats.TotalBids}
+              </Typography>
+            </Box>
+            <Box mb={1}>
+              <Typography color="primary" component="span">
+                Total Raffle Eth Deposits:
+              </Typography>
+              &nbsp;
+              <Typography component="span">
+                {prizeInfo.RoundStats.TotalRaffleEthDepositsEth.toFixed(4)}
+              </Typography>
+            </Box>
+            <Box mb={1}>
+              <Typography color="primary" component="span">
+                Total Raffle NFTs:
+              </Typography>
+              &nbsp;
+              <Typography component="span">
+                {prizeInfo.RoundStats.TotalRaffleNFTs}
+              </Typography>
+            </Box>
+            <Typography variant="h6" mt={4}>
+              Raffle Winners
+            </Typography>
+            <RaffleWinnerTable
+              RaffleETHDeposits={prizeInfo.RaffleETHDeposits}
+              RaffleNFTWinners={prizeInfo.RaffleNFTWinners}
+            />
+            <Typography variant="h6" mt={4}>
+              Donated NFTs
+            </Typography>
+            <Grid container spacing={2}>
+              {nftDonations.length ? (
+                nftDonations.map((nft) => (
+                  <Grid key={nft.RecordId} item xs={12} sm={12} md={4} lg={4}>
+                    <DonatedNFT nft={nft} />
+                  </Grid>
+                ))
+              ) : (
+                <Grid item>
+                  <Typography>
+                    No ERC721 tokens were donated on this round
+                  </Typography>
+                </Grid>
+              )}
             </Grid>
-          )}
-        </Grid>
+          </Box>
+        ) : (
+          <Typography variant="h6">Prize data not found!</Typography>
+        )}
       </MainWrapper>
     </>
   );
