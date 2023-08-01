@@ -825,7 +825,7 @@ const NewHome = ({
             {data.NumRaffleEthWinners +
               data.NumRaffleNFTWinners +
               data.NumHolderNFTWinners * 2}
-            &nbsp; raffle winners:
+            &nbsp;raffle winners:
           </Typography>
           <Box textAlign="center" marginBottom="56px">
             <Image
