@@ -7,8 +7,9 @@ import api from "../../services/api";
 import { convertTimestampToDateTime } from "../../utils";
 import DonatedNFT from "../../components/DonatedNFT";
 import RaffleWinnerTable from "../../components/RaffleWinnerTable";
+import BiddingHistoryTable from "../../components/BiddingHistoryTable";
 
-const PrizeInfo = ({ prizeNum, nftDonations, prizeInfo }) => {
+const PrizeInfo = ({ bidHistory, prizeNum, nftDonations, prizeInfo }) => {
   return (
     <>
       <Head>
@@ -103,31 +104,37 @@ const PrizeInfo = ({ prizeNum, nftDonations, prizeInfo }) => {
                 {prizeInfo.RoundStats.TotalRaffleNFTs}
               </Typography>
             </Box>
-            <Typography variant="h6" mt={4}>
-              Raffle Winners
-            </Typography>
-            <RaffleWinnerTable
-              RaffleETHDeposits={prizeInfo.RaffleETHDeposits}
-              RaffleNFTWinners={prizeInfo.RaffleNFTWinners}
-            />
-            <Typography variant="h6" mt={4}>
-              Donated NFTs
-            </Typography>
-            <Grid container spacing={2}>
-              {nftDonations.length ? (
-                nftDonations.map((nft) => (
-                  <Grid key={nft.RecordId} item xs={12} sm={12} md={4} lg={4}>
-                    <DonatedNFT nft={nft} />
+            <Box mt={4}>
+              <Typography variant="h6" lineHeight={1}>
+                Bid History
+              </Typography>
+              <BiddingHistoryTable biddingHistory={bidHistory} />
+            </Box>
+            <Box mt={4}>
+              <Typography variant="h6">Raffle Winners</Typography>
+              <RaffleWinnerTable
+                RaffleETHDeposits={prizeInfo.RaffleETHDeposits}
+                RaffleNFTWinners={prizeInfo.RaffleNFTWinners}
+              />
+            </Box>
+            <Box mt={4}>
+              <Typography variant="h6">Donated NFTs</Typography>
+              <Grid container spacing={2}>
+                {nftDonations.length ? (
+                  nftDonations.map((nft) => (
+                    <Grid key={nft.RecordId} item xs={12} sm={12} md={4} lg={4}>
+                      <DonatedNFT nft={nft} />
+                    </Grid>
+                  ))
+                ) : (
+                  <Grid item>
+                    <Typography>
+                      No ERC721 tokens were donated on this round
+                    </Typography>
                   </Grid>
-                ))
-              ) : (
-                <Grid item>
-                  <Typography>
-                    No ERC721 tokens were donated on this round
-                  </Typography>
-                </Grid>
-              )}
-            </Grid>
+                )}
+              </Grid>
+            </Box>
           </Box>
         ) : (
           <Typography variant="h6">Prize data not found!</Typography>
@@ -142,8 +149,13 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   const prizeNum = Array.isArray(id) ? id[0] : id;
   const nftDonations = await api.get_donations_nft_by_round(Number(prizeNum));
   const prizeInfo = await api.get_prize_info(Number(prizeNum));
+  const bidHistory = await api.get_bid_list_by_round(
+    Number(prizeNum) - 1,
+    "desc"
+  );
   return {
     props: {
+      bidHistory,
       prizeNum,
       nftDonations,
       prizeInfo,
