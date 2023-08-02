@@ -52,109 +52,105 @@ const BidInfo = ({ BidInfo }) => {
         <Typography variant="h4" color="primary" mb={4}>
           Bid Info
         </Typography>
-        <Box mb={1}>
-          <Typography color="primary" component="span">
+        <Box mb={1} display="flex" flexWrap="wrap">
+          <Typography color="primary">
             Transaction Hash:
           </Typography>
           &nbsp;
-          <Typography component="span">
-            <Link
-              href={`https://arbiscan.io/tx/${BidInfo.TxHash}`}
-              style={{ color: "rgb(255, 255, 255)" }}
-              target="_blank"
-            >
-              {BidInfo.TxHash}
-            </Link>
-          </Typography>
+          <Link
+            href={`https://arbiscan.io/tx/${BidInfo.TxHash}`}
+            style={{ color: "rgb(255, 255, 255)" }}
+            target="_blank"
+          >
+            <Typography>{BidInfo.TxHash}</Typography>
+          </Link>
         </Box>
-        <Box mb={1}>
-          <Typography color="primary" component="span">
+        <Box mb={1}  display="flex" flexWrap="wrap">
+          <Typography color="primary">
             Round Number:
           </Typography>
           &nbsp;
-          <Typography component="span">{BidInfo.RoundNum}</Typography>
+          <Typography>{BidInfo.RoundNum}</Typography>
         </Box>
-        <Box mb={1}>
-          <Typography color="primary" component="span">
+        <Box mb={1} display="flex" flexWrap="wrap">
+          <Typography color="primary">
             Bid Datetime:
           </Typography>
           &nbsp;
-          <Typography component="span">
+          <Typography>
             {convertTimestampToDateTime(BidInfo.TimeStamp)}
           </Typography>
         </Box>
-        <Box mb={1}>
-          <Typography color="primary" component="span">
+        <Box mb={1} display="flex" flexWrap="wrap">
+          <Typography color="primary">
             Bidder Address:
           </Typography>
           &nbsp;
-          <Typography component="span">
-            <Link
-              href={`/user/${BidInfo.BidderAddr}`}
-              style={{ color: "rgb(255, 255, 255)" }}
-            >
-              {BidInfo.BidderAddr}
-            </Link>
-          </Typography>
+          <Link
+            href={`/user/${BidInfo.BidderAddr}`}
+            style={{ color: "rgb(255, 255, 255)" }}
+          >
+            <Typography>{BidInfo.BidderAddr}</Typography>
+          </Link>
         </Box>
-        <Box mb={1}>
-          <Typography color="primary" component="span">
+        <Box mb={1} display="flex" flexWrap="wrap">
+          <Typography color="primary">
             Bid Price:
           </Typography>
           &nbsp;
-          <Typography component="span">
+          <Typography>
             {BidInfo.BidPriceEth.toFixed(6)} ETH
           </Typography>
         </Box>
-        <Box mb={1}>
-          <Typography color="primary" component="span">
+        <Box mb={1} display="flex" flexWrap="wrap">
+          <Typography color="primary">
             Was bid with RandomWalkNFT:
           </Typography>
           &nbsp;
-          <Typography component="span">
+          <Typography>
             {BidInfo.RWalkNFTId < 0 ? "No" : "Yes"}
           </Typography>
         </Box>
         {BidInfo.RWalkNFTId >= 0 && (
-          <Box mb={1}>
-            <Typography color="primary" component="span">
+          <Box mb={1} display="flex" flexWrap="wrap">
+            <Typography color="primary">
               RandomWalkNFT ID:
             </Typography>
             &nbsp;
-            <Typography component="span">{BidInfo.RWalkNFTId}</Typography>
+            <Typography>{BidInfo.RWalkNFTId}</Typography>
           </Box>
         )}
 
         {BidInfo.NFTDonationTokenAddr !== "" &&
           BidInfo.NFTDonationTokenId !== -1 && (
             <>
-              <Box mb={1}>
-                <Typography color="primary" component="span">
+              <Box mb={1} display="flex" flexWrap="wrap">
+                <Typography color="primary">
                   Donated NFT Contract Address (aka Token):
                 </Typography>
                 &nbsp;
-                <Typography component="span">
+                <Typography>
                   {BidInfo.NFTDonationTokenAddr}
                 </Typography>
               </Box>
-              <Box mb={1}>
-                <Typography color="primary" component="span">
+              <Box mb={1} display="flex" flexWrap="wrap">
+                <Typography color="primary">
                   Donated NFT Token Id:
                 </Typography>
                 &nbsp;
-                <Typography component="span">
+                <Typography>
                   {BidInfo.NFTDonationTokenId}
                 </Typography>
               </Box>
-              <Box mb={1}>
-                <Typography color="primary" component="span">
+              <Box mb={1} display="flex" flexWrap="wrap">
+                <Typography color="primary">
                   Donated NFT Token URI:
                 </Typography>
                 &nbsp;
-                <Typography component="span">{BidInfo.NFTTokenURI}</Typography>
+                <Typography>{BidInfo.NFTTokenURI}</Typography>
               </Box>
-              <Box mb={1}>
-                <Typography color="primary" component="span">
+              <Box mb={1} display="flex" flexWrap="wrap">
+                <Typography color="primary">
                   Image:
                 </Typography>
                 <Grid container spacing={4}>
@@ -165,39 +161,39 @@ const BidInfo = ({ BidInfo }) => {
                     />
                   </Grid>
                   <Grid item xs={12} md={8}>
-                    <Box mb={1}>
-                      <Typography color="primary" component="span">
+                    <Box mb={1} display="flex" flexWrap="wrap">
+                      <Typography color="primary">
                         Collection Name:
                       </Typography>
                       &nbsp;
-                      <Typography component="span">
+                      <Typography>
                         {tokenURI?.collection_name}
                       </Typography>
                     </Box>
-                    <Box mb={1}>
-                      <Typography color="primary" component="span">
+                    <Box mb={1} display="flex" flexWrap="wrap">
+                      <Typography color="primary">
                         Artist:
                       </Typography>
                       &nbsp;
-                      <Typography component="span">
+                      <Typography>
                         {tokenURI?.artist}
                       </Typography>
                     </Box>
-                    <Box mb={1}>
-                      <Typography color="primary" component="span">
+                    <Box mb={1} display="flex" flexWrap="wrap">
+                      <Typography color="primary">
                         Platform:
                       </Typography>
                       &nbsp;
-                      <Typography component="span">
+                      <Typography>
                         {tokenURI?.platform}
                       </Typography>
                     </Box>
-                    <Box mb={1}>
-                      <Typography color="primary" component="span">
+                    <Box mb={1} display="flex" flexWrap="wrap">
+                      <Typography color="primary">
                         Description:
                       </Typography>
                       &nbsp;
-                      <Typography component="span">
+                      <Typography>
                         {tokenURI?.description}
                       </Typography>
                     </Box>
@@ -206,12 +202,12 @@ const BidInfo = ({ BidInfo }) => {
               </Box>
             </>
           )}
-        <Box mb={1}>
-          <Typography color="primary" component="span">
+        <Box mb={1} display="flex" flexWrap="wrap">
+          <Typography color="primary">
             Message:
           </Typography>
           &nbsp;
-          <Typography component="span">{BidInfo.Message}</Typography>
+          <Typography>{BidInfo.Message}</Typography>
         </Box>
         {BidInfo.RWalkNFTId >= 0 && (
           <Box width="400px" mt={4}>
