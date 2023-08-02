@@ -213,9 +213,11 @@ const BidInfo = ({ BidInfo }) => {
           &nbsp;
           <Typography component="span">{BidInfo.Message}</Typography>
         </Box>
-        <Box width="400px" mt={4}>
-          <RandomWalkNFT tokenId={BidInfo.RWalkNFTId} selectable={false} />
-        </Box>
+        {BidInfo.RWalkNFTId >= 0 && (
+          <Box width="400px" mt={4}>
+            <RandomWalkNFT tokenId={BidInfo.RWalkNFTId} selectable={false} />
+          </Box>
+        )}
       </MainWrapper>
     </>
   );
