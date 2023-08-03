@@ -1,4 +1,3 @@
-import * as React from 'react'
 import {
   Box,
   Link,
@@ -8,7 +7,6 @@ import {
   Container,
   Button,
   Accordion,
-  CardMedia,
   Card,
   TextField,
   Skeleton,
@@ -398,5 +396,26 @@ export const CodeWrapper = styled(Box)(!isSafari ? {
   border: "1px solid rgba(21, 191, 253, 0.5)",
   borderRadius: "16px",
   overflow: "hidden"
+})
+
+export const CustomTextField = styled(TextField)({
+  ".MuiInputBase-root": {
+    padding: "2px 16px 2px 0 !important"
+  },
+  ".MuiInputBase-input": {
+    padding: "12px 16px !important"
+  }
+})
+
+export const StyledInput = styled('input')({
+  '&::-webkit-outer-spin-button, &::-webkit-inner-spin-button': {
+    '-webkit-appearance': "inner-spin-button !important",
+    width: "15px",
+    position: "absolute",
+    padding: "0px 6px !important",
+    top: 0,
+    right: 0,
+    height: "100%"
+  }
 })
 

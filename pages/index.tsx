@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import {
   Button,
@@ -18,10 +18,12 @@ import {
   InputAdornment,
 } from "@mui/material";
 import {
+  CustomTextField,
   GradientBorder,
   GradientText,
   MainWrapper,
   StyledCard,
+  StyledInput,
 } from "../components/styled";
 import BiddingHistory from "../components/BiddingHistoryTable";
 import api from "../services/api";
@@ -642,13 +644,14 @@ const NewHome = ({
                       >
                         Rise bid price by
                       </Typography>
-                      <TextField
+                      <CustomTextField
                         type="number"
                         placeholder="Bid Price Plus"
                         value={bidPricePlus}
                         size="small"
                         fullWidth
                         InputProps={{
+                          inputComponent: StyledInput,
                           endAdornment: (
                             <InputAdornment position="end">%</InputAdornment>
                           ),
