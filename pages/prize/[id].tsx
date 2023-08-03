@@ -111,14 +111,14 @@ const PrizeInfo = ({ bidHistory, prizeNum, nftDonations, prizeInfo }) => {
               <BiddingHistoryTable biddingHistory={bidHistory} />
             </Box>
             <Box mt={4}>
-              <Typography variant="h6">Raffle Winners</Typography>
+              <Typography variant="h6" mb={2}>Raffle Winners</Typography>
               <RaffleWinnerTable
                 RaffleETHDeposits={prizeInfo.RaffleETHDeposits}
                 RaffleNFTWinners={prizeInfo.RaffleNFTWinners}
               />
             </Box>
             <Box mt={4}>
-              <Typography variant="h6">Donated NFTs</Typography>
+              <Typography variant="h6" mb={2}>Donated NFTs</Typography>
               <Grid container spacing={2}>
                 {nftDonations.length ? (
                   nftDonations.map((nft) => (

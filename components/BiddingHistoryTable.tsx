@@ -116,7 +116,7 @@ const BiddingHistoryTable = ({ biddingHistory }) => {
   const [curPage, setCurrentPage] = useState(1);
 
   return (
-    <Box mt={4}>
+    <Box mt={2}>
       <HistoryTable
         biddingHistory={biddingHistory}
         perPage={perPage}

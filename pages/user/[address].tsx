@@ -8,7 +8,6 @@ import BiddingHistoryTable from "../../components/BiddingHistoryTable";
 import { PrizeTable } from "../../components/PrizeTable";
 import RaffleWinnerTable from "../../components/RaffleWinnerTable";
 import { ClaimedRaffleNFTTable } from "../../components/ClaimedRaffleNFTTable";
-import { shortenHex } from "../../utils";
 
 const UserInfo = ({
   address,
@@ -112,7 +111,7 @@ const UserInfo = ({
           <BiddingHistoryTable biddingHistory={Bids} />
         </Box>
         <Box>
-          <Typography variant="h6" lineHeight={1} mt={8} mb={4}>
+          <Typography variant="h6" lineHeight={1} mt={8} mb={2}>
             Prizes won by the User
           </Typography>
           <PrizeTable list={Prizes} />
@@ -124,7 +123,7 @@ const UserInfo = ({
           <ClaimedRaffleNFTTable list={claimedRaffleNFTs} />
         </Box> */}
         <Box>
-          <Typography variant="h6" lineHeight={1} mt={8} mb={4}>
+          <Typography variant="h6" lineHeight={1} mt={8} mb={2}>
             Raffles won by the User
           </Typography>
           <RaffleWinnerTable
@@ -133,7 +132,7 @@ const UserInfo = ({
           />
         </Box>
         <Box>
-          <Typography variant="h6" lineHeight={1} mt={8} mb={4}>
+          <Typography variant="h6" lineHeight={1} mt={8} mb={2}>
             Raffle NFT claims by User
           </Typography>
           <ClaimedRaffleNFTTable list={claimedRaffleNFTs} />

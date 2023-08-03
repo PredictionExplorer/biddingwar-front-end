@@ -19,11 +19,7 @@ const DonatedNFT = ({ nft }) => {
 
   return (
     <StyledCard>
-      <CardActionArea>
-        {tokenURI && (
-          <NFTImage src={tokenURI?.image} sx={{ backgroundSize: "contain" }} />
-        )}
-      </CardActionArea>
+      <CardActionArea>{<NFTImage src={tokenURI?.image} />}</CardActionArea>
       <Box
         sx={{
           display: "flex",

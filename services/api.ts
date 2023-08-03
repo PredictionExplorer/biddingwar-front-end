@@ -30,9 +30,14 @@ class ApiService {
     return data;
   }
 
-  public async get_dashboard() {
-    const { data } = await axios.get("/api/dashboard");
-    return data;
+  public async get_unique_bidders() {
+    const { data } = await axios.get(biddingwarBaseUrl + "user/unique_bidders");
+    return data.UniqueBidders;
+  }
+
+  public async get_unique_winners() {
+    const { data } = await axios.get(biddingwarBaseUrl + "user/unique_winners");
+    return data.UniqueWinners;
   }
 
   public async get_donations_nft_by_round(round: number) {

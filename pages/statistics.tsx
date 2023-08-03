@@ -1,8 +1,12 @@
 import React from "react";
-import { Box, Typography } from "@mui/material";
+import { Box, Grid, Typography } from "@mui/material";
 import Head from "next/head";
 import { MainWrapper } from "../components/styled";
 import api from "../services/api";
+import BiddingHistoryTable from "../components/BiddingHistoryTable";
+import { UniqueBiddersTable } from "../components/UniqueBiddersTable";
+import { UniqueWinnersTable } from "../components/UniqueWinnersTable";
+import DonatedNFT from "../components/DonatedNFT";
 
 const convertTimestampToDateTime = (timestamp: any) => {
   var date_ob = new Date(timestamp * 1000);
@@ -29,7 +33,7 @@ const convertTimestampToDateTime = (timestamp: any) => {
 
 const StatisticsItem = ({ title, value }) => {
   return (
-    <Box display="flex" my={1}>
+    <Box display="flex" flexWrap="wrap" my={1}>
       <Typography color="primary" width="300px">
         {title}
       </Typography>
@@ -38,7 +42,20 @@ const StatisticsItem = ({ title, value }) => {
   );
 };
 
-const Statistics = ({ data }) => {
+const Statistics = ({
+  data,
+  bidHistory,
+  uniqueBidders,
+  uniqueWinners,
+  nftDonations,
+}) => {
+  const gridLayout =
+    nftDonations.length > 16
+      ? { xs: 6, sm: 3, md: 2, lg: 2 }
+      : nftDonations.length > 9
+      ? { xs: 6, sm: 4, md: 3, lg: 3 }
+      : { xs: 12, sm: 6, md: 4, lg: 4 };
+
   return (
     <>
       <Head>
@@ -74,6 +91,22 @@ const Statistics = ({ data }) => {
             value={convertTimestampToDateTime(data.PrizeClaimTs)}
           />
           <StatisticsItem title="Last Bidder" value={data.LastBidderAddr} />
+        </Box>
+        <Box my={4}>
+          <Box display="flex" alignItems="center" flexWrap="wrap">
+            <Typography variant="h6" component="span">
+              CURRENT ROUND
+            </Typography>
+            <Typography
+              variant="h6"
+              component="span"
+              color="primary"
+              sx={{ ml: 1.5 }}
+            >
+              BID HISTORY
+            </Typography>
+          </Box>
+          <BiddingHistoryTable biddingHistory={bidHistory} />
         </Box>
         <Typography variant="h5">Overall Statistics</Typography>
         <Box mt={4}>
@@ -138,6 +171,43 @@ const Statistics = ({ data }) => {
             value={data.NumDonatedNFTs}
           />
         </Box>
+        <Box mt={4}>
+          <Typography variant="h6" mb={2}>
+            UNIQUE BIDDERS
+          </Typography>
+          <UniqueBiddersTable list={uniqueBidders} />
+        </Box>
+        <Box mt={4}>
+          <Typography variant="h6" mb={2}>
+            UNIQUE WINNERS
+          </Typography>
+          <UniqueWinnersTable list={uniqueWinners} />
+        </Box>
+        <Box mt={4}>
+          <Typography variant="h6" mb={2}>Donated NFTs</Typography>
+          <Grid container spacing={2} mt={2}>
+            {nftDonations.length ? (
+              nftDonations.map((nft) => (
+                <Grid
+                  item
+                  key={nft.RecordId}
+                  xs={gridLayout.xs}
+                  sm={gridLayout.sm}
+                  md={gridLayout.md}
+                  lg={gridLayout.lg}
+                >
+                  <DonatedNFT nft={nft} />
+                </Grid>
+              ))
+            ) : (
+              <Grid item>
+                <Typography>
+                  No ERC721 tokens were donated on this round
+                </Typography>
+              </Grid>
+            )}
+          </Grid>
+        </Box>
       </MainWrapper>
     </>
   );
@@ -145,8 +215,16 @@ const Statistics = ({ data }) => {
 
 export async function getServerSideProps() {
   const data = await api.get_dashboard_info();
+  const bidHistory = await api.get_bid_list_by_round(
+    data.CurRoundNum - 1,
+    "desc"
+  );
+  const uniqueBidders = await api.get_unique_bidders();
+  const uniqueWinners = await api.get_unique_winners();
+  const nftDonations = await api.get_donations_nft_list();
+
   return {
-    props: { data },
+    props: { data, bidHistory, uniqueBidders, uniqueWinners, nftDonations },
   };
 }
 

@@ -13,7 +13,12 @@ const NFTImage = (props) => {
     event.target.src = "/images/qmark.png";
   };
 
-  return <StyledImage src={props.src} onError={handleImageError} />;
+  return (
+    <StyledImage
+      src={props.src || "/images/qmark.png"}
+      onError={handleImageError}
+    />
+  );
 };
 
 export default NFTImage;
