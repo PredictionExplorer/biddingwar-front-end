@@ -2,6 +2,7 @@ import React, { useState } from "react";
 
 import {
   Box,
+  Button,
   Pagination,
   Table,
   TableBody,
@@ -19,17 +20,25 @@ import {
   TablePrimaryHead,
   TablePrimaryRow,
 } from "../components/styled";
+import { convertTimestampToDateTime } from "../utils";
 
 const MyWinningsRow = ({ winning }) => {
+  const handleETHClaim = async (roundNum) => {};
+
   if (!winning) {
     return <TablePrimaryRow></TablePrimaryRow>;
   }
 
   return (
     <TablePrimaryRow>
-      <TablePrimaryCell>{winning.type}</TablePrimaryCell>
-      <TablePrimaryCell>{winning.tokenId}</TablePrimaryCell>
-      <TablePrimaryCell>{winning.price}</TablePrimaryCell>
+      <TablePrimaryCell>
+        {convertTimestampToDateTime(winning.timestamp)}
+      </TablePrimaryCell>
+      <TablePrimaryCell>{winning.roundNum}</TablePrimaryCell>
+      <TablePrimaryCell>{winning.amount}</TablePrimaryCell>
+      <TablePrimaryCell>
+        <Button onClick={() => handleETHClaim(winning.roundNum)}>Claim</Button>
+      </TablePrimaryCell>
     </TablePrimaryRow>
   );
 };
@@ -40,14 +49,17 @@ const MyWinningsTable = ({ list }) => {
       <Table>
         <TablePrimaryHead>
           <TableRow>
-            <TableCell>Type</TableCell>
-            <TableCell>Token</TableCell>
-            <TableCell>Price</TableCell>
+            <TableCell>Date</TableCell>
+            <TableCell>Round</TableCell>
+            <TableCell>Amount</TableCell>
+            <TableCell></TableCell>
           </TableRow>
         </TablePrimaryHead>
         <TableBody>
           {list.length > 0 ? (
-            list.map((winning, i) => <MyWinningsRow winning={winning} key={i} />)
+            list.map((winning, i) => (
+              <MyWinningsRow winning={winning} key={i} />
+            ))
           ) : (
             <TableRow>
               <TablePrimaryCell align="center" colSpan={8}>
