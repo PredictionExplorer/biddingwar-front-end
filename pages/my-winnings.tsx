@@ -61,7 +61,7 @@ const MyWinningsTable = ({ list }) => {
   );
 };
 
-const MyOffers = ({ list }) => {
+const MyWinnings = ({ list }) => {
   const perPage = 20;
   const [curPage, setCurPage] = useState(1);
   return (
@@ -103,4 +103,4 @@ export async function getServerSideProps() {
   };
 }
 
-export default MyOffers;
+export default MyWinnings;

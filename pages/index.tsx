@@ -27,15 +27,15 @@ import {
 } from "../components/styled";
 import BiddingHistory from "../components/BiddingHistoryTable";
 import api from "../services/api";
-import useBiddingWarContract from "../hooks/useBiddingWarContract";
+import useCosmicGameContract from "../hooks/useCosmicGameContract";
 import { Contract, constants, ethers } from "ethers";
 import useRWLKNFTContract from "../hooks/useRWLKNFTContract";
 import { useActiveWeb3React } from "../hooks/web3";
-import { BIDDINGWAR_ADDRESS } from "../config/app";
+import { COSMICGAME_ADDRESS } from "../config/app";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import FAQ from "../components/FAQ";
 import { ArrowForward } from "@mui/icons-material";
-import NFT_ABI from "../contracts/NFT.json";
+import NFT_ABI from "../contracts/RandomWalkNFT.json";
 import PaginationRWLKGrid from "../components/PaginationRWLKGrid";
 import useCosmicSignatureContract from "../hooks/useCosmicSignatureContract";
 import RaffleWinners from "../components/RaffleWinners";
@@ -86,7 +86,7 @@ const NewHome = ({
   // const [blackVideo, setBlackVideo] = useState(null);
 
   const { library, account } = useActiveWeb3React();
-  const biddingWarContract = useBiddingWarContract();
+  const cosmicGameContract = useCosmicGameContract();
   const nftRWLKContract = useRWLKNFTContract();
   const cosmicSignatureContract = useCosmicSignatureContract();
   // const ref = useRef(null);
@@ -120,7 +120,7 @@ const NewHome = ({
 
   const onClaimPrize = async () => {
     try {
-      await biddingWarContract.claimPrize().then((tx) => tx.wait());
+      await cosmicGameContract.claimPrize().then((tx) => tx.wait());
       const balance = await cosmicSignatureContract.totalSupply();
       const token_id = balance.toNumber() - 1;
       const seed = await cosmicSignatureContract.seeds(token_id);
@@ -185,14 +185,14 @@ const NewHome = ({
     let bidPrice, newBidPrice;
     setIsBidding(true);
     try {
-      bidPrice = await biddingWarContract.getBidPrice();
+      bidPrice = await cosmicGameContract.getBidPrice();
       newBidPrice =
         parseFloat(ethers.utils.formatEther(bidPrice)) *
         1.01 *
         (1 + bidPricePlus / 100);
       let receipt;
       if (!nftDonateAddress || nftId === -1) {
-        receipt = await biddingWarContract
+        receipt = await cosmicGameContract
           .bid(message, {
             value: ethers.utils.parseEther(newBidPrice.toFixed(10)),
           })
@@ -246,14 +246,14 @@ const NewHome = ({
         const approvedBy = await nftDonateContract.getApproved(nftId);
         const isApprovedForAll = await nftDonateContract.isApprovedForAll(
           account,
-          BIDDINGWAR_ADDRESS
+          COSMICGAME_ADDRESS
         );
-        if (!isApprovedForAll && approvedBy !== BIDDINGWAR_ADDRESS) {
+        if (!isApprovedForAll && approvedBy !== COSMICGAME_ADDRESS) {
           await nftDonateContract
-            .setApprovalForAll(BIDDINGWAR_ADDRESS, true)
+            .setApprovalForAll(COSMICGAME_ADDRESS, true)
             .then((tx) => tx.wait());
         }
-        receipt = await biddingWarContract
+        receipt = await cosmicGameContract
           .bidAndDonateNFT(message, nftDonateAddress, nftId, {
             value: ethers.utils.parseEther(newBidPrice.toFixed(6)),
           })
@@ -281,7 +281,7 @@ const NewHome = ({
     try {
       let receipt;
       if (!nftDonateAddress || nftId === -1) {
-        receipt = await biddingWarContract
+        receipt = await cosmicGameContract
           .bidWithRWLK(rwlkId, message)
           .then((tx) => tx.wait());
         console.log(receipt);
@@ -332,14 +332,14 @@ const NewHome = ({
       );
       const isApprovedForAll = nftDonateContract.isApprovedForAll(
         account,
-        BIDDINGWAR_ADDRESS
+        COSMICGAME_ADDRESS
       );
       if (!isApprovedForAll) {
         await nftDonateContract
-          .setApprovalForAll(BIDDINGWAR_ADDRESS, true)
+          .setApprovalForAll(COSMICGAME_ADDRESS, true)
           .then((tx) => tx.wait());
       }
-      receipt = await biddingWarContract
+      receipt = await cosmicGameContract
         .bidWithRWLKAndDonateNFT(rwlkId, message, nftDonateAddress, nftId)
         .then((tx) => tx.wait());
       console.log(receipt);
