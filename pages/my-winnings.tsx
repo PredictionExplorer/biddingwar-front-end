@@ -22,9 +22,7 @@ import {
 } from "../components/styled";
 import { convertTimestampToDateTime } from "../utils";
 
-const MyWinningsRow = ({ winning }) => {
-  const handleETHClaim = async (roundNum) => {};
-
+const MyWinningsRow = ({ winning, handleETHClaim }) => {
   if (!winning) {
     return <TablePrimaryRow></TablePrimaryRow>;
   }
@@ -43,7 +41,7 @@ const MyWinningsRow = ({ winning }) => {
   );
 };
 
-const MyWinningsTable = ({ list }) => {
+const MyWinningsTable = ({ list, handleETHClaim }) => {
   return (
     <TablePrimaryContainer>
       <Table>
@@ -58,7 +56,11 @@ const MyWinningsTable = ({ list }) => {
         <TableBody>
           {list.length > 0 ? (
             list.map((winning, i) => (
-              <MyWinningsRow winning={winning} key={i} />
+              <MyWinningsRow
+                key={i}
+                winning={winning}
+                handleETHClaim={handleETHClaim}
+              />
             ))
           ) : (
             <TableRow>
@@ -76,6 +78,8 @@ const MyWinningsTable = ({ list }) => {
 const MyWinnings = ({ list }) => {
   const perPage = 20;
   const [curPage, setCurPage] = useState(1);
+  const claimAllETH = async () => {};
+  const handleETHClaim = async (roundNum) => {};
   return (
     <>
       <Head>
@@ -92,7 +96,13 @@ const MyWinnings = ({ list }) => {
           My Winnings
         </Typography>
         <Box mt={6}>
-          <MyWinningsTable list={list} />
+          <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
+            <Typography variant="h5">Raffle ETH</Typography>
+            <Button onClick={claimAllETH} variant="contained">
+              Claim All
+            </Button>
+          </Box>
+          <MyWinningsTable list={list} handleETHClaim={handleETHClaim} />
           <Box display="flex" justifyContent="center" mt={4}>
             <Pagination
               color="primary"
@@ -102,6 +112,38 @@ const MyWinnings = ({ list }) => {
               showFirstButton
               showLastButton
             />
+          </Box>
+        </Box>
+        <Box mt={6}>
+          <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
+            <Typography variant="h5">Raffle NFTs</Typography>
+            <Button onClick={claimAllETH} variant="contained">
+              Claim All
+            </Button>
+          </Box>
+        </Box>
+        <Box mt={6}>
+          <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
+            <Typography variant="h5">Donated NFTs</Typography>
+            <Button onClick={claimAllETH} variant="contained">
+              Claim All
+            </Button>
+          </Box>
+        </Box>
+        <Box mt={6}>
+          <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
+            <Typography variant="h5">RWLK Holder Winning NFTs</Typography>
+            <Button onClick={claimAllETH} variant="contained">
+              Claim All
+            </Button>
+          </Box>
+        </Box>
+        <Box mt={6}>
+          <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
+            <Typography variant="h5">CS Holder Winning NFTs</Typography>
+            <Button onClick={claimAllETH} variant="contained">
+              Claim All
+            </Button>
           </Box>
         </Box>
       </MainWrapper>
