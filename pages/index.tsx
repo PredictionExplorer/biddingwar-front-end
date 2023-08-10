@@ -28,7 +28,7 @@ import {
 import BiddingHistory from "../components/BiddingHistoryTable";
 import api from "../services/api";
 import useCosmicGameContract from "../hooks/useCosmicGameContract";
-import { Contract, constants, ethers } from "ethers";
+import { BigNumber, Contract, constants, ethers } from "ethers";
 import useRWLKNFTContract from "../hooks/useRWLKNFTContract";
 import { useActiveWeb3React } from "../hooks/web3";
 import { COSMICGAME_ADDRESS } from "../config/app";
@@ -120,7 +120,14 @@ const NewHome = ({
 
   const onClaimPrize = async () => {
     try {
-      await cosmicGameContract.claimPrize().then((tx) => tx.wait());
+      const estimageGas = await cosmicGameContract.estimateGas.claimPrize();
+      await cosmicGameContract
+        .claimPrize({
+          gasLimit: estimageGas
+            .mul(BigNumber.from(115))
+            .div(BigNumber.from(100)),
+        })
+        .then((tx) => tx.wait());
       const balance = await cosmicSignatureContract.totalSupply();
       const token_id = balance.toNumber() - 1;
       const seed = await cosmicSignatureContract.seeds(token_id);
