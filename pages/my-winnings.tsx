@@ -79,13 +79,7 @@ const MyWinningsTable = ({ list, handleETHClaim }) => {
   );
 };
 
-const MyWinnings = ({
-  list,
-  RaffleNFTs,
-  DonatedNFTs,
-  RWLKHolderNFTs,
-  CSHolderNFTs,
-}) => {
+const MyWinnings = ({ list, RaffleNFTs, PrizeNFTs, DonatedNFTs }) => {
   const perPage = 20;
   const [curPage, setCurPage] = useState(1);
   const handleETHClaim = async (roundNum) => {};
@@ -94,10 +88,8 @@ const MyWinnings = ({
   const handleAllRaffleNFTsClaim = async () => {};
   const handleDonatedNFTClaim = async (nftId) => {};
   const handleAllDonatedNFTsClaim = async () => {};
-  const handleRWLKHolderNFTClaim = async (nftId) => {};
-  const handleAllRWLKHolderNFTsClaim = async () => {};
-  const handleCSHolderNFTClaim = async (nftId) => {};
-  const handleAllCSHolderNFTsClaim = async () => {};
+  const handlePrizeNFTClaim = async (nftId) => {};
+  const handleAllPrizeNFTsClaim = async () => {};
   return (
     <>
       <Head>
@@ -134,13 +126,36 @@ const MyWinnings = ({
         </Box>
         <Box mt={6}>
           <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
-            <Typography variant="h5">Raffle NFTs</Typography>
+            <Typography variant="h5">Winnings from Raffle NFTs</Typography>
             <Button onClick={handleAllRaffleNFTsClaim} variant="contained">
               Claim All
             </Button>
           </Box>
           <Grid container spacing={2} mt={2}>
             {RaffleNFTs.map((nft, i) => (
+              <Grid
+                key={i}
+                sx={{ position: "relative" }}
+                item
+                xs={12}
+                sm={6}
+                md={3}
+                lg={3}
+              >
+                <NFT nft={nft} />
+              </Grid>
+            ))}
+          </Grid>
+        </Box>
+        <Box mt={6}>
+          <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
+            <Typography variant="h5">NFTs from Prize winnings</Typography>
+            <Button onClick={handleAllPrizeNFTsClaim} variant="contained">
+              Claim All
+            </Button>
+          </Box>
+          <Grid container spacing={2} mt={2}>
+            {PrizeNFTs.map((nft, i) => (
               <Grid
                 key={i}
                 sx={{ position: "relative" }}
@@ -170,52 +185,6 @@ const MyWinnings = ({
             ))}
           </Grid>
         </Box>
-        <Box mt={6}>
-          <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
-            <Typography variant="h5">RWLK Holder Winning NFTs</Typography>
-            <Button onClick={handleAllRWLKHolderNFTsClaim} variant="contained">
-              Claim All
-            </Button>
-          </Box>
-          <Grid container spacing={2} mt={2}>
-            {RWLKHolderNFTs.map((nft, i) => (
-              <Grid
-                key={i}
-                sx={{ position: "relative" }}
-                item
-                xs={12}
-                sm={6}
-                md={3}
-                lg={3}
-              >
-                <NFT nft={nft} />
-              </Grid>
-            ))}
-          </Grid>
-        </Box>
-        <Box mt={6}>
-          <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
-            <Typography variant="h5">CS Holder Winning NFTs</Typography>
-            <Button onClick={handleAllCSHolderNFTsClaim} variant="contained">
-              Claim All
-            </Button>
-          </Box>
-          <Grid container spacing={2} mt={2}>
-            {CSHolderNFTs.map((nft, i) => (
-              <Grid
-                key={i}
-                sx={{ position: "relative" }}
-                item
-                xs={12}
-                sm={6}
-                md={3}
-                lg={3}
-              >
-                <NFT nft={nft} />
-              </Grid>
-            ))}
-          </Grid>
-        </Box>
       </MainWrapper>
     </>
   );
@@ -228,9 +197,8 @@ export async function getServerSideProps() {
     props: {
       list: [],
       RaffleNFTs: nfts.slice(6, 9),
+      PrizeNFTs: nfts.slice(0, 3),
       DonatedNFTs: nftDonations,
-      RWLKHolderNFTs: nfts.slice(0, 3),
-      CSHolderNFTs: nfts.slice(3, 6),
     },
   };
 }
