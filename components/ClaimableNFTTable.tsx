@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import {
   Box,
+  Button,
   Link,
   Pagination,
   Table,
@@ -39,7 +40,9 @@ const NFTRow = ({ nft }) => {
       <TablePrimaryCell>
         {convertTimestampToDateTime(nft.WinningTimestamp)}
       </TablePrimaryCell>
-      <TablePrimaryCell>{nft.WinningIndex}</TablePrimaryCell>
+      <TablePrimaryCell>
+        <Button variant="contained">Claim</Button>
+      </TablePrimaryCell>
     </TablePrimaryRow>
   );
 };
@@ -58,8 +61,8 @@ export const ClaimableNFTTable = ({ list }) => {
               <TableCell>Winner</TableCell>
               <TableCell>Round #</TableCell>
               <TableCell>Token ID</TableCell>
-              <TableCell>Winning Date</TableCell>
-              <TableCell>Winning Index</TableCell>
+              <TableCell>Claimed Date</TableCell>
+              <TableCell></TableCell>
             </TableRow>
           </TablePrimaryHead>
           <TableBody>
