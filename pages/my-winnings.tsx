@@ -25,6 +25,7 @@ import { convertTimestampToDateTime } from "../utils";
 import DonatedNFT from "../components/DonatedNFT";
 import NFT from "../components/NFT";
 import api from "../services/api";
+import { ClaimableNFTTable } from "../components/ClaimableNFTTable";
 
 const MyWinningsRow = ({ winning, handleETHClaim }) => {
   if (!winning) {
@@ -131,21 +132,8 @@ const MyWinnings = ({ list, RaffleNFTs, PrizeNFTs, DonatedNFTs }) => {
               Claim All
             </Button>
           </Box>
-          <Grid container spacing={2} mt={2}>
-            {RaffleNFTs.map((nft, i) => (
-              <Grid
-                key={i}
-                sx={{ position: "relative" }}
-                item
-                xs={12}
-                sm={6}
-                md={3}
-                lg={3}
-              >
-                <NFT nft={nft} />
-              </Grid>
-            ))}
-          </Grid>
+          {/* Table */}
+          <ClaimableNFTTable list={[]} />
         </Box>
         <Box mt={6}>
           <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
@@ -154,21 +142,8 @@ const MyWinnings = ({ list, RaffleNFTs, PrizeNFTs, DonatedNFTs }) => {
               Claim All
             </Button>
           </Box>
-          <Grid container spacing={2} mt={2}>
-            {PrizeNFTs.map((nft, i) => (
-              <Grid
-                key={i}
-                sx={{ position: "relative" }}
-                item
-                xs={12}
-                sm={6}
-                md={3}
-                lg={3}
-              >
-                <NFT nft={nft} />
-              </Grid>
-            ))}
-          </Grid>
+          {/* Table */}
+          <ClaimableNFTTable list={[]} />
         </Box>
         <Box mt={6}>
           <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
@@ -177,13 +152,8 @@ const MyWinnings = ({ list, RaffleNFTs, PrizeNFTs, DonatedNFTs }) => {
               Claim All
             </Button>
           </Box>
-          <Grid container spacing={2} mt={2}>
-            {DonatedNFTs.map((nft) => (
-              <Grid item key={nft.RecordId} xs={12} sm={6} md={3} lg={3}>
-                <DonatedNFT nft={nft} />
-              </Grid>
-            ))}
-          </Grid>
+          {/* Table */}
+          <ClaimableNFTTable list={[]} />
         </Box>
       </MainWrapper>
     </>
