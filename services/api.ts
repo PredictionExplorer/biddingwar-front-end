@@ -99,6 +99,11 @@ class ApiService {
     return data.UserRaffleDeposits;
   }
 
+  public async get_unclaimed_raffle_deposits_by_user(address: string) {
+    const { data } = await axios.get(cosmicGameBaseUrl + `user/unclaimed_raffle_deposits/${address}/0/1000000`);
+    return data.UnclaimedDeposits;
+  }
+
   public async get_raffle_nft_winners_by_round(round: number) {
     const { data } = await axios.get(cosmicGameBaseUrl + `raffle/nft_winners/by_round/${round}`);
     return data.RaffleNFTWinners;

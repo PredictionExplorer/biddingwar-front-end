@@ -34,12 +34,12 @@ const MyWinningsRow = ({ winning, handleETHClaim }) => {
   return (
     <TablePrimaryRow>
       <TablePrimaryCell>
-        {convertTimestampToDateTime(winning.timestamp)}
+        {convertTimestampToDateTime(winning.TimeStamp)}
       </TablePrimaryCell>
-      <TablePrimaryCell>{winning.roundNum}</TablePrimaryCell>
-      <TablePrimaryCell>{winning.amount}</TablePrimaryCell>
+      <TablePrimaryCell>{winning.RoundNum}</TablePrimaryCell>
+      <TablePrimaryCell>{winning.Amount.toFixed(4)}</TablePrimaryCell>
       <TablePrimaryCell>
-        <Button onClick={() => handleETHClaim(winning.roundNum)}>Claim</Button>
+        <Button onClick={() => handleETHClaim(winning.RoundNum)}>Claim</Button>
       </TablePrimaryCell>
     </TablePrimaryRow>
   );
@@ -53,7 +53,7 @@ const MyWinningsTable = ({ list, handleETHClaim }) => {
           <TableRow>
             <TableCell>Date</TableCell>
             <TableCell>Round</TableCell>
-            <TableCell>Amount</TableCell>
+            <TableCell>Amount (ETH)</TableCell>
             <TableCell></TableCell>
           </TableRow>
         </TablePrimaryHead>
@@ -79,7 +79,7 @@ const MyWinningsTable = ({ list, handleETHClaim }) => {
   );
 };
 
-const MyWinnings = ({ list }) => {
+const MyWinnings = () => {
   const { account } = useActiveWeb3React();
   const perPage = 20;
   const [curPage, setCurPage] = useState(1);
@@ -89,6 +89,7 @@ const MyWinnings = ({ list }) => {
     NumDonatedNFTToClaim: 0,
   });
   const [donatedNFTToClaim, setDonatedNFTToClaim] = useState([]);
+  const [raffleETHToClaim, setRaffleETHToClaim] = useState([]);
   const [claimHistory, setClaimHistory] = useState([]);
 
   const handleETHClaim = async (roundNum) => {};
@@ -110,12 +111,21 @@ const MyWinnings = ({ list }) => {
 
   useEffect(() => {
     const fetchUnclaimedDonatedNFTs = async () => {
-      const nfts = await api.get_unclaimed_donated_nft_by_user(account);
+      const nfts = await api.get_unclaimed_donated_nft_by_user("0x70997970C51812dc3A010C7d01b50e0d17dc79C8");
       setDonatedNFTToClaim(nfts);
     };
-    if (status.NumDonatedNFTToClaim > 0) {
-      fetchUnclaimedDonatedNFTs();
-    }
+    const fetchUnclaimedRaffleETHDeposits = async () => {
+      const deposits = await api.get_unclaimed_raffle_deposits_by_user("0x70997970C51812dc3A010C7d01b50e0d17dc79C8");
+      setRaffleETHToClaim(deposits);
+    };
+    // if (status.NumDonatedNFTToClaim > 0) {
+    //   fetchUnclaimedDonatedNFTs();
+    // }
+    fetchUnclaimedDonatedNFTs();
+    fetchUnclaimedRaffleETHDeposits();
+    // if (status.ETHRaffleToClaim > 0) {
+    //   fetchUnclaimedRaffleETHDeposits();
+    // }
   }, [status]);
   return (
     <>
@@ -143,13 +153,16 @@ const MyWinnings = ({ list }) => {
               Claim All
             </Button>
           </Box>
-          <MyWinningsTable list={list} handleETHClaim={handleETHClaim} />
+          <MyWinningsTable
+            list={raffleETHToClaim}
+            handleETHClaim={handleETHClaim}
+          />
           <Box display="flex" justifyContent="center" mt={4}>
             <Pagination
               color="primary"
               page={curPage}
               onChange={(_e, page) => setCurPage(page)}
-              count={Math.ceil(list.length / perPage)}
+              count={Math.ceil(raffleETHToClaim.length / perPage)}
               showFirstButton
               showLastButton
             />
@@ -172,16 +185,5 @@ const MyWinnings = ({ list }) => {
     </>
   );
 };
-
-export async function getServerSideProps() {
-  const nfts = await api.get_cst_list();
-  return {
-    props: {
-      list: [],
-      RaffleNFTs: nfts.slice(6, 9),
-      PrizeNFTs: nfts.slice(0, 3),
-    },
-  };
-}
 
 export default MyWinnings;

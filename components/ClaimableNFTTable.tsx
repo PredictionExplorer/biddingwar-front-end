@@ -29,17 +29,15 @@ const NFTRow = ({ nft }) => {
       </TablePrimaryCell>
       <TablePrimaryCell>
         <Link
-          href={`/user/${nft.WinnerAddr}`}
+          href={`/user/${nft.DonorAddr}`}
           style={{ color: "rgba(255, 255, 255, 0.68)", fontSize: 14 }}
         >
-          {shortenHex(nft.WinnerAddr, 6)}
+          {nft.DonorAddr}
         </Link>
       </TablePrimaryCell>
-      <TablePrimaryCell>{nft.WinningRoundNum}</TablePrimaryCell>
-      <TablePrimaryCell>{nft.TokenId}</TablePrimaryCell>
-      <TablePrimaryCell>
-        {convertTimestampToDateTime(nft.WinningTimestamp)}
-      </TablePrimaryCell>
+      <TablePrimaryCell>{nft.RoundNum}</TablePrimaryCell>
+      <TablePrimaryCell>{nft.TokenAddr}</TablePrimaryCell>
+      <TablePrimaryCell>{nft.NFTTokenId}</TablePrimaryCell>
       <TablePrimaryCell>
         <Button variant="contained">Claim</Button>
       </TablePrimaryCell>
@@ -58,10 +56,10 @@ export const ClaimableNFTTable = ({ list }) => {
           <TablePrimaryHead>
             <TableRow>
               <TableCell>Datetime</TableCell>
-              <TableCell>Winner</TableCell>
+              <TableCell>Donor Address</TableCell>
               <TableCell>Round #</TableCell>
+              <TableCell>Token Address</TableCell>
               <TableCell>Token ID</TableCell>
-              <TableCell>Claimed Date</TableCell>
               <TableCell></TableCell>
             </TableRow>
           </TablePrimaryHead>

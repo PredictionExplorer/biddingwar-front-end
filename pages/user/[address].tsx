@@ -56,11 +56,29 @@ const UserInfo = ({
         </Box>
         <Box mb={1}>
           <Typography color="primary" component="span">
-            Maximum Prize won:
+            Maximum amount gained (in prize winnings):
           </Typography>
           &nbsp;
           <Typography component="span">
             {UserInfo.MaxWinAmount.toFixed(6)} ETH
+          </Typography>
+        </Box>
+        <Box mb={1}>
+          <Typography color="primary" component="span">
+            Amount of winnings in ETH raffles:
+          </Typography>
+          &nbsp;
+          <Typography component="span">
+            {UserInfo.SumRaffleEthWinnings.toFixed(6)} ETH
+          </Typography>
+        </Box>
+        <Box mb={1}>
+          <Typography color="primary" component="span">
+            Amount withdrawn from ETH raffles:
+          </Typography>
+          &nbsp;
+          <Typography component="span">
+            {UserInfo.SumRaffleEthWithdrawal.toFixed(6)} ETH
           </Typography>
         </Box>
         <Box mb={1}>
@@ -76,7 +94,10 @@ const UserInfo = ({
           </Typography>
           &nbsp;
           <Typography component="span">
-            {UserInfo.SumRaffleEthWinnings.toFixed(6)} ETH
+            {(
+              UserInfo.SumRaffleEthWinnings + UserInfo.SumRaffleEthWithdrawal
+            ).toFixed(6)}{" "}
+            ETH
           </Typography>
         </Box>
         <Box mb={1}>
@@ -94,13 +115,6 @@ const UserInfo = ({
           </Typography>
           &nbsp;
           <Typography component="span">{UserInfo.RaffleNFTWon}</Typography>
-        </Box>
-        <Box mb={1}>
-          <Typography color="primary" component="span">
-            Number of Raffle NFTs claimed:
-          </Typography>
-          &nbsp;
-          <Typography component="span">{UserInfo.RaffleNFTClaimed}</Typography>
         </Box>
         <Box mt={6}>
           <Typography variant="h6" lineHeight={1}>
