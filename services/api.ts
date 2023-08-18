@@ -109,9 +109,19 @@ class ApiService {
     return data.UserRaffleNFTWinnings;
   }
 
-  public async get_raffle_nft_claims_by_user(address: string) {
-    const { data } = await axios.get(cosmicGameBaseUrl + `user/raffle_nft_claims/${address}`);
-    return data.UserRaffleNFTClaims;
+  public async get_unclaimed_donated_nft_by_user(address: string) {
+    const { data } = await axios.get(cosmicGameBaseUrl + `user/nft/unclaimed_by_user/${address}`);
+    return data.UnclaimedDonatedNFTs;
+  }
+  
+  public async get_notif_red_box(address: string) {
+    const { data } = await axios.get(cosmicGameBaseUrl + `user/notif_red_box/${address}`);
+    return data.Winnings;
+  }
+  
+  public async get_claim_history(address: string) {
+    const { data } = await axios.get(cosmicGameBaseUrl + `user/claim_history/${address}/0/100000`);
+    return data.ClaimHistory;
   }
 
   public async get_info(token_id: number | string) {

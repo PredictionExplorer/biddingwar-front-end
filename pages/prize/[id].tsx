@@ -1,5 +1,5 @@
-import React from "react";
-import { Box, Grid, Link, Typography } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { Box, Button, Grid, Link, Typography } from "@mui/material";
 import Head from "next/head";
 import { MainWrapper } from "../../components/styled";
 import { GetServerSidePropsContext } from "next";
@@ -8,8 +8,22 @@ import { convertTimestampToDateTime } from "../../utils";
 import DonatedNFT from "../../components/DonatedNFT";
 import RaffleWinnerTable from "../../components/RaffleWinnerTable";
 import BiddingHistoryTable from "../../components/BiddingHistoryTable";
+import { useActiveWeb3React } from "../../hooks/web3";
 
 const PrizeInfo = ({ bidHistory, prizeNum, nftDonations, prizeInfo }) => {
+  const { account } = useActiveWeb3React();
+  const [status, setStatus] = useState({
+    ETHRaffleToClaim: 0,
+    ETHRaffleToClaimWei: 0,
+    NumDonatedNFTToClaim: 0,
+  });
+  useEffect(() => {
+    const fetchNotification = async () => {
+      const notify = await api.get_notif_red_box(account);
+      setStatus(notify);
+    };
+    fetchNotification();
+  }, []);
   return (
     <>
       <Head>
@@ -111,14 +125,38 @@ const PrizeInfo = ({ bidHistory, prizeNum, nftDonations, prizeInfo }) => {
               <BiddingHistoryTable biddingHistory={bidHistory} />
             </Box>
             <Box mt={4}>
-              <Typography variant="h6" mb={2}>Raffle Winners</Typography>
+              <Box
+                sx={{
+                  mb: 2,
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
+                <Typography variant="h6">Raffle Winners</Typography>
+                {status.ETHRaffleToClaim > 0 && (
+                  <Button variant="contained">Claim All</Button>
+                )}
+              </Box>
               <RaffleWinnerTable
                 RaffleETHDeposits={prizeInfo.RaffleETHDeposits}
                 RaffleNFTWinners={prizeInfo.RaffleNFTWinners}
               />
             </Box>
             <Box mt={4}>
-              <Typography variant="h6" mb={2}>Donated NFTs</Typography>
+              <Box
+                sx={{
+                  mb: 2,
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
+                <Typography variant="h6">Donated NFTs</Typography>
+                {status.NumDonatedNFTToClaim > 0 && (
+                  <Button variant="contained">Claim All</Button>
+                )}
+              </Box>
               <Grid container spacing={2}>
                 {nftDonations.length ? (
                   nftDonations.map((nft) => (

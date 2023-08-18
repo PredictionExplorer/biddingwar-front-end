@@ -1,9 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import {
   Box,
   Button,
-  Grid,
   Pagination,
   Table,
   TableBody,
@@ -22,10 +21,10 @@ import {
   TablePrimaryRow,
 } from "../components/styled";
 import { convertTimestampToDateTime } from "../utils";
-import DonatedNFT from "../components/DonatedNFT";
-import NFT from "../components/NFT";
 import api from "../services/api";
 import { ClaimableNFTTable } from "../components/ClaimableNFTTable";
+import { useActiveWeb3React } from "../hooks/web3";
+import WinningHistoryTable from "../components/WinningHistoryTable";
 
 const MyWinningsRow = ({ winning, handleETHClaim }) => {
   if (!winning) {
@@ -80,17 +79,44 @@ const MyWinningsTable = ({ list, handleETHClaim }) => {
   );
 };
 
-const MyWinnings = ({ list, RaffleNFTs, PrizeNFTs, DonatedNFTs }) => {
+const MyWinnings = ({ list }) => {
+  const { account } = useActiveWeb3React();
   const perPage = 20;
   const [curPage, setCurPage] = useState(1);
+  const [status, setStatus] = useState({
+    ETHRaffleToClaim: 0,
+    ETHRaffleToClaimWei: 0,
+    NumDonatedNFTToClaim: 0,
+  });
+  const [donatedNFTToClaim, setDonatedNFTToClaim] = useState([]);
+  const [claimHistory, setClaimHistory] = useState([]);
+
   const handleETHClaim = async (roundNum) => {};
   const handleAllETHClaim = async () => {};
-  const handleRaffleNFTClaim = async (nftId) => {};
-  const handleAllRaffleNFTsClaim = async () => {};
-  const handleDonatedNFTClaim = async (nftId) => {};
   const handleAllDonatedNFTsClaim = async () => {};
-  const handlePrizeNFTClaim = async (nftId) => {};
-  const handleAllPrizeNFTsClaim = async () => {};
+
+  useEffect(() => {
+    const fetchNotification = async () => {
+      const notify = await api.get_notif_red_box(account);
+      setStatus(notify);
+    };
+    const fetchClaimHistory = async () => {
+      const history = await api.get_claim_history(account);
+      setClaimHistory(history);
+    };
+    fetchNotification();
+    fetchClaimHistory();
+  }, []);
+
+  useEffect(() => {
+    const fetchUnclaimedDonatedNFTs = async () => {
+      const nfts = await api.get_unclaimed_donated_nft_by_user(account);
+      setDonatedNFTToClaim(nfts);
+    };
+    if (status.NumDonatedNFTToClaim > 0) {
+      fetchUnclaimedDonatedNFTs();
+    }
+  }, [status]);
   return (
     <>
       <Head>
@@ -108,7 +134,11 @@ const MyWinnings = ({ list, RaffleNFTs, PrizeNFTs, DonatedNFTs }) => {
         </Typography>
         <Box mt={6}>
           <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
-            <Typography variant="h5">Raffle ETH</Typography>
+            <Typography variant="h5">
+              Raffle ETH{" "}
+              {status.ETHRaffleToClaim > 0 &&
+                `(${status.ETHRaffleToClaim} ETH)`}
+            </Typography>
             <Button onClick={handleAllETHClaim} variant="contained">
               Claim All
             </Button>
@@ -127,33 +157,16 @@ const MyWinnings = ({ list, RaffleNFTs, PrizeNFTs, DonatedNFTs }) => {
         </Box>
         <Box mt={6}>
           <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
-            <Typography variant="h5">Winnings from Raffle NFTs</Typography>
-            <Button onClick={handleAllRaffleNFTsClaim} variant="contained">
-              Claim All
-            </Button>
-          </Box>
-          {/* Table */}
-          <ClaimableNFTTable list={[]} />
-        </Box>
-        <Box mt={6}>
-          <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
-            <Typography variant="h5">NFTs from Prize winnings</Typography>
-            <Button onClick={handleAllPrizeNFTsClaim} variant="contained">
-              Claim All
-            </Button>
-          </Box>
-          {/* Table */}
-          <ClaimableNFTTable list={[]} />
-        </Box>
-        <Box mt={6}>
-          <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
             <Typography variant="h5">Donated NFTs</Typography>
             <Button onClick={handleAllDonatedNFTsClaim} variant="contained">
               Claim All
             </Button>
           </Box>
-          {/* Table */}
-          <ClaimableNFTTable list={[]} />
+          <ClaimableNFTTable list={donatedNFTToClaim} />
+        </Box>
+        <Box mt={6}>
+          <Typography variant="h5">History of Winnings</Typography>
+          <WinningHistoryTable winningHistory={claimHistory} />
         </Box>
       </MainWrapper>
     </>
@@ -162,13 +175,11 @@ const MyWinnings = ({ list, RaffleNFTs, PrizeNFTs, DonatedNFTs }) => {
 
 export async function getServerSideProps() {
   const nfts = await api.get_cst_list();
-  const nftDonations = await api.get_donations_nft_by_round(3);
   return {
     props: {
       list: [],
       RaffleNFTs: nfts.slice(6, 9),
       PrizeNFTs: nfts.slice(0, 3),
-      DonatedNFTs: nftDonations,
     },
   };
 }
