@@ -15,9 +15,9 @@ import {
   TablePrimaryHead,
   TablePrimaryRow,
 } from "../components/styled";
-import { convertTimestampToDateTime, shortenHex } from "../utils";
+import { convertTimestampToDateTime } from "../utils";
 
-const NFTRow = ({ nft }) => {
+const NFTRow = ({ nft, handleClaim }) => {
   if (!nft) {
     return <TablePrimaryRow></TablePrimaryRow>;
   }
@@ -39,13 +39,13 @@ const NFTRow = ({ nft }) => {
       <TablePrimaryCell>{nft.TokenAddr}</TablePrimaryCell>
       <TablePrimaryCell>{nft.NFTTokenId}</TablePrimaryCell>
       <TablePrimaryCell>
-        <Button variant="contained">Claim</Button>
+        <Button variant="contained" onClick={() => handleClaim(nft.Index)}>Claim</Button>
       </TablePrimaryCell>
     </TablePrimaryRow>
   );
 };
 
-export const ClaimableNFTTable = ({ list }) => {
+export const ClaimableNFTTable = ({ list, handleClaim }) => {
   const perPage = 5;
   const [page, setPage] = useState(1);
 
@@ -67,7 +67,7 @@ export const ClaimableNFTTable = ({ list }) => {
             {list.length > 0 ? (
               list
                 .slice((page - 1) * perPage, page * perPage)
-                .map((nft) => <NFTRow nft={nft} key={nft.EvtLogId} />)
+                .map((nft) => <NFTRow nft={nft} key={nft.EvtLogId} handleClaim={handleClaim} />)
             ) : (
               <TableRow>
                 <TablePrimaryCell align="center" colSpan={6}>

@@ -9,9 +9,13 @@ import DonatedNFT from "../../components/DonatedNFT";
 import RaffleWinnerTable from "../../components/RaffleWinnerTable";
 import BiddingHistoryTable from "../../components/BiddingHistoryTable";
 import { useActiveWeb3React } from "../../hooks/web3";
+import useRaffleWalletContract from "../../hooks/useRaffleWalletContract";
+import useCosmicGameContract from "../../hooks/useCosmicGameContract";
 
 const PrizeInfo = ({ bidHistory, prizeNum, nftDonations, prizeInfo }) => {
   const { account } = useActiveWeb3React();
+  const cosmicGameContract = useCosmicGameContract();
+  const raffleWalletContract = useRaffleWalletContract();
   const [status, setStatus] = useState({
     ETHRaffleToClaim: 0,
     ETHRaffleToClaimWei: 0,
@@ -24,6 +28,23 @@ const PrizeInfo = ({ bidHistory, prizeNum, nftDonations, prizeInfo }) => {
     };
     fetchNotification();
   }, []);
+
+  const handleAllETHClaim = async () => {
+    try {
+      const res = await raffleWalletContract.withdraw();
+      console.log(res);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  const handleAllDonatedNFTsClaim = async () => {
+    try {
+      const res = await cosmicGameContract.claimManyDonatedNFTs();
+      console.log(res);
+    } catch (err) {
+      console.log(err);
+    }
+  };
   return (
     <>
       <Head>
@@ -135,7 +156,9 @@ const PrizeInfo = ({ bidHistory, prizeNum, nftDonations, prizeInfo }) => {
               >
                 <Typography variant="h6">Raffle Winners</Typography>
                 {status.ETHRaffleToClaim > 0 && (
-                  <Button variant="contained">Claim All</Button>
+                  <Button variant="contained" onClick={handleAllETHClaim}>
+                    Claim All
+                  </Button>
                 )}
               </Box>
               <RaffleWinnerTable
@@ -154,7 +177,12 @@ const PrizeInfo = ({ bidHistory, prizeNum, nftDonations, prizeInfo }) => {
               >
                 <Typography variant="h6">Donated NFTs</Typography>
                 {status.NumDonatedNFTToClaim > 0 && (
-                  <Button variant="contained">Claim All</Button>
+                  <Button
+                    variant="contained"
+                    onClick={handleAllDonatedNFTsClaim}
+                  >
+                    Claim All
+                  </Button>
                 )}
               </Box>
               <Grid container spacing={2}>

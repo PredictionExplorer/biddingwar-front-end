@@ -25,8 +25,10 @@ import api from "../services/api";
 import { ClaimableNFTTable } from "../components/ClaimableNFTTable";
 import { useActiveWeb3React } from "../hooks/web3";
 import WinningHistoryTable from "../components/WinningHistoryTable";
+import useCosmicGameContract from "../hooks/useCosmicGameContract";
+import useRaffleWalletContract from "../hooks/useRaffleWalletContract";
 
-const MyWinningsRow = ({ winning, handleETHClaim }) => {
+const MyWinningsRow = ({ winning }) => {
   if (!winning) {
     return <TablePrimaryRow></TablePrimaryRow>;
   }
@@ -38,14 +40,11 @@ const MyWinningsRow = ({ winning, handleETHClaim }) => {
       </TablePrimaryCell>
       <TablePrimaryCell>{winning.RoundNum}</TablePrimaryCell>
       <TablePrimaryCell>{winning.Amount.toFixed(4)}</TablePrimaryCell>
-      <TablePrimaryCell>
-        <Button onClick={() => handleETHClaim(winning.RoundNum)}>Claim</Button>
-      </TablePrimaryCell>
     </TablePrimaryRow>
   );
 };
 
-const MyWinningsTable = ({ list, handleETHClaim }) => {
+const MyWinningsTable = ({ list }) => {
   return (
     <TablePrimaryContainer>
       <Table>
@@ -54,17 +53,12 @@ const MyWinningsTable = ({ list, handleETHClaim }) => {
             <TableCell>Date</TableCell>
             <TableCell>Round</TableCell>
             <TableCell>Amount (ETH)</TableCell>
-            <TableCell></TableCell>
           </TableRow>
         </TablePrimaryHead>
         <TableBody>
           {list.length > 0 ? (
             list.map((winning, i) => (
-              <MyWinningsRow
-                key={i}
-                winning={winning}
-                handleETHClaim={handleETHClaim}
-              />
+              <MyWinningsRow key={i} winning={winning} />
             ))
           ) : (
             <TableRow>
@@ -92,9 +86,33 @@ const MyWinnings = () => {
   const [raffleETHToClaim, setRaffleETHToClaim] = useState([]);
   const [claimHistory, setClaimHistory] = useState([]);
 
-  const handleETHClaim = async (roundNum) => {};
-  const handleAllETHClaim = async () => {};
-  const handleAllDonatedNFTsClaim = async () => {};
+  const cosmicGameContract = useCosmicGameContract();
+  const raffleWalletContract = useRaffleWalletContract();
+
+  const handleAllETHClaim = async () => {
+    try {
+      const res = await raffleWalletContract.withdraw();
+      console.log(res);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  const handleDonatedNFTsClaim = async (tokenID) => {
+    try {
+      const res = await cosmicGameContract.claimDonatedNFT(tokenID);
+      console.log(res);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  const handleAllDonatedNFTsClaim = async () => {
+    try {
+      const res = await cosmicGameContract.claimManyDonatedNFTs();
+      console.log(res);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   useEffect(() => {
     const fetchNotification = async () => {
@@ -111,18 +129,18 @@ const MyWinnings = () => {
 
   useEffect(() => {
     const fetchUnclaimedDonatedNFTs = async () => {
-      const nfts = await api.get_unclaimed_donated_nft_by_user("0x70997970C51812dc3A010C7d01b50e0d17dc79C8");
+      const nfts = await api.get_unclaimed_donated_nft_by_user(account);
       setDonatedNFTToClaim(nfts);
     };
     const fetchUnclaimedRaffleETHDeposits = async () => {
-      const deposits = await api.get_unclaimed_raffle_deposits_by_user("0x70997970C51812dc3A010C7d01b50e0d17dc79C8");
+      const deposits = await api.get_unclaimed_raffle_deposits_by_user(account);
       setRaffleETHToClaim(deposits);
     };
+    fetchUnclaimedDonatedNFTs();
+    fetchUnclaimedRaffleETHDeposits();
     // if (status.NumDonatedNFTToClaim > 0) {
     //   fetchUnclaimedDonatedNFTs();
     // }
-    fetchUnclaimedDonatedNFTs();
-    fetchUnclaimedRaffleETHDeposits();
     // if (status.ETHRaffleToClaim > 0) {
     //   fetchUnclaimedRaffleETHDeposits();
     // }
@@ -147,16 +165,15 @@ const MyWinnings = () => {
             <Typography variant="h5">
               Raffle ETH{" "}
               {status.ETHRaffleToClaim > 0 &&
-                `(${status.ETHRaffleToClaim} ETH)`}
+                `(${status.ETHRaffleToClaim.toFixed(6)} ETH)`}
             </Typography>
-            <Button onClick={handleAllETHClaim} variant="contained">
-              Claim All
-            </Button>
+            {status.ETHRaffleToClaim > 0 && (
+              <Button onClick={handleAllETHClaim} variant="contained">
+                Claim All
+              </Button>
+            )}
           </Box>
-          <MyWinningsTable
-            list={raffleETHToClaim}
-            handleETHClaim={handleETHClaim}
-          />
+          <MyWinningsTable list={raffleETHToClaim} />
           <Box display="flex" justifyContent="center" mt={4}>
             <Pagination
               color="primary"
@@ -171,11 +188,16 @@ const MyWinnings = () => {
         <Box mt={6}>
           <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
             <Typography variant="h5">Donated NFTs</Typography>
-            <Button onClick={handleAllDonatedNFTsClaim} variant="contained">
-              Claim All
-            </Button>
+            {donatedNFTToClaim.length > 0 && (
+              <Button onClick={handleAllDonatedNFTsClaim} variant="contained">
+                Claim All
+              </Button>
+            )}
           </Box>
-          <ClaimableNFTTable list={donatedNFTToClaim} />
+          <ClaimableNFTTable
+            list={donatedNFTToClaim}
+            handleClaim={handleDonatedNFTsClaim}
+          />
         </Box>
         <Box mt={6}>
           <Typography variant="h5">History of Winnings</Typography>
