@@ -21,6 +21,7 @@ const PrizeInfo = ({ bidHistory, prizeNum, nftDonations, prizeInfo }) => {
     ETHRaffleToClaimWei: 0,
     NumDonatedNFTToClaim: 0,
   });
+  const [donatedNFTToClaim, setDonatedNFTToClaim] = useState([]);
   useEffect(() => {
     const fetchNotification = async () => {
       const res = await fetch(`/api/notifRedBox/?address=${account}`);
@@ -36,6 +37,19 @@ const PrizeInfo = ({ bidHistory, prizeNum, nftDonations, prizeInfo }) => {
     };
   }, []);
 
+  useEffect(() => {
+    const fetchUnclaimedDonatedNFTs = async () => {
+      const res = await fetch(
+        `/api/unclaimedDonatedNftByUser/?address=${account}`
+      );
+      const nfts = await res.json();
+      setDonatedNFTToClaim(nfts);
+    };
+    if (status.NumDonatedNFTToClaim > 0) {
+      fetchUnclaimedDonatedNFTs();
+    }
+  }, [status]);
+
   const handleAllETHClaim = async () => {
     try {
       const res = await raffleWalletContract.withdraw();
@@ -46,6 +60,7 @@ const PrizeInfo = ({ bidHistory, prizeNum, nftDonations, prizeInfo }) => {
   };
   const handleAllDonatedNFTsClaim = async () => {
     try {
+      const indexList = donatedNFTToClaim.map((item) => item.Index);
       const res = await cosmicGameContract.claimManyDonatedNFTs();
       console.log(res);
     } catch (err) {

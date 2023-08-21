@@ -38,7 +38,7 @@
   "function charityAmount() view returns (uint256)",
   "function charityPercentage() view returns (uint256)",
   "function claimDonatedNFT(uint256)",
-  "function claimManyDonatedNFTs()",
+  "function claimManyDonatedNFTs(uint256[])",
   "function claimPrize()",
   "function claimRaffleNFT(uint256)",
   "function donate() payable",

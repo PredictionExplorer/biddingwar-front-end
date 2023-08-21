@@ -21,7 +21,6 @@ import {
   TablePrimaryRow,
 } from "../components/styled";
 import { convertTimestampToDateTime } from "../utils";
-import api from "../services/api";
 import { ClaimableNFTTable } from "../components/ClaimableNFTTable";
 import { useActiveWeb3React } from "../hooks/web3";
 import WinningHistoryTable from "../components/WinningHistoryTable";
@@ -107,7 +106,8 @@ const MyWinnings = () => {
   };
   const handleAllDonatedNFTsClaim = async () => {
     try {
-      const res = await cosmicGameContract.claimManyDonatedNFTs();
+      const indexList = donatedNFTToClaim.map((item) => item.Index);
+      const res = await cosmicGameContract.claimManyDonatedNFTs(indexList);
       console.log(res);
     } catch (err) {
       console.log(err);
@@ -158,6 +158,7 @@ const MyWinnings = () => {
       fetchUnclaimedRaffleETHDeposits();
     }
   }, [status]);
+
   return (
     <>
       <Head>
