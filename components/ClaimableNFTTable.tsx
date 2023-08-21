@@ -15,7 +15,7 @@ import {
   TablePrimaryHead,
   TablePrimaryRow,
 } from "../components/styled";
-import { convertTimestampToDateTime } from "../utils";
+import { convertTimestampToDateTime, shortenHex } from "../utils";
 
 const NFTRow = ({ nft, handleClaim }) => {
   if (!nft) {
@@ -32,14 +32,16 @@ const NFTRow = ({ nft, handleClaim }) => {
           href={`/user/${nft.DonorAddr}`}
           style={{ color: "rgba(255, 255, 255, 0.68)", fontSize: 14 }}
         >
-          {nft.DonorAddr}
+          {shortenHex(nft.DonorAddr, 6)}
         </Link>
       </TablePrimaryCell>
       <TablePrimaryCell>{nft.RoundNum}</TablePrimaryCell>
       <TablePrimaryCell>{nft.TokenAddr}</TablePrimaryCell>
       <TablePrimaryCell>{nft.NFTTokenId}</TablePrimaryCell>
       <TablePrimaryCell>
-        <Button variant="contained" onClick={() => handleClaim(nft.Index)}>Claim</Button>
+        <Button variant="contained" onClick={() => handleClaim(nft.Index)}>
+          Claim
+        </Button>
       </TablePrimaryCell>
     </TablePrimaryRow>
   );
@@ -67,7 +69,13 @@ export const ClaimableNFTTable = ({ list, handleClaim }) => {
             {list.length > 0 ? (
               list
                 .slice((page - 1) * perPage, page * perPage)
-                .map((nft) => <NFTRow nft={nft} key={nft.EvtLogId} handleClaim={handleClaim} />)
+                .map((nft) => (
+                  <NFTRow
+                    nft={nft}
+                    key={nft.EvtLogId}
+                    handleClaim={handleClaim}
+                  />
+                ))
             ) : (
               <TableRow>
                 <TablePrimaryCell align="center" colSpan={6}>
