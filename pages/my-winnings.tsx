@@ -123,8 +123,14 @@ const MyWinnings = () => {
       const history = await api.get_claim_history(account);
       setClaimHistory(history);
     };
-    fetchNotification();
+    const interval = setInterval(() => {
+      fetchNotification();
+    }, 30000);
+
     fetchClaimHistory();
+    return () => {
+      clearInterval(interval);
+    };
   }, []);
 
   useEffect(() => {
