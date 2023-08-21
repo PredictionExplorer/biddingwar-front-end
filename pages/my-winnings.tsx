@@ -26,6 +26,7 @@ import { useActiveWeb3React } from "../hooks/web3";
 import WinningHistoryTable from "../components/WinningHistoryTable";
 import useCosmicGameContract from "../hooks/useCosmicGameContract";
 import useRaffleWalletContract from "../hooks/useRaffleWalletContract";
+import router from "next/router";
 
 const MyWinningsRow = ({ winning }) => {
   if (!winning) {
@@ -84,33 +85,66 @@ const MyWinnings = () => {
   const [donatedNFTToClaim, setDonatedNFTToClaim] = useState([]);
   const [raffleETHToClaim, setRaffleETHToClaim] = useState([]);
   const [claimHistory, setClaimHistory] = useState([]);
+  const [isClaiming, setIsClaiming] = useState({
+    donatedNFT: false,
+    raffleETH: false,
+  });
 
   const cosmicGameContract = useCosmicGameContract();
   const raffleWalletContract = useRaffleWalletContract();
 
   const handleAllETHClaim = async () => {
     try {
+      setIsClaiming({
+        ...isClaiming,
+        raffleETH: true,
+      });
       const res = await raffleWalletContract.withdraw();
       console.log(res);
+      setTimeout(() => {
+        router.reload();
+      }, 4000);
     } catch (err) {
       console.log(err);
+      setIsClaiming({
+        ...isClaiming,
+        raffleETH: false,
+      });
     }
   };
-  const handleDonatedNFTsClaim = async (tokenID) => {
+  const handleDonatedNFTsClaim = async (e, tokenID) => {
     try {
+      e.target.disabled = true;
+      e.target.classList.add('.Mui-disabled');
       const res = await cosmicGameContract.claimDonatedNFT(tokenID);
       console.log(res);
+      setTimeout(() => {
+        router.reload();
+      }, 4000);
     } catch (err) {
       console.log(err);
+      e.target.disabled = false;
+      e.target.classList.remove('Mui-disabled');
     }
   };
   const handleAllDonatedNFTsClaim = async () => {
     try {
+      setIsClaiming({
+        ...isClaiming,
+        donatedNFT: true,
+      });
       const indexList = donatedNFTToClaim.map((item) => item.Index);
       const res = await cosmicGameContract.claimManyDonatedNFTs(indexList);
       console.log(res);
+      setTimeout(() => {
+        router.reload();
+      }, 4000);
     } catch (err) {
       console.log(err);
+      setIsClaiming({
+        ...isClaiming,
+        donatedNFT: false,
+      });
     }
   };
 
@@ -182,7 +216,11 @@ const MyWinnings = () => {
                 `(${status.ETHRaffleToClaim.toFixed(6)} ETH)`}
             </Typography>
             {status.ETHRaffleToClaim > 0 && (
-              <Button onClick={handleAllETHClaim} variant="contained">
+              <Button
+                onClick={handleAllETHClaim}
+                variant="contained"
+                disabled={isClaiming.raffleETH}
+              >
                 Claim All
               </Button>
             )}
@@ -203,7 +241,11 @@ const MyWinnings = () => {
           <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
             <Typography variant="h5">Donated NFTs</Typography>
             {donatedNFTToClaim.length > 0 && (
-              <Button onClick={handleAllDonatedNFTsClaim} variant="contained">
+              <Button
+                onClick={handleAllDonatedNFTsClaim}
+                variant="contained"
+                disabled={isClaiming.donatedNFT}
+              >
                 Claim All
               </Button>
             )}

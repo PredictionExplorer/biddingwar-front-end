@@ -39,7 +39,7 @@ const NFTRow = ({ nft, handleClaim }) => {
       <TablePrimaryCell>{nft.TokenAddr}</TablePrimaryCell>
       <TablePrimaryCell>{nft.NFTTokenId}</TablePrimaryCell>
       <TablePrimaryCell>
-        <Button variant="contained" onClick={() => handleClaim(nft.Index)}>
+        <Button variant="contained" onClick={(e) => handleClaim(e, nft.Index)}>
           Claim
         </Button>
       </TablePrimaryCell>
