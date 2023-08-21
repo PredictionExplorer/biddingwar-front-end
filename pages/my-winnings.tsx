@@ -136,14 +136,12 @@ const MyWinnings = () => {
       const deposits = await api.get_unclaimed_raffle_deposits_by_user(account);
       setRaffleETHToClaim(deposits);
     };
-    fetchUnclaimedDonatedNFTs();
-    fetchUnclaimedRaffleETHDeposits();
-    // if (status.NumDonatedNFTToClaim > 0) {
-    //   fetchUnclaimedDonatedNFTs();
-    // }
-    // if (status.ETHRaffleToClaim > 0) {
-    //   fetchUnclaimedRaffleETHDeposits();
-    // }
+    if (status.NumDonatedNFTToClaim > 0) {
+      fetchUnclaimedDonatedNFTs();
+    }
+    if (status.ETHRaffleToClaim > 0) {
+      fetchUnclaimedRaffleETHDeposits();
+    }
   }, [status]);
   return (
     <>
