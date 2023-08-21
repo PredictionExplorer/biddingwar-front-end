@@ -154,7 +154,11 @@ const PrizeInfo = ({ bidHistory, prizeNum, nftDonations, prizeInfo }) => {
                   alignItems: "center",
                 }}
               >
-                <Typography variant="h6">Raffle Winners</Typography>
+                <Typography variant="h6">
+                  Raffle Winners{" "}
+                  {status.ETHRaffleToClaim > 0 &&
+                    `(${status.ETHRaffleToClaim.toFixed(6)} ETH)`}
+                </Typography>
                 {status.ETHRaffleToClaim > 0 && (
                   <Button variant="contained" onClick={handleAllETHClaim}>
                     Claim All

@@ -75,13 +75,13 @@ const MyWinningsTable = ({ list }) => {
 
 const MyWinnings = () => {
   const { account } = useActiveWeb3React();
-  const perPage = 20;
   const [curPage, setCurPage] = useState(1);
   const [status, setStatus] = useState({
     ETHRaffleToClaim: 0,
     ETHRaffleToClaimWei: 0,
     NumDonatedNFTToClaim: 0,
   });
+  const perPage = 5;
   const [donatedNFTToClaim, setDonatedNFTToClaim] = useState([]);
   const [raffleETHToClaim, setRaffleETHToClaim] = useState([]);
   const [claimHistory, setClaimHistory] = useState([]);

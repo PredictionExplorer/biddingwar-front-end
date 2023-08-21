@@ -37,12 +37,10 @@ const HistoryRow = ({ history }) => {
       </TablePrimaryCell>
       <TablePrimaryCell>{shortenHex(history.BidderAddr, 6)}</TablePrimaryCell>
       <TablePrimaryCell>
-        {history.BidPriceEth &&
-          `${
-            history.BidPriceEth < 1
-              ? history.BidPriceEth?.toFixed(7)
-              : history.BidPriceEth?.toFixed(2)
-          }Ξ`}
+        {history.BidPriceEth && history.BidPriceEth < 1
+          ? history.BidPriceEth?.toFixed(7)
+          : history.BidPriceEth?.toFixed(2)}
+        Ξ
       </TablePrimaryCell>
       <TablePrimaryCell>
         {history.RWalkNFTId < 0 ? "" : history.RWalkNFTId}
