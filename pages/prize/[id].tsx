@@ -26,7 +26,13 @@ const PrizeInfo = ({ bidHistory, prizeNum, nftDonations, prizeInfo }) => {
       const notify = await api.get_notif_red_box(account);
       setStatus(notify);
     };
+    const interval = setInterval(() => {
+      fetchNotification();
+    }, 30000);
     fetchNotification();
+    return () => {
+      clearInterval(interval);
+    };
   }, []);
 
   const handleAllETHClaim = async () => {

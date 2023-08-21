@@ -127,6 +127,7 @@ const MyWinnings = () => {
       fetchNotification();
     }, 30000);
 
+    fetchNotification();
     fetchClaimHistory();
     return () => {
       clearInterval(interval);
