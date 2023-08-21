@@ -116,11 +116,13 @@ const MyWinnings = () => {
 
   useEffect(() => {
     const fetchNotification = async () => {
-      const notify = await api.get_notif_red_box(account);
+      const res = await fetch(`/api/notifRedBox/?address=${account}`);
+      const notify = await res.json();
       setStatus(notify);
     };
     const fetchClaimHistory = async () => {
-      const history = await api.get_claim_history(account);
+      const res = await fetch(`/api/claimHistory/?address=${account}`);
+      const history = await res.json();
       setClaimHistory(history);
     };
     const interval = setInterval(() => {
@@ -136,11 +138,17 @@ const MyWinnings = () => {
 
   useEffect(() => {
     const fetchUnclaimedDonatedNFTs = async () => {
-      const nfts = await api.get_unclaimed_donated_nft_by_user(account);
+      const res = await fetch(
+        `/api/unclaimedDonatedNftByUser/?address=${account}`
+      );
+      const nfts = await res.json();
       setDonatedNFTToClaim(nfts);
     };
     const fetchUnclaimedRaffleETHDeposits = async () => {
-      const deposits = await api.get_unclaimed_raffle_deposits_by_user(account);
+      const res = await fetch(
+        `/api/unclaimedRaffleDepositsByUser/?address=${account}`
+      );
+      const deposits = await res.json();
       setRaffleETHToClaim(deposits);
     };
     if (status.NumDonatedNFTToClaim > 0) {

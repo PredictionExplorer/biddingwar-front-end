@@ -67,7 +67,7 @@ class ApiService {
       const { data } = await axios.get(cosmicGameBaseUrl + `prize/info/${id}`);
       const prizeInfo = data.PrizeInfo;
       return prizeInfo;
-    } catch(err) {
+    } catch (err) {
       return null;
     }
   }
@@ -99,11 +99,6 @@ class ApiService {
     return data.UserRaffleDeposits;
   }
 
-  public async get_unclaimed_raffle_deposits_by_user(address: string) {
-    const { data } = await axios.get(cosmicGameBaseUrl + `user/unclaimed_raffle_deposits/${address}/0/1000000`);
-    return data.UnclaimedDeposits;
-  }
-
   public async get_raffle_nft_winners_by_round(round: number) {
     const { data } = await axios.get(cosmicGameBaseUrl + `raffle/nft_winners/by_round/${round}`);
     return data.RaffleNFTWinners;
@@ -112,21 +107,6 @@ class ApiService {
   public async get_raffle_nft_winners_by_user(address: string) {
     const { data } = await axios.get(cosmicGameBaseUrl + `user/raffle_nft_winnings/${address}`);
     return data.UserRaffleNFTWinnings;
-  }
-
-  public async get_unclaimed_donated_nft_by_user(address: string) {
-    const { data } = await axios.get(cosmicGameBaseUrl + `user/nft/unclaimed_by_user/${address}`);
-    return data.UnclaimedDonatedNFTs;
-  }
-  
-  public async get_notif_red_box(address: string) {
-    const { data } = await axios.get(cosmicGameBaseUrl + `user/notif_red_box/${address}`);
-    return data.Winnings;
-  }
-  
-  public async get_claim_history(address: string) {
-    const { data } = await axios.get(cosmicGameBaseUrl + `user/claim_history/${address}/0/100000`);
-    return data.ClaimHistory;
   }
 
   public async get_info(token_id: number | string) {

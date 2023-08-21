@@ -23,7 +23,8 @@ const PrizeInfo = ({ bidHistory, prizeNum, nftDonations, prizeInfo }) => {
   });
   useEffect(() => {
     const fetchNotification = async () => {
-      const notify = await api.get_notif_red_box(account);
+      const res = await fetch(`/api/notifRedBox/?address=${account}`);
+      const notify = await res.json();
       setStatus(notify);
     };
     const interval = setInterval(() => {
