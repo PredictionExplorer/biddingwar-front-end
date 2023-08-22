@@ -92,17 +92,11 @@ const HistoryTable = ({ biddingHistory, perPage, curPage }) => {
           </TableRow>
         </TablePrimaryHead>
         <TableBody>
-          {biddingHistory.length > 0 ? (
-            biddingHistory
-              .slice((curPage - 1) * perPage, curPage * perPage)
-              .map((history, i) => <HistoryRow history={history} key={i} />)
-          ) : (
-            <TableRow>
-              <TablePrimaryCell align="center" colSpan={8}>
-                No history yet.
-              </TablePrimaryCell>
-            </TableRow>
-          )}
+          {biddingHistory
+            .slice((curPage - 1) * perPage, curPage * perPage)
+            .map((history, i) => (
+              <HistoryRow history={history} key={i} />
+            ))}
         </TableBody>
       </Table>
     </TablePrimaryContainer>
@@ -115,22 +109,28 @@ const BiddingHistoryTable = ({ biddingHistory }) => {
 
   return (
     <Box mt={2}>
-      <HistoryTable
-        biddingHistory={biddingHistory}
-        perPage={perPage}
-        curPage={curPage}
-      />
-      <Box display="flex" justifyContent="center" mt={4}>
-        <Pagination
-          color="primary"
-          page={curPage}
-          onChange={(e, page) => setCurrentPage(page)}
-          count={Math.ceil(biddingHistory.length / perPage)}
-          hideNextButton
-          hidePrevButton
-          shape="rounded"
-        />
-      </Box>
+      {biddingHistory.length > 0 ? (
+        <>
+          <HistoryTable
+            biddingHistory={biddingHistory}
+            perPage={perPage}
+            curPage={curPage}
+          />
+          <Box display="flex" justifyContent="center" mt={4}>
+            <Pagination
+              color="primary"
+              page={curPage}
+              onChange={(e, page) => setCurrentPage(page)}
+              count={Math.ceil(biddingHistory.length / perPage)}
+              hideNextButton
+              hidePrevButton
+              shape="rounded"
+            />
+          </Box>
+        </>
+      ) : (
+        <Typography>No bid history yet.</Typography>
+      )}
     </Box>
   );
 };

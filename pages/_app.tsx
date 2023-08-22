@@ -24,6 +24,8 @@ import '../styles/global.css'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 import * as ga from '../utils/analytics'
+import { ApiDataProvider } from '../contexts/ApiDataContext'
+import ApiDataFetcher from '../contexts/ApiDataFetcher'
 
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache()
@@ -45,6 +47,7 @@ function MyApp(props: MyAppProps) {
     }
   }, [router.events])
   const canonicalUrl = (`https://www.randomwalknft.com` + (router.asPath === "/" ? "": router.asPath)).split("?")[0];
+
   return (
     <>
       <Head>
@@ -102,11 +105,12 @@ function MyApp(props: MyAppProps) {
             <ThemeProvider theme={theme}>
               <CssBaseline />
               <Web3ReactManager>
-                <>
+              <ApiDataProvider>
                   <Header />
                   <Component {...pageProps} />
                   <Footer />
-                </>
+                  <ApiDataFetcher interval={30000} />
+                </ApiDataProvider>
               </Web3ReactManager>
             </ThemeProvider>
           </CacheProvider>

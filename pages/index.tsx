@@ -890,18 +890,20 @@ const NewHome = ({
           </Grid>
         </Box>
         <Box marginTop="80px">
-          <Typography variant="h6" component="span">
-            DONATED
-          </Typography>
-          <Typography variant="h6" color="primary" component="span" mx={1}>
-            ERC721 TOKENS
-          </Typography>
-          <Typography variant="h6" component="span">
-            FOR CURRENT ROUND
-          </Typography>
-          <Grid container spacing={2} mt={2}>
-            {nftDonations.length ? (
-              nftDonations.map((nft) => (
+          <Box>
+            <Typography variant="h6" component="span">
+              DONATED
+            </Typography>
+            <Typography variant="h6" color="primary" component="span" mx={1}>
+              ERC721 TOKENS
+            </Typography>
+            <Typography variant="h6" component="span">
+              FOR CURRENT ROUND
+            </Typography>
+          </Box>
+          {nftDonations.length > 0 ? (
+            <Grid container spacing={2} mt={2}>
+              {nftDonations.map((nft) => (
                 <Grid
                   item
                   key={nft.RecordId}
@@ -912,18 +914,16 @@ const NewHome = ({
                 >
                   <DonatedNFT nft={nft} />
                 </Grid>
-              ))
-            ) : (
-              <Grid item>
-                <Typography>
-                  No ERC721 tokens were donated on this round
-                </Typography>
-              </Grid>
-            )}
-          </Grid>
+              ))}
+            </Grid>
+          ) : (
+            <Typography mt={2}>
+              No ERC721 tokens were donated on this round
+            </Typography>
+          )}
         </Box>
         <Box mt="120px">
-          <Box display="flex" alignItems="center" flexWrap="wrap">
+          <Box>
             <Typography variant="h6" component="span">
               CURRENT ROUND
             </Typography>

@@ -7,6 +7,7 @@ import {
   Box,
   Pagination,
   Link,
+  Typography,
 } from "@mui/material";
 import {
   TablePrimaryContainer,
@@ -47,6 +48,9 @@ const RaffleWinnerTable = ({ RaffleETHDeposits, RaffleNFTWinners }) => {
   const perPage = 5;
   const list = [...RaffleETHDeposits, ...RaffleNFTWinners];
   const [page, setPage] = useState(1);
+  if (list.length === 0) {
+    return <Typography>No winners yet.</Typography>;
+  }
   return (
     <>
       <TablePrimaryContainer>
@@ -61,27 +65,17 @@ const RaffleWinnerTable = ({ RaffleETHDeposits, RaffleNFTWinners }) => {
             </TableRow>
           </TablePrimaryHead>
           <TableBody>
-            {list.length > 0 ? (
-              <>
-                {list
-                  .slice((page - 1) * perPage, page * perPage)
-                  .map((winner, i) => (
-                    <WinnerRow
-                      key={winner.EvtLogId}
-                      winner={winner}
-                      type={
-                        winner.Amount ? "ETH Deposits" : "CosmicSignature Token"
-                      }
-                    />
-                  ))}
-              </>
-            ) : (
-              <TableRow>
-                <TablePrimaryCell align="center" colSpan={8}>
-                  No winners yet.
-                </TablePrimaryCell>
-              </TableRow>
-            )}
+            {list
+              .slice((page - 1) * perPage, page * perPage)
+              .map((winner, i) => (
+                <WinnerRow
+                  key={winner.EvtLogId}
+                  winner={winner}
+                  type={
+                    winner.Amount ? "ETH Deposits" : "CosmicSignature Token"
+                  }
+                />
+              ))}
           </TableBody>
         </Table>
       </TablePrimaryContainer>

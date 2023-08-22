@@ -35,9 +35,9 @@ const NFTRow = ({ nft, handleClaim }) => {
           {shortenHex(nft.DonorAddr, 6)}
         </Link>
       </TablePrimaryCell>
-      <TablePrimaryCell>{nft.RoundNum}</TablePrimaryCell>
+      <TablePrimaryCell align="center">{nft.RoundNum}</TablePrimaryCell>
       <TablePrimaryCell>{nft.TokenAddr}</TablePrimaryCell>
-      <TablePrimaryCell>{nft.NFTTokenId}</TablePrimaryCell>
+      <TablePrimaryCell align="right">{nft.NFTTokenId}</TablePrimaryCell>
       <TablePrimaryCell>
         <Button variant="contained" onClick={(e) => handleClaim(e, nft.Index)}>
           Claim
@@ -59,9 +59,9 @@ export const ClaimableNFTTable = ({ list, handleClaim }) => {
             <TableRow>
               <TableCell>Datetime</TableCell>
               <TableCell>Donor Address</TableCell>
-              <TableCell>Round #</TableCell>
+              <TableCell align="center">Round #</TableCell>
               <TableCell>Token Address</TableCell>
-              <TableCell>Token ID</TableCell>
+              <TableCell align="right">Token ID</TableCell>
               <TableCell></TableCell>
             </TableRow>
           </TablePrimaryHead>

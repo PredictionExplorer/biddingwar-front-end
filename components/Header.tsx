@@ -8,22 +8,25 @@ import {
   ListItem,
   Container,
   Link,
+  Badge,
+  Box,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-
+import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 import NAV_SECTIONS from "../config/nav";
 import ConnectWalletButton from "../components/ConnectWalletButton";
 
 import { NavLink, AppBarWrapper, DrawerList } from "./styled";
 import ListNavItem from "./ListNavItem";
 import ListItemButton from "./ListItemButton";
+import { useApiData } from "../contexts/ApiDataContext";
 
 const Header = () => {
   const [state, setState] = useState({
     mobileView: false,
     drawerOpen: false,
   });
-
+  const { apiData: status } = useApiData();
   const { mobileView, drawerOpen } = state;
 
   useEffect(() => {
@@ -51,6 +54,15 @@ const Header = () => {
         {NAV_SECTIONS.map((nav, i) => (
           <ListNavItem key={i} nav={nav} />
         ))}
+        {(status.ETHRaffleToClaim > 0 || status.NumDonatedNFTToClaim > 0) && (
+          <Box ml={3}>
+            <Badge color="secondary" variant="dot">
+              <NavLink href="/my-winnings">
+                <EmojiEventsIcon />
+              </NavLink>
+            </Badge>
+          </Box>
+        )}
         <ConnectWalletButton isMobileView={false} />
       </Toolbar>
     );

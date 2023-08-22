@@ -11,31 +11,14 @@ import BiddingHistoryTable from "../../components/BiddingHistoryTable";
 import { useActiveWeb3React } from "../../hooks/web3";
 import useRaffleWalletContract from "../../hooks/useRaffleWalletContract";
 import useCosmicGameContract from "../../hooks/useCosmicGameContract";
+import { useApiData } from "../../contexts/ApiDataContext";
 
 const PrizeInfo = ({ bidHistory, prizeNum, nftDonations, prizeInfo }) => {
   const { account } = useActiveWeb3React();
   const cosmicGameContract = useCosmicGameContract();
   const raffleWalletContract = useRaffleWalletContract();
-  const [status, setStatus] = useState({
-    ETHRaffleToClaim: 0,
-    ETHRaffleToClaimWei: 0,
-    NumDonatedNFTToClaim: 0,
-  });
+  const { apiData: status } = useApiData();
   const [donatedNFTToClaim, setDonatedNFTToClaim] = useState([]);
-  useEffect(() => {
-    const fetchNotification = async () => {
-      const res = await fetch(`/api/notifRedBox/?address=${account}`);
-      const notify = await res.json();
-      setStatus(notify);
-    };
-    const interval = setInterval(() => {
-      fetchNotification();
-    }, 30000);
-    fetchNotification();
-    return () => {
-      clearInterval(interval);
-    };
-  }, []);
 
   useEffect(() => {
     const fetchUnclaimedDonatedNFTs = async () => {

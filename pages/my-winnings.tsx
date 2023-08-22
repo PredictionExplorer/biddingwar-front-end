@@ -27,6 +27,7 @@ import WinningHistoryTable from "../components/WinningHistoryTable";
 import useCosmicGameContract from "../hooks/useCosmicGameContract";
 import useRaffleWalletContract from "../hooks/useRaffleWalletContract";
 import router from "next/router";
+import { useApiData } from "../contexts/ApiDataContext";
 
 const MyWinningsRow = ({ winning }) => {
   if (!winning) {
@@ -38,8 +39,10 @@ const MyWinningsRow = ({ winning }) => {
       <TablePrimaryCell>
         {convertTimestampToDateTime(winning.TimeStamp)}
       </TablePrimaryCell>
-      <TablePrimaryCell>{winning.RoundNum}</TablePrimaryCell>
-      <TablePrimaryCell>{winning.Amount.toFixed(4)}</TablePrimaryCell>
+      <TablePrimaryCell align="center">{winning.RoundNum}</TablePrimaryCell>
+      <TablePrimaryCell align="right">
+        {winning.Amount.toFixed(4)}
+      </TablePrimaryCell>
     </TablePrimaryRow>
   );
 };
@@ -51,8 +54,8 @@ const MyWinningsTable = ({ list }) => {
         <TablePrimaryHead>
           <TableRow>
             <TableCell>Date</TableCell>
-            <TableCell>Round</TableCell>
-            <TableCell>Amount (ETH)</TableCell>
+            <TableCell align="center">Round</TableCell>
+            <TableCell align="right">Amount (ETH)</TableCell>
           </TableRow>
         </TablePrimaryHead>
         <TableBody>
@@ -76,11 +79,7 @@ const MyWinningsTable = ({ list }) => {
 const MyWinnings = () => {
   const { account } = useActiveWeb3React();
   const [curPage, setCurPage] = useState(1);
-  const [status, setStatus] = useState({
-    ETHRaffleToClaim: 0,
-    ETHRaffleToClaimWei: 0,
-    NumDonatedNFTToClaim: 0,
-  });
+  const { apiData: status } = useApiData();
   const perPage = 5;
   const [donatedNFTToClaim, setDonatedNFTToClaim] = useState([]);
   const [raffleETHToClaim, setRaffleETHToClaim] = useState([]);
@@ -115,7 +114,7 @@ const MyWinnings = () => {
   const handleDonatedNFTsClaim = async (e, tokenID) => {
     try {
       e.target.disabled = true;
-      e.target.classList.add('.Mui-disabled');
+      e.target.classList.add("Mui-disabled");
       const res = await cosmicGameContract.claimDonatedNFT(tokenID);
       console.log(res);
       setTimeout(() => {
@@ -124,7 +123,7 @@ const MyWinnings = () => {
     } catch (err) {
       console.log(err);
       e.target.disabled = false;
-      e.target.classList.remove('Mui-disabled');
+      e.target.classList.remove("Mui-disabled");
     }
   };
   const handleAllDonatedNFTsClaim = async () => {
@@ -149,25 +148,12 @@ const MyWinnings = () => {
   };
 
   useEffect(() => {
-    const fetchNotification = async () => {
-      const res = await fetch(`/api/notifRedBox/?address=${account}`);
-      const notify = await res.json();
-      setStatus(notify);
-    };
     const fetchClaimHistory = async () => {
       const res = await fetch(`/api/claimHistory/?address=${account}`);
       const history = await res.json();
       setClaimHistory(history);
     };
-    const interval = setInterval(() => {
-      fetchNotification();
-    }, 30000);
-
-    fetchNotification();
     fetchClaimHistory();
-    return () => {
-      clearInterval(interval);
-    };
   }, []);
 
   useEffect(() => {

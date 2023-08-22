@@ -39,66 +39,72 @@ const LatestNFTs = ({ nfts }) => {
             alt="divider"
           />
         </Box>
-        {matches && (
-          <Grid container spacing={2} marginTop="58px">
-            {data.slice(0, 6).map((nft, i) => (
-              <Grid
-                key={i}
-                sx={{ position: "relative" }}
-                item
-                xs={12}
-                sm={12}
-                md={4}
-                lg={4}
-              >
-                <NFT nft={nft} />
+        {data.length > 0 ? (
+          <>
+            {matches && (
+              <Grid container spacing={2} marginTop="58px">
+                {data.slice(0, 6).map((nft, i) => (
+                  <Grid
+                    key={i}
+                    sx={{ position: "relative" }}
+                    item
+                    xs={12}
+                    sm={12}
+                    md={4}
+                    lg={4}
+                  >
+                    <NFT nft={nft} />
+                  </Grid>
+                ))}
               </Grid>
-            ))}
-          </Grid>
-        )}
-        <Box display={matches ? "none" : "block"}>
-          <ul
-            ref={scrollRef}
-            style={{
-              listStyle: "none",
-              display: "flex",
-              overflow: "hidden",
-              scrollSnapType: "x mandatory",
-              padding: 0,
-            }}
-          >
-            {data.slice(0, 6).map((nft, i) => (
-              <li
-                key={i}
+            )}
+            <Box display={matches ? "none" : "block"}>
+              <ul
+                ref={scrollRef}
                 style={{
-                  width: "100%",
-                  flexShrink: 0,
-                  marginRight: "10px",
-                  position: "relative",
+                  listStyle: "none",
+                  display: "flex",
+                  overflow: "hidden",
+                  scrollSnapType: "x mandatory",
+                  padding: 0,
                 }}
               >
-                <NFT nft={nft} />
-              </li>
-            ))}
-          </ul>
-          <Box textAlign="center">
-            <Button
-              variant="contained"
-              sx={{ mr: 1 }}
-              onClick={() => prev()}
-              disabled={activePageIndex === 0}
-            >
-              <ArrowBack fontSize="small" />
-            </Button>
-            <Button
-              variant="contained"
-              onClick={() => next()}
-              disabled={activePageIndex === pages.length - 1}
-            >
-              <ArrowForward fontSize="small" />
-            </Button>
-          </Box>
-        </Box>
+                {data.slice(0, 6).map((nft, i) => (
+                  <li
+                    key={i}
+                    style={{
+                      width: "100%",
+                      flexShrink: 0,
+                      marginRight: "10px",
+                      position: "relative",
+                    }}
+                  >
+                    <NFT nft={nft} />
+                  </li>
+                ))}
+              </ul>
+              <Box textAlign="center">
+                <Button
+                  variant="contained"
+                  sx={{ mr: 1 }}
+                  onClick={() => prev()}
+                  disabled={activePageIndex === 0}
+                >
+                  <ArrowBack fontSize="small" />
+                </Button>
+                <Button
+                  variant="contained"
+                  onClick={() => next()}
+                  disabled={activePageIndex === pages.length - 1}
+                >
+                  <ArrowForward fontSize="small" />
+                </Button>
+              </Box>
+            </Box>
+          </>
+        ) : (
+          <Typography>There is no NFT yet.</Typography>
+        )}
       </Container>
     </Box>
   );

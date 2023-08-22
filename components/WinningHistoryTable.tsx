@@ -1,13 +1,5 @@
 import React, { useState } from "react";
-import {
-  Box,
-  Table,
-  TableRow,
-  TableBody,
-  Link,
-  TableCell,
-  Typography,
-} from "@mui/material";
+import { Box, Table, TableRow, TableBody, TableCell } from "@mui/material";
 import {
   TablePrimaryContainer,
   TablePrimaryCell,
@@ -15,7 +7,6 @@ import {
   TablePrimaryRow,
 } from "./styled";
 import Pagination from "@mui/material/Pagination";
-import { shortenHex } from "../utils";
 
 const convertTimestampToDateTime = (timestamp: any) => {
   var date_ob = new Date(timestamp * 1000);
@@ -40,19 +31,21 @@ const HistoryRow = ({ history }) => {
         {history.RecordType === 0
           ? "ETH Deposit"
           : history.RecordType === 1
-          ? "CS NFT"
+          ? "Cosmic Signature token"
           : "Donated NFT"}
       </TablePrimaryCell>
       <TablePrimaryCell>
         {convertTimestampToDateTime(history.TimeStamp)}
       </TablePrimaryCell>
-      <TablePrimaryCell>{history.RoundNum}</TablePrimaryCell>
-      <TablePrimaryCell>{history.AmountEth.toFixed(4)}</TablePrimaryCell>
+      <TablePrimaryCell align="center">{history.RoundNum}</TablePrimaryCell>
+      <TablePrimaryCell align="right">
+        {history.AmountEth.toFixed(4)}
+      </TablePrimaryCell>
       <TablePrimaryCell>{history.TokenAddress}</TablePrimaryCell>
-      <TablePrimaryCell>
+      <TablePrimaryCell align="right">
         {history.TokenId >= 0 && history.TokenId}
       </TablePrimaryCell>
-      <TablePrimaryCell>
+      <TablePrimaryCell align="right">
         {history.WinnerIndex >= 0 && history.WinnerIndex}
       </TablePrimaryCell>
     </TablePrimaryRow>
@@ -67,11 +60,11 @@ const HistoryTable = ({ winningHistory, perPage, curPage }) => {
           <TableRow>
             <TableCell>Record Type</TableCell>
             <TableCell>Datetime</TableCell>
-            <TableCell>Round</TableCell>
-            <TableCell>Amount (ETH)</TableCell>
+            <TableCell align="center">Round</TableCell>
+            <TableCell align="right">Amount (ETH)</TableCell>
             <TableCell>Token Address</TableCell>
-            <TableCell>Token ID</TableCell>
-            <TableCell>Winner Index</TableCell>
+            <TableCell align="right">Token ID</TableCell>
+            <TableCell align="right">Position</TableCell>
           </TableRow>
         </TablePrimaryHead>
         <TableBody>
