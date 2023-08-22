@@ -44,7 +44,7 @@ const PrizeInfo = ({ bidHistory, prizeNum, nftDonations, prizeInfo }) => {
   const handleAllDonatedNFTsClaim = async () => {
     try {
       const indexList = donatedNFTToClaim.map((item) => item.Index);
-      const res = await cosmicGameContract.claimManyDonatedNFTs();
+      const res = await cosmicGameContract.claimManyDonatedNFTs(indexList);
       console.log(res);
     } catch (err) {
       console.log(err);
@@ -151,25 +151,9 @@ const PrizeInfo = ({ bidHistory, prizeNum, nftDonations, prizeInfo }) => {
               <BiddingHistoryTable biddingHistory={bidHistory} />
             </Box>
             <Box mt={4}>
-              <Box
-                sx={{
-                  mb: 2,
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                }}
-              >
-                <Typography variant="h6">
-                  Raffle Winners{" "}
-                  {status.ETHRaffleToClaim > 0 &&
-                    `(${status.ETHRaffleToClaim.toFixed(6)} ETH)`}
-                </Typography>
-                {status.ETHRaffleToClaim > 0 && (
-                  <Button variant="contained" onClick={handleAllETHClaim}>
-                    Claim All
-                  </Button>
-                )}
-              </Box>
+              <Typography variant="h6" mb={2}>
+                Raffle Winners
+              </Typography>
               <RaffleWinnerTable
                 RaffleETHDeposits={prizeInfo.RaffleETHDeposits}
                 RaffleNFTWinners={prizeInfo.RaffleNFTWinners}

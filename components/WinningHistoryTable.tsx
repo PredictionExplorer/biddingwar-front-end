@@ -1,5 +1,13 @@
 import React, { useState } from "react";
-import { Box, Table, TableRow, TableBody, TableCell } from "@mui/material";
+import {
+  Box,
+  Table,
+  TableRow,
+  TableBody,
+  TableCell,
+  Typography,
+  Link,
+} from "@mui/material";
 import {
   TablePrimaryContainer,
   TablePrimaryCell,
@@ -43,7 +51,21 @@ const HistoryRow = ({ history }) => {
       </TablePrimaryCell>
       <TablePrimaryCell>{history.TokenAddress}</TablePrimaryCell>
       <TablePrimaryCell align="right">
-        {history.TokenId >= 0 && history.TokenId}
+        {history.TokenId >= 0 &&
+          (history.RecordType === 1 ? (
+            <Link
+              href={`/detail/${history.TokenId}`}
+              sx={{
+                textDecoration: "none",
+                fontSize: "inherit",
+                color: "inherit",
+              }}
+            >
+              {history.TokenId}
+            </Link>
+          ) : (
+            history.TokenId
+          ))}
       </TablePrimaryCell>
       <TablePrimaryCell align="right">
         {history.WinnerIndex >= 0 && history.WinnerIndex}
@@ -68,17 +90,11 @@ const HistoryTable = ({ winningHistory, perPage, curPage }) => {
           </TableRow>
         </TablePrimaryHead>
         <TableBody>
-          {winningHistory.length > 0 ? (
-            winningHistory
-              .slice((curPage - 1) * perPage, curPage * perPage)
-              .map((history, i) => <HistoryRow history={history} key={i} />)
-          ) : (
-            <TableRow>
-              <TablePrimaryCell align="center" colSpan={7}>
-                No history yet.
-              </TablePrimaryCell>
-            </TableRow>
-          )}
+          {winningHistory
+            .slice((curPage - 1) * perPage, curPage * perPage)
+            .map((history, i) => (
+              <HistoryRow history={history} key={i} />
+            ))}
         </TableBody>
       </Table>
     </TablePrimaryContainer>
@@ -88,7 +104,9 @@ const HistoryTable = ({ winningHistory, perPage, curPage }) => {
 const WinningHistoryTable = ({ winningHistory }) => {
   const perPage = 5;
   const [curPage, setCurrentPage] = useState(1);
-
+  if (winningHistory.length === 0) {
+    return <Typography>No history yet.</Typography>;
+  }
   return (
     <Box mt={2}>
       <HistoryTable

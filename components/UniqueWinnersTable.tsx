@@ -7,6 +7,7 @@ import {
   TableBody,
   TableCell,
   TableRow,
+  Typography,
 } from "@mui/material";
 import {
   TablePrimaryCell,
@@ -40,6 +41,9 @@ const UniqueWinnersRow = ({ winner }) => {
 export const UniqueWinnersTable = ({ list }) => {
   const perPage = 5;
   const [page, setPage] = useState(1);
+  if (list.length === 0) {
+    return <Typography>No bidders yet.</Typography>;
+  }
   return (
     <>
       <TablePrimaryContainer>
@@ -53,19 +57,9 @@ export const UniqueWinnersTable = ({ list }) => {
             </TableRow>
           </TablePrimaryHead>
           <TableBody>
-            {list.length > 0 ? (
-              list
-                .slice((page - 1) * perPage, page * perPage)
-                .map((winner) => (
-                  <UniqueWinnersRow winner={winner} key={winner.WinnerAid} />
-                ))
-            ) : (
-              <TableRow>
-                <TablePrimaryCell align="center" colSpan={3}>
-                  No bidders yet.
-                </TablePrimaryCell>
-              </TableRow>
-            )}
+            {list.slice((page - 1) * perPage, page * perPage).map((winner) => (
+              <UniqueWinnersRow winner={winner} key={winner.WinnerAid} />
+            ))}
           </TableBody>
         </Table>
       </TablePrimaryContainer>

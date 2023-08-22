@@ -6,6 +6,7 @@ import {
   TableBody,
   TableCell,
   TableRow,
+  Typography,
 } from "@mui/material";
 import {
   TablePrimaryCell,
@@ -48,6 +49,9 @@ const PrizeRow = ({ prize }) => {
 export const PrizeTable = ({ list }) => {
   const perPage = 5;
   const [page, setPage] = useState(1);
+  if (list.length === 0) {
+    return <Typography>No winners yet.</Typography>;
+  }
   return (
     <>
       <TablePrimaryContainer>
@@ -65,17 +69,9 @@ export const PrizeTable = ({ list }) => {
             </TableRow>
           </TablePrimaryHead>
           <TableBody>
-            {list.length > 0 ? (
-              list
-                .slice((page - 1) * perPage, page * perPage)
-                .map((prize) => <PrizeRow prize={prize} key={prize.EvtLogId} />)
-            ) : (
-              <TableRow>
-                <TablePrimaryCell align="center" colSpan={8}>
-                  No winners yet.
-                </TablePrimaryCell>
-              </TableRow>
-            )}
+            {list.slice((page - 1) * perPage, page * perPage).map((prize) => (
+              <PrizeRow prize={prize} key={prize.EvtLogId} />
+            ))}
           </TableBody>
         </Table>
       </TablePrimaryContainer>

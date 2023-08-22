@@ -23,7 +23,6 @@ import {
 import { convertTimestampToDateTime } from "../utils";
 import { ClaimableNFTTable } from "../components/ClaimableNFTTable";
 import { useActiveWeb3React } from "../hooks/web3";
-import WinningHistoryTable from "../components/WinningHistoryTable";
 import useCosmicGameContract from "../hooks/useCosmicGameContract";
 import useRaffleWalletContract from "../hooks/useRaffleWalletContract";
 import router from "next/router";
@@ -59,17 +58,9 @@ const MyWinningsTable = ({ list }) => {
           </TableRow>
         </TablePrimaryHead>
         <TableBody>
-          {list.length > 0 ? (
-            list.map((winning, i) => (
-              <MyWinningsRow key={i} winning={winning} />
-            ))
-          ) : (
-            <TableRow>
-              <TablePrimaryCell align="center" colSpan={8}>
-                No winnings yet.
-              </TablePrimaryCell>
-            </TableRow>
-          )}
+          {list.map((winning, i) => (
+            <MyWinningsRow key={i} winning={winning} />
+          ))}
         </TableBody>
       </Table>
     </TablePrimaryContainer>
@@ -83,7 +74,6 @@ const MyWinnings = () => {
   const perPage = 5;
   const [donatedNFTToClaim, setDonatedNFTToClaim] = useState([]);
   const [raffleETHToClaim, setRaffleETHToClaim] = useState([]);
-  const [claimHistory, setClaimHistory] = useState([]);
   const [isClaiming, setIsClaiming] = useState({
     donatedNFT: false,
     raffleETH: false,
@@ -148,15 +138,6 @@ const MyWinnings = () => {
   };
 
   useEffect(() => {
-    const fetchClaimHistory = async () => {
-      const res = await fetch(`/api/claimHistory/?address=${account}`);
-      const history = await res.json();
-      setClaimHistory(history);
-    };
-    fetchClaimHistory();
-  }, []);
-
-  useEffect(() => {
     const fetchUnclaimedDonatedNFTs = async () => {
       const res = await fetch(
         `/api/unclaimedDonatedNftByUser/?address=${account}`
@@ -196,32 +177,40 @@ const MyWinnings = () => {
         </Typography>
         <Box mt={6}>
           <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
-            <Typography variant="h5">
-              Raffle ETH{" "}
-              {status.ETHRaffleToClaim > 0 &&
-                `(${status.ETHRaffleToClaim.toFixed(6)} ETH)`}
-            </Typography>
+            <Typography variant="h5">Raffle ETH</Typography>
             {status.ETHRaffleToClaim > 0 && (
-              <Button
-                onClick={handleAllETHClaim}
-                variant="contained"
-                disabled={isClaiming.raffleETH}
-              >
-                Claim All
-              </Button>
+              <Box>
+                <Typography component="span" mr={2}>
+                  Your winnings are{" "}
+                  {`${status.ETHRaffleToClaim.toFixed(6)} ETH`}
+                </Typography>
+                <Button
+                  onClick={handleAllETHClaim}
+                  variant="contained"
+                  disabled={isClaiming.raffleETH}
+                >
+                  Claim All
+                </Button>
+              </Box>
             )}
           </Box>
-          <MyWinningsTable list={raffleETHToClaim} />
-          <Box display="flex" justifyContent="center" mt={4}>
-            <Pagination
-              color="primary"
-              page={curPage}
-              onChange={(_e, page) => setCurPage(page)}
-              count={Math.ceil(raffleETHToClaim.length / perPage)}
-              showFirstButton
-              showLastButton
-            />
-          </Box>
+          {raffleETHToClaim.length > 0 ? (
+            <>
+              <MyWinningsTable list={raffleETHToClaim} />
+              <Box display="flex" justifyContent="center" mt={4}>
+                <Pagination
+                  color="primary"
+                  page={curPage}
+                  onChange={(_e, page) => setCurPage(page)}
+                  count={Math.ceil(raffleETHToClaim.length / perPage)}
+                  showFirstButton
+                  showLastButton
+                />
+              </Box>
+            </>
+          ) : (
+            <Typography>No winnings yet.</Typography>
+          )}
         </Box>
         <Box mt={6}>
           <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
@@ -240,10 +229,6 @@ const MyWinnings = () => {
             list={donatedNFTToClaim}
             handleClaim={handleDonatedNFTsClaim}
           />
-        </Box>
-        <Box mt={6}>
-          <Typography variant="h5">History of Winnings</Typography>
-          <WinningHistoryTable winningHistory={claimHistory} />
         </Box>
       </MainWrapper>
     </>

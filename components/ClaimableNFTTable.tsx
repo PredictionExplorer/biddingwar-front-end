@@ -8,6 +8,7 @@ import {
   TableBody,
   TableCell,
   TableRow,
+  Typography,
 } from "@mui/material";
 import {
   TablePrimaryCell,
@@ -50,7 +51,9 @@ const NFTRow = ({ nft, handleClaim }) => {
 export const ClaimableNFTTable = ({ list, handleClaim }) => {
   const perPage = 5;
   const [page, setPage] = useState(1);
-
+  if (list.length === 0) {
+    return <Typography>No NFTs yet.</Typography>;
+  }
   return (
     <>
       <TablePrimaryContainer>
@@ -66,23 +69,9 @@ export const ClaimableNFTTable = ({ list, handleClaim }) => {
             </TableRow>
           </TablePrimaryHead>
           <TableBody>
-            {list.length > 0 ? (
-              list
-                .slice((page - 1) * perPage, page * perPage)
-                .map((nft) => (
-                  <NFTRow
-                    nft={nft}
-                    key={nft.EvtLogId}
-                    handleClaim={handleClaim}
-                  />
-                ))
-            ) : (
-              <TableRow>
-                <TablePrimaryCell align="center" colSpan={6}>
-                  No NFTs yet.
-                </TablePrimaryCell>
-              </TableRow>
-            )}
+            {list.slice((page - 1) * perPage, page * perPage).map((nft) => (
+              <NFTRow nft={nft} key={nft.EvtLogId} handleClaim={handleClaim} />
+            ))}
           </TableBody>
         </Table>
       </TablePrimaryContainer>

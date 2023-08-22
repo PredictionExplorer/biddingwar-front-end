@@ -50,15 +50,9 @@ const OfferTable = ({ offers }) => {
           </TableRow>
         </TablePrimaryHead>
         <TableBody>
-          {offers.length > 0 ? (
-            offers.map((offer, i) => <OfferRow offer={offer} key={i} />)
-          ) : (
-            <TableRow>
-              <TablePrimaryCell align="center" colSpan={8}>
-                No offers yet.
-              </TablePrimaryCell>
-            </TableRow>
-          )}
+          {offers.map((offer, i) => (
+            <OfferRow offer={offer} key={i} />
+          ))}
         </TableBody>
       </Table>
     </TablePrimaryContainer>
@@ -68,7 +62,9 @@ const OfferTable = ({ offers }) => {
 const BuyOfferTable = ({ offers }) => {
   const perPage = 20;
   const [curPage, setCurPage] = useState(1);
-
+  if (offers.length === 0) {
+    return <Typography>No offers yet.</Typography>;
+  }
   return (
     <Box mt={4}>
       <OfferTable
