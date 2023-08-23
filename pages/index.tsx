@@ -730,12 +730,13 @@ const NewHome = ({
                         >
                           Claim Prize
                           <Box sx={{ display: "flex", alignItems: "center" }}>
-                            {prizeTime + 300000 > Date.now() && (
-                              <>
-                                available in &nbsp;
-                                <Countdown date={prizeTime + 300000} />
-                              </>
-                            )}
+                            {prizeTime + 300000 > Date.now() &&
+                              data.LastBidderAddr !== account && (
+                                <>
+                                  available in &nbsp;
+                                  <Countdown date={prizeTime + 300000} />
+                                </>
+                              )}
                             &nbsp;
                             <ArrowForward sx={{ width: 22, height: 22 }} />
                           </Box>
