@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import {
   Box,
   Button,
+  Link,
   Pagination,
   Table,
   TableBody,
@@ -229,6 +230,11 @@ const MyWinnings = () => {
             list={donatedNFTToClaim}
             handleClaim={handleDonatedNFTsClaim}
           />
+        </Box>
+        <Box mt={6}>
+          <Link sx={{ textDecoration: "none" }} href="/winning-history">
+            <Typography variant="h6">Go to my winning history page.</Typography>
+          </Link>
         </Box>
       </MainWrapper>
     </>
