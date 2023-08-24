@@ -2,7 +2,6 @@ import React from "react";
 import { Box, Typography } from "@mui/material";
 import Head from "next/head";
 import { MainWrapper } from "../../components/styled";
-import { GetServerSidePropsContext } from "next";
 import api from "../../services/api";
 import { PrizeTable } from "../../components/PrizeTable";
 
@@ -30,8 +29,9 @@ const PrizeWinners = ({ prizeClaims }) => {
   );
 };
 
-export async function getServerSideProps(context: GetServerSidePropsContext) {
-  const prizeClaims = await api.get_prize_list();
+export async function getServerSideProps() {
+  let prizeClaims = await api.get_prize_list();
+  prizeClaims = prizeClaims.sort((a, b) => b.TimeStamp - a.TimeStamp);
   return {
     props: {
       prizeClaims,

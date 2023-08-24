@@ -143,14 +143,16 @@ const MyWinnings = () => {
       const res = await fetch(
         `/api/unclaimedDonatedNftByUser/?address=${account}`
       );
-      const nfts = await res.json();
+      let nfts = await res.json();
+      nfts = nfts.sort((a, b) => a.TimeStamp - b.TimeStamp);
       setDonatedNFTToClaim(nfts);
     };
     const fetchUnclaimedRaffleETHDeposits = async () => {
       const res = await fetch(
         `/api/unclaimedRaffleDepositsByUser/?address=${account}`
       );
-      const deposits = await res.json();
+      let deposits = await res.json();
+      deposits = deposits.sort((a, b) => b.TimeStamp - a.TimeStamp);
       setRaffleETHToClaim(deposits);
     };
     if (status.NumDonatedNFTToClaim > 0) {
@@ -197,7 +199,12 @@ const MyWinnings = () => {
           </Box>
           {raffleETHToClaim.length > 0 ? (
             <>
-              <MyWinningsTable list={raffleETHToClaim} />
+              <MyWinningsTable
+                list={raffleETHToClaim.slice(
+                  (curPage - 1) * perPage,
+                  curPage * perPage
+                )}
+              />
               <Box display="flex" justifyContent="center" mt={4}>
                 <Pagination
                   color="primary"
@@ -232,9 +239,9 @@ const MyWinnings = () => {
           />
         </Box>
         <Box mt={6}>
-          <Link sx={{ textDecoration: "none" }} href="/winning-history">
-            <Typography variant="h6">Go to my winning history page.</Typography>
-          </Link>
+          <Button variant="text" href="/winning-history">
+            Go to my winning history page.
+          </Button>
         </Box>
       </MainWrapper>
     </>

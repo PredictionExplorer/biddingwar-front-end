@@ -56,7 +56,6 @@ const HistoryRow = ({ history }) => {
             <Link
               href={`/detail/${history.TokenId}`}
               sx={{
-                textDecoration: "none",
                 fontSize: "inherit",
                 color: "inherit",
               }}
