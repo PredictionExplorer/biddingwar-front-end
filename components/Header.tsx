@@ -20,14 +20,26 @@ import { NavLink, AppBarWrapper, DrawerList } from "./styled";
 import ListNavItem from "./ListNavItem";
 import ListItemButton from "./ListItemButton";
 import { useApiData } from "../contexts/ApiDataContext";
+import { useActiveWeb3React } from "../hooks/web3";
 
 const Header = () => {
   const [state, setState] = useState({
     mobileView: false,
     drawerOpen: false,
   });
+  const [claimHistory, setClaimHistory] = useState([]);
   const { apiData: status } = useApiData();
   const { mobileView, drawerOpen } = state;
+  const { account } = useActiveWeb3React();
+
+  useEffect(() => {
+    const fetchClaimHistory = async () => {
+      const res = await fetch(`/api/claimHistory/?address=${account}`);
+      const history = await res.json();
+      setClaimHistory(history);
+    };
+    fetchClaimHistory();
+  }, []);
 
   useEffect(() => {
     const setResponsiveness = () => {
@@ -54,6 +66,14 @@ const Header = () => {
         {NAV_SECTIONS.map((nav, i) => (
           <ListNavItem key={i} nav={nav} />
         ))}
+        {claimHistory.length > 0 && (
+          <ListNavItem
+            nav={{
+              title: "Winning History",
+              route: "/winning-history",
+            }}
+          />
+        )}
         {(status.ETHRaffleToClaim > 0 || status.NumDonatedNFTToClaim > 0) && (
           <Box ml={3}>
             <Badge color="secondary" variant="dot">
@@ -100,10 +120,27 @@ const Header = () => {
                 key={i}
                 nav={nav}
                 sx={{ justifyContent: "center" }}
-              >
-                <NavLink href={nav.route}>{nav.title}</NavLink>
-              </ListItemButton>
+              />
             ))}
+            {claimHistory.length > 0 && (
+              <ListItemButton
+                nav={{
+                  title: "Winning History",
+                  route: "/winning-history",
+                }}
+                sx={{ justifyContent: "center" }}
+              />
+            )}
+            {(status.ETHRaffleToClaim > 0 ||
+              status.NumDonatedNFTToClaim > 0) && (
+              <Box ml={3}>
+                <Badge color="secondary" variant="dot">
+                  <NavLink href="/my-winnings">
+                    <EmojiEventsIcon />
+                  </NavLink>
+                </Badge>
+              </Box>
+            )}
           </DrawerList>
         </Drawer>
       </Toolbar>
