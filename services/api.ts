@@ -146,3 +146,6 @@ class ApiService {
 }
 
 export default new ApiService();
+
+/// add seed to nft detail
+// gaslimit
