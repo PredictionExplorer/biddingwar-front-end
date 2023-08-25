@@ -251,6 +251,13 @@ const NFTTrait = ({ nft, prizeInfo }) => {
             </Box>
             <Box mb={1}>
               <Typography color="primary" component="span">
+                Seed:
+              </Typography>
+              &nbsp;
+              <Typography component="span">{nft.Seed}</Typography>
+            </Box>
+            <Box mb={1}>
+              <Typography color="primary" component="span">
                 Prize Type:
               </Typography>
               &nbsp;
