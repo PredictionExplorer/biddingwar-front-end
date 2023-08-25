@@ -146,3 +146,6 @@ class ApiService {
 }
 
 export default new ApiService();
+
+// claim prize page nft
+// winning history button on top menu

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -17,8 +17,22 @@ import {
   TablePrimaryRow,
 } from "../components/styled";
 import { convertTimestampToDateTime, shortenHex } from "../utils";
+import axios from "axios";
+import NFTImage from "./NFTImage";
 
 const NFTRow = ({ nft, handleClaim }) => {
+  const [tokenURI, setTokenURI] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const { data } = await axios.get(nft.NFTTokenURI);
+      setTokenURI(data);
+    };
+    if (nft.NFTTokenURI) {
+      fetchData();
+    }
+  }, []);
+
   if (!nft) {
     return <TablePrimaryRow></TablePrimaryRow>;
   }
@@ -39,6 +53,9 @@ const NFTRow = ({ nft, handleClaim }) => {
       <TablePrimaryCell align="center">{nft.RoundNum}</TablePrimaryCell>
       <TablePrimaryCell>{nft.TokenAddr}</TablePrimaryCell>
       <TablePrimaryCell align="right">{nft.NFTTokenId}</TablePrimaryCell>
+      <TablePrimaryCell>
+        <NFTImage src={tokenURI?.image} />
+      </TablePrimaryCell>
       <TablePrimaryCell>
         <Button variant="contained" onClick={(e) => handleClaim(e, nft.Index)}>
           Claim
@@ -65,6 +82,7 @@ export const ClaimableNFTTable = ({ list, handleClaim }) => {
               <TableCell align="center">Round #</TableCell>
               <TableCell>Token Address</TableCell>
               <TableCell align="right">Token ID</TableCell>
+              <TableCell>Token Image</TableCell>
               <TableCell></TableCell>
             </TableRow>
           </TablePrimaryHead>
