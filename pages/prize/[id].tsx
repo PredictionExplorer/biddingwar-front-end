@@ -208,10 +208,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   const prizeNum = Array.isArray(id) ? id[0] : id;
   const nftDonations = await api.get_donations_nft_by_round(Number(prizeNum));
   const prizeInfo = await api.get_prize_info(Number(prizeNum));
-  const bidHistory = await api.get_bid_list_by_round(
-    Number(prizeNum) - 1,
-    "desc"
-  );
+  const bidHistory = await api.get_bid_list_by_round(Number(prizeNum), "desc");
   return {
     props: {
       bidHistory,
