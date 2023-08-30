@@ -192,13 +192,6 @@ const NewHome = ({
   };
 
   const onBid = async () => {
-    router.push({
-      pathname: "/my-wallet",
-      query: {
-        message: "success",
-      },
-    });
-    return;
     let bidPrice, newBidPrice;
     setIsBidding(true);
     try {
