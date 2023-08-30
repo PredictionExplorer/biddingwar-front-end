@@ -1,5 +1,5 @@
-import React from "react";
-import { Box, Grid, Typography } from "@mui/material";
+import React, { useState } from "react";
+import { Box, Grid, Pagination, Typography } from "@mui/material";
 import Head from "next/head";
 import { MainWrapper } from "../components/styled";
 import api from "../services/api";
@@ -55,7 +55,8 @@ const Statistics = ({
       : nftDonations.length > 9
       ? { xs: 6, sm: 4, md: 3, lg: 3 }
       : { xs: 12, sm: 6, md: 4, lg: 4 };
-
+  const [curPage, setCurrentPage] = useState(1);
+  const perPage = 12;
   return (
     <>
       <Head>
@@ -184,29 +185,44 @@ const Statistics = ({
           <UniqueWinnersTable list={uniqueWinners} />
         </Box>
         <Box mt={4}>
-          <Typography variant="h6" mb={2}>Donated NFTs</Typography>
-          <Grid container spacing={2} mt={2}>
-            {nftDonations.length ? (
-              nftDonations.map((nft) => (
-                <Grid
-                  item
-                  key={nft.RecordId}
-                  xs={gridLayout.xs}
-                  sm={gridLayout.sm}
-                  md={gridLayout.md}
-                  lg={gridLayout.lg}
-                >
-                  <DonatedNFT nft={nft} />
-                </Grid>
-              ))
-            ) : (
-              <Grid item>
-                <Typography>
-                  No ERC721 tokens were donated on this round
-                </Typography>
+          <Typography variant="h6" mb={2}>
+            Donated NFTs
+          </Typography>
+          {nftDonations.length > 0 ? (
+            <>
+              <Grid container spacing={2} mt={2}>
+                {nftDonations
+                  .slice((curPage - 1) * perPage, curPage * perPage)
+                  .map((nft) => (
+                    <Grid
+                      item
+                      key={nft.RecordId}
+                      xs={gridLayout.xs}
+                      sm={gridLayout.sm}
+                      md={gridLayout.md}
+                      lg={gridLayout.lg}
+                    >
+                      <DonatedNFT nft={nft} />
+                    </Grid>
+                  ))}
               </Grid>
-            )}
-          </Grid>
+              <Box display="flex" justifyContent="center" mt={4}>
+                <Pagination
+                  color="primary"
+                  page={curPage}
+                  onChange={(e, page) => setCurrentPage(page)}
+                  count={Math.ceil(nftDonations.length / perPage)}
+                  hideNextButton
+                  hidePrevButton
+                  shape="rounded"
+                />
+              </Box>
+            </>
+          ) : (
+            <Typography mt={2}>
+              No ERC721 tokens were donated on this round
+            </Typography>
+          )}
         </Box>
       </MainWrapper>
     </>

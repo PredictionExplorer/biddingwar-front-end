@@ -16,6 +16,7 @@ import {
   Snackbar,
   Alert,
   InputAdornment,
+  Pagination,
 } from "@mui/material";
 import {
   CustomTextField,
@@ -83,6 +84,8 @@ const NewHome = ({
   const [bannerTokenId, setBannerTokenId] = useState("");
   const [rwlknftIds, setRwlknftIds] = useState([]);
   const [roundStartedAgo, setRoundStartedAgo] = useState("");
+  const [curPage, setCurrentPage] = useState(1);
+  const perPage = 12;
   // const [blackVideo, setBlackVideo] = useState(null);
 
   const { library, account } = useActiveWeb3React();
@@ -903,20 +906,33 @@ const NewHome = ({
             </Typography>
           </Box>
           {nftDonations.length > 0 ? (
-            <Grid container spacing={2} mt={2}>
-              {nftDonations.map((nft) => (
-                <Grid
-                  item
-                  key={nft.RecordId}
-                  xs={gridLayout.xs}
-                  sm={gridLayout.sm}
-                  md={gridLayout.md}
-                  lg={gridLayout.lg}
-                >
-                  <DonatedNFT nft={nft} />
-                </Grid>
-              ))}
-            </Grid>
+            <>
+              <Grid container spacing={2} mt={2}>
+                {nftDonations.map((nft) => (
+                  <Grid
+                    item
+                    key={nft.RecordId}
+                    xs={gridLayout.xs}
+                    sm={gridLayout.sm}
+                    md={gridLayout.md}
+                    lg={gridLayout.lg}
+                  >
+                    <DonatedNFT nft={nft} />
+                  </Grid>
+                ))}
+              </Grid>
+              <Box display="flex" justifyContent="center" mt={4}>
+                <Pagination
+                  color="primary"
+                  page={curPage}
+                  onChange={(e, page) => setCurrentPage(page)}
+                  count={Math.ceil(nftDonations.length / perPage)}
+                  hideNextButton
+                  hidePrevButton
+                  shape="rounded"
+                />
+              </Box>
+            </>
           ) : (
             <Typography mt={2}>
               No ERC721 tokens were donated on this round

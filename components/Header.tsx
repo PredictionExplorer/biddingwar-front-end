@@ -76,7 +76,7 @@ const Header = () => {
         )}
         {(status.ETHRaffleToClaim > 0 || status.NumDonatedNFTToClaim > 0) && (
           <Box ml={3}>
-            <Badge color="secondary" variant="dot">
+            <Badge color="error" variant="dot">
               <NavLink href="/my-winnings">
                 <EmojiEventsIcon />
               </NavLink>
@@ -134,7 +134,7 @@ const Header = () => {
             {(status.ETHRaffleToClaim > 0 ||
               status.NumDonatedNFTToClaim > 0) && (
               <Box ml={3}>
-                <Badge color="secondary" variant="dot">
+                <Badge color="error" variant="dot">
                   <NavLink href="/my-winnings">
                     <EmojiEventsIcon />
                   </NavLink>

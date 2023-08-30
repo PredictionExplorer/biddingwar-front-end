@@ -409,7 +409,7 @@ export const CustomTextField = styled(TextField)({
 
 export const StyledInput = styled('input')({
   '&::-webkit-outer-spin-button, &::-webkit-inner-spin-button': {
-    '-webkit-appearance': "inner-spin-button !important",
+    WebkitAppearance: "inner-spin-button !important",
     width: "15px",
     position: "absolute",
     padding: "0px 6px !important",

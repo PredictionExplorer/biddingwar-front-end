@@ -53,7 +53,7 @@ export const UniqueWinnersTable = ({ list }) => {
               <TableCell>Winner Address</TableCell>
               <TableCell>Prizes Taken</TableCell>
               <TableCell>Max Prize</TableCell>
-              <TableCell>Prizes sum (ETH)</TableCell>
+              <TableCell>Prizes Sum (ETH)</TableCell>
             </TableRow>
           </TablePrimaryHead>
           <TableBody>
