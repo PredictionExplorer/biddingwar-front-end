@@ -40,6 +40,14 @@ const WinnerRow = ({ winner, type }) => {
       <TablePrimaryCell>
         {winner.Amount ? `${winner.Amount.toFixed(4)}Ξ` : ""}
       </TablePrimaryCell>
+      <TablePrimaryCell>
+        <Link
+          href={`/detail/${winner.TokenId}`}
+          style={{ color: "rgba(255, 255, 255, 0.68)", fontSize: 14 }}
+        >
+          {winner.TokenId}
+        </Link>
+      </TablePrimaryCell>
     </TablePrimaryRow>
   );
 };
@@ -62,6 +70,7 @@ const RaffleWinnerTable = ({ RaffleETHDeposits, RaffleNFTWinners }) => {
               <TableCell>Round #</TableCell>
               <TableCell>Type</TableCell>
               <TableCell>Amount</TableCell>
+              <TableCell>Token ID</TableCell>
             </TableRow>
           </TablePrimaryHead>
           <TableBody>

@@ -15,7 +15,7 @@ import {
   TablePrimaryContainer,
   TablePrimaryHead,
   TablePrimaryRow,
-} from "../components/styled";
+} from "./styled";
 import { convertTimestampToDateTime, shortenHex } from "../utils";
 import axios from "axios";
 import NFTImage from "./NFTImage";
@@ -52,20 +52,27 @@ const NFTRow = ({ nft, handleClaim }) => {
       </TablePrimaryCell>
       <TablePrimaryCell align="center">{nft.RoundNum}</TablePrimaryCell>
       <TablePrimaryCell>{nft.TokenAddr}</TablePrimaryCell>
-      <TablePrimaryCell align="right">{nft.NFTTokenId}</TablePrimaryCell>
+      <TablePrimaryCell align="right">
+        {nft.NFTTokenId || nft.TokenId}
+      </TablePrimaryCell>
       <TablePrimaryCell>
         <NFTImage src={tokenURI?.image} />
       </TablePrimaryCell>
       <TablePrimaryCell>
-        <Button variant="contained" onClick={(e) => handleClaim(e, nft.Index)}>
-          Claim
-        </Button>
+        {nft.NFTTokenId === "" && (
+          <Button
+            variant="contained"
+            onClick={(e) => handleClaim(e, nft.Index)}
+          >
+            Claim
+          </Button>
+        )}
       </TablePrimaryCell>
     </TablePrimaryRow>
   );
 };
 
-export const ClaimableNFTTable = ({ list, handleClaim }) => {
+export const DonatedNFTTable = ({ list, handleClaim }) => {
   const perPage = 5;
   const [page, setPage] = useState(1);
   if (list.length === 0) {
@@ -88,7 +95,7 @@ export const ClaimableNFTTable = ({ list, handleClaim }) => {
           </TablePrimaryHead>
           <TableBody>
             {list.slice((page - 1) * perPage, page * perPage).map((nft) => (
-              <NFTRow nft={nft} key={nft.EvtLogId} handleClaim={handleClaim} />
+              <NFTRow nft={nft} key={nft.RecordId} handleClaim={handleClaim} />
             ))}
           </TableBody>
         </Table>

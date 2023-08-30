@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import {
   Box,
   Button,
-  Link,
   Pagination,
   Table,
   TableBody,
@@ -22,7 +21,7 @@ import {
   TablePrimaryRow,
 } from "../components/styled";
 import { convertTimestampToDateTime } from "../utils";
-import { ClaimableNFTTable } from "../components/ClaimableNFTTable";
+import { DonatedNFTTable } from "../components/DonatedNFTTable";
 import { useActiveWeb3React } from "../hooks/web3";
 import useCosmicGameContract from "../hooks/useCosmicGameContract";
 import useRaffleWalletContract from "../hooks/useRaffleWalletContract";
@@ -180,11 +179,11 @@ const MyWinnings = () => {
         </Typography>
         <Box mt={6}>
           <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
-            <Typography variant="h5">Raffle ETH</Typography>
+            <Typography variant="h5">Claimable Raffle ETH</Typography>
             {status.ETHRaffleToClaim > 0 && (
               <Box>
                 <Typography component="span" mr={2}>
-                  Your winnings are{" "}
+                  Your claimable winnings are{" "}
                   {`${status.ETHRaffleToClaim.toFixed(6)} ETH`}
                 </Typography>
                 <Button
@@ -233,7 +232,7 @@ const MyWinnings = () => {
               </Button>
             )}
           </Box>
-          <ClaimableNFTTable
+          <DonatedNFTTable
             list={donatedNFTToClaim}
             handleClaim={handleDonatedNFTsClaim}
           />
