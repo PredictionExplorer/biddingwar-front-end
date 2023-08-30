@@ -136,7 +136,7 @@ const NewHome = ({
       const seed = await cosmicSignatureContract.seeds(token_id);
       await api.create(token_id, seed);
       router.push({
-        pathname: `/detail/${token_id}`,
+        pathname: "/my-wallet",
         query: {
           message: "success",
         },
@@ -192,6 +192,13 @@ const NewHome = ({
   };
 
   const onBid = async () => {
+    router.push({
+      pathname: "/my-wallet",
+      query: {
+        message: "success",
+      },
+    });
+    return;
     let bidPrice, newBidPrice;
     setIsBidding(true);
     try {

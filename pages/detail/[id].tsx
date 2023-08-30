@@ -1,14 +1,11 @@
 import { GetServerSidePropsContext } from "next";
-import { useRouter } from "next/router";
 import React from "react";
-import { Box, Alert } from "@mui/material";
 import Head from "next/head";
 import NFTTrait from "../../components/NFTTrait";
 import { MainWrapper } from "../../components/styled";
 import api from "../../services/api";
 
 const Detail = ({ nft, prizeInfo }) => {
-  const router = useRouter();
   return (
     <>
       <Head>
@@ -21,15 +18,6 @@ const Detail = ({ nft, prizeInfo }) => {
           paddingRight: 0,
         }}
       >
-        {router.query && router.query.message && (
-          <Box px={8} mb={2}>
-            <Alert variant="outlined" severity="success">
-              {router.query.message === "success"
-                ? "Media files are being generated. Please refrersh the page in a few minutes."
-                : ""}
-            </Alert>
-          </Box>
-        )}
         <NFTTrait nft={nft} prizeInfo={prizeInfo} />
       </MainWrapper>
     </>

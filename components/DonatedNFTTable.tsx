@@ -59,7 +59,7 @@ const NFTRow = ({ nft, handleClaim }) => {
         <NFTImage src={tokenURI?.image} />
       </TablePrimaryCell>
       <TablePrimaryCell>
-        {nft.NFTTokenId === "" && (
+        {!nft.WinnerAddr && (
           <Button
             variant="contained"
             onClick={(e) => handleClaim(e, nft.Index)}

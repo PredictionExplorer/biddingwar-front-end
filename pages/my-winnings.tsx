@@ -210,8 +210,9 @@ const MyWinnings = () => {
                   page={curPage}
                   onChange={(_e, page) => setCurPage(page)}
                   count={Math.ceil(raffleETHToClaim.length / perPage)}
-                  showFirstButton
-                  showLastButton
+                  hideNextButton
+                  hidePrevButton
+                  shape="rounded"
                 />
               </Box>
             </>

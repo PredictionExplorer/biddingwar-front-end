@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {
+  Alert,
   Box,
   Button,
   Link,
@@ -21,7 +22,7 @@ import {
 import { convertTimestampToDateTime } from "../utils";
 import { useActiveWeb3React } from "../hooks/web3";
 import useRaffleWalletContract from "../hooks/useRaffleWalletContract";
-import router from "next/router";
+import { useRouter } from "next/router";
 import { useApiData } from "../contexts/ApiDataContext";
 import useCosmicGameContract from "../hooks/useCosmicGameContract";
 import { DonatedNFTTable } from "../components/DonatedNFTTable";
@@ -73,8 +74,9 @@ const MyWinningsTable = ({ list }) => {
           page={curPage}
           onChange={(_e, page) => setCurPage(page)}
           count={Math.ceil(list.length / perPage)}
-          showFirstButton
-          showLastButton
+          hideNextButton
+          hidePrevButton
+          shape="rounded"
         />
       </Box>
     </>
@@ -155,8 +157,9 @@ const RaffleNFTTable = ({ list }) => {
           page={curPage}
           onChange={(_e, page) => setCurPage(page)}
           count={Math.ceil(list.length / perPage)}
-          showFirstButton
-          showLastButton
+          hideNextButton
+          hidePrevButton
+          shape="rounded"
         />
       </Box>
     </>
@@ -164,6 +167,7 @@ const RaffleNFTTable = ({ list }) => {
 };
 
 const MyWallet = () => {
+  const router = useRouter();
   const { account } = useActiveWeb3React();
   const { apiData: status } = useApiData();
   const [raffleETHToClaim, setRaffleETHToClaim] = useState([]);
@@ -276,6 +280,15 @@ const MyWallet = () => {
         <meta name="description" content="" />
       </Head>
       <MainWrapper>
+        {router.query && router.query.message && (
+          <Box px={8} mb={8}>
+            <Alert variant="outlined" severity="success">
+              {router.query.message === "success"
+                ? "Congratulations! You claimed the prize successfully."
+                : ""}
+            </Alert>
+          </Box>
+        )}
         <Typography
           variant="h4"
           color="primary"
