@@ -165,7 +165,7 @@ const MyWinnings = () => {
   return (
     <>
       <Head>
-        <title>My Winnings | Cosmic Signature</title>
+        <title>Pending Winnings | Cosmic Signature</title>
         <meta name="description" content="" />
       </Head>
       <MainWrapper>
@@ -175,7 +175,7 @@ const MyWinnings = () => {
           gutterBottom
           textAlign="center"
         >
-          My Winnings
+          Pending Winnings
         </Typography>
         <Box mt={6}>
           <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>

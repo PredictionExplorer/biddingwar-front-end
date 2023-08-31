@@ -39,7 +39,7 @@ const HistoryRow = ({ history }) => {
         {history.RecordType === 0
           ? "ETH Deposit"
           : history.RecordType === 1
-          ? "Cosmic Signature token"
+          ? "Cosmic Signature Token"
           : "Donated NFT"}
       </TablePrimaryCell>
       <TablePrimaryCell>
@@ -69,6 +69,9 @@ const HistoryRow = ({ history }) => {
       <TablePrimaryCell align="right">
         {history.WinnerIndex >= 0 && history.WinnerIndex}
       </TablePrimaryCell>
+      <TablePrimaryCell align="right">
+        {history.Claimed ? "Claimed" : "Unclaimed"}
+      </TablePrimaryCell>
     </TablePrimaryRow>
   );
 };
@@ -86,6 +89,7 @@ const HistoryTable = ({ winningHistory, perPage, curPage }) => {
             <TableCell>Token Address</TableCell>
             <TableCell align="right">Token ID</TableCell>
             <TableCell align="right">Position</TableCell>
+            <TableCell align="right">Status</TableCell>
           </TableRow>
         </TablePrimaryHead>
         <TableBody>

@@ -83,7 +83,7 @@ const MyWinningsTable = ({ list }) => {
   );
 };
 
-const RaffleNFTRow = ({ nft }) => {
+const CSTRow = ({ nft }) => {
   if (!nft) {
     return <TablePrimaryRow></TablePrimaryRow>;
   }
@@ -110,20 +110,22 @@ const RaffleNFTRow = ({ nft }) => {
         </Link>
       </TablePrimaryCell>
       <TablePrimaryCell align="right">
-        {nft.PrizeNum > -1 && (
+        {nft.PrizeNum > -1 ? (
           <Link
             href={`/prize/${nft.PrizeNum}`}
             style={{ color: "rgba(255, 255, 255, 0.68)", fontSize: 14 }}
           >
-            {nft.PrizeNum}
+            Prize Winner (#{nft.PrizeNum})
           </Link>
+        ) : (
+          "Raffle Winner"
         )}
       </TablePrimaryCell>
     </TablePrimaryRow>
   );
 };
 
-const RaffleNFTTable = ({ list }) => {
+const CSTTable = ({ list }) => {
   const perPage = 5;
   const [curPage, setCurPage] = useState(1);
   if (list.length === 0) {
@@ -139,14 +141,14 @@ const RaffleNFTTable = ({ list }) => {
               <TableCell>Date</TableCell>
               <TableCell align="center">Winner Address</TableCell>
               <TableCell align="center">Token ID</TableCell>
-              <TableCell align="right">Prize Num</TableCell>
+              <TableCell align="right">Prize Type</TableCell>
             </TableRow>
           </TablePrimaryHead>
           <TableBody>
             {list
               .slice((curPage - 1) * perPage, curPage * perPage)
               .map((nft) => (
-                <RaffleNFTRow key={nft.EvtLogId} nft={nft} />
+                <CSTRow key={nft.EvtLogId} nft={nft} />
               ))}
           </TableBody>
         </Table>
@@ -319,8 +321,14 @@ const MyWallet = () => {
           <MyWinningsTable list={raffleETHToClaim} />
         </Box>
         <Box mt={6}>
+          <Typography variant="h5" mb={2}>
+            Cosmic Signature Tokens
+          </Typography>
+          <CSTTable list={CSTList} />
+        </Box>
+        <Box mt={6}>
           <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
-            <Typography variant="h5">Raffle NFTs</Typography>
+            <Typography variant="h5">Donated NFTs</Typography>
             {status.NumDonatedNFTToClaim > 0 && (
               <Button
                 onClick={handleAllDonatedNFTsClaim}
@@ -331,12 +339,6 @@ const MyWallet = () => {
               </Button>
             )}
           </Box>
-          <RaffleNFTTable list={CSTList} />
-        </Box>
-        <Box mt={6}>
-          <Typography variant="h5" mb={2}>
-            Donated NFTs
-          </Typography>
           <DonatedNFTTable
             list={[...unclaimedDonatedNFTs, ...claimedDonatedNFTs]}
             handleClaim={handleDonatedNFTsClaim}
