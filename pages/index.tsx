@@ -519,11 +519,10 @@ const NewHome = ({
                 />
               </CardActionArea>
             </StyledCard>
-            <Box>
-              <Typography color="primary" mt={4}>
-                Distribution of Prize funds
-              </Typography>
-
+            <Typography color="primary" mt={4}>
+              Random sample of your possible NFT
+            </Typography>
+            <Box mt={4}>
               <Chart
                 transitions={false}
                 style={{ width: "100%", height: matches ? 300 : 200 }}
@@ -545,6 +544,9 @@ const NewHome = ({
                   />
                 </ChartSeries>
               </Chart>
+              <Typography color="primary" mt={4}>
+                Distribution of Prize funds
+              </Typography>
             </Box>
           </Grid>
           <Grid item xs={12} sm={12} md={6} lg={6}>
