@@ -11,6 +11,10 @@ import {
   IconButton,
 } from "@mui/material";
 import PriorityHighIcon from "@mui/icons-material/PriorityHigh";
+import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
+import ConfirmationNumberIcon from "@mui/icons-material/ConfirmationNumber";
+import VolunteerActivismIcon from "@mui/icons-material/VolunteerActivism";
+import TokenIcon from "@mui/icons-material/Token";
 import {
   TablePrimaryContainer,
   TablePrimaryCell,
@@ -41,19 +45,37 @@ const HistoryRow = ({ history }) => {
       sx={!history.Claimed && { background: "rgba(255, 255, 255, 0.06)" }}
     >
       <TablePrimaryCell>
-        {history.RecordType === 0
-          ? "ETH Deposit"
-          : history.RecordType === 1
-          ? "Cosmic Signature Token"
-          : "Donated NFT"}
-        &nbsp;
-        {!history.Claimed && (
-          <Tooltip title="This winning is unclaimed, go to Pending Winnings page and claim it.">
-            <IconButton size="small">
-              <PriorityHighIcon fontSize="small" color="error" />
-            </IconButton>
-          </Tooltip>
-        )}
+        <Box sx={{ display: "flex", alignItems: "center" }}>
+          {history.RecordType === 0 ? (
+            <>
+              <ConfirmationNumberIcon />
+              &nbsp;<span>ETH Deposit</span>
+            </>
+          ) : history.RecordType === 1 ? (
+            <>
+              <TokenIcon />
+              &nbsp;<span>Cosmic Signature Token</span>
+            </>
+          ) : history.RecordType === 2 ? (
+            <>
+              <VolunteerActivismIcon />
+              &nbsp;<span>Donated NFT</span>
+            </>
+          ) : (
+            <>
+              <EmojiEventsIcon />
+              &nbsp;<span>Main Prize</span>
+            </>
+          )}
+          &nbsp;
+          {!history.Claimed && (
+            <Tooltip title="This winning is unclaimed, go to Pending Winnings page and claim it.">
+              <IconButton size="small">
+                <PriorityHighIcon fontSize="small" color="error" />
+              </IconButton>
+            </Tooltip>
+          )}
+        </Box>
       </TablePrimaryCell>
       <TablePrimaryCell>
         {convertTimestampToDateTime(history.TimeStamp)}
