@@ -7,7 +7,10 @@ import {
   TableCell,
   Typography,
   Link,
+  Tooltip,
+  IconButton,
 } from "@mui/material";
+import PriorityHighIcon from "@mui/icons-material/PriorityHigh";
 import {
   TablePrimaryContainer,
   TablePrimaryCell,
@@ -34,13 +37,23 @@ const HistoryRow = ({ history }) => {
   }
 
   return (
-    <TablePrimaryRow>
+    <TablePrimaryRow
+      sx={!history.Claimed && { background: "rgba(255, 255, 255, 0.06)" }}
+    >
       <TablePrimaryCell>
         {history.RecordType === 0
           ? "ETH Deposit"
           : history.RecordType === 1
           ? "Cosmic Signature Token"
           : "Donated NFT"}
+        &nbsp;
+        {!history.Claimed && (
+          <Tooltip title="This winning is unclaimed, go to Pending Winnings page and claim it.">
+            <IconButton size="small">
+              <PriorityHighIcon fontSize="small" color="error" />
+            </IconButton>
+          </Tooltip>
+        )}
       </TablePrimaryCell>
       <TablePrimaryCell>
         {convertTimestampToDateTime(history.TimeStamp)}
@@ -69,9 +82,6 @@ const HistoryRow = ({ history }) => {
       <TablePrimaryCell align="right">
         {history.WinnerIndex >= 0 && history.WinnerIndex}
       </TablePrimaryCell>
-      <TablePrimaryCell align="right">
-        {history.Claimed ? "Claimed" : "Unclaimed"}
-      </TablePrimaryCell>
     </TablePrimaryRow>
   );
 };
@@ -89,7 +99,6 @@ const HistoryTable = ({ winningHistory, perPage, curPage }) => {
             <TableCell>Token Address</TableCell>
             <TableCell align="right">Token ID</TableCell>
             <TableCell align="right">Position</TableCell>
-            <TableCell align="right">Status</TableCell>
           </TableRow>
         </TablePrimaryHead>
         <TableBody>
