@@ -58,9 +58,17 @@ const PrizeInfo = ({ bidHistory, prizeNum, nftDonations, prizeInfo }) => {
       </Head>
       <MainWrapper>
         <Box mb={4}>
-          <Typography variant="h4" color="primary" component="span" mr={2}>
-            {`Round #${prizeNum}`}
-          </Typography>
+          <Link
+            href={`/prize/${prizeNum}`}
+            sx={{
+              textDecorationColor: "#15BFFD !important",
+              textDecorationThickness: "3px",
+            }}
+          >
+            <Typography variant="h4" color="primary" component="span" mr={2}>
+              {`Round #${prizeNum}`}
+            </Typography>
+          </Link>
           <Typography variant="h4" component="span">
             Prize Information
           </Typography>
@@ -90,14 +98,14 @@ const PrizeInfo = ({ bidHistory, prizeNum, nftDonations, prizeInfo }) => {
                 Winner Address:
               </Typography>
               &nbsp;
-              <Typography fontFamily="monospace" component="span">
-                <Link
-                  href={`/user/${prizeInfo.WinnerAddr}`}
-                  style={{ color: "rgb(255, 255, 255)" }}
-                >
+              <Link
+                href={`/user/${prizeInfo.WinnerAddr}`}
+                style={{ color: "rgb(255, 255, 255)" }}
+              >
+                <Typography fontFamily="monospace" component="span">
                   {prizeInfo.WinnerAddr}
-                </Link>
-              </Typography>
+                </Typography>
+              </Link>
             </Box>
             <Box mb={1}>
               <Typography color="primary" component="span">

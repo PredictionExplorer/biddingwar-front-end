@@ -226,28 +226,21 @@ const NFTTrait = ({ nft, prizeInfo }) => {
                 Winner:
               </Typography>
               &nbsp;
-              <Typography component="span">
-                <Link
-                  style={{ color: "#fff", fontSize: matches ? "16px" : "12px" }}
-                  href={`/user/${nft.WinnerAddr}`}
-                >
-                  {nft.WinnerAddr}
-                </Link>
-              </Typography>
+              <Link style={{ color: "#fff" }} href={`/user/${nft.WinnerAddr}`}>
+                <Typography component="span">{nft.WinnerAddr}</Typography>
+              </Link>
             </Box>
             <Box mb={1}>
               <Typography color="primary" component="span">
                 Owner:
               </Typography>
               &nbsp;
-              <Typography component="span">
-                <Link
-                  style={{ color: "#fff", fontSize: matches ? "16px" : "12px" }}
-                  href={`/user/${nft.CurOwnerAddr}`}
-                >
-                  {nft.CurOwnerAddr}
-                </Link>
-              </Typography>
+              <Link
+                style={{ color: "#fff" }}
+                href={`/user/${nft.CurOwnerAddr}`}
+              >
+                <Typography component="span">{nft.CurOwnerAddr}</Typography>
+              </Link>
             </Box>
             <Box mb={1}>
               <Typography color="primary" component="span">

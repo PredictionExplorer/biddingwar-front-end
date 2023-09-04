@@ -42,6 +42,7 @@ const HistoryRow = ({ history }) => {
           : history.BidPriceEth?.toFixed(2)}
         Ξ
       </TablePrimaryCell>
+      <TablePrimaryCell align="center">{history.RoundNum}</TablePrimaryCell>
       <TablePrimaryCell>
         {history.RWalkNFTId < 0 ? "" : history.RWalkNFTId}
       </TablePrimaryCell>
@@ -85,6 +86,7 @@ const HistoryTable = ({ biddingHistory, perPage, curPage }) => {
             <TableCell>Date</TableCell>
             <TableCell>Bidder</TableCell>
             <TableCell>Price</TableCell>
+            <TableCell align="center">Round #</TableCell>
             <TableCell>RWLK ID</TableCell>
             <TableCell>Donated NFT Address</TableCell>
             <TableCell>Donated NFT ID</TableCell>

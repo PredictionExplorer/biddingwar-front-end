@@ -35,12 +35,19 @@ const WinnerRow = ({ winner, type }) => {
           {shortenHex(winner.WinnerAddr, 6)}
         </Link>
       </TablePrimaryCell>
-      <TablePrimaryCell>{winner.RoundNum}</TablePrimaryCell>
+      <TablePrimaryCell align="center">
+        <Link
+          href={`/prize/${winner.RoundNum}`}
+          style={{ color: "rgba(255, 255, 255, 0.68)", fontSize: 14 }}
+        >
+          {winner.RoundNum}
+        </Link>
+      </TablePrimaryCell>
       <TablePrimaryCell>{type}</TablePrimaryCell>
       <TablePrimaryCell>
         {winner.Amount ? `${winner.Amount.toFixed(4)}Ξ` : ""}
       </TablePrimaryCell>
-      <TablePrimaryCell>
+      <TablePrimaryCell align="right">
         <Link
           href={`/detail/${winner.TokenId}`}
           style={{ color: "rgba(255, 255, 255, 0.68)", fontSize: 14 }}
@@ -67,10 +74,10 @@ const RaffleWinnerTable = ({ RaffleETHDeposits, RaffleNFTWinners }) => {
             <TableRow>
               <TableCell>Datetime</TableCell>
               <TableCell>Winner</TableCell>
-              <TableCell>Round #</TableCell>
+              <TableCell align="center">Round #</TableCell>
               <TableCell>Type</TableCell>
               <TableCell>Amount</TableCell>
-              <TableCell>Token ID</TableCell>
+              <TableCell align="right">Token ID</TableCell>
             </TableRow>
           </TablePrimaryHead>
           <TableBody>
