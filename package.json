@@ -53,6 +53,7 @@
     "next": "canary",
     "react": "^18",
     "react-awesome-lightbox": "^1.8.1",
+    "react-cookie": "^6.1.0",
     "react-copy-to-clipboard": "^5.0.4",
     "react-countdown": "^2.3.2",
     "react-device-detect": "^2.1.2",

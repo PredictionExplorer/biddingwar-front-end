@@ -26,6 +26,7 @@ import { useEffect } from 'react'
 import * as ga from '../utils/analytics'
 import { ApiDataProvider } from '../contexts/ApiDataContext'
 import ApiDataFetcher from '../contexts/ApiDataFetcher'
+import { CookiesProvider } from 'react-cookie'
 
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache()
@@ -105,12 +106,14 @@ function MyApp(props: MyAppProps) {
             <ThemeProvider theme={theme}>
               <CssBaseline />
               <Web3ReactManager>
-              <ApiDataProvider>
+              <CookiesProvider>
+                <ApiDataProvider>
                   <Header />
                   <Component {...pageProps} />
                   <Footer />
                   <ApiDataFetcher interval={30000} />
                 </ApiDataProvider>
+              </CookiesProvider>
               </Web3ReactManager>
             </ThemeProvider>
           </CacheProvider>

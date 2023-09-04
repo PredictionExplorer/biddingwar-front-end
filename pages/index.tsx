@@ -58,6 +58,7 @@ import "@egjs/hammerjs";
 import getErrorMessage from "../utils/alert";
 import NFTImage from "../components/NFTImage";
 import { calculateTimeDiff } from "../utils";
+import { useCookies } from "react-cookie";
 
 const NewHome = ({
   biddingHistory,
@@ -69,6 +70,7 @@ const NewHome = ({
 }) => {
   const [data, setData] = useState(initialData);
   const [curBidList, setCurBidList] = useState(biddingHistory);
+  const [donatedNFTs, setDonatedNFTs] = useState(nftDonations);
   const [prizeTime, setPrizeTime] = useState(0);
   const [message, setMessage] = useState("");
   const [nftDonateAddress, setNftDonateAddress] = useState("");
@@ -95,6 +97,7 @@ const NewHome = ({
   // const ref = useRef(null);
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up("md"));
+  const [cookies, setCookie] = useCookies(["banner_id"]);
 
   const gridLayout =
     nftDonations.length > 16
@@ -410,6 +413,12 @@ const NewHome = ({
       const newBidData = await bidResponse.json();
       setCurBidList(newBidData);
 
+      const nftResponse = await fetch(
+        `/api/donatedNftByRound/?round=${newData.CurRoundNum - 1}`
+      );
+      const nftData = await nftResponse.json();
+      setDonatedNFTs(nftData);
+
       setData((prevData) => {
         if (
           account !== newData.LastBidderAddr &&
@@ -431,7 +440,13 @@ const NewHome = ({
     };
 
     fetchPrizeTime();
-    const bannerId = Math.floor(Math.random() * nfts.length);
+    let bannerId = cookies.banner_id;
+    if (!cookies.banner_id) {
+      bannerId = Math.floor(Math.random() * nfts.length);
+      const date = new Date();
+      date.setHours(date.getHours() + 1);
+      setCookie("banner_id", bannerId, { expires: date });
+    }
     const fileName = bannerId.toString().padStart(6, "0");
     setBannerTokenId(fileName);
     // setBlackVideo(
@@ -907,10 +922,10 @@ const NewHome = ({
               FOR CURRENT ROUND
             </Typography>
           </Box>
-          {nftDonations.length > 0 ? (
+          {donatedNFTs.length > 0 ? (
             <>
               <Grid container spacing={2} mt={2}>
-                {nftDonations.map((nft) => (
+                {donatedNFTs.map((nft) => (
                   <Grid
                     item
                     key={nft.RecordId}
@@ -928,7 +943,7 @@ const NewHome = ({
                   color="primary"
                   page={curPage}
                   onChange={(e, page) => setCurrentPage(page)}
-                  count={Math.ceil(nftDonations.length / perPage)}
+                  count={Math.ceil(donatedNFTs.length / perPage)}
                   hideNextButton
                   hidePrevButton
                   shape="rounded"
