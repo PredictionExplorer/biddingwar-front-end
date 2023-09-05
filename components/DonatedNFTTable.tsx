@@ -53,10 +53,17 @@ const NFTRow = ({ nft, handleClaim }) => {
       <TablePrimaryCell align="center">{nft.RoundNum}</TablePrimaryCell>
       <TablePrimaryCell>{nft.TokenAddr}</TablePrimaryCell>
       <TablePrimaryCell align="right">
-        {nft.NFTTokenId || nft.TokenId}
+        <Link
+          href={nft.NFTTokenURI}
+          sx={{ color: "inherit", textDecoration: "none" }}
+        >
+          {nft.NFTTokenId || nft.TokenId}
+        </Link>
       </TablePrimaryCell>
       <TablePrimaryCell>
-        <NFTImage src={tokenURI?.image} />
+        <Link href={nft.NFTTokenURI}>
+          <NFTImage src={tokenURI?.image} />
+        </Link>
       </TablePrimaryCell>
       <TablePrimaryCell>
         {!nft.WinnerAddr && (

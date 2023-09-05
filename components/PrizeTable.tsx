@@ -35,13 +35,21 @@ const PrizeRow = ({ prize }) => {
       </TablePrimaryCell>
       <TablePrimaryCell>{shortenHex(prize.WinnerAddr, 6)}</TablePrimaryCell>
       <TablePrimaryCell align="center">{prize.PrizeNum}</TablePrimaryCell>
-      <TablePrimaryCell>{prize.AmountEth.toFixed(4)} ETH</TablePrimaryCell>
-      <TablePrimaryCell align="center">{prize.RoundStats.TotalBids}</TablePrimaryCell>
-      <TablePrimaryCell align="center">{prize.RoundStats.TotalDonatedNFTs}</TablePrimaryCell>
-      <TablePrimaryCell>
+      <TablePrimaryCell align="right">
+        {prize.AmountEth.toFixed(4)} ETH
+      </TablePrimaryCell>
+      <TablePrimaryCell align="center">
+        {prize.RoundStats.TotalBids}
+      </TablePrimaryCell>
+      <TablePrimaryCell align="center">
+        {prize.RoundStats.TotalDonatedNFTs}
+      </TablePrimaryCell>
+      <TablePrimaryCell align="right">
         {prize.RoundStats.TotalRaffleEthDepositsEth.toFixed(4)} ETH
       </TablePrimaryCell>
-      <TablePrimaryCell align="right">{prize.RoundStats.TotalRaffleNFTs}</TablePrimaryCell>
+      <TablePrimaryCell align="center">
+        {prize.RoundStats.TotalRaffleNFTs}
+      </TablePrimaryCell>
     </TablePrimaryRow>
   );
 };
@@ -61,11 +69,11 @@ export const PrizeTable = ({ list }) => {
               <TableCell>Datetime</TableCell>
               <TableCell>Winner</TableCell>
               <TableCell align="center">Round #</TableCell>
-              <TableCell>Prize Amount</TableCell>
+              <TableCell align="right">Prize Amount</TableCell>
               <TableCell align="center">Bids</TableCell>
               <TableCell align="center">Donated NFTs</TableCell>
-              <TableCell>Raffle Deposits</TableCell>
-              <TableCell align="right">Raffle NFTs</TableCell>
+              <TableCell align="right">Raffle Deposits</TableCell>
+              <TableCell align="center">Raffle NFTs</TableCell>
             </TableRow>
           </TablePrimaryHead>
           <TableBody>
