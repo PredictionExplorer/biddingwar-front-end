@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Alert,
   Box,
@@ -26,6 +26,7 @@ import { useRouter } from "next/router";
 import { useApiData } from "../contexts/ApiDataContext";
 import useCosmicGameContract from "../hooks/useCosmicGameContract";
 import { DonatedNFTTable } from "../components/DonatedNFTTable";
+import Fireworks, { FireworksHandlers } from "@fireworks-js/react";
 
 const MyWinningsRow = ({ winning }) => {
   if (!winning) {
@@ -170,6 +171,7 @@ const CSTTable = ({ list }) => {
 
 const MyWallet = () => {
   const router = useRouter();
+  const ref = useRef<FireworksHandlers>(null);
   const { account } = useActiveWeb3React();
   const { apiData: status } = useApiData();
   const [raffleETHToClaim, setRaffleETHToClaim] = useState([]);
@@ -180,6 +182,7 @@ const MyWallet = () => {
     donatedNFT: false,
     raffleETH: false,
   });
+  const [finishFireworks, setFinishFireworks] = useState(false);
 
   const cosmicGameContract = useCosmicGameContract();
   const raffleWalletContract = useRaffleWalletContract();
@@ -241,6 +244,11 @@ const MyWallet = () => {
     }
   };
 
+  const handleFireworksClick = () => {
+    ref.current.stop();
+    setFinishFireworks(true);
+  };
+
   useEffect(() => {
     const fetchRaffleETHDeposits = async () => {
       const res = await fetch(
@@ -283,13 +291,30 @@ const MyWallet = () => {
       </Head>
       <MainWrapper>
         {router.query && router.query.message && (
-          <Box px={8} mb={8}>
-            <Alert variant="outlined" severity="success">
-              {router.query.message === "success"
-                ? "Congratulations! You claimed the prize successfully."
-                : ""}
-            </Alert>
-          </Box>
+          <>
+            <Box px={8} mb={8}>
+              <Alert variant="outlined" severity="success">
+                {router.query.message === "success"
+                  ? "Congratulations! You claimed the prize successfully."
+                  : ""}
+              </Alert>
+            </Box>
+            {!finishFireworks && (
+              <Fireworks
+                ref={ref}
+                options={{ opacity: 0.5 }}
+                style={{
+                  top: 0,
+                  left: 0,
+                  width: "100%",
+                  height: "100%",
+                  position: "fixed",
+                  zIndex: 10000,
+                }}
+                onClick={handleFireworksClick}
+              />
+            )}
+          </>
         )}
         <Typography
           variant="h4"

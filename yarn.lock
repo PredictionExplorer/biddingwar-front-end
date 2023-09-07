@@ -1168,6 +1168,13 @@
     "@ethersproject/properties" "^5.5.0"
     "@ethersproject/strings" "^5.5.0"
 
+"@fireworks-js/react@^2.10.7":
+  version "2.10.7"
+  resolved "https://registry.yarnpkg.com/@fireworks-js/react/-/react-2.10.7.tgz#8e06a3121f8a4717e7836de95cb0c5045129a281"
+  integrity sha512-hxfEB0vRUX7nNznhc5SEw0W8jamgF32oUiMvd5c8dOAFZgkidF8qylRw/V1Xp6In1QsjUQXnv/gvOKCe2o8JOg==
+  dependencies:
+    fireworks-js "2.10.7"
+
 "@fortawesome/fontawesome-common-types@^0.2.36":
   version "0.2.36"
   resolved "https://registry.yarnpkg.com/@fortawesome/fontawesome-common-types/-/fontawesome-common-types-0.2.36.tgz#b44e52db3b6b20523e0c57ef8c42d315532cb903"
@@ -3379,6 +3386,11 @@ find-yarn-workspace-root2@1.2.16:
   dependencies:
     micromatch "^4.0.2"
     pkg-dir "^4.2.0"
+
+fireworks-js@2.10.7:
+  version "2.10.7"
+  resolved "https://registry.yarnpkg.com/fireworks-js/-/fireworks-js-2.10.7.tgz#eb099652304356aef160ec00869fc60f00c6277a"
+  integrity sha512-FyRNiqlgu9ZeFCjfN0UiGUlj5dUWNYLyFaWN/Q8sOMf0E+KGA4dMROaBZpCtym85fChgCspoa3jHoLTRZiy74A==
 
 flat-cache@^3.0.4:
   version "3.0.4"
