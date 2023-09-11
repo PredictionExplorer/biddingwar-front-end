@@ -239,7 +239,10 @@ const MyWinnings = () => {
           />
         </Box>
         <Box mt={6}>
-          <Button variant="text" href="/winning-history">
+          <Button
+            variant="outlined"
+            onClick={() => router.push("/winning-history")}
+          >
             Go to my winning history page.
           </Button>
         </Box>
