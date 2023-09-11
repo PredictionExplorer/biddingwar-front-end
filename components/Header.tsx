@@ -38,7 +38,9 @@ const Header = () => {
       const history = await res.json();
       setClaimHistory(history);
     };
-    fetchClaimHistory();
+    if (account) {
+      fetchClaimHistory();
+    }
   }, []);
 
   useEffect(() => {

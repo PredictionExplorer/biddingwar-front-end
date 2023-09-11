@@ -17,8 +17,10 @@ const ApiDataFetcher: React.FC<ApiDataFetcherProps> = ({ interval }) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const newData = await fetchNotification();
-      setApiData(newData);
+      if (account) {
+        const newData = await fetchNotification();
+        setApiData(newData);
+      }
     };
 
     fetchData();

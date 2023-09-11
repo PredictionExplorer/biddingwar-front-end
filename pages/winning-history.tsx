@@ -14,7 +14,9 @@ const WinningHistory = () => {
       const history = await res.json();
       setClaimHistory(history);
     };
-    fetchClaimHistory();
+    if (account) {
+      fetchClaimHistory();
+    }
   }, []);
 
   return (
