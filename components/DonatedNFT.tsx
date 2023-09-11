@@ -19,7 +19,11 @@ const DonatedNFT = ({ nft }) => {
 
   return (
     <StyledCard>
-      <CardActionArea>
+      <CardActionArea
+        onClick={() =>
+          window.open(tokenURI?.external_url, "_blank", "noopener")
+        }
+      >
         <NFTImage src={tokenURI?.image} />
       </CardActionArea>
       <Box
