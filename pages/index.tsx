@@ -581,13 +581,16 @@ const NewHome = ({
             <Typography variant="h5" component="span">
               (Round #{data.CurRoundNum})
             </Typography>
-            {prizeTime > Date.now() ? (
-              <Countdown key={0} date={prizeTime} renderer={Counter} />
-            ) : (
-              <Countdown key={1} date={Date.now()} renderer={Counter} />
-            )}
+            {data.LastBidderAddr !== constants.AddressZero &&
+              (prizeTime > Date.now() ? (
+                <Countdown key={0} date={prizeTime} renderer={Counter} />
+              ) : (
+                <Countdown key={1} date={Date.now()} renderer={Counter} />
+              ))}
             <Box>
               <Typography color="primary" component="span">
+                {data.LastBidderAddr === constants.AddressZero &&
+                  "Previous Round "}
                 Bid Price:
               </Typography>
               &nbsp;
@@ -597,6 +600,8 @@ const NewHome = ({
             </Box>
             <Box>
               <Typography color="primary" component="span">
+                {data.LastBidderAddr === constants.AddressZero &&
+                  "Previous Round "}
                 Reward:
               </Typography>
               &nbsp;
@@ -614,7 +619,11 @@ const NewHome = ({
               </Box>
             )}
             <Box sx={{ mt: "24px" }}>
-              <Typography color="primary">Last Bidder Address:</Typography>
+              <Typography color="primary">
+                {data.LastBidderAddr === constants.AddressZero &&
+                  "Previous Round "}
+                Last Bidder Address:
+              </Typography>
               <Typography>
                 {data.LastBidderAddr === constants.AddressZero ? (
                   "There is no bidder yet."

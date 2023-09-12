@@ -11,7 +11,6 @@ import {
   Container,
   Menu,
   MenuItem,
-  useMediaQuery,
   Snackbar,
   Alert,
   List,
@@ -36,7 +35,6 @@ import {
   ExpandMore,
 } from "@mui/icons-material";
 import useCosmicSignatureContract from "../hooks/useCosmicSignatureContract";
-import theme from "../config/styles";
 import NFTImage from "./NFTImage";
 
 const NFTTrait = ({ nft, prizeInfo }) => {
@@ -54,11 +52,11 @@ const NFTTrait = ({ nft, prizeInfo }) => {
   });
   const [showRaffleTokenWinners, setShowRaffleTokenWinners] = useState(false);
   const [showRaffleETHWinners, setShowRaffleETHWinners] = useState(false);
+  const [tokenName, setTokenName] = useState("");
 
   const router = useRouter();
   const nftContract = useCosmicSignatureContract();
   const { account } = useActiveWeb3React();
-  const matches = useMediaQuery(theme.breakpoints.up("md"));
 
   const handlePlay = (videoPath) => {
     fetch(videoPath).then((res) => {
@@ -81,6 +79,16 @@ const NFTTrait = ({ nft, prizeInfo }) => {
         .then((tx) => tx.wait());
 
       router.reload();
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const handleSetTokenName = async () => {
+    try {
+      await nftContract
+        .setTokenName(nft.TokenId, tokenName)
+        .then((tx) => tx.wait());
     } catch (err) {
       console.log(err);
     }
@@ -381,6 +389,30 @@ const NFTTrait = ({ nft, prizeInfo }) => {
                     >
                       Transfer
                     </Button>
+                  </Box>
+                  <Box mt={3}>
+                    <Typography variant="h6" align="left">
+                      Rename
+                    </Typography>
+                    <Box display="flex">
+                      <TextField
+                        variant="filled"
+                        color="secondary"
+                        placeholder="Enter token name here"
+                        value={tokenName}
+                        size="small"
+                        fullWidth
+                        onChange={(e) => setTokenName(e.target.value)}
+                      />
+                      <Button
+                        color="secondary"
+                        variant="contained"
+                        onClick={handleSetTokenName}
+                        sx={{ ml: 1, whiteSpace: "nowrap" }}
+                      >
+                        {tokenName === "" ? "Set Name" : "Change Name"}
+                      </Button>
+                    </Box>
                   </Box>
                 </>
               )}
