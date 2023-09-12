@@ -17,6 +17,7 @@ import {
   Alert,
   InputAdornment,
   Pagination,
+  Link,
 } from "@mui/material";
 import {
   CustomTextField,
@@ -606,9 +607,16 @@ const NewHome = ({
             <Box sx={{ mt: "24px" }}>
               <Typography color="primary">Last Bidder Address:</Typography>
               <Typography>
-                {data.LastBidderAddr === constants.AddressZero
-                  ? "There is no bidder yet."
-                  : data.LastBidderAddr}
+                {data.LastBidderAddr === constants.AddressZero ? (
+                  "There is no bidder yet."
+                ) : (
+                  <Link
+                    href={`/user/${data.LastBidderAddr}`}
+                    color="rgb(255, 255, 255)"
+                  >
+                    {data.LastBidderAddr}
+                  </Link>
+                )}
               </Typography>
             </Box>
             {!!(curBidList.length && curBidList[0].Message !== "") && (

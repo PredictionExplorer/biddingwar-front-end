@@ -54,14 +54,15 @@ const NFTRow = ({ nft, handleClaim }) => {
       <TablePrimaryCell>{nft.TokenAddr}</TablePrimaryCell>
       <TablePrimaryCell align="right">
         <Link
-          href={nft.NFTTokenURI}
-          sx={{ color: "inherit", textDecoration: "none" }}
+          href={tokenURI?.external_url}
+          target="_blank"
+          sx={{ color: "inherit" }}
         >
           {nft.NFTTokenId || nft.TokenId}
         </Link>
       </TablePrimaryCell>
       <TablePrimaryCell>
-        <Link href={nft.NFTTokenURI}>
+        <Link href={tokenURI?.external_url} target="_blank">
           <NFTImage src={tokenURI?.image} />
         </Link>
       </TablePrimaryCell>
