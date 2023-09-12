@@ -40,7 +40,6 @@ import { ArrowForward } from "@mui/icons-material";
 import NFT_ABI from "../contracts/RandomWalkNFT.json";
 import PaginationRWLKGrid from "../components/PaginationRWLKGrid";
 import useCosmicSignatureContract from "../hooks/useCosmicSignatureContract";
-import RaffleWinners from "../components/RaffleWinners";
 import Prize from "../components/Prize";
 import LatestNFTs from "../components/LatestNFTs";
 import router from "next/router";
@@ -60,6 +59,7 @@ import getErrorMessage from "../utils/alert";
 import NFTImage from "../components/NFTImage";
 import { calculateTimeDiff } from "../utils";
 import { useCookies } from "react-cookie";
+import WinningHistoryTable from "../components/WinningHistoryTable";
 
 const NewHome = ({
   biddingHistory,
@@ -88,6 +88,7 @@ const NewHome = ({
   const [rwlknftIds, setRwlknftIds] = useState([]);
   const [roundStartedAgo, setRoundStartedAgo] = useState("");
   const [curPage, setCurrentPage] = useState(1);
+  const [claimHistory, setClaimHistory] = useState(null);
   const perPage = 12;
   // const [blackVideo, setBlackVideo] = useState(null);
 
@@ -450,6 +451,14 @@ const NewHome = ({
     }
     const fileName = bannerId.toString().padStart(6, "0");
     setBannerTokenId(fileName);
+
+    const fetchClaimHistory = async () => {
+      const res = await fetch("/api/claimHistory");
+      const history = await res.json();
+      setClaimHistory(history);
+    };
+    fetchClaimHistory();
+
     // setBlackVideo(
     //   `https://cosmic-game.s3.us-east-2.amazonaws.com/${fileName}.mp4`
     // );
@@ -579,7 +588,7 @@ const NewHome = ({
             )}
             <Box>
               <Typography color="primary" component="span">
-                BID PRICE:
+                Bid Price:
               </Typography>
               &nbsp;
               <Typography component="span">
@@ -588,7 +597,7 @@ const NewHome = ({
             </Box>
             <Box>
               <Typography color="primary" component="span">
-                REWARD:
+                Reward:
               </Typography>
               &nbsp;
               <Typography component="span">
@@ -985,7 +994,16 @@ const NewHome = ({
       <LatestNFTs nfts={nfts} />
 
       <Container>
-        {prizeInfo && <RaffleWinners prizeInfo={prizeInfo} />}
+        <Box mt="60px">
+          <Typography variant="h4" textAlign="center" mb={6}>
+            History of Winnings
+          </Typography>
+          {claimHistory === null ? (
+            <Typography>Loading...</Typography>
+          ) : (
+            <WinningHistoryTable winningHistory={claimHistory} />
+          )}
+        </Box>
 
         <Box sx={{ padding: "90px 0 80px" }}>
           <Typography variant="h4" textAlign="center">

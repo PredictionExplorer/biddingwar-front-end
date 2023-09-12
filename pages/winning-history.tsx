@@ -10,7 +10,7 @@ const WinningHistory = () => {
   const [claimHistory, setClaimHistory] = useState(null);
   useEffect(() => {
     const fetchClaimHistory = async () => {
-      const res = await fetch(`/api/claimHistory/?address=${account}`);
+      const res = await fetch(`/api/claimHistoryByUser/?address=${account}`);
       const history = await res.json();
       setClaimHistory(history);
     };
@@ -32,7 +32,10 @@ const WinningHistory = () => {
         {claimHistory === null ? (
           <Typography>Loading...</Typography>
         ) : (
-          <WinningHistoryTable winningHistory={claimHistory} />
+          <WinningHistoryTable
+            winningHistory={claimHistory}
+            showClaimedStatus={true}
+          />
         )}
       </MainWrapper>
     </>

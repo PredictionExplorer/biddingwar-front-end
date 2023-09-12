@@ -35,14 +35,17 @@ const convertTimestampToDateTime = (timestamp: any) => {
   return result;
 };
 
-const HistoryRow = ({ history }) => {
+const HistoryRow = ({ history, showClaimedStatus }) => {
   if (!history) {
     return <TablePrimaryRow></TablePrimaryRow>;
   }
 
   return (
     <TablePrimaryRow
-      sx={!history.Claimed && { background: "rgba(255, 255, 255, 0.06)" }}
+      sx={
+        !history.Claimed &&
+        showClaimedStatus && { background: "rgba(255, 255, 255, 0.06)" }
+      }
     >
       <TablePrimaryCell>
         <Box sx={{ display: "flex", alignItems: "center" }}>
@@ -68,7 +71,7 @@ const HistoryRow = ({ history }) => {
             </>
           )}
           &nbsp;
-          {!history.Claimed && (
+          {!history.Claimed && showClaimedStatus && (
             <Tooltip title="This winning is unclaimed, go to Pending Winnings page and claim it.">
               <IconButton size="small">
                 <PriorityHighIcon fontSize="small" color="error" />
@@ -108,7 +111,12 @@ const HistoryRow = ({ history }) => {
   );
 };
 
-const HistoryTable = ({ winningHistory, perPage, curPage }) => {
+const HistoryTable = ({
+  winningHistory,
+  perPage,
+  curPage,
+  showClaimedStatus,
+}) => {
   return (
     <TablePrimaryContainer>
       <Table>
@@ -127,7 +135,11 @@ const HistoryTable = ({ winningHistory, perPage, curPage }) => {
           {winningHistory
             .slice((curPage - 1) * perPage, curPage * perPage)
             .map((history, i) => (
-              <HistoryRow history={history} key={i} />
+              <HistoryRow
+                history={history}
+                key={i}
+                showClaimedStatus={showClaimedStatus}
+              />
             ))}
         </TableBody>
       </Table>
@@ -135,7 +147,7 @@ const HistoryTable = ({ winningHistory, perPage, curPage }) => {
   );
 };
 
-const WinningHistoryTable = ({ winningHistory }) => {
+const WinningHistoryTable = ({ winningHistory, showClaimedStatus = false }) => {
   const perPage = 5;
   const [curPage, setCurrentPage] = useState(1);
   if (winningHistory.length === 0) {
@@ -145,6 +157,7 @@ const WinningHistoryTable = ({ winningHistory }) => {
     <Box mt={2}>
       <HistoryTable
         winningHistory={winningHistory}
+        showClaimedStatus={showClaimedStatus}
         perPage={perPage}
         curPage={curPage}
       />
