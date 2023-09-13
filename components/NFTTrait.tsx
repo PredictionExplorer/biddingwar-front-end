@@ -52,7 +52,7 @@ const NFTTrait = ({ nft, prizeInfo }) => {
   });
   const [showRaffleTokenWinners, setShowRaffleTokenWinners] = useState(false);
   const [showRaffleETHWinners, setShowRaffleETHWinners] = useState(false);
-  const [tokenName, setTokenName] = useState("");
+  const [tokenName, setTokenName] = useState(nft.TokenName);
 
   const router = useRouter();
   const nftContract = useCosmicSignatureContract();
