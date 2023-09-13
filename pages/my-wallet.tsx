@@ -292,8 +292,12 @@ const MyWallet = () => {
       <MainWrapper>
         {router.query && router.query.message && (
           <>
-            <Box px={8} mb={8}>
-              <Alert variant="outlined" severity="success">
+            <Box px={8} mb={8} sx={{ zIndex: 10002, position: "relative" }}>
+              <Alert
+                variant="filled"
+                severity="success"
+                sx={{ boxShadow: "3px 3px 4px 1px #ffffff7f" }}
+              >
                 {router.query.message === "success"
                   ? "Congratulations! You claimed the prize successfully."
                   : ""}

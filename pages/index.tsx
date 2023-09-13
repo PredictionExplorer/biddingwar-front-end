@@ -609,14 +609,22 @@ const NewHome = ({
                 {data.PrizeAmountEth.toFixed(4)} ETH
               </Typography>
             </Box>
-            {roundStartedAgo && (
-              <Box>
-                <Typography color="primary" component="span">
-                  Round Started:
-                </Typography>
-                &nbsp;
-                <Typography component="span">{roundStartedAgo} ago</Typography>
-              </Box>
+            {data.LastBidderAddr === constants.AddressZero ? (
+              <Typography color="primary" component="span">
+                Round is not started.
+              </Typography>
+            ) : (
+              roundStartedAgo && (
+                <Box>
+                  <Typography color="primary" component="span">
+                    Round Started:
+                  </Typography>
+                  &nbsp;
+                  <Typography component="span">
+                    {roundStartedAgo} ago
+                  </Typography>
+                </Box>
+              )
             )}
             <Box sx={{ mt: "24px" }}>
               <Typography color="primary">
