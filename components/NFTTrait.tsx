@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import {
   Box,
@@ -36,6 +36,7 @@ import {
 } from "@mui/icons-material";
 import useCosmicSignatureContract from "../hooks/useCosmicSignatureContract";
 import NFTImage from "./NFTImage";
+import { NameHistoryTable } from "./NameHistoryTable";
 
 const NFTTrait = ({ nft, prizeInfo }) => {
   const fileName = nft.TokenId.toString().padStart(6, "0");
@@ -53,6 +54,7 @@ const NFTTrait = ({ nft, prizeInfo }) => {
   const [showRaffleTokenWinners, setShowRaffleTokenWinners] = useState(false);
   const [showRaffleETHWinners, setShowRaffleETHWinners] = useState(false);
   const [tokenName, setTokenName] = useState(nft.TokenName);
+  const [nameHistory, setNameHistory] = useState([]);
 
   const router = useRouter();
   const nftContract = useCosmicSignatureContract();
@@ -92,6 +94,7 @@ const NFTTrait = ({ nft, prizeInfo }) => {
     } catch (err) {
       console.log(err);
     }
+    await fetchNameHistory();
   };
 
   const handlePrev = () =>
@@ -123,6 +126,16 @@ const NFTTrait = ({ nft, prizeInfo }) => {
     var result = `${month}/${date}/${year} ${hours}:${minutes}:${seconds}`;
     return result;
   };
+
+  const fetchNameHistory = async () => {
+    const response = await fetch(`/api/nameHistory/?tokenId=${nft.TokenId}`);
+    const history = await response.json();
+    setNameHistory(history);
+  };
+
+  useEffect(() => {
+    fetchNameHistory();
+  }, []);
 
   return (
     <Container>
@@ -419,6 +432,12 @@ const NFTTrait = ({ nft, prizeInfo }) => {
             </Box>
           </Grid>
         </Grid>
+        <Box mt="40px">
+          <Typography variant="h6" mb={2}>
+            History of Name Changes
+          </Typography>
+          <NameHistoryTable list={nameHistory} />
+        </Box>
         <Box mt="80px">
           <NFTVideo image_thumb={image} onClick={() => handlePlay(video)} />
         </Box>
