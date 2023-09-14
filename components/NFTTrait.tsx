@@ -342,7 +342,7 @@ const NFTTrait = ({ nft, prizeInfo }) => {
                         <ListItem key={winner.EvtLogId} sx={{ padding: 0 }}>
                           <Link
                             href={`/user/${winner.WinnerAddr}`}
-                            sx={{ textDecoration: "none", color: "inherit" }}
+                            sx={{ color: "inherit" }}
                           >
                             <Typography fontFamily="monospace">
                               {winner.WinnerAddr}
@@ -367,7 +367,7 @@ const NFTTrait = ({ nft, prizeInfo }) => {
                         <ListItem key={winner.EvtLogId} sx={{ padding: 0 }}>
                           <Link
                             href={`/user/${winner.WinnerAddr}`}
-                            sx={{ textDecoration: "none", color: "inherit" }}
+                            sx={{ color: "inherit" }}
                           >
                             <Typography fontFamily="monospace">
                               {winner.WinnerAddr}
