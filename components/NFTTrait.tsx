@@ -94,7 +94,9 @@ const NFTTrait = ({ nft, prizeInfo }) => {
     } catch (err) {
       console.log(err);
     }
-    await fetchNameHistory();
+    setTimeout(async () => {
+      await fetchNameHistory();
+    }, 1000);
   };
 
   const handlePrev = () =>
@@ -156,16 +158,20 @@ const NFTTrait = ({ nft, prizeInfo }) => {
               <CardActionArea onClick={() => setImageOpen(true)}>
                 <NFTImage src={image} />
                 <NFTInfoWrapper>
-                  <Typography
-                    variant="body1"
-                    gutterBottom
-                    sx={{
-                      color: "#FFFFFF",
-                    }}
-                  >
+                  <Typography variant="body1" sx={{ color: "#FFFFFF" }}>
                     {formatId(nft.TokenId)}
                   </Typography>
                 </NFTInfoWrapper>
+                {nameHistory.length > 0 && (
+                  <NFTInfoWrapper sx={{ width: "calc(100% - 40px)" }}>
+                    <Typography
+                      variant="body1"
+                      sx={{ color: "#FFFFFF", textAlign: "center" }}
+                    >
+                      {nameHistory[0].TokenName}
+                    </Typography>
+                  </NFTInfoWrapper>
+                )}
               </CardActionArea>
             </StyledCard>
             <Box mt={2}>
