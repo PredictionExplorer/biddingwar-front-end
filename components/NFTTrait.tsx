@@ -37,6 +37,7 @@ import {
 import useCosmicSignatureContract from "../hooks/useCosmicSignatureContract";
 import NFTImage from "./NFTImage";
 import { NameHistoryTable } from "./NameHistoryTable";
+import { TransferHistoryTable } from "./TransferHistoryTable";
 
 const NFTTrait = ({ nft, prizeInfo }) => {
   const fileName = nft.TokenId.toString().padStart(6, "0");
@@ -55,6 +56,7 @@ const NFTTrait = ({ nft, prizeInfo }) => {
   const [showRaffleETHWinners, setShowRaffleETHWinners] = useState(false);
   const [tokenName, setTokenName] = useState(nft.TokenName);
   const [nameHistory, setNameHistory] = useState([]);
+  const [transferHistory, setTransferHistory] = useState([]);
 
   const router = useRouter();
   const nftContract = useCosmicSignatureContract();
@@ -134,9 +136,15 @@ const NFTTrait = ({ nft, prizeInfo }) => {
     const history = await response.json();
     setNameHistory(history);
   };
+  const fetchTransferHistory = async () => {
+    const response = await fetch(`/api/transferHistory/?tokenId=${nft.TokenId}`);
+    const history = await response.json();
+    setTransferHistory(history);
+  };
 
   useEffect(() => {
     fetchNameHistory();
+    fetchTransferHistory();
   }, []);
 
   return (
@@ -443,6 +451,12 @@ const NFTTrait = ({ nft, prizeInfo }) => {
             History of Name Changes
           </Typography>
           <NameHistoryTable list={nameHistory} />
+        </Box>
+        <Box mt="40px">
+          <Typography variant="h6" mb={2}>
+            History of Ownership Changes
+          </Typography>
+          <TransferHistoryTable list={transferHistory} />
         </Box>
         <Box mt="80px">
           <NFTVideo image_thumb={image} onClick={() => handlePlay(video)} />
