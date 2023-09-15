@@ -575,87 +575,120 @@ const NewHome = ({
             </Box>
           </Grid>
           <Grid item xs={12} sm={12} md={6} lg={6}>
-            <Typography variant="h4" mr={1} component="span">
-              Current Bid
-            </Typography>
-            <Typography variant="h5" component="span">
-              (Round #{data.CurRoundNum})
-            </Typography>
-            {data.LastBidderAddr !== constants.AddressZero &&
-              (prizeTime > Date.now() ? (
-                <Countdown key={0} date={prizeTime} renderer={Counter} />
-              ) : (
-                <Countdown key={1} date={Date.now()} renderer={Counter} />
-              ))}
-            <Box>
-              <Typography color="primary" component="span">
-                {data.LastBidderAddr === constants.AddressZero &&
-                  "Previous Round "}
-                Bid Price:
-              </Typography>
-              &nbsp;
-              <Typography component="span">
-                {data.BidPriceEth.toFixed(6)} ETH
-              </Typography>
-            </Box>
-            <Box>
-              <Typography color="primary" component="span">
-                {data.LastBidderAddr === constants.AddressZero &&
-                  "Previous Round "}
-                Reward:
-              </Typography>
-              &nbsp;
-              <Typography component="span">
-                {data.PrizeAmountEth.toFixed(4)} ETH
-              </Typography>
-            </Box>
-            {data.LastBidderAddr === constants.AddressZero ? (
-              <Typography color="primary" component="span">
-                Round is not started.
-              </Typography>
-            ) : (
-              roundStartedAgo && (
+            {data.LastBidderAddr !== constants.AddressZero ? (
+              <>
+                <Typography variant="h4" mr={1} component="span">
+                  Current Bid
+                </Typography>
+                <Typography variant="h5" component="span">
+                  (Round #{data.CurRoundNum})
+                </Typography>
+                {data.LastBidderAddr !== constants.AddressZero &&
+                  (prizeTime > Date.now() ? (
+                    <Countdown key={0} date={prizeTime} renderer={Counter} />
+                  ) : (
+                    <Countdown key={1} date={Date.now()} renderer={Counter} />
+                  ))}
                 <Box>
                   <Typography color="primary" component="span">
-                    Round Started:
+                    Bid Price:
                   </Typography>
                   &nbsp;
                   <Typography component="span">
-                    {roundStartedAgo} ago
+                    {data.BidPriceEth.toFixed(6)} ETH
                   </Typography>
                 </Box>
-              )
-            )}
-            <Box sx={{ mt: "24px" }}>
-              <Typography color="primary">
-                {data.LastBidderAddr === constants.AddressZero &&
-                  "Previous Round "}
-                Last Bidder Address:
-              </Typography>
-              <Typography>
-                {data.LastBidderAddr === constants.AddressZero ? (
-                  "There is no bidder yet."
-                ) : (
-                  <Link
-                    href={`/user/${data.LastBidderAddr}`}
-                    color="rgb(255, 255, 255)"
-                  >
-                    {data.LastBidderAddr}
-                  </Link>
+                <Box>
+                  <Typography color="primary" component="span">
+                    Reward:
+                  </Typography>
+                  &nbsp;
+                  <Typography component="span">
+                    {data.PrizeAmountEth.toFixed(4)} ETH
+                  </Typography>
+                </Box>
+                {roundStartedAgo && (
+                  <Box>
+                    <Typography color="primary" component="span">
+                      Round Started:
+                    </Typography>
+                    &nbsp;
+                    <Typography component="span">
+                      {roundStartedAgo} ago
+                    </Typography>
+                  </Box>
                 )}
-              </Typography>
-            </Box>
-            {!!(curBidList.length && curBidList[0].Message !== "") && (
-              <Box sx={{ mb: "24px" }}>
-                <Typography color="primary" component="span">
-                  Last Bidder Message:
+                <Box sx={{ mt: "24px" }}>
+                  <Typography color="primary">Last Bidder Address:</Typography>
+                  <Typography>
+                    {data.LastBidderAddr === constants.AddressZero ? (
+                      "There is no bidder yet."
+                    ) : (
+                      <Link
+                        href={`/user/${data.LastBidderAddr}`}
+                        color="rgb(255, 255, 255)"
+                      >
+                        {data.LastBidderAddr}
+                      </Link>
+                    )}
+                  </Typography>
+                </Box>
+                {!!(curBidList.length && curBidList[0].Message !== "") && (
+                  <Box sx={{ mb: "24px" }}>
+                    <Typography color="primary" component="span">
+                      Last Bidder Message:
+                    </Typography>
+                    &nbsp;
+                    <Typography component="span">
+                      {curBidList[0].Message}
+                    </Typography>
+                  </Box>
+                )}
+              </>
+            ) : (
+              <>
+                <Typography variant="h4" mb={2}>
+                  Round #{data.CurRoundNum} ended
                 </Typography>
-                &nbsp;
-                <Typography component="span">
-                  {curBidList[0].Message}
+                <Box mb={1}>
+                  <Typography color="primary" component="span">
+                    Winner:
+                  </Typography>
+                  &nbsp;
+                  <Typography component="span">
+                    <Link
+                      href={`/user/${prizeInfo.WinnerAddr}`}
+                      color="rgb(255, 255, 255)"
+                      fontSize="inherit"
+                    >
+                      {prizeInfo.WinnerAddr}
+                    </Link>
+                  </Typography>
+                </Box>
+                <Box>
+                  <Typography color="primary" component="span">
+                    Previous Round Reward:
+                  </Typography>
+                  &nbsp;
+                  <Typography component="span">
+                    {data.PrizeAmountEth.toFixed(4)} ETH
+                  </Typography>
+                </Box>
+                <Typography mt="40px" mb={1}>
+                  Be the first to start a new round, place a bid.
                 </Typography>
-              </Box>
+                <Box>
+                  <Typography color="primary" component="span">
+                    Bid Price:
+                  </Typography>
+                  &nbsp;
+                  <Typography component="span">
+                    {data.BidPriceEth.toFixed(6)} ETH
+                  </Typography>
+                </Box>
+              </>
             )}
+
             {account !== null && (
               <>
                 <Accordion>
