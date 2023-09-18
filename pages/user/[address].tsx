@@ -1,21 +1,25 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Typography } from "@mui/material";
 import Head from "next/head";
 import { MainWrapper } from "../../components/styled";
 import { GetServerSidePropsContext } from "next";
 import api from "../../services/api";
 import BiddingHistoryTable from "../../components/BiddingHistoryTable";
-import { PrizeTable } from "../../components/PrizeTable";
-import RaffleWinnerTable from "../../components/RaffleWinnerTable";
+import WinningHistoryTable from "../../components/WinningHistoryTable";
 
-const UserInfo = ({
-  address,
-  Bids,
-  Prizes,
-  UserInfo,
-  RaffleETHDeposits,
-  RaffleNFTWinners,
-}) => {
+const UserInfo = ({ address, Bids, UserInfo }) => {
+  const [claimHistory, setClaimHistory] = useState(null);
+  useEffect(() => {
+    const fetchClaimHistory = async () => {
+      const res = await fetch(`/api/claimHistoryByUser/?address=${address}`);
+      const history = await res.json();
+      setClaimHistory(history);
+    };
+    if (address) {
+      fetchClaimHistory();
+    }
+  }, []);
+
   return (
     <>
       <Head>
@@ -124,18 +128,16 @@ const UserInfo = ({
         </Box>
         <Box>
           <Typography variant="h6" lineHeight={1} mt={8} mb={2}>
-            Prizes won by the User
+            Winning history by the User
           </Typography>
-          <PrizeTable list={Prizes} />
-        </Box>
-        <Box>
-          <Typography variant="h6" lineHeight={1} mt={8} mb={2}>
-            Raffles won by the User
-          </Typography>
-          <RaffleWinnerTable
-            RaffleETHDeposits={RaffleETHDeposits}
-            RaffleNFTWinners={RaffleNFTWinners}
-          />
+          {claimHistory === null ? (
+            <Typography>Loading...</Typography>
+          ) : (
+            <WinningHistoryTable
+              winningHistory={claimHistory}
+              showClaimedStatus={true}
+            />
+          )}
         </Box>
       </MainWrapper>
     </>
@@ -145,17 +147,12 @@ const UserInfo = ({
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const params = context.params!.address;
   const address = Array.isArray(params) ? params[0] : params;
-  const { Bids, Prizes, UserInfo } = await api.get_user_info(address);
-  const RaffleETHDeposits = await api.get_raffle_deposits_by_user(address);
-  const RaffleNFTWinners = await api.get_raffle_nft_winners_by_user(address);
+  const { Bids, UserInfo } = await api.get_user_info(address);
   return {
     props: {
       address,
       Bids,
-      Prizes,
       UserInfo,
-      RaffleETHDeposits,
-      RaffleNFTWinners,
     },
   };
 }
