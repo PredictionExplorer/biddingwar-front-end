@@ -13,8 +13,6 @@ import {
   MenuItem,
   Snackbar,
   Alert,
-  List,
-  ListItem,
 } from "@mui/material";
 
 import { CopyToClipboard } from "react-copy-to-clipboard";
@@ -52,8 +50,6 @@ const NFTTrait = ({ nft, prizeInfo, numCSTokenMints }) => {
     text: "",
     visible: false,
   });
-  const [showRaffleTokenWinners, setShowRaffleTokenWinners] = useState(false);
-  const [showRaffleETHWinners, setShowRaffleETHWinners] = useState(false);
   const [tokenName, setTokenName] = useState(nft.TokenName);
   const [nameHistory, setNameHistory] = useState([]);
   const [transferHistory, setTransferHistory] = useState([]);
@@ -310,94 +306,16 @@ const NFTTrait = ({ nft, prizeInfo, numCSTokenMints }) => {
                     {prizeInfo.AmountEth.toFixed(4)} ETH
                   </Typography>
                 </Box>
-                <Box mb={1}>
-                  <Typography color="primary" component="span">
-                    Donation Amount:
-                  </Typography>
-                  &nbsp;
-                  <Typography component="span">
-                    {prizeInfo.CharityAmountETH.toFixed(4)} ETH
-                  </Typography>
-                </Box>
-                <Box mb={2}>
-                  <Typography color="primary" component="span">
-                    Charity Address:
-                  </Typography>
-                  &nbsp;
-                  <Typography component="span">
-                    {prizeInfo.CharityAddress}
-                  </Typography>
-                </Box>
-                <Grid container spacing={2} mt={2}>
-                  <Grid item xs={6}>
-                    <Button
-                      variant="contained"
-                      onClick={() =>
-                        setShowRaffleTokenWinners(!showRaffleTokenWinners)
-                      }
-                    >
-                      Raffle Token Winners
-                    </Button>
-                  </Grid>
-                  <Grid item xs={6}>
-                    <Button
-                      variant="contained"
-                      onClick={() =>
-                        setShowRaffleETHWinners(!showRaffleETHWinners)
-                      }
-                    >
-                      Raffle ETH Winners
-                    </Button>
-                  </Grid>
-                </Grid>
-                {showRaffleTokenWinners && (
-                  <Box mt={2}>
-                    <Typography color="primary">
-                      Raffle Token Winners:
-                    </Typography>
-                    <List>
-                      {prizeInfo.RaffleNFTWinners.map((winner) => (
-                        <ListItem key={winner.EvtLogId} sx={{ padding: 0 }}>
-                          <Link
-                            href={`/user/${winner.WinnerAddr}`}
-                            sx={{ color: "inherit" }}
-                          >
-                            <Typography fontFamily="monospace">
-                              {winner.WinnerAddr}
-                            </Typography>
-                          </Link>
-                        </ListItem>
-                      ))}
-                    </List>
-                  </Box>
-                )}
-                {showRaffleETHWinners && (
-                  <Box mt={2}>
-                    <Typography color="primary" component="span" mr={1}>
-                      Raffle ETH Winners:
-                    </Typography>
-                    <Typography component="span">
-                      {prizeInfo.RaffleETHDeposits[0].Amount.toFixed(4)} ETH
-                      (for each winner)
-                    </Typography>
-                    <List>
-                      {prizeInfo.RaffleETHDeposits.map((winner) => (
-                        <ListItem key={winner.EvtLogId} sx={{ padding: 0 }}>
-                          <Link
-                            href={`/user/${winner.WinnerAddr}`}
-                            sx={{ color: "inherit" }}
-                          >
-                            <Typography fontFamily="monospace">
-                              {winner.WinnerAddr}
-                            </Typography>
-                          </Link>
-                        </ListItem>
-                      ))}
-                    </List>
-                  </Box>
-                )}
               </>
             )}
+            <Box mt={6}>
+              <Button
+                variant="outlined"
+                onClick={() => router.push(`/prize/${nft.PrizeNum}`)}
+              >
+                View Round Details
+              </Button>
+            </Box>
             <Box>
               {account === nft.CurOwnerAddr && (
                 <>
