@@ -39,7 +39,7 @@ import NFTImage from "./NFTImage";
 import { NameHistoryTable } from "./NameHistoryTable";
 import { TransferHistoryTable } from "./TransferHistoryTable";
 
-const NFTTrait = ({ nft, prizeInfo }) => {
+const NFTTrait = ({ nft, prizeInfo, numCSTokenMints }) => {
   const fileName = nft.TokenId.toString().padStart(6, "0");
   const image = `https://cosmic-game.s3.us-east-2.amazonaws.com/${fileName}.png`;
   const video = `https://cosmic-game.s3.us-east-2.amazonaws.com/${fileName}.mp4`;
@@ -147,7 +147,7 @@ const NFTTrait = ({ nft, prizeInfo }) => {
   useEffect(() => {
     fetchNameHistory();
     fetchTransferHistory();
-  }, []);
+  }, [nft]);
 
   return (
     <Container>
@@ -226,6 +226,7 @@ const NFTTrait = ({ nft, prizeInfo }) => {
                         fullWidth
                         startIcon={<ArrowBack />}
                         onClick={handlePrev}
+                        disabled={nft.TokenId === 0}
                       >
                         Prev
                       </Button>
@@ -237,6 +238,7 @@ const NFTTrait = ({ nft, prizeInfo }) => {
                         fullWidth
                         endIcon={<ArrowForward />}
                         onClick={handleNext}
+                        disabled={nft.TokenId === numCSTokenMints - 1}
                       >
                         Next
                       </Button>
