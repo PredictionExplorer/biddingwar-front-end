@@ -6,7 +6,6 @@ import {
   TableBody,
   TableCell,
   TableRow,
-  Typography,
 } from "@mui/material";
 import {
   TablePrimaryCell,
@@ -23,7 +22,9 @@ const NameHistoryRow = ({ record }) => {
 
   return (
     <TablePrimaryRow>
-      <TablePrimaryCell>{convertTimestampToDateTime(record.TimeStamp)}</TablePrimaryCell>
+      <TablePrimaryCell>
+        {convertTimestampToDateTime(record.TimeStamp)}
+      </TablePrimaryCell>
       <TablePrimaryCell>{record.TokenName}</TablePrimaryCell>
     </TablePrimaryRow>
   );
@@ -32,9 +33,6 @@ const NameHistoryRow = ({ record }) => {
 export const NameHistoryTable = ({ list }) => {
   const perPage = 5;
   const [page, setPage] = useState(1);
-  if (list.length === 0) {
-    return <Typography>No record yet.</Typography>;
-  }
   return (
     <>
       <TablePrimaryContainer>

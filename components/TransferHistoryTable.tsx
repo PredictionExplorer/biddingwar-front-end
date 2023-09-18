@@ -7,7 +7,6 @@ import {
   TableBody,
   TableCell,
   TableRow,
-  Typography,
 } from "@mui/material";
 import {
   TablePrimaryCell,
@@ -23,15 +22,7 @@ const TransferHistoryRow = ({ record }) => {
   }
 
   return (
-    <TablePrimaryRow
-      sx={
-        record.TransferType && {
-          fontStyle: "italic",
-          background: "rgba(255, 255, 255, 0.06)",
-        }
-      }
-      title="Mint"
-    >
+    <TablePrimaryRow>
       <TablePrimaryCell>
         {convertTimestampToDateTime(record.TimeStamp)}
       </TablePrimaryCell>
@@ -58,9 +49,6 @@ const TransferHistoryRow = ({ record }) => {
 export const TransferHistoryTable = ({ list }) => {
   const perPage = 5;
   const [page, setPage] = useState(1);
-  if (list.length === 0) {
-    return <Typography>No record yet.</Typography>;
-  }
   return (
     <>
       <TablePrimaryContainer>

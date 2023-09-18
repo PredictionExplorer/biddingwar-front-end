@@ -137,7 +137,9 @@ const NFTTrait = ({ nft, prizeInfo }) => {
     setNameHistory(history);
   };
   const fetchTransferHistory = async () => {
-    const response = await fetch(`/api/transferHistory/?tokenId=${nft.TokenId}`);
+    const response = await fetch(
+      `/api/transferHistory/?tokenId=${nft.TokenId}`
+    );
     const history = await response.json();
     setTransferHistory(history);
   };
@@ -419,7 +421,7 @@ const NFTTrait = ({ nft, prizeInfo }) => {
                   </Box>
                   <Box mt={3}>
                     <Typography variant="h6" align="left">
-                      Rename
+                      Set a name to the token
                     </Typography>
                     <Box display="flex">
                       <TextField
@@ -446,18 +448,22 @@ const NFTTrait = ({ nft, prizeInfo }) => {
             </Box>
           </Grid>
         </Grid>
-        <Box mt="40px">
-          <Typography variant="h6" mb={2}>
-            History of Name Changes
-          </Typography>
-          <NameHistoryTable list={nameHistory} />
-        </Box>
-        <Box mt="40px">
-          <Typography variant="h6" mb={2}>
-            History of Ownership Changes
-          </Typography>
-          <TransferHistoryTable list={transferHistory} />
-        </Box>
+        {nameHistory.length !== 0 && (
+          <Box mt="40px">
+            <Typography variant="h6" mb={2}>
+              History of Name Changes
+            </Typography>
+            <NameHistoryTable list={nameHistory} />
+          </Box>
+        )}
+        {transferHistory.length !== 0 && !transferHistory[0].TransferType && (
+          <Box mt="40px">
+            <Typography variant="h6" mb={2}>
+              History of Ownership Changes
+            </Typography>
+            <TransferHistoryTable list={transferHistory} />
+          </Box>
+        )}
         <Box mt="80px">
           <NFTVideo image_thumb={image} onClick={() => handlePlay(video)} />
         </Box>
