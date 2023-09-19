@@ -15,10 +15,11 @@ import {
   TablePrimaryRow,
 } from "./styled";
 import { convertTimestampToDateTime } from "../utils";
+import { ZERO_ADDRESS } from "../config/misc";
 
 const TransferHistoryRow = ({ record }) => {
-  if (!record) {
-    return <TablePrimaryRow></TablePrimaryRow>;
+  if (!record || record.FromAddr === ZERO_ADDRESS) {
+    return;
   }
 
   return (

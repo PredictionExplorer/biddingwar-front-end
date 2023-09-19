@@ -143,6 +143,7 @@ const NFTTrait = ({ nft, prizeInfo, numCSTokenMints }) => {
   useEffect(() => {
     fetchNameHistory();
     fetchTransferHistory();
+    setTokenName(nft.TokenName);
   }, [nft]);
 
   return (

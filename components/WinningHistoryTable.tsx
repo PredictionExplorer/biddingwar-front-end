@@ -90,7 +90,7 @@ const HistoryRow = ({ history, showClaimedStatus }) => {
       <TablePrimaryCell>{history.TokenAddress}</TablePrimaryCell>
       <TablePrimaryCell align="right">
         {history.TokenId >= 0 &&
-          (history.RecordType === 1 ? (
+          (history.RecordType === 1 || history.RecordType === 3 ? (
             <Link
               href={`/detail/${history.TokenId}`}
               sx={{
@@ -101,7 +101,15 @@ const HistoryRow = ({ history, showClaimedStatus }) => {
               {history.TokenId}
             </Link>
           ) : (
-            history.TokenId
+            <Link
+              href={`/detail/${history.TokenId}`}
+              sx={{
+                fontSize: "inherit",
+                color: "inherit",
+              }}
+            >
+              {history.TokenId}
+            </Link>
           ))}
       </TablePrimaryCell>
       <TablePrimaryCell align="right">
