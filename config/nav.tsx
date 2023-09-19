@@ -1,6 +1,5 @@
-import { Badge, Box } from "@mui/material";
+import { Badge } from "@mui/material";
 import { ReactNode } from "react";
-import { NavLink } from "../components/styled";
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 
 type NavItem = {
