@@ -8,40 +8,21 @@ import {
   ListItem,
   Container,
   Link,
-  Badge,
-  Box,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 import NAV_SECTIONS from "../config/nav";
 import ConnectWalletButton from "../components/ConnectWalletButton";
 
-import { NavLink, AppBarWrapper, DrawerList } from "./styled";
+import { AppBarWrapper, DrawerList } from "./styled";
 import ListNavItem from "./ListNavItem";
 import ListItemButton from "./ListItemButton";
-import { useApiData } from "../contexts/ApiDataContext";
-import { useActiveWeb3React } from "../hooks/web3";
 
 const Header = () => {
   const [state, setState] = useState({
     mobileView: false,
     drawerOpen: false,
   });
-  const [claimHistory, setClaimHistory] = useState([]);
-  const { apiData: status } = useApiData();
   const { mobileView, drawerOpen } = state;
-  const { account } = useActiveWeb3React();
-
-  useEffect(() => {
-    const fetchClaimHistory = async () => {
-      const res = await fetch(`/api/claimHistory/?address=${account}`);
-      const history = await res.json();
-      setClaimHistory(history);
-    };
-    if (account) {
-      fetchClaimHistory();
-    }
-  }, []);
 
   useEffect(() => {
     const setResponsiveness = () => {
@@ -68,23 +49,6 @@ const Header = () => {
         {NAV_SECTIONS.map((nav, i) => (
           <ListNavItem key={i} nav={nav} />
         ))}
-        {claimHistory.length > 0 && (
-          <ListNavItem
-            nav={{
-              title: "Winning History",
-              route: "/winning-history",
-            }}
-          />
-        )}
-        {(status.ETHRaffleToClaim > 0 || status.NumDonatedNFTToClaim > 0) && (
-          <Box ml={3}>
-            <Badge color="error" variant="dot">
-              <NavLink href="/my-winnings">
-                <EmojiEventsIcon />
-              </NavLink>
-            </Badge>
-          </Box>
-        )}
         <ConnectWalletButton isMobileView={false} />
       </Toolbar>
     );
@@ -124,25 +88,6 @@ const Header = () => {
                 sx={{ justifyContent: "center" }}
               />
             ))}
-            {claimHistory.length > 0 && (
-              <ListItemButton
-                nav={{
-                  title: "Winning History",
-                  route: "/winning-history",
-                }}
-                sx={{ justifyContent: "center" }}
-              />
-            )}
-            {(status.ETHRaffleToClaim > 0 ||
-              status.NumDonatedNFTToClaim > 0) && (
-              <Box ml={3}>
-                <Badge color="error" variant="dot">
-                  <NavLink href="/my-winnings">
-                    <EmojiEventsIcon />
-                  </NavLink>
-                </Badge>
-              </Box>
-            )}
           </DrawerList>
         </Drawer>
       </Toolbar>
