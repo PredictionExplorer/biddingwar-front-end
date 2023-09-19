@@ -128,7 +128,7 @@ const UserInfo = ({ address, Bids, UserInfo }) => {
         </Box>
         <Box>
           <Typography variant="h6" lineHeight={1} mt={8} mb={2}>
-            Winning history by the User
+            History of Winnings
           </Typography>
           {claimHistory === null ? (
             <Typography>Loading...</Typography>
