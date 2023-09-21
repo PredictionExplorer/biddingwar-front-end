@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useApiData } from './ApiDataContext';
 import { useActiveWeb3React } from '../hooks/web3';
+import api from '../services/api';
 
 interface ApiDataFetcherProps {
   interval: number;
@@ -10,8 +11,7 @@ const ApiDataFetcher: React.FC<ApiDataFetcherProps> = ({ interval }) => {
   const { setApiData } = useApiData();
   const { account } = useActiveWeb3React();
   const fetchNotification = async () => {
-    const res = await fetch(`/api/notifRedBox?address=${account}`);
-    const notify = await res.json();
+    const notify = await api.notify_red_box(account);
     return notify;
   };
 

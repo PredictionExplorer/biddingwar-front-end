@@ -6,12 +6,15 @@ import PaginationGrid from "../components/PaginationGrid";
 import { MainWrapper } from "../components/styled";
 import api from "../services/api";
 
-const Gallery = ({ nfts }) => {
+const Gallery = () => {
   const [collection, setCollection] = useState([]);
-
   useEffect(() => {
-    const sorted = nfts.sort((a, b) => Number(b.TokenId) - Number(a.TokenId));
-    setCollection(sorted);
+    const fetchData = async () => {
+      const nfts = await api.get_cst_list();
+      const sorted = nfts.sort((a, b) => Number(b.TokenId) - Number(a.TokenId));
+      setCollection(sorted);
+    };
+    fetchData();
   }, []);
 
   return (
@@ -41,12 +44,5 @@ const Gallery = ({ nfts }) => {
     </>
   );
 };
-
-export async function getServerSideProps() {
-  const nfts = await api.get_cst_list();
-  return {
-    props: { nfts },
-  };
-}
 
 export default Gallery;

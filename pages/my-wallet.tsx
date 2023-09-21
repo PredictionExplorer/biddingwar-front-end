@@ -27,6 +27,7 @@ import { useApiData } from "../contexts/ApiDataContext";
 import useCosmicGameContract from "../hooks/useCosmicGameContract";
 import { DonatedNFTTable } from "../components/DonatedNFTTable";
 import Fireworks, { FireworksHandlers } from "@fireworks-js/react";
+import api from "../services/api";
 
 const MyWinningsRow = ({ winning }) => {
   if (!winning) {
@@ -251,30 +252,20 @@ const MyWallet = () => {
 
   useEffect(() => {
     const fetchRaffleETHDeposits = async () => {
-      const res = await fetch(
-        `/api/raffleETHDepositsByUser/?address=${account}`
-      );
-      let deposits = await res.json();
+      let deposits = await api.get_raffle_deposits_by_user(account);
       deposits = deposits.sort((a, b) => b.TimeStamp - a.TimeStamp);
       setRaffleETHToClaim(deposits);
     };
     const fetchCSTList = async () => {
-      const res = await fetch(`/api/cstListByUser/?address=${account}`);
-      let cstList = await res.json();
+      let cstList = await api.get_cst_list_by_user(account);
       setCSTList(cstList);
     };
     const fetchClaimedDonatedNFTs = async () => {
-      const res = await fetch(
-        `/api/claimedDonatedNftByUser/?address=${account}`
-      );
-      let list = await res.json();
+      const list = await api.get_claimed_donated_nft_by_user(account);
       setClaimedDonatedNFTs(list);
     };
     const fetchUnclaimedDonatedNFTs = async () => {
-      const res = await fetch(
-        `/api/unclaimedDonatedNftByUser/?address=${account}`
-      );
-      let list = await res.json();
+      const list = await api.get_unclaimed_donated_nft_by_user(account);
       setUnclaimedDonatedNFTs(list);
     };
     fetchRaffleETHDeposits();

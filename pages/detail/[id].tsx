@@ -1,15 +1,40 @@
 import { GetServerSidePropsContext } from "next";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Head from "next/head";
 import NFTTrait from "../../components/NFTTrait";
 import { MainWrapper } from "../../components/styled";
 import api from "../../services/api";
+import { Typography } from "@mui/material";
 
-const Detail = ({ nft, prizeInfo, numCSTokenMints }) => {
+const Detail = ({ tokenId }) => {
+  const [loading, setLoading] = useState(true);
+  const [nft, setNft] = useState(null);
+  const [prizeInfo, setPrizeInfo] = useState(null);
+  const [dashboard, setDashboard] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      const dashboardData = await api.get_dashboard_info();
+      console.log(dashboardData);
+      setDashboard(dashboardData);
+      if (dashboardData.MainStats.NumCSTokenMints > parseInt(tokenId)) {
+        const nft = await api.get_cst_info(parseInt(tokenId));
+        setNft(nft);
+      }
+      if (nft?.PrizeNum >= 0) {
+        const prizeInfo = await api.get_prize_info(nft.PrizeNum);
+        setPrizeInfo(prizeInfo);
+      }
+      setLoading(false);
+    };
+    fetchData();
+  }, []);
+
   return (
     <>
       <Head>
-        <title>NFT #{nft.TokenId} | CosmicSignature Token</title>
+        <title>NFT #{nft?.TokenId} | CosmicSignature Token</title>
       </Head>
       <MainWrapper
         maxWidth={false}
@@ -18,11 +43,15 @@ const Detail = ({ nft, prizeInfo, numCSTokenMints }) => {
           paddingRight: 0,
         }}
       >
-        <NFTTrait
-          nft={nft}
-          prizeInfo={prizeInfo}
-          numCSTokenMints={numCSTokenMints}
-        />
+        {loading ? (
+          <Typography>Loading...</Typography>
+        ) : (
+          <NFTTrait
+            nft={nft}
+            prizeInfo={prizeInfo}
+            numCSTokenMints={dashboard.MainStats.NumCSTokenMints}
+          />
+        )}
       </MainWrapper>
     </>
   );
@@ -31,22 +60,7 @@ const Detail = ({ nft, prizeInfo, numCSTokenMints }) => {
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const id = context.params!.id;
   const tokenId = Array.isArray(id) ? id[0] : id;
-  const dashboardData = await api.get_dashboard_info();
-  let nft = null;
-  if (dashboardData.MainStats.NumCSTokenMints > parseInt(tokenId)) {
-    nft = await api.get_cst_info(parseInt(tokenId));
-  }
-  let prizeInfo = null;
-  if (nft?.PrizeNum >= 0) {
-    prizeInfo = await api.get_prize_info(nft.PrizeNum);
-  }
-  return {
-    props: {
-      nft,
-      prizeInfo,
-      numCSTokenMints: dashboardData.MainStats.NumCSTokenMints,
-    },
-  };
+  return { props: { tokenId } };
 }
 
 export default Detail;

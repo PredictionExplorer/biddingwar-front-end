@@ -36,6 +36,7 @@ import useCosmicSignatureContract from "../hooks/useCosmicSignatureContract";
 import NFTImage from "./NFTImage";
 import { NameHistoryTable } from "./NameHistoryTable";
 import { TransferHistoryTable } from "./TransferHistoryTable";
+import api from "../services/api";
 
 const NFTTrait = ({ nft, prizeInfo, numCSTokenMints }) => {
   const fileName = nft.TokenId.toString().padStart(6, "0");
@@ -128,15 +129,11 @@ const NFTTrait = ({ nft, prizeInfo, numCSTokenMints }) => {
   };
 
   const fetchNameHistory = async () => {
-    const response = await fetch(`/api/nameHistory/?tokenId=${nft.TokenId}`);
-    const history = await response.json();
+    const history = await api.get_name_history(nft.TokenId);
     setNameHistory(history);
   };
   const fetchTransferHistory = async () => {
-    const response = await fetch(
-      `/api/transferHistory/?tokenId=${nft.TokenId}`
-    );
-    const history = await response.json();
+    const history = await api.get_transfer_history(nft.TokenId);
     setTransferHistory(history);
   };
 

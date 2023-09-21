@@ -11,8 +11,7 @@ const UserInfo = ({ address, Bids, UserInfo }) => {
   const [claimHistory, setClaimHistory] = useState(null);
   useEffect(() => {
     const fetchClaimHistory = async () => {
-      const res = await fetch(`/api/claimHistoryByUser/?address=${address}`);
-      const history = await res.json();
+      const history = await api.get_claim_history_by_user(address);
       setClaimHistory(history);
     };
     if (address) {

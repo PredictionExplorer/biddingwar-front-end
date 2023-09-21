@@ -4,14 +4,14 @@ import Head from "next/head";
 import { MainWrapper } from "../components/styled";
 import { useActiveWeb3React } from "../hooks/web3";
 import WinningHistoryTable from "../components/WinningHistoryTable";
+import api from "../services/api";
 
 const WinningHistory = () => {
   const { account } = useActiveWeb3React();
   const [claimHistory, setClaimHistory] = useState(null);
   useEffect(() => {
     const fetchClaimHistory = async () => {
-      const res = await fetch(`/api/claimHistoryByUser/?address=${account}`);
-      const history = await res.json();
+      const history = await api.get_claim_history_by_user(account);
       setClaimHistory(history);
     };
     if (account) {

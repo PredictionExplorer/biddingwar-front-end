@@ -27,6 +27,7 @@ import useCosmicGameContract from "../hooks/useCosmicGameContract";
 import useRaffleWalletContract from "../hooks/useRaffleWalletContract";
 import router from "next/router";
 import { useApiData } from "../contexts/ApiDataContext";
+import api from "../services/api";
 
 const MyWinningsRow = ({ winning }) => {
   if (!winning) {
@@ -139,18 +140,12 @@ const MyWinnings = () => {
 
   useEffect(() => {
     const fetchUnclaimedDonatedNFTs = async () => {
-      const res = await fetch(
-        `/api/unclaimedDonatedNftByUser/?address=${account}`
-      );
-      let nfts = await res.json();
+      let nfts = await api.get_unclaimed_donated_nft_by_user(account);
       nfts = nfts.sort((a, b) => a.TimeStamp - b.TimeStamp);
       setDonatedNFTToClaim(nfts);
     };
     const fetchUnclaimedRaffleETHDeposits = async () => {
-      const res = await fetch(
-        `/api/unclaimedRaffleDepositsByUser/?address=${account}`
-      );
-      let deposits = await res.json();
+      let deposits = await api.get_unclaimed_raffle_deposits_by_user(account);
       deposits = deposits.sort((a, b) => b.TimeStamp - a.TimeStamp);
       setRaffleETHToClaim(deposits);
     };

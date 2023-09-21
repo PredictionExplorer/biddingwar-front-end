@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import {
   Box,
@@ -12,12 +12,21 @@ import {
 import { useSnapCarousel } from "react-snap-carousel";
 import { ArrowForward, ArrowBack } from "@mui/icons-material";
 import NFT from "./NFT";
+import api from "../services/api";
 
-const LatestNFTs = ({ nfts }) => {
+const LatestNFTs = () => {
+  const [data, setData] = useState([]);
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up("md"));
   const { scrollRef, pages, activePageIndex, next, prev } = useSnapCarousel();
-  const data = nfts.sort((a, b) => Number(b.TokenId) - Number(a.TokenId));
+  useEffect(() => {
+    const fetchData = async () => {
+      const nfts = await api.get_cst_list();
+      const data = nfts.sort((a, b) => Number(b.TokenId) - Number(a.TokenId));
+      setData(data);
+    };
+    fetchData();
+  }, []);
   return (
     <Box sx={{ backgroundColor: "#101441" }}>
       <Container sx={{ padding: "80px 10px 150px" }}>

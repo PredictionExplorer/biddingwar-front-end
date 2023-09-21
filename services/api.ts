@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const baseUrl = "https://randomwalknft-api.com/";
-export const cosmicGameBaseUrl = "http://170.187.142.12:9090/api/cosmicgame/";
+export const cosmicGameBaseUrl = "https://170.187.142.12/api/cosmicgame/";
 
 class ApiService {
   public async create(token_id: number, seed: string) {
@@ -51,6 +51,21 @@ class ApiService {
     return data.NFTDonations;
   }
 
+  public async get_claimed_donated_nft_by_user(address: string) {
+    const { data } = await axios.get(cosmicGameBaseUrl + `user/nft/claims/${address}`);
+    return data.DonatedNFTClaims;
+  }
+
+  public async get_unclaimed_donated_nft_by_user(address: string) {
+    const { data } = await axios.get(cosmicGameBaseUrl + `user/nft/unclaimed_by_user/${address}`);
+    return data.UnclaimedDonatedNFTs;
+  }
+
+  public async get_unclaimed_raffle_deposits_by_user(address: string) {
+    const { data } = await axios.get(cosmicGameBaseUrl + `user/unclaimed_raffle_deposits/${address}/0/1000000`);
+    return data.UnclaimedDeposits;
+  }
+
   public async get_prize_list() {
     const { data } = await axios.get(cosmicGameBaseUrl + "prize/list/0/1000000");
     return data.PrizeClaims;
@@ -71,6 +86,11 @@ class ApiService {
     const { data } = await axios.get(cosmicGameBaseUrl + 'cst/list/0/1000000');
     const cstList = data.CosmicSignatureTokenList;
     return cstList;
+  }
+
+  public async get_cst_list_by_user(address: string) {
+    const { data } = await axios.get(cosmicGameBaseUrl + `cst/list_by_user/${address}/0/1000000`);
+    return data.UserTokens;
   }
 
   public async get_cst_info(tokenId: number) {
@@ -98,6 +118,43 @@ class ApiService {
     const { data } = await axios.get(baseUrl + "token_info/" + token_id);
     return data;
   }
+
+  public async notify_red_box(address: string) {
+    const { data } = await axios.get(cosmicGameBaseUrl + `user/notif_red_box/${address}`);
+    return data.Winnings;
+  }
+
+  public async get_name_history(token_id: number) {
+    const { data } = await axios.get(cosmicGameBaseUrl + `cst/names/${token_id}`);
+    return data.TokenNameHistory;
+  }
+
+  public async get_transfer_history(token_id: number) {
+    const { data } = await axios.get(cosmicGameBaseUrl + `cst/transfers/${token_id}/0/10000`);
+    return data.TokenTransfers;
+  }
+
+  public async get_claim_history() {
+    const { data } = await axios.get(cosmicGameBaseUrl + "prize/claim_history/0/100000");
+    return data.GlobalClaimHistory;
+  }
+
+  public async get_claim_history_by_user(address: string) {
+    const { data } = await axios.get(cosmicGameBaseUrl + `user/claim_history/${address}/0/100000`);
+    return data.ClaimHistory;
+  }
+
+  public async get_prize_time() {
+    const { data } = await axios.get(cosmicGameBaseUrl + "prize/cur_round/time");
+    return data.CurRoundPrizeTime;
+  }
+
+  public async get_current_time() {
+    const { data } = await axios.get(cosmicGameBaseUrl + "time/current");
+    return data.CurrentTimeStamp;
+  }
+
+
 }
 
 export default new ApiService();

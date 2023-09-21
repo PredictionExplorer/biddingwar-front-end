@@ -61,18 +61,12 @@ import { calculateTimeDiff } from "../utils";
 import { useCookies } from "react-cookie";
 import WinningHistoryTable from "../components/WinningHistoryTable";
 
-const NewHome = ({
-  biddingHistory,
-  initialData,
-  nfts,
-  prizeInfo,
-  biddedRWLKIds,
-  nftDonations,
-}) => {
-  const [data, setData] = useState(initialData);
-  const [curBidList, setCurBidList] = useState(biddingHistory);
-  const [donatedNFTs, setDonatedNFTs] = useState(nftDonations);
+const NewHome = () => {
+  const [data, setData] = useState(null);
+  const [curBidList, setCurBidList] = useState([]);
+  const [donatedNFTs, setDonatedNFTs] = useState([]);
   const [prizeTime, setPrizeTime] = useState(0);
+  const [prizeInfo, setPrizeInfo] = useState(null);
   const [message, setMessage] = useState("");
   const [nftDonateAddress, setNftDonateAddress] = useState("");
   const [nftId, setNftId] = useState(-1);
@@ -102,23 +96,23 @@ const NewHome = ({
   const [cookies, setCookie] = useCookies(["banner_id"]);
 
   const gridLayout =
-    nftDonations.length > 16
+    donatedNFTs.length > 16
       ? { xs: 6, sm: 3, md: 2, lg: 2 }
-      : nftDonations.length > 9
+      : donatedNFTs.length > 9
       ? { xs: 6, sm: 4, md: 3, lg: 3 }
       : { xs: 12, sm: 6, md: 4, lg: 4 };
 
   const series = [
-    { category: "Prize", value: data.PrizePercentage },
-    { category: "Raffle", value: data.RafflePercentage },
-    { category: "Charity", value: data.CharityPercentage },
+    { category: "Prize", value: data?.PrizePercentage },
+    { category: "Raffle", value: data?.RafflePercentage },
+    { category: "Charity", value: data?.CharityPercentage },
     {
       category: "Next round",
       value:
         100 -
-        data.CharityPercentage -
-        data.RafflePercentage -
-        data.PrizePercentage,
+        data?.CharityPercentage -
+        data?.RafflePercentage -
+        data?.PrizePercentage,
     },
   ];
 
@@ -386,6 +380,8 @@ const NewHome = ({
 
   useEffect(() => {
     const getData = async () => {
+      const bidList = await api.get_bid_list();
+      const biddedRWLKIds = bidList.map((bid) => bid.RWalkNFTId);
       if (nftRWLKContract && account) {
         const tokens = await nftRWLKContract.walletOfOwner(account);
         const nftIds = tokens
@@ -405,22 +401,13 @@ const NewHome = ({
   // }, [blackVideo]);
 
   useEffect(() => {
-    const fetchDashboardData = async () => {
-      const response = await fetch("/api/dashboard");
-      const newData = await response.json();
-
-      const bidResponse = await fetch(
-        `/api/bid/?round=${newData.CurRoundNum - 1}&sortDir=desc`
-      );
-      const newBidData = await bidResponse.json();
+    const fetchData = async () => {
+      const newData = await api.get_dashboard_info();
+      const round = newData.CurRoundNum - 1;
+      const newBidData = await api.get_bid_list_by_round(round, "desc");
       setCurBidList(newBidData);
-
-      const nftResponse = await fetch(
-        `/api/donatedNftByRound/?round=${newData.CurRoundNum - 1}`
-      );
-      const nftData = await nftResponse.json();
+      const nftData = await api.get_donations_nft_by_round(round);
       setDonatedNFTs(nftData);
-
       setData((prevData) => {
         if (
           account !== newData.LastBidderAddr &&
@@ -433,30 +420,31 @@ const NewHome = ({
     };
 
     const fetchPrizeTime = async () => {
-      const res = await fetch("/api/prizeTime");
-      const t = await res.json();
-      const response = await fetch("/api/currentTimeStamp");
-      const current = await response.json();
+      const t = await api.get_prize_time();
+      const current = await api.get_current_time();
       const offset = current * 1000 - Date.now();
       setPrizeTime(t * 1000 - offset);
     };
 
-    fetchPrizeTime();
-    let bannerId = cookies.banner_id;
-    if (!cookies.banner_id) {
-      bannerId = Math.floor(Math.random() * nfts.length);
-      const date = new Date();
-      date.setHours(date.getHours() + 1);
-      setCookie("banner_id", bannerId, { expires: date });
-    }
-    const fileName = bannerId.toString().padStart(6, "0");
-    setBannerTokenId(fileName);
+    const fetchPrizeInfo = async () => {
+      const prizeList = await api.get_prize_list();
+      let prizeInfo;
+      if (prizeList.length) {
+        prizeInfo = await api.get_prize_info(prizeList.length - 1);
+      } else {
+        prizeInfo = null;
+      }
+      setPrizeInfo(prizeInfo);
+    };
 
     const fetchClaimHistory = async () => {
-      const res = await fetch("/api/claimHistory");
-      const history = await res.json();
+      const history = await api.get_claim_history();
       setClaimHistory(history);
     };
+
+    fetchData();
+    fetchPrizeInfo();
+    fetchPrizeTime();
     fetchClaimHistory();
 
     // setBlackVideo(
@@ -464,8 +452,10 @@ const NewHome = ({
     // );
     // Fetch data every 12 seconds
     const interval = setInterval(() => {
-      fetchDashboardData();
+      fetchData();
+      fetchPrizeInfo();
       fetchPrizeTime();
+      fetchClaimHistory();
     }, 12000);
 
     // Clean up the interval when the component is unmounted
@@ -476,19 +466,33 @@ const NewHome = ({
 
   useEffect(() => {
     const interval = setInterval(async () => {
-      if (data.TsRoundStart) {
-        const response = await fetch("/api/currentTimeStamp");
-        const current = await response.json();
-        const timeDiff = calculateTimeDiff(data.TsRoundStart, current);
+      if (data?.TsRoundStart) {
+        const current = await api.get_current_time();
+        const timeDiff = calculateTimeDiff(data?.TsRoundStart, current);
         setRoundStartedAgo(timeDiff);
       } else {
         setRoundStartedAgo("");
       }
     }, 1000);
+
     return () => {
       clearInterval(interval);
     };
   }, []);
+
+  useEffect(() => {
+    if (data) {
+      let bannerId = cookies.banner_id;
+      if (!cookies.banner_id) {
+        bannerId = Math.floor(Math.random() * data?.MainStats.NumCSTokenMints);
+        const date = new Date();
+        date.setHours(date.getHours() + 1);
+        setCookie("banner_id", bannerId, { expires: date });
+      }
+      const fileName = bannerId.toString().padStart(6, "0");
+      setBannerTokenId(fileName);
+    }
+  }, [data]);
 
   return (
     <>
@@ -575,15 +579,15 @@ const NewHome = ({
             </Box>
           </Grid>
           <Grid item xs={12} sm={12} md={6} lg={6}>
-            {data.LastBidderAddr !== constants.AddressZero ? (
+            {data?.LastBidderAddr !== constants.AddressZero ? (
               <>
                 <Typography variant="h4" mr={1} component="span">
                   Current Bid
                 </Typography>
                 <Typography variant="h5" component="span">
-                  (Round #{data.CurRoundNum})
+                  (Round #{data?.CurRoundNum})
                 </Typography>
-                {data.LastBidderAddr !== constants.AddressZero &&
+                {data?.LastBidderAddr !== constants.AddressZero &&
                   (prizeTime > Date.now() ? (
                     <Countdown key={0} date={prizeTime} renderer={Counter} />
                   ) : (
@@ -595,7 +599,7 @@ const NewHome = ({
                   </Typography>
                   &nbsp;
                   <Typography component="span">
-                    {data.BidPriceEth.toFixed(6)} ETH
+                    {data?.BidPriceEth.toFixed(6)} ETH
                   </Typography>
                 </Box>
                 <Box>
@@ -604,7 +608,7 @@ const NewHome = ({
                   </Typography>
                   &nbsp;
                   <Typography component="span">
-                    {data.PrizeAmountEth.toFixed(4)} ETH
+                    {data?.PrizeAmountEth.toFixed(4)} ETH
                   </Typography>
                 </Box>
                 {roundStartedAgo && (
@@ -621,14 +625,14 @@ const NewHome = ({
                 <Box sx={{ mt: "24px" }}>
                   <Typography color="primary">Last Bidder Address:</Typography>
                   <Typography>
-                    {data.LastBidderAddr === constants.AddressZero ? (
+                    {data?.LastBidderAddr === constants.AddressZero ? (
                       "There is no bidder yet."
                     ) : (
                       <Link
-                        href={`/user/${data.LastBidderAddr}`}
+                        href={`/user/${data?.LastBidderAddr}`}
                         color="rgb(255, 255, 255)"
                       >
-                        {data.LastBidderAddr}
+                        {data?.LastBidderAddr}
                       </Link>
                     )}
                   </Typography>
@@ -648,7 +652,7 @@ const NewHome = ({
             ) : (
               <>
                 <Typography variant="h4" mb={2}>
-                  Round #{data.CurRoundNum} ended
+                  Round #{data?.CurRoundNum} ended
                 </Typography>
                 <Box mb={1}>
                   <Typography color="primary" component="span">
@@ -657,11 +661,11 @@ const NewHome = ({
                   &nbsp;
                   <Typography component="span">
                     <Link
-                      href={`/user/${prizeInfo.WinnerAddr}`}
+                      href={`/user/${prizeInfo?.WinnerAddr}`}
                       color="rgb(255, 255, 255)"
                       fontSize="inherit"
                     >
-                      {prizeInfo.WinnerAddr}
+                      {prizeInfo?.WinnerAddr}
                     </Link>
                   </Typography>
                 </Box>
@@ -671,7 +675,7 @@ const NewHome = ({
                   </Typography>
                   &nbsp;
                   <Typography component="span">
-                    {data.PrizeAmountEth.toFixed(4)} ETH
+                    {data?.PrizeAmountEth.toFixed(4)} ETH
                   </Typography>
                 </Box>
                 <Typography mt="40px" mb={1}>
@@ -683,7 +687,7 @@ const NewHome = ({
                   </Typography>
                   &nbsp;
                   <Typography component="span">
-                    {data.BidPriceEth.toFixed(6)} ETH
+                    {data?.BidPriceEth.toFixed(6)} ETH
                   </Typography>
                 </Box>
               </>
@@ -760,7 +764,7 @@ const NewHome = ({
                         color="rgba(255, 255, 255, 0.68)"
                         ml={2}
                       >
-                        {(data.BidPriceEth * (1 + bidPricePlus / 100)).toFixed(
+                        {(data?.BidPriceEth * (1 + bidPricePlus / 100)).toFixed(
                           6
                         )}{" "}
                         ETH
@@ -797,7 +801,7 @@ const NewHome = ({
                   </Grid>
                   {!(
                     prizeTime > Date.now() ||
-                    data.LastBidderAddr === constants.AddressZero
+                    data?.LastBidderAddr === constants.AddressZero
                   ) && (
                     <Grid container columnSpacing={2} mt="20px">
                       <Grid item xs={12} sm={12} md={12} lg={12}>
@@ -807,7 +811,7 @@ const NewHome = ({
                           onClick={onClaimPrize}
                           fullWidth
                           disabled={
-                            data.LastBidderAddr !== account &&
+                            data?.LastBidderAddr !== account &&
                             prizeTime + 300000 > Date.now()
                           }
                           sx={{
@@ -818,7 +822,7 @@ const NewHome = ({
                           Claim Prize
                           <Box sx={{ display: "flex", alignItems: "center" }}>
                             {prizeTime + 300000 > Date.now() &&
-                              data.LastBidderAddr !== account && (
+                              data?.LastBidderAddr !== account && (
                                 <>
                                   available in &nbsp;
                                   <Countdown date={prizeTime + 300000} />
@@ -828,7 +832,7 @@ const NewHome = ({
                             <ArrowForward sx={{ width: 22, height: 22 }} />
                           </Box>
                         </Button>
-                        {data.LastBidderAddr !== account &&
+                        {data?.LastBidderAddr !== account &&
                           prizeTime + 300000 > Date.now() && (
                             <Typography
                               variant="body2"
@@ -897,17 +901,17 @@ const NewHome = ({
               </Typography>
               <Typography variant="body2" component="span">
                 When you bid, you are also buying a raffle ticket.{" "}
-                {data.NumRaffleEthWinners} raffle tickets will be chosen and
-                these people will win {data.RafflePercentage}% of the pot each.
-                Also, {data.NumRaffleNFTWinners} additional winners and{" "}
-                {data.NumHolderNFTWinners} Random Walk NFT holders and{" "}
-                {data.NumHolderNFTWinners} CosmicSignature token holders will be
-                chosen which will receive a Cosmic Signature NFT.
+                {data?.NumRaffleEthWinners} raffle tickets will be chosen and
+                these people will win {data?.RafflePercentage}% of the pot each.
+                Also, {data?.NumRaffleNFTWinners} additional winners and{" "}
+                {data?.NumHolderNFTWinners} Random Walk NFT holders and{" "}
+                {data?.NumHolderNFTWinners} CosmicSignature token holders will
+                be chosen which will receive a Cosmic Signature NFT.
               </Typography>
             </Box>
           </Grid>
         </Grid>
-        <Prize prizeAmount={data.PrizeAmountEth} />
+        <Prize prizeAmount={data?.PrizeAmountEth || 0} />
 
         <Box margin="100px 0">
           <Typography variant="h4" textAlign="center">
@@ -920,9 +924,9 @@ const NewHome = ({
           >
             you are also buying a raffle ticket. When the round ends, there
             are&nbsp;
-            {data.NumRaffleEthWinners +
-              data.NumRaffleNFTWinners +
-              data.NumHolderNFTWinners * 2}
+            {data?.NumRaffleEthWinners +
+              data?.NumRaffleNFTWinners +
+              data?.NumHolderNFTWinners * 2}
             &nbsp;raffle winners:
           </Typography>
           <Box textAlign="center" marginBottom="56px">
@@ -940,10 +944,10 @@ const NewHome = ({
                   sx={{ fontSize: "26px !important" }}
                   textAlign="center"
                 >
-                  {data.NumRaffleEthWinners} will receive
+                  {data?.NumRaffleEthWinners} will receive
                 </Typography>
                 <GradientText variant="h3" textAlign="center">
-                  {data.RafflePercentage}% of the ETH
+                  {data?.RafflePercentage}% of the ETH
                 </GradientText>
                 <Typography
                   sx={{ fontSize: "22px !important" }}
@@ -960,8 +964,8 @@ const NewHome = ({
                   sx={{ fontSize: "26px !important" }}
                   textAlign="center"
                 >
-                  {data.NumRaffleNFTWinners + data.NumHolderNFTWinners * 2} will
-                  receive
+                  {data?.NumRaffleNFTWinners + data?.NumHolderNFTWinners * 2}{" "}
+                  will receive
                 </Typography>
                 <GradientText variant="h3" textAlign="center">
                   1 Cosmic NFT
@@ -1041,7 +1045,7 @@ const NewHome = ({
         </Box>
       </MainWrapper>
 
-      <LatestNFTs nfts={nfts} />
+      <LatestNFTs />
 
       <Container>
         <Box mt="60px">
@@ -1073,37 +1077,5 @@ const NewHome = ({
     </>
   );
 };
-
-export async function getServerSideProps() {
-  const dashboardData = await api.get_dashboard_info();
-  const bidList = await api.get_bid_list();
-  const biddedRWLKIds = bidList.map((bid) => bid.RWalkNFTId);
-  const biddingHistory = await api.get_bid_list_by_round(
-    dashboardData.CurRoundNum - 1,
-    "desc"
-  );
-  const nfts = await api.get_cst_list();
-  const prizeList = await api.get_prize_list();
-  let prizeInfo;
-  if (prizeList.length) {
-    prizeInfo = await api.get_prize_info(prizeList.length - 1);
-  } else {
-    prizeInfo = null;
-  }
-  const nftDonations = await api.get_donations_nft_by_round(
-    dashboardData.CurRoundNum - 1
-  );
-
-  return {
-    props: {
-      biddingHistory,
-      initialData: dashboardData,
-      nfts,
-      prizeInfo,
-      biddedRWLKIds,
-      nftDonations,
-    },
-  };
-}
 
 export default NewHome;

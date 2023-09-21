@@ -9,38 +9,15 @@ import DonatedNFT from "../../components/DonatedNFT";
 import RaffleWinnerTable from "../../components/RaffleWinnerTable";
 import BiddingHistoryTable from "../../components/BiddingHistoryTable";
 import { useActiveWeb3React } from "../../hooks/web3";
-import useRaffleWalletContract from "../../hooks/useRaffleWalletContract";
 import useCosmicGameContract from "../../hooks/useCosmicGameContract";
 import { useApiData } from "../../contexts/ApiDataContext";
 
 const PrizeInfo = ({ bidHistory, prizeNum, nftDonations, prizeInfo }) => {
   const { account } = useActiveWeb3React();
   const cosmicGameContract = useCosmicGameContract();
-  const raffleWalletContract = useRaffleWalletContract();
   const { apiData: status } = useApiData();
   const [donatedNFTToClaim, setDonatedNFTToClaim] = useState([]);
 
-  useEffect(() => {
-    const fetchUnclaimedDonatedNFTs = async () => {
-      const res = await fetch(
-        `/api/unclaimedDonatedNftByUser/?address=${account}`
-      );
-      const nfts = await res.json();
-      setDonatedNFTToClaim(nfts);
-    };
-    if (status.NumDonatedNFTToClaim > 0) {
-      fetchUnclaimedDonatedNFTs();
-    }
-  }, [status]);
-
-  const handleAllETHClaim = async () => {
-    try {
-      const res = await raffleWalletContract.withdraw();
-      console.log(res);
-    } catch (err) {
-      console.log(err);
-    }
-  };
   const handleAllDonatedNFTsClaim = async () => {
     try {
       const indexList = donatedNFTToClaim.map((item) => item.Index);
@@ -50,6 +27,16 @@ const PrizeInfo = ({ bidHistory, prizeNum, nftDonations, prizeInfo }) => {
       console.log(err);
     }
   };
+  useEffect(() => {
+    const fetchUnclaimedDonatedNFTs = async () => {
+      const nfts = await api.get_unclaimed_donated_nft_by_user(account);
+      setDonatedNFTToClaim(nfts);
+    };
+    if (status.NumDonatedNFTToClaim > 0) {
+      fetchUnclaimedDonatedNFTs();
+    }
+  }, [status]);
+
   return (
     <>
       <Head>
