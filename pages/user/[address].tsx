@@ -7,17 +7,26 @@ import api from "../../services/api";
 import BiddingHistoryTable from "../../components/BiddingHistoryTable";
 import WinningHistoryTable from "../../components/WinningHistoryTable";
 
-const UserInfo = ({ address, Bids, UserInfo }) => {
+const UserInfo = ({ address }) => {
   const [claimHistory, setClaimHistory] = useState(null);
+  const [bidHistory, setBidHistory] = useState([]);
+  const [userInfo, setUserInfo] = useState(null);
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
-    const fetchClaimHistory = async () => {
+    const fetchData = async () => {
+      setLoading(true);
       const history = await api.get_claim_history_by_user(address);
       setClaimHistory(history);
+      const { Bids, UserInfo } = await api.get_user_info(address);
+      setBidHistory(Bids);
+      setUserInfo(UserInfo);
+      setLoading(false);
     };
     if (address) {
-      fetchClaimHistory();
+      fetchData();
     }
-  }, []);
+  }, [address]);
 
   return (
     <>
@@ -34,110 +43,113 @@ const UserInfo = ({ address, Bids, UserInfo }) => {
             {address}
           </Typography>
         </Box>
-        <Box mb={1}>
-          <Typography color="primary" component="span">
-            Number of Bids:
-          </Typography>
-          &nbsp;
-          <Typography component="span">{UserInfo.NumBids}</Typography>
-        </Box>
-        <Box mb={1}>
-          <Typography color="primary" component="span">
-            Maximum Bid Amount:
-          </Typography>
-          &nbsp;
-          <Typography component="span">
-            {UserInfo.MaxBidAmount.toFixed(6)} ETH
-          </Typography>
-        </Box>
-        <Box mb={1}>
-          <Typography color="primary" component="span">
-            Number of Prizes taken:
-          </Typography>
-          &nbsp;
-          <Typography component="span">{UserInfo.NumPrizes}</Typography>
-        </Box>
-        <Box mb={1}>
-          <Typography color="primary" component="span">
-            Maximum amount gained (in prize winnings):
-          </Typography>
-          &nbsp;
-          <Typography component="span">
-            {UserInfo.MaxWinAmount.toFixed(6)} ETH
-          </Typography>
-        </Box>
-        <Box mb={1}>
-          <Typography color="primary" component="span">
-            Amount of winnings in ETH raffles:
-          </Typography>
-          &nbsp;
-          <Typography component="span">
-            {UserInfo.SumRaffleEthWinnings.toFixed(6)} ETH
-          </Typography>
-        </Box>
-        <Box mb={1}>
-          <Typography color="primary" component="span">
-            Amount withdrawn from ETH raffles:
-          </Typography>
-          &nbsp;
-          <Typography component="span">
-            {UserInfo.SumRaffleEthWithdrawal.toFixed(6)} ETH
-          </Typography>
-        </Box>
-        <Box mb={1}>
-          <Typography color="primary" component="span">
-            Unclaimed donated NFTs:
-          </Typography>
-          &nbsp;
-          <Typography component="span">{UserInfo.UnclaimedNFTs}</Typography>
-        </Box>
-        <Box mb={1}>
-          <Typography color="primary" component="span">
-            Total ETH won in raffles:
-          </Typography>
-          &nbsp;
-          <Typography component="span">
-            {(
-              UserInfo.SumRaffleEthWinnings + UserInfo.SumRaffleEthWithdrawal
-            ).toFixed(6)}{" "}
-            ETH
-          </Typography>
-        </Box>
-        <Box mb={1}>
-          <Typography color="primary" component="span">
-            Number of (ETH) raffles participated in:
-          </Typography>
-          &nbsp;
-          <Typography component="span">
-            {UserInfo.NumRaffleEthWinnings}
-          </Typography>
-        </Box>
-        <Box mb={1}>
-          <Typography color="primary" component="span">
-            Number of Raffle NFTs won:
-          </Typography>
-          &nbsp;
-          <Typography component="span">{UserInfo.RaffleNFTWon}</Typography>
-        </Box>
-        <Box mt={6}>
-          <Typography variant="h6" lineHeight={1}>
-            Bid History
-          </Typography>
-          <BiddingHistoryTable biddingHistory={Bids} />
-        </Box>
-        <Box>
-          <Typography variant="h6" lineHeight={1} mt={8} mb={2}>
-            History of Winnings
-          </Typography>
-          {claimHistory === null ? (
-            <Typography>Loading...</Typography>
-          ) : (
-            <WinningHistoryTable
-              winningHistory={claimHistory}
-              showClaimedStatus={true}
-            />
-          )}
-        </Box>
+        {loading ? (
+          <Typography>Loading...</Typography>
+        ) : (
+          <>
+            <Box mb={1}>
+              <Typography color="primary" component="span">
+                Number of Bids:
+              </Typography>
+              &nbsp;
+              <Typography component="span">{userInfo.NumBids}</Typography>
+            </Box>
+            <Box mb={1}>
+              <Typography color="primary" component="span">
+                Maximum Bid Amount:
+              </Typography>
+              &nbsp;
+              <Typography component="span">
+                {userInfo.MaxBidAmount.toFixed(6)} ETH
+              </Typography>
+            </Box>
+            <Box mb={1}>
+              <Typography color="primary" component="span">
+                Number of Prizes taken:
+              </Typography>
+              &nbsp;
+              <Typography component="span">{userInfo.NumPrizes}</Typography>
+            </Box>
+            <Box mb={1}>
+              <Typography color="primary" component="span">
+                Maximum amount gained (in prize winnings):
+              </Typography>
+              &nbsp;
+              <Typography component="span">
+                {userInfo.MaxWinAmount.toFixed(6)} ETH
+              </Typography>
+            </Box>
+            <Box mb={1}>
+              <Typography color="primary" component="span">
+                Amount of winnings in ETH raffles:
+              </Typography>
+              &nbsp;
+              <Typography component="span">
+                {userInfo.SumRaffleEthWinnings.toFixed(6)} ETH
+              </Typography>
+            </Box>
+            <Box mb={1}>
+              <Typography color="primary" component="span">
+                Amount withdrawn from ETH raffles:
+              </Typography>
+              &nbsp;
+              <Typography component="span">
+                {userInfo.SumRaffleEthWithdrawal.toFixed(6)} ETH
+              </Typography>
+            </Box>
+            <Box mb={1}>
+              <Typography color="primary" component="span">
+                Unclaimed donated NFTs:
+              </Typography>
+              &nbsp;
+              <Typography component="span">{userInfo.UnclaimedNFTs}</Typography>
+            </Box>
+            <Box mb={1}>
+              <Typography color="primary" component="span">
+                Total ETH won in raffles:
+              </Typography>
+              &nbsp;
+              <Typography component="span">
+                {(
+                  userInfo.SumRaffleEthWinnings +
+                  userInfo.SumRaffleEthWithdrawal
+                ).toFixed(6)}{" "}
+                ETH
+              </Typography>
+            </Box>
+            <Box mb={1}>
+              <Typography color="primary" component="span">
+                Number of (ETH) raffles participated in:
+              </Typography>
+              &nbsp;
+              <Typography component="span">
+                {userInfo.NumRaffleEthWinnings}
+              </Typography>
+            </Box>
+            <Box mb={1}>
+              <Typography color="primary" component="span">
+                Number of Raffle NFTs won:
+              </Typography>
+              &nbsp;
+              <Typography component="span">{userInfo.RaffleNFTWon}</Typography>
+            </Box>
+            <Box mt={6}>
+              <Typography variant="h6" lineHeight={1}>
+                Bid History
+              </Typography>
+              <BiddingHistoryTable biddingHistory={bidHistory} />
+            </Box>
+            <Box>
+              <Typography variant="h6" lineHeight={1} mt={8} mb={2}>
+                History of Winnings
+              </Typography>
+              <WinningHistoryTable
+                winningHistory={claimHistory}
+                showClaimedStatus={true}
+              />
+            </Box>
+          </>
+        )}
       </MainWrapper>
     </>
   );
@@ -146,14 +158,7 @@ const UserInfo = ({ address, Bids, UserInfo }) => {
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const params = context.params!.address;
   const address = Array.isArray(params) ? params[0] : params;
-  const { Bids, UserInfo } = await api.get_user_info(address);
-  return {
-    props: {
-      address,
-      Bids,
-      UserInfo,
-    },
-  };
+  return { props: { address } };
 }
 
 export default UserInfo;

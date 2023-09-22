@@ -12,6 +12,7 @@ const NAVS: NavItem[] = [
   { title: "Gallery", route: "/gallery" },
   { title: "Contracts", route: "/contracts" },
   { title: "Prizes", route: "/prize" },
+  { title: "Statistics", route: "/statistics" },
   { title: "FAQ", route: "/faq" },
   {
     title: (
