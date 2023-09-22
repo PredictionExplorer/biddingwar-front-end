@@ -411,6 +411,7 @@ const NewHome = () => {
       setData((prevData) => {
         if (
           account !== newData.LastBidderAddr &&
+          prevData &&
           prevData.CurNumBids < newData.CurNumBids
         ) {
           playAudio();

@@ -18,8 +18,8 @@ const Detail = ({ tokenId }) => {
       const dashboardData = await api.get_dashboard_info();
       console.log(dashboardData);
       setDashboard(dashboardData);
-      if (dashboardData.MainStats.NumCSTokenMints > parseInt(tokenId)) {
-        const nft = await api.get_cst_info(parseInt(tokenId));
+      if (dashboardData.MainStats.NumCSTokenMints > tokenId) {
+        const nft = await api.get_cst_info(tokenId);
         setNft(nft);
       }
       if (nft?.PrizeNum >= 0) {
@@ -60,7 +60,7 @@ const Detail = ({ tokenId }) => {
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const id = context.params!.id;
   const tokenId = Array.isArray(id) ? id[0] : id;
-  return { props: { tokenId } };
+  return { props: { tokenId: parseInt(tokenId) } };
 }
 
 export default Detail;

@@ -32,16 +32,22 @@ const convertTimestampToDateTime = (timestamp: any) => {
   return result;
 };
 
-const BidInfo = ({ BidInfo }) => {
+const BidInfo = ({ bidId }) => {
+  const [loading, setLoading] = useState(true);
+  const [bidInfo, setBidInfo] = useState(null);
   const [tokenURI, setTokenURI] = useState(null);
   useEffect(() => {
     const fetchData = async () => {
-      const { data } = await axios.get(BidInfo.NFTTokenURI);
-      setTokenURI(data);
+      setLoading(true);
+      const bidInfo = await api.get_bid_info(bidId);
+      setBidInfo(bidInfo);
+      if (bidInfo.NFTTokenURI) {
+        const { data } = await axios.get(bidInfo.NFTTokenURI);
+        setTokenURI(data);
+      }
+      setLoading(false);
     };
-    if (BidInfo.NFTTokenURI) {
-      fetchData();
-    }
+    fetchData();
   }, []);
   return (
     <>
@@ -53,129 +59,145 @@ const BidInfo = ({ BidInfo }) => {
         <Typography variant="h4" color="primary" mb={4}>
           Bid Info
         </Typography>
-        <Box mb={1} display="flex" flexWrap="wrap">
-          <Typography color="primary">Transaction Hash:</Typography>
-          &nbsp;
-          <Link
-            href={`https://arbiscan.io/tx/${BidInfo.TxHash}`}
-            style={{ color: "rgb(255, 255, 255)" }}
-            target="_blank"
-          >
-            <Typography>{shortenHex(BidInfo.TxHash, 16) }</Typography>
-          </Link>
-        </Box>
-        <Box mb={1} display="flex" flexWrap="wrap">
-          <Typography color="primary">Round Number:</Typography>
-          &nbsp;
-          <Link
-            href={`/prize/${BidInfo.RoundNum}`}
-            sx={{
-              fontSize: "inherit",
-              color: "inherit",
-            }}
-          >
-            <Typography>{BidInfo.RoundNum}</Typography>
-          </Link>
-        </Box>
-        <Box mb={1} display="flex" flexWrap="wrap">
-          <Typography color="primary">Bid Datetime:</Typography>
-          &nbsp;
-          <Typography>
-            {convertTimestampToDateTime(BidInfo.TimeStamp)}
-          </Typography>
-        </Box>
-        <Box mb={1} display="flex" flexWrap="wrap">
-          <Typography color="primary">Bidder Address:</Typography>
-          &nbsp;
-          <Link
-            href={`/user/${BidInfo.BidderAddr}`}
-            style={{ color: "rgb(255, 255, 255)" }}
-          >
-            <Typography>{BidInfo.BidderAddr}</Typography>
-          </Link>
-        </Box>
-        <Box mb={1} display="flex" flexWrap="wrap">
-          <Typography color="primary">Bid Price:</Typography>
-          &nbsp;
-          <Typography>{BidInfo.BidPriceEth.toFixed(6)} ETH</Typography>
-        </Box>
-        <Box mb={1} display="flex" flexWrap="wrap">
-          <Typography color="primary">Was bid with RandomWalkNFT:</Typography>
-          &nbsp;
-          <Typography>{BidInfo.RWalkNFTId < 0 ? "No" : "Yes"}</Typography>
-        </Box>
-        {BidInfo.RWalkNFTId >= 0 && (
-          <Box mb={1} display="flex" flexWrap="wrap">
-            <Typography color="primary">RandomWalkNFT ID:</Typography>
-            &nbsp;
-            <Typography>{BidInfo.RWalkNFTId}</Typography>
-          </Box>
-        )}
-
-        {BidInfo.NFTDonationTokenAddr !== "" &&
-          BidInfo.NFTDonationTokenId !== -1 && (
-            <>
+        {loading ? (
+          <Typography>Loading...</Typography>
+        ) : (
+          <>
+            <Box mb={1} display="flex" flexWrap="wrap">
+              <Typography color="primary">Transaction Hash:</Typography>
+              &nbsp;
+              <Link
+                href={`https://arbiscan.io/tx/${bidInfo.TxHash}`}
+                style={{ color: "rgb(255, 255, 255)" }}
+                target="_blank"
+              >
+                <Typography>{shortenHex(bidInfo.TxHash, 16)}</Typography>
+              </Link>
+            </Box>
+            <Box mb={1} display="flex" flexWrap="wrap">
+              <Typography color="primary">Round Number:</Typography>
+              &nbsp;
+              <Link
+                href={`/prize/${bidInfo.RoundNum}`}
+                sx={{
+                  fontSize: "inherit",
+                  color: "inherit",
+                }}
+              >
+                <Typography>{bidInfo.RoundNum}</Typography>
+              </Link>
+            </Box>
+            <Box mb={1} display="flex" flexWrap="wrap">
+              <Typography color="primary">Bid Datetime:</Typography>
+              &nbsp;
+              <Typography>
+                {convertTimestampToDateTime(bidInfo.TimeStamp)}
+              </Typography>
+            </Box>
+            <Box mb={1} display="flex" flexWrap="wrap">
+              <Typography color="primary">Bidder Address:</Typography>
+              &nbsp;
+              <Link
+                href={`/user/${bidInfo.BidderAddr}`}
+                style={{ color: "rgb(255, 255, 255)" }}
+              >
+                <Typography>{bidInfo.BidderAddr}</Typography>
+              </Link>
+            </Box>
+            <Box mb={1} display="flex" flexWrap="wrap">
+              <Typography color="primary">Bid Price:</Typography>
+              &nbsp;
+              <Typography>{bidInfo.BidPriceEth.toFixed(6)} ETH</Typography>
+            </Box>
+            <Box mb={1} display="flex" flexWrap="wrap">
+              <Typography color="primary">
+                Was bid with RandomWalkNFT:
+              </Typography>
+              &nbsp;
+              <Typography>{bidInfo.RWalkNFTId < 0 ? "No" : "Yes"}</Typography>
+            </Box>
+            {bidInfo.RWalkNFTId >= 0 && (
               <Box mb={1} display="flex" flexWrap="wrap">
-                <Typography color="primary">
-                  Donated NFT Contract Address (aka Token):
-                </Typography>
+                <Typography color="primary">RandomWalkNFT ID:</Typography>
                 &nbsp;
-                <Typography>{BidInfo.NFTDonationTokenAddr}</Typography>
+                <Typography>{bidInfo.RWalkNFTId}</Typography>
               </Box>
-              <Box mb={1} display="flex" flexWrap="wrap">
-                <Typography color="primary">Donated NFT Token Id:</Typography>
-                &nbsp;
-                <Typography>{BidInfo.NFTDonationTokenId}</Typography>
+            )}
+            {bidInfo.NFTDonationTokenAddr !== "" &&
+              bidInfo.NFTDonationTokenId !== -1 && (
+                <>
+                  <Box mb={1} display="flex" flexWrap="wrap">
+                    <Typography color="primary">
+                      Donated NFT Contract Address (aka Token):
+                    </Typography>
+                    &nbsp;
+                    <Typography>{bidInfo.NFTDonationTokenAddr}</Typography>
+                  </Box>
+                  <Box mb={1} display="flex" flexWrap="wrap">
+                    <Typography color="primary">
+                      Donated NFT Token Id:
+                    </Typography>
+                    &nbsp;
+                    <Typography>{bidInfo.NFTDonationTokenId}</Typography>
+                  </Box>
+                  <Box mb={1} display="flex" flexWrap="wrap">
+                    <Typography color="primary">
+                      Donated NFT Token URI:
+                    </Typography>
+                    &nbsp;
+                    <Typography>{bidInfo.NFTTokenURI}</Typography>
+                  </Box>
+                  <Box mb={1} display="flex" flexWrap="wrap">
+                    <Typography color="primary">Image:</Typography>
+                    <Grid container spacing={4}>
+                      <Grid item xs={12} md={4}>
+                        <NFTImage
+                          src={tokenURI?.image}
+                          sx={{ backgroundSize: "contain" }}
+                        />
+                      </Grid>
+                      <Grid item xs={12} md={8}>
+                        <Box mb={1} display="flex" flexWrap="wrap">
+                          <Typography color="primary">
+                            Collection Name:
+                          </Typography>
+                          &nbsp;
+                          <Typography>{tokenURI?.collection_name}</Typography>
+                        </Box>
+                        <Box mb={1} display="flex" flexWrap="wrap">
+                          <Typography color="primary">Artist:</Typography>
+                          &nbsp;
+                          <Typography>{tokenURI?.artist}</Typography>
+                        </Box>
+                        <Box mb={1} display="flex" flexWrap="wrap">
+                          <Typography color="primary">Platform:</Typography>
+                          &nbsp;
+                          <Typography>{tokenURI?.platform}</Typography>
+                        </Box>
+                        <Box mb={1} display="flex" flexWrap="wrap">
+                          <Typography color="primary">Description:</Typography>
+                          &nbsp;
+                          <Typography>{tokenURI?.description}</Typography>
+                        </Box>
+                      </Grid>
+                    </Grid>
+                  </Box>
+                </>
+              )}
+            <Box mb={1} display="flex" flexWrap="wrap">
+              <Typography color="primary">Message:</Typography>
+              &nbsp;
+              <Typography>{bidInfo.Message}</Typography>
+            </Box>
+            {bidInfo.RWalkNFTId >= 0 && (
+              <Box width="400px" mt={4}>
+                <RandomWalkNFT
+                  tokenId={bidInfo.RWalkNFTId}
+                  selectable={false}
+                />
               </Box>
-              <Box mb={1} display="flex" flexWrap="wrap">
-                <Typography color="primary">Donated NFT Token URI:</Typography>
-                &nbsp;
-                <Typography>{BidInfo.NFTTokenURI}</Typography>
-              </Box>
-              <Box mb={1} display="flex" flexWrap="wrap">
-                <Typography color="primary">Image:</Typography>
-                <Grid container spacing={4}>
-                  <Grid item xs={12} md={4}>
-                    <NFTImage
-                      src={tokenURI?.image}
-                      sx={{ backgroundSize: "contain" }}
-                    />
-                  </Grid>
-                  <Grid item xs={12} md={8}>
-                    <Box mb={1} display="flex" flexWrap="wrap">
-                      <Typography color="primary">Collection Name:</Typography>
-                      &nbsp;
-                      <Typography>{tokenURI?.collection_name}</Typography>
-                    </Box>
-                    <Box mb={1} display="flex" flexWrap="wrap">
-                      <Typography color="primary">Artist:</Typography>
-                      &nbsp;
-                      <Typography>{tokenURI?.artist}</Typography>
-                    </Box>
-                    <Box mb={1} display="flex" flexWrap="wrap">
-                      <Typography color="primary">Platform:</Typography>
-                      &nbsp;
-                      <Typography>{tokenURI?.platform}</Typography>
-                    </Box>
-                    <Box mb={1} display="flex" flexWrap="wrap">
-                      <Typography color="primary">Description:</Typography>
-                      &nbsp;
-                      <Typography>{tokenURI?.description}</Typography>
-                    </Box>
-                  </Grid>
-                </Grid>
-              </Box>
-            </>
-          )}
-        <Box mb={1} display="flex" flexWrap="wrap">
-          <Typography color="primary">Message:</Typography>
-          &nbsp;
-          <Typography>{BidInfo.Message}</Typography>
-        </Box>
-        {BidInfo.RWalkNFTId >= 0 && (
-          <Box width="400px" mt={4}>
-            <RandomWalkNFT tokenId={BidInfo.RWalkNFTId} selectable={false} />
-          </Box>
+            )}
+          </>
         )}
       </MainWrapper>
     </>
@@ -185,10 +207,7 @@ const BidInfo = ({ BidInfo }) => {
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const params = context.params!.id;
   const id = Array.isArray(params) ? params[0] : params;
-  const BidInfo = await api.get_bid_info(Number(id));
-  return {
-    props: { BidInfo },
-  };
+  return { props: { bidId: parseInt(id) } };
 }
 
 export default BidInfo;

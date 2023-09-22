@@ -54,9 +54,12 @@ const PrizeRow = ({ prize }) => {
   );
 };
 
-export const PrizeTable = ({ list }) => {
+export const PrizeTable = ({ list, loading }) => {
   const perPage = 5;
   const [page, setPage] = useState(1);
+  if (loading) {
+    return <Typography>Loading...</Typography>;
+  }
   if (list.length === 0) {
     return <Typography>No winners yet.</Typography>;
   }

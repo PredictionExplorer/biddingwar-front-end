@@ -12,11 +12,15 @@ import { useActiveWeb3React } from "../../hooks/web3";
 import useCosmicGameContract from "../../hooks/useCosmicGameContract";
 import { useApiData } from "../../contexts/ApiDataContext";
 
-const PrizeInfo = ({ bidHistory, prizeNum, nftDonations, prizeInfo }) => {
+const PrizeInfo = ({ prizeNum }) => {
   const { account } = useActiveWeb3React();
   const cosmicGameContract = useCosmicGameContract();
   const { apiData: status } = useApiData();
   const [donatedNFTToClaim, setDonatedNFTToClaim] = useState([]);
+  const [bidHistory, setBidHistory] = useState([]);
+  const [nftDonations, setNftDonations] = useState([]);
+  const [prizeInfo, setPrizeInfo] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   const handleAllDonatedNFTsClaim = async () => {
     try {
@@ -36,6 +40,20 @@ const PrizeInfo = ({ bidHistory, prizeNum, nftDonations, prizeInfo }) => {
       fetchUnclaimedDonatedNFTs();
     }
   }, [status]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      const nftDonations = await api.get_donations_nft_by_round(prizeNum);
+      setNftDonations(nftDonations);
+      const prizeInfo = await api.get_prize_info(prizeNum);
+      setPrizeInfo(prizeInfo);
+      const bidHistory = await api.get_bid_list_by_round(prizeNum, "desc");
+      setBidHistory(bidHistory);
+      setLoading(false);
+    };
+    fetchData();
+  }, []);
 
   return (
     <>
@@ -60,7 +78,9 @@ const PrizeInfo = ({ bidHistory, prizeNum, nftDonations, prizeInfo }) => {
             Prize Information
           </Typography>
         </Box>
-        {prizeInfo ? (
+        {loading ? (
+          <Typography>Loading...</Typography>
+        ) : prizeInfo ? (
           <Box>
             <Box mb={1}>
               <Typography color="primary" component="span">
@@ -191,7 +211,7 @@ const PrizeInfo = ({ bidHistory, prizeNum, nftDonations, prizeInfo }) => {
             </Box>
           </Box>
         ) : (
-          <Typography variant="h6">Prize data not found!</Typography>
+          <Typography>Prize data not found!</Typography>
         )}
       </MainWrapper>
     </>
@@ -201,17 +221,7 @@ const PrizeInfo = ({ bidHistory, prizeNum, nftDonations, prizeInfo }) => {
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const id = context.params!.id;
   const prizeNum = Array.isArray(id) ? id[0] : id;
-  const nftDonations = await api.get_donations_nft_by_round(Number(prizeNum));
-  const prizeInfo = await api.get_prize_info(Number(prizeNum));
-  const bidHistory = await api.get_bid_list_by_round(Number(prizeNum), "desc");
-  return {
-    props: {
-      bidHistory,
-      prizeNum,
-      nftDonations,
-      prizeInfo,
-    },
-  };
+  return { props: { prizeNum: parseInt(prizeNum) } };
 }
 
 export default PrizeInfo;
