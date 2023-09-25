@@ -8,6 +8,7 @@ import {
   TableBody,
   TableCell,
   TableRow,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import {
@@ -43,20 +44,31 @@ const NFTRow = ({ nft, handleClaim }) => {
         {convertTimestampToDateTime(nft.TimeStamp)}
       </TablePrimaryCell>
       <TablePrimaryCell>
-        <Link
-          href={`/user/${nft.DonorAddr}`}
-          style={{ color: "rgba(255, 255, 255, 0.68)", fontSize: 14 }}
-        >
-          {shortenHex(nft.DonorAddr, 6)}
-        </Link>
+        <Tooltip title={nft.DonorAddr}>
+          <Link
+            href={`/user/${nft.DonorAddr}`}
+            style={{ color: "rgba(255, 255, 255, 0.68)", fontSize: "inherit" }}
+          >
+            {shortenHex(nft.DonorAddr, 6)}
+          </Link>
+        </Tooltip>
       </TablePrimaryCell>
       <TablePrimaryCell align="center">{nft.RoundNum}</TablePrimaryCell>
-      <TablePrimaryCell>{nft.TokenAddr}</TablePrimaryCell>
+      <TablePrimaryCell>
+        <Tooltip title={nft.TokenAddr}>
+          <Link
+            href={`https://arbiscan.io/address/${nft.TokenAddr}`}
+            style={{ color: "rgba(255, 255, 255, 0.68)", fontSize: "inherit" }}
+          >
+            {shortenHex(nft.TokenAddr, 6)}
+          </Link>
+        </Tooltip>
+      </TablePrimaryCell>
       <TablePrimaryCell align="right">
         <Link
           href={tokenURI?.external_url}
           target="_blank"
-          sx={{ color: "inherit" }}
+          sx={{ fontSize: "inherit", color: "inherit" }}
         >
           {nft.NFTTokenId || nft.TokenId}
         </Link>
@@ -90,6 +102,15 @@ export const DonatedNFTTable = ({ list, handleClaim }) => {
     <>
       <TablePrimaryContainer>
         <Table>
+          <colgroup>
+            <col width="15%" />
+            <col width="20%" />
+            <col width="10%" />
+            <col width="20%" />
+            <col width="10%" />
+            <col width="25%" />
+            <col width="5%" />
+          </colgroup>
           <TablePrimaryHead>
             <TableRow>
               <TableCell>Datetime</TableCell>

@@ -7,6 +7,7 @@ import {
   Link,
   TableCell,
   Typography,
+  Tooltip,
 } from "@mui/material";
 import {
   TablePrimaryContainer,
@@ -33,7 +34,14 @@ const HistoryRow = ({ history }) => {
       <TablePrimaryCell sx={{ whiteSpace: "nowrap" }}>
         {convertTimestampToDateTime(history.TimeStamp)}
       </TablePrimaryCell>
-      <TablePrimaryCell>{shortenHex(history.BidderAddr, 6)}</TablePrimaryCell>
+      <TablePrimaryCell>
+        <Tooltip title={history.BidderAddr}>
+          <Typography sx={{ fontSize: "inherit !important" }}>
+            {shortenHex(history.BidderAddr, 6)}
+          </Typography>
+        </Tooltip>
+      </TablePrimaryCell>
+
       <TablePrimaryCell>
         {history.BidPriceEth && history.BidPriceEth < 1
           ? history.BidPriceEth?.toFixed(7)
@@ -45,9 +53,15 @@ const HistoryRow = ({ history }) => {
         {history.RWalkNFTId < 0 ? "" : history.RWalkNFTId}
       </TablePrimaryCell>
       <TablePrimaryCell>
-        {history.NFTDonationTokenAddr
-          ? shortenHex(history.NFTDonationTokenAddr)
-          : ""}
+        {history.NFTDonationTokenAddr ? (
+          <Tooltip title={history.NFTDonationTokenAddr}>
+            <Typography sx={{ fontSize: "inherit !important" }}>
+              {shortenHex(history.NFTDonationTokenAddr, 6)}
+            </Typography>
+          </Tooltip>
+        ) : (
+          ""
+        )}
       </TablePrimaryCell>
       <TablePrimaryCell>
         {history.NFTDonationTokenId < 0 ? "" : history.NFTDonationTokenId}
@@ -84,8 +98,8 @@ const HistoryTable = ({ biddingHistory, perPage, curPage }) => {
           <col width="10%" />
           <col width="10%" />
           <col width="10%" />
-          <col width="14%" />
-          <col width="10%" />
+          <col width="15%" />
+          <col width="9%" />
           <col width="20%" />
         </colgroup>
         <TablePrimaryHead>

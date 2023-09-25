@@ -54,6 +54,11 @@ const MyWinningsTable = ({ list }) => {
     <>
       <TablePrimaryContainer>
         <Table>
+          <colgroup>
+            <col width="20%" />
+            <col width="60%" />
+            <col width="20%" />
+          </colgroup>
           <TablePrimaryHead>
             <TableRow>
               <TableCell>Date</TableCell>
@@ -138,6 +143,12 @@ const CSTTable = ({ list }) => {
     <>
       <TablePrimaryContainer>
         <Table>
+          <colgroup>
+            <col width="15%" />
+            <col width="55%" />
+            <col width="10%" />
+            <col width="30%" />
+          </colgroup>
           <TablePrimaryHead>
             <TableRow>
               <TableCell>Date</TableCell>
