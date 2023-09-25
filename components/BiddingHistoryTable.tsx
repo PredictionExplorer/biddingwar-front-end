@@ -19,8 +19,6 @@ import { shortenHex, convertTimestampToDateTime } from "../utils";
 import router from "next/router";
 
 const HistoryRow = ({ history }) => {
-  const [expanded, setExpanded] = useState(false);
-
   if (!history) {
     return <TablePrimaryRow></TablePrimaryRow>;
   }
@@ -57,13 +55,12 @@ const HistoryRow = ({ history }) => {
       <TablePrimaryCell>
         <Link
           sx={{ textDecoration: "none", color: "rgba(255, 255, 255, 0.68)" }}
-          onClick={() => setExpanded((expanded) => !expanded)}
         >
           <Typography
             sx={{
-              maxWidth: expanded ? "auto" : "400px",
+              maxWidth: "180px",
               overflow: "hidden",
-              whiteSpace: expanded ? "normal" : "nowrap",
+              whiteSpace: "nowrap",
               display: "inline-block",
               textOverflow: "ellipsis",
             }}
@@ -81,6 +78,16 @@ const HistoryTable = ({ biddingHistory, perPage, curPage }) => {
   return (
     <TablePrimaryContainer>
       <Table>
+        <colgroup>
+          <col width="11%" />
+          <col width="15%" />
+          <col width="10%" />
+          <col width="10%" />
+          <col width="10%" />
+          <col width="14%" />
+          <col width="10%" />
+          <col width="20%" />
+        </colgroup>
         <TablePrimaryHead>
           <TableRow>
             <TableCell>Date</TableCell>
