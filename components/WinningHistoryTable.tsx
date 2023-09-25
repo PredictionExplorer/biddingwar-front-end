@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Table,
@@ -22,6 +22,8 @@ import {
   TablePrimaryRow,
 } from "./styled";
 import Pagination from "@mui/material/Pagination";
+import { shortenHex } from "../utils";
+import axios from "axios";
 
 const convertTimestampToDateTime = (timestamp: any) => {
   var date_ob = new Date(timestamp * 1000);
@@ -36,9 +38,17 @@ const convertTimestampToDateTime = (timestamp: any) => {
 };
 
 const HistoryRow = ({ history, showClaimedStatus }) => {
+  const [tokenURI, setTokenURI] = useState(null);
   if (!history) {
     return <TablePrimaryRow></TablePrimaryRow>;
   }
+  useEffect(() => {
+    const fetchTokenURI = async () => {
+      const { data } = await axios.get(history.TokenURI);
+      setTokenURI(data);
+    };
+    fetchTokenURI();
+  }, [history]);
 
   return (
     <TablePrimaryRow
@@ -87,7 +97,20 @@ const HistoryRow = ({ history, showClaimedStatus }) => {
       <TablePrimaryCell align="right">
         {history.AmountEth.toFixed(4)}
       </TablePrimaryCell>
-      <TablePrimaryCell>{history.TokenAddress}</TablePrimaryCell>
+      <TablePrimaryCell>
+        <Tooltip title={history.TokenAddress}>
+          <Link
+            href={`https://arbiscan.io/address/${history.TokenAddress}`}
+            sx={{
+              fontSize: "inherit",
+              color: "inherit",
+            }}
+            target="_blank"
+          >
+            {shortenHex(history.TokenAddress.toString(), 6)}
+          </Link>
+        </Tooltip>
+      </TablePrimaryCell>
       <TablePrimaryCell align="right">
         {history.TokenId >= 0 &&
           (history.RecordType === 1 || history.RecordType === 3 ? (
@@ -97,16 +120,18 @@ const HistoryRow = ({ history, showClaimedStatus }) => {
                 fontSize: "inherit",
                 color: "inherit",
               }}
+              target="_blank"
             >
               {history.TokenId}
             </Link>
           ) : (
             <Link
-              href={`/detail/${history.TokenId}`}
+              href={tokenURI?.external_url}
               sx={{
                 fontSize: "inherit",
                 color: "inherit",
               }}
+              target="_blank"
             >
               {history.TokenId}
             </Link>

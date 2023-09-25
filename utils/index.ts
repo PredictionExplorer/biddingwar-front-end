@@ -2,9 +2,12 @@ import type { BigNumberish } from '@ethersproject/bignumber'
 import { formatUnits } from '@ethersproject/units'
 
 export function shortenHex(hex: string, length = 4) {
-  return `${hex.substring(0, length + 2)}....${hex.substring(
-    hex.length - length,
-  )}`
+  if (hex) {
+    return `${hex.substring(0, length + 2)}....${hex.substring(
+      hex.length - length,
+    )}`;
+  }
+  return "";
 }
 
 const ETHERSCAN_PREFIXES = {
