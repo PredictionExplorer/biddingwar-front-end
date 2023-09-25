@@ -48,6 +48,12 @@ export const UniqueWinnersTable = ({ list }) => {
     <>
       <TablePrimaryContainer>
         <Table>
+          <colgroup>
+            <col width="55%" />
+            <col width="15%" />
+            <col width="15%" />
+            <col width="15%" />
+          </colgroup>
           <TablePrimaryHead>
             <TableRow>
               <TableCell>Winner Address</TableCell>

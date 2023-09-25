@@ -6,6 +6,7 @@ import {
   TableBody,
   TableCell,
   TableRow,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import {
@@ -33,7 +34,13 @@ const PrizeRow = ({ prize }) => {
       <TablePrimaryCell>
         {convertTimestampToDateTime(prize.TimeStamp)}
       </TablePrimaryCell>
-      <TablePrimaryCell>{shortenHex(prize.WinnerAddr, 6)}</TablePrimaryCell>
+      <TablePrimaryCell>
+        <Tooltip title={prize.WinnerAddr}>
+          <Typography sx={{ fontSize: "inherit !important" }}>
+            {shortenHex(prize.WinnerAddr, 6)}
+          </Typography>
+        </Tooltip>
+      </TablePrimaryCell>
       <TablePrimaryCell align="center">{prize.PrizeNum}</TablePrimaryCell>
       <TablePrimaryCell align="right">
         {prize.AmountEth.toFixed(4)} ETH
@@ -67,6 +74,16 @@ export const PrizeTable = ({ list, loading }) => {
     <>
       <TablePrimaryContainer>
         <Table>
+          <colgroup>
+            <col width="12%" />
+            <col width="15%" />
+            <col width="10%" />
+            <col width="12%" />
+            <col width="10%" />
+            <col width="12%" />
+            <col width="15%" />
+            <col width="12%" />
+          </colgroup>
           <TablePrimaryHead>
             <TableRow>
               <TableCell>Datetime</TableCell>

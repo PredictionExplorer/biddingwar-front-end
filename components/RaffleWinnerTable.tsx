@@ -8,6 +8,7 @@ import {
   Pagination,
   Link,
   Typography,
+  Tooltip,
 } from "@mui/material";
 import {
   TablePrimaryContainer,
@@ -28,12 +29,14 @@ const WinnerRow = ({ winner, type }) => {
         {convertTimestampToDateTime(winner.TimeStamp)}
       </TablePrimaryCell>
       <TablePrimaryCell>
-        <Link
-          href={`/user/${winner.WinnerAddr}`}
-          style={{ color: "rgba(255, 255, 255, 0.68)", fontSize: 14 }}
-        >
-          {shortenHex(winner.WinnerAddr, 6)}
-        </Link>
+        <Tooltip title={winner.WinnerAddr}>
+          <Link
+            href={`/user/${winner.WinnerAddr}`}
+            style={{ color: "rgba(255, 255, 255, 0.68)", fontSize: 14 }}
+          >
+            {shortenHex(winner.WinnerAddr, 6)}
+          </Link>
+        </Tooltip>
       </TablePrimaryCell>
       <TablePrimaryCell align="center">
         <Link
@@ -70,6 +73,14 @@ const RaffleWinnerTable = ({ RaffleETHDeposits, RaffleNFTWinners }) => {
     <>
       <TablePrimaryContainer>
         <Table>
+          <colgroup>
+            <col width="15%" />
+            <col width="20%" />
+            <col width="15%" />
+            <col width="20%" />
+            <col width="15%" />
+            <col width="15%" />
+          </colgroup>
           <TablePrimaryHead>
             <TableRow>
               <TableCell>Datetime</TableCell>

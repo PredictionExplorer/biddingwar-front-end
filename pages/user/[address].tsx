@@ -17,7 +17,6 @@ const UserInfo = ({ address }) => {
     const fetchData = async () => {
       setLoading(true);
       const history = await api.get_claim_history_by_user(address);
-      console.log(history);
       setClaimHistory(history);
       const { Bids, UserInfo } = await api.get_user_info(address);
       setBidHistory(Bids);

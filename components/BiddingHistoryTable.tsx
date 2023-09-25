@@ -94,13 +94,13 @@ const HistoryTable = ({ biddingHistory, perPage, curPage }) => {
       <Table>
         <colgroup>
           <col width="11%" />
-          <col width="15%" />
+          <col width="16%" />
           <col width="10%" />
           <col width="10%" />
           <col width="10%" />
           <col width="15%" />
           <col width="9%" />
-          <col width="20%" />
+          <col width="19%" />
         </colgroup>
         <TablePrimaryHead>
           <TableRow>
