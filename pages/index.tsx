@@ -18,6 +18,8 @@ import {
   InputAdornment,
   Pagination,
   Link,
+  Backdrop,
+  CircularProgress,
 } from "@mui/material";
 import {
   CustomTextField,
@@ -62,6 +64,7 @@ import { useCookies } from "react-cookie";
 import WinningHistoryTable from "../components/WinningHistoryTable";
 
 const NewHome = () => {
+  const [loading, setLoading] = useState(true);
   const [data, setData] = useState(null);
   const [curBidList, setCurBidList] = useState([]);
   const [donatedNFTs, setDonatedNFTs] = useState([]);
@@ -418,6 +421,7 @@ const NewHome = () => {
         }
         return newData;
       });
+      setLoading(false);
     };
 
     const fetchPrizeTime = async () => {
@@ -536,6 +540,12 @@ const NewHome = () => {
             {notification.text}
           </Alert>
         </Snackbar>
+        <Backdrop
+          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          open={loading}
+        >
+          <CircularProgress color="inherit" />
+        </Backdrop>
         <Grid container spacing={8}>
           <Grid item xs={12} sm={12} md={6} lg={6}>
             <StyledCard>

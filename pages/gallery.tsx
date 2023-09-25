@@ -7,12 +7,15 @@ import { MainWrapper } from "../components/styled";
 import api from "../services/api";
 
 const Gallery = () => {
+  const [loading, setLoading] = useState(true);
   const [collection, setCollection] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true);
       const nfts = await api.get_cst_list();
       const sorted = nfts.sort((a, b) => Number(b.TokenId) - Number(a.TokenId));
       setCollection(sorted);
+      setLoading(false);
     };
     fetchData();
   }, []);
@@ -39,7 +42,7 @@ const Gallery = () => {
           </Typography>
         </Box>
 
-        <PaginationGrid data={collection} />
+        <PaginationGrid data={collection} loading={loading} />
       </MainWrapper>
     </>
   );

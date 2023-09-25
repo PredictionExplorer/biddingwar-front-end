@@ -5,7 +5,7 @@ import Pagination from "@mui/material/Pagination";
 import { SearchBox, SearchField, SearchButton } from "./styled";
 import NFT from "./NFT";
 
-const PaginationGrid = ({ data }) => {
+const PaginationGrid = ({ data, loading }) => {
   const [nftId, setNftId] = useState("");
   const [searchNFT, setSearchNFT] = useState(null);
   const [searchResult, setSearchResult] = useState(false);
@@ -67,7 +67,11 @@ const PaginationGrid = ({ data }) => {
           Search
         </SearchButton>
       </SearchBox>
-      {data.length > 0 && (
+      {loading ? (
+        <Typography variant="h6" align="center">
+          Loading...
+        </Typography>
+      ) : data.length > 0 ? (
         <>
           <Grid spacing={2} container>
             {!!(nftId && searchResult) ? (
@@ -106,8 +110,7 @@ const PaginationGrid = ({ data }) => {
             </Box>
           )}
         </>
-      )}
-      {!data.length && (
+      ) : (
         <Typography variant="h6" align="center">
           Nothing Found!
         </Typography>
