@@ -10,12 +10,13 @@ import {
   Link,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-import NAV_SECTIONS from "../config/nav";
+import getNAVs from "../config/nav";
 import ConnectWalletButton from "../components/ConnectWalletButton";
 
 import { AppBarWrapper, DrawerList } from "./styled";
 import ListNavItem from "./ListNavItem";
 import ListItemButton from "./ListItemButton";
+import { useApiData } from "../contexts/ApiDataContext";
 
 const Header = () => {
   const [state, setState] = useState({
@@ -23,6 +24,7 @@ const Header = () => {
     drawerOpen: false,
   });
   const { mobileView, drawerOpen } = state;
+  const { apiData: status } = useApiData();
 
   useEffect(() => {
     const setResponsiveness = () => {
@@ -46,7 +48,7 @@ const Header = () => {
         <Link href="/">
           <Image src="/images/logo2.svg" width={240} height={48} alt="logo" />
         </Link>
-        {NAV_SECTIONS.map((nav, i) => (
+        {getNAVs(status).map((nav, i) => (
           <ListNavItem key={i} nav={nav} />
         ))}
         <ConnectWalletButton isMobileView={false} />
@@ -81,7 +83,7 @@ const Header = () => {
             <ListItem>
               <ConnectWalletButton isMobileView />
             </ListItem>
-            {NAV_SECTIONS.map((nav, i) => (
+            {getNAVs(status).map((nav, i) => (
               <ListItemButton
                 key={i}
                 nav={nav}
