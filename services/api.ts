@@ -95,8 +95,7 @@ class ApiService {
 
   public async get_cst_info(tokenId: number) {
     const { data } = await axios.get(cosmicGameBaseUrl + `cst/info/${tokenId}`);
-    const cstList = data.TokenInfo;
-    return cstList;
+    return data;
   }
 
   public async get_user_info(address: string) {

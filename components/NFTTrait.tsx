@@ -339,7 +339,9 @@ const NFTTrait = ({ nft, prizeInfo, numCSTokenMints }) => {
                   </Box>
                   <Box mt={3}>
                     <Typography variant="h6" align="left">
-                      Set a name to the token
+                      {nft.TokenName
+                        ? "Rename the token"
+                        : "Set a name to the token"}
                     </Typography>
                     <Box display="flex">
                       <TextField

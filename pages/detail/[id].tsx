@@ -16,20 +16,16 @@ const Detail = ({ tokenId }) => {
     const fetchData = async () => {
       setLoading(true);
       const dashboardData = await api.get_dashboard_info();
-      console.log(dashboardData);
       setDashboard(dashboardData);
       if (dashboardData.MainStats.NumCSTokenMints > tokenId) {
-        const nft = await api.get_cst_info(tokenId);
-        setNft(nft);
-      }
-      if (nft?.PrizeNum >= 0) {
-        const prizeInfo = await api.get_prize_info(nft.PrizeNum);
-        setPrizeInfo(prizeInfo);
+        const res = await api.get_cst_info(tokenId);
+        setNft(res.TokenInfo);
+        setPrizeInfo(res.PrizeInfo);
       }
       setLoading(false);
     };
     fetchData();
-  }, []);
+  }, [tokenId]);
 
   return (
     <>
