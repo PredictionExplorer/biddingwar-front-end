@@ -200,7 +200,6 @@ const NewHome = () => {
       bidPrice = await cosmicGameContract.getBidPrice();
       newBidPrice =
         parseFloat(ethers.utils.formatEther(bidPrice)) *
-        1.01 *
         (1 + bidPricePlus / 100);
       let receipt;
       if (!nftDonateAddress || nftId === -1) {
@@ -781,6 +780,10 @@ const NewHome = () => {
                         ETH
                       </Typography>
                     </Box>
+                    <Typography variant="body2" mt={2}>
+                      The bid price is increased {bidPricePlus}% to prevent
+                      bidding collision.
+                    </Typography>
                   </AccordionDetails>
                 </Accordion>
                 <Box mb={2} position="relative">
