@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Typography,
   List,
@@ -35,57 +35,70 @@ const ContractItem = ({ name, value }) => {
   );
 };
 
-const Contracts = ({ data }) => (
-  <>
-    <Head>
-      <title>Withdraw | CosmicSignature NFT</title>
-      <meta
-        name="description"
-        content="Programmatically generated CosmicSignature image and video NFTs. ETH spent on minting goes back to the minters."
-      />
-    </Head>
-    <MainWrapper>
-      <Typography variant="h4" color="primary" align="center">
-        Contract Addresses
-      </Typography>
-      <List sx={{ mt: 8 }}>
-        <ContractItem
-          name="CosmicGame Address"
-          value={data.ContractAddrs.CosmicGameAddr}
-        />
-        <ContractItem
-          name="CosmicToken Address"
-          value={data.ContractAddrs.CosmicTokenAddr}
-        />
-        <ContractItem
-          name="CosmicSignature Address"
-          value={data.ContractAddrs.CosmicSignatureAddr}
-        />
-        <ContractItem
-          name="CosmicDAO Address"
-          value={data.ContractAddrs.CosmicDaoAddr}
-        />
-        <ContractItem
-          name="CharityWallet Address"
-          value={data.ContractAddrs.CharityWalletAddr}
-        />
-        <ContractItem
-          name="RaffleWallet Address"
-          value={data.ContractAddrs.RaffleWalletAddr}
-        />
-      </List>
-    </MainWrapper>
-  </>
-);
+const Contracts = () => {
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        const newData = await api.get_dashboard_info();
+        setData(newData);
+        setLoading(false);
+      } catch (err) {
+        console.log(err);
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
 
-export async function getServerSideProps() {
-  const dashboardData = await api.get_dashboard_info();
-
-  return {
-    props: {
-      data: dashboardData,
-    },
-  };
-}
+  return (
+    <>
+      <Head>
+        <title>Withdraw | CosmicSignature NFT</title>
+        <meta
+          name="description"
+          content="Programmatically generated CosmicSignature image and video NFTs. ETH spent on minting goes back to the minters."
+        />
+      </Head>
+      <MainWrapper>
+        <Typography variant="h4" color="primary" align="center">
+          Contract Addresses
+        </Typography>
+        {loading ? (
+          <Typography variant="h6">Loading...</Typography>
+        ) : (
+          <List sx={{ mt: 8 }}>
+            <ContractItem
+              name="CosmicGame Address"
+              value={data?.ContractAddrs.CosmicGameAddr}
+            />
+            <ContractItem
+              name="CosmicToken Address"
+              value={data?.ContractAddrs.CosmicTokenAddr}
+            />
+            <ContractItem
+              name="CosmicSignature Address"
+              value={data?.ContractAddrs.CosmicSignatureAddr}
+            />
+            <ContractItem
+              name="CosmicDAO Address"
+              value={data?.ContractAddrs.CosmicDaoAddr}
+            />
+            <ContractItem
+              name="CharityWallet Address"
+              value={data?.ContractAddrs.CharityWalletAddr}
+            />
+            <ContractItem
+              name="RaffleWallet Address"
+              value={data?.ContractAddrs.RaffleWalletAddr}
+            />
+          </List>
+        )}
+      </MainWrapper>
+    </>
+  );
+};
 
 export default Contracts;
