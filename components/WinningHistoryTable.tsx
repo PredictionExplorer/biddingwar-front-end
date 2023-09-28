@@ -39,9 +39,6 @@ const convertTimestampToDateTime = (timestamp: any) => {
 
 const HistoryRow = ({ history, showClaimedStatus }) => {
   const [tokenURI, setTokenURI] = useState(null);
-  if (!history) {
-    return <TablePrimaryRow></TablePrimaryRow>;
-  }
   useEffect(() => {
     const fetchTokenURI = async () => {
       const { data } = await axios.get(history.TokenURI);
@@ -50,6 +47,9 @@ const HistoryRow = ({ history, showClaimedStatus }) => {
     fetchTokenURI();
   }, [history]);
 
+  if (!history) {
+    return <TablePrimaryRow></TablePrimaryRow>;
+  }
   return (
     <TablePrimaryRow
       sx={
