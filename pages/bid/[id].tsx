@@ -52,15 +52,15 @@ const BidInfo = ({ bidId }) => {
   return (
     <>
       <Head>
-        <title>Bid Info | Cosmic Signature</title>
+        <title>Bid Information | Cosmic Signature</title>
         <meta name="description" content="" />
       </Head>
       <MainWrapper>
         <Typography variant="h4" color="primary" mb={4}>
-          Bid Info
+          Bid Information
         </Typography>
         {loading ? (
-          <Typography>Loading...</Typography>
+          <Typography variant="h6">Loading...</Typography>
         ) : (
           <>
             <Box mb={1} display="flex" flexWrap="wrap">

@@ -79,7 +79,7 @@ const PrizeInfo = ({ prizeNum }) => {
           </Typography>
         </Box>
         {loading ? (
-          <Typography>Loading...</Typography>
+          <Typography variant="h6">Loading...</Typography>
         ) : prizeInfo ? (
           <Box>
             <Box mb={1}>

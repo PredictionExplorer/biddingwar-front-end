@@ -4,7 +4,7 @@ import Head from "next/head";
 import NFTTrait from "../../components/NFTTrait";
 import { MainWrapper } from "../../components/styled";
 import api from "../../services/api";
-import { Typography } from "@mui/material";
+import { Container, Typography } from "@mui/material";
 
 const Detail = ({ tokenId }) => {
   const [loading, setLoading] = useState(true);
@@ -40,7 +40,9 @@ const Detail = ({ tokenId }) => {
         }}
       >
         {loading ? (
-          <Typography>Loading...</Typography>
+          <Container>
+            <Typography variant="h6">Loading...</Typography>
+          </Container>
         ) : (
           <NFTTrait
             nft={nft}

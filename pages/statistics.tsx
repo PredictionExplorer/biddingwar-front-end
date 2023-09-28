@@ -87,7 +87,7 @@ const Statistics = () => {
       </Head>
       <MainWrapper>
         {loading ? (
-          <Typography>Loading...</Typography>
+          <Typography variant="h6">Loading...</Typography>
         ) : (
           <>
             <Typography variant="h5">Current Round Statistics</Typography>

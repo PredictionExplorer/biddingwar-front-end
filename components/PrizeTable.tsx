@@ -65,10 +65,10 @@ export const PrizeTable = ({ list, loading }) => {
   const perPage = 5;
   const [page, setPage] = useState(1);
   if (loading) {
-    return <Typography>Loading...</Typography>;
+    return <Typography variant="h6">Loading...</Typography>;
   }
   if (list.length === 0) {
-    return <Typography>No winners yet.</Typography>;
+    return <Typography variant="h6">No winners yet.</Typography>;
   }
   return (
     <>

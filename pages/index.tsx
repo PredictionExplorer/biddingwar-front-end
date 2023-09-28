@@ -1067,7 +1067,7 @@ const NewHome = () => {
             History of Winnings
           </Typography>
           {claimHistory === null ? (
-            <Typography>Loading...</Typography>
+            <Typography variant="h6">Loading...</Typography>
           ) : (
             <WinningHistoryTable winningHistory={claimHistory} />
           )}

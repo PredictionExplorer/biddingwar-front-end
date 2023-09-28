@@ -44,7 +44,7 @@ const UserInfo = ({ address }) => {
           </Typography>
         </Box>
         {loading ? (
-          <Typography>Loading...</Typography>
+          <Typography variant="h6">Loading...</Typography>
         ) : (
           <>
             <Box mb={1}>
