@@ -77,6 +77,7 @@ const HistoryRow = ({ history }) => {
               whiteSpace: "nowrap",
               display: "inline-block",
               textOverflow: "ellipsis",
+              lineHeight: 1,
             }}
             component="span"
           >
