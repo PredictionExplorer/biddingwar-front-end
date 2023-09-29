@@ -306,14 +306,16 @@ const NFTTrait = ({ nft, prizeInfo, numCSTokenMints }) => {
                 </Box>
               </>
             )}
-            <Box mt={6}>
-              <Button
-                variant="outlined"
-                onClick={() => router.push(`/prize/${nft.PrizeNum}`)}
-              >
-                View Round Details
-              </Button>
-            </Box>
+            {nft.PrizeNum >= 0 && (
+              <Box mt={6}>
+                <Button
+                  variant="outlined"
+                  onClick={() => router.push(`/prize/${nft.PrizeNum}`)}
+                >
+                  View Round Details
+                </Button>
+              </Box>
+            )}
             <Box>
               {account === nft.CurOwnerAddr && (
                 <>
