@@ -18,7 +18,7 @@ const getNAVs = (status) => {
     { title: "FAQ", route: "/faq" },
     {
       title:
-        status.ETHRaffleToClaim > 0 && status.NumDonatedNFTToClaim > 0 ? (
+        status.ETHRaffleToClaim > 0 || status.NumDonatedNFTToClaim > 0 ? (
           <Badge color="error" variant="dot">
             <EmojiEventsIcon />
           </Badge>
@@ -35,6 +35,5 @@ const getNAVs = (status) => {
   ];
   return NAVS;
 };
-
 
 export default getNAVs;

@@ -67,7 +67,7 @@ const NFTTrait = ({ nft, prizeInfo, numCSTokenMints }) => {
       } else {
         setNotification({
           visible: true,
-          text: "Video is being generated, come back later",
+          text: "Video is being generated, come back later!",
         });
       }
     });
@@ -95,6 +95,10 @@ const NFTTrait = ({ nft, prizeInfo, numCSTokenMints }) => {
     }
     setTimeout(async () => {
       await fetchNameHistory();
+      setNotification({
+        text: "The token name has been changed successfully!",
+        visible: true,
+      });
     }, 1000);
   };
 
@@ -147,7 +151,7 @@ const NFTTrait = ({ nft, prizeInfo, numCSTokenMints }) => {
     <Container>
       <SectionWrapper>
         <Snackbar
-          anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+          anchorOrigin={{ vertical: "top", horizontal: "right" }}
           autoHideDuration={10000}
           open={notification.visible}
           onClose={() => setNotification({ text: "", visible: false })}
