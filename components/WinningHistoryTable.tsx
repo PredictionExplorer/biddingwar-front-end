@@ -83,8 +83,8 @@ const HistoryRow = ({ history, showClaimedStatus }) => {
           &nbsp;
           {!history.Claimed && showClaimedStatus && (
             <Tooltip title="This winning is unclaimed, go to Pending Winnings page and claim it.">
-              <IconButton size="small">
-                <PriorityHighIcon fontSize="small" color="error" />
+              <IconButton size="small" sx={{ fontSize: "16px" }}>
+                <PriorityHighIcon fontSize="inherit" color="error" />
               </IconButton>
             </Tooltip>
           )}
@@ -155,8 +155,8 @@ const HistoryTable = ({
       <Table>
         <colgroup>
           <col width="20%" />
-          <col width="15%" />
-          <col width="10%" />
+          <col width="16%" />
+          <col width="9%" />
           <col width="15%" />
           <col width="15%" />
           <col width="15%" />
