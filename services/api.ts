@@ -2,6 +2,7 @@ import axios from "axios";
 
 const baseUrl = "https://randomwalknft-api.com/";
 // export const cosmicGameBaseUrl = "https://170.187.142.12/api/cosmicgame/";
+const proxyUrl = "/api/proxy?url=";
 export const cosmicGameBaseUrl = "http://170.187.142.12:9090/api/cosmicgame/";
 
 class ApiService {
@@ -27,7 +28,7 @@ class ApiService {
   }
 
   public async get_dashboard_info() {
-    const { data } = await axios.get(cosmicGameBaseUrl + "statistics/dashboard");
+    const { data } = await axios.get(`/api/proxy?url=${encodeURIComponent(cosmicGameBaseUrl + "statistics/dashboard")}`);
     return data;
   }
 
