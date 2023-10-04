@@ -1,8 +1,8 @@
 import axios from "axios";
 
 const baseUrl = "https://randomwalknft-api.com/";
-export const cosmicGameBaseUrl = "https://170.187.142.12/api/cosmicgame/";
-// export const cosmicGameBaseUrl = "http://170.187.142.12:9090/api/cosmicgame/";
+// export const cosmicGameBaseUrl = "https://170.187.142.12/api/cosmicgame/";
+export const cosmicGameBaseUrl = "http://170.187.142.12:9090/api/cosmicgame/";
 
 class ApiService {
   public async create(token_id: number, seed: string) {
@@ -27,7 +27,7 @@ class ApiService {
   }
 
   public async get_dashboard_info() {
-    const { data } = await axios.get(cosmicGameBaseUrl + "statistics/dashboard");
+    const { data } = await axios.get(cosmicGameBaseUrl + "statistics/dashboard", { method: 'get', headers: { "Access-Control-Allow-Origin": "*" }, });
     return data;
   }
 
