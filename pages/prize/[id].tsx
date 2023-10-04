@@ -12,7 +12,7 @@ import { useActiveWeb3React } from "../../hooks/web3";
 import useCosmicGameContract from "../../hooks/useCosmicGameContract";
 import { useApiData } from "../../contexts/ApiDataContext";
 
-const PrizeInfo = ({ prizeNum }) => {
+const PrizeInfo = ({ roundNum }) => {
   const { account } = useActiveWeb3React();
   const cosmicGameContract = useCosmicGameContract();
   const { apiData: status } = useApiData();
@@ -44,11 +44,11 @@ const PrizeInfo = ({ prizeNum }) => {
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
-      const nftDonations = await api.get_donations_nft_by_round(prizeNum);
+      const nftDonations = await api.get_donations_nft_by_round(roundNum);
       setNftDonations(nftDonations);
-      const prizeInfo = await api.get_prize_info(prizeNum);
+      const prizeInfo = await api.get_prize_info(roundNum);
       setPrizeInfo(prizeInfo);
-      const bidHistory = await api.get_bid_list_by_round(prizeNum, "desc");
+      const bidHistory = await api.get_bid_list_by_round(roundNum, "desc");
       setBidHistory(bidHistory);
       setLoading(false);
     };
@@ -64,14 +64,14 @@ const PrizeInfo = ({ prizeNum }) => {
       <MainWrapper>
         <Box mb={4}>
           <Link
-            href={`/prize/${prizeNum}`}
+            href={`/prize/${roundNum}`}
             sx={{
               textDecorationColor: "#15BFFD !important",
               textDecorationThickness: "3px",
             }}
           >
             <Typography variant="h4" color="primary" component="span" mr={2}>
-              {`Round #${prizeNum}`}
+              {`Round #${roundNum}`}
             </Typography>
           </Link>
           <Typography variant="h4" component="span">
@@ -220,8 +220,8 @@ const PrizeInfo = ({ prizeNum }) => {
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const id = context.params!.id;
-  const prizeNum = Array.isArray(id) ? id[0] : id;
-  return { props: { prizeNum: parseInt(prizeNum) } };
+  const roundNum = Array.isArray(id) ? id[0] : id;
+  return { props: { roundNum: parseInt(roundNum) } };
 }
 
 export default PrizeInfo;

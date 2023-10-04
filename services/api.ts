@@ -71,8 +71,8 @@ class ApiService {
     return data.PrizeClaims;
   }
 
-  public async get_prize_info(prizeNum: number) {
-    const id = prizeNum < 0 ? 0 : prizeNum;
+  public async get_prize_info(roundNum: number) {
+    const id = roundNum < 0 ? 0 : roundNum;
     try {
       const { data } = await axios.get(cosmicGameBaseUrl + `prize/info/${id}`);
       const prizeInfo = data.PrizeInfo;

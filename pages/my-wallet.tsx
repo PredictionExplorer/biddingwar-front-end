@@ -117,12 +117,12 @@ const CSTRow = ({ nft }) => {
         </Link>
       </TablePrimaryCell>
       <TablePrimaryCell align="right">
-        {nft.PrizeNum > -1 ? (
+        {nft.RecordType === 3 ? (
           <Link
-            href={`/prize/${nft.PrizeNum}`}
+            href={`/prize/${nft.RoundNum}`}
             style={{ color: "rgba(255, 255, 255, 0.68)", fontSize: 14 }}
           >
-            Prize Winner (#{nft.PrizeNum})
+            Prize Winner (#{nft.RoundNum})
           </Link>
         ) : (
           "Raffle Winner"

@@ -292,12 +292,12 @@ const NFTTrait = ({ nft, prizeInfo, numCSTokenMints }) => {
               </Typography>
               &nbsp;
               <Typography component="span">
-                {nft.PrizeNum === -1
+                {nft.RecordType === 1
                   ? "Raffle Winner"
-                  : `Round Winner (round #${nft.PrizeNum})`}
+                  : `Round Winner (round #${nft.RoundNum})`}
               </Typography>
             </Box>
-            {nft.PrizeNum >= 0 && (
+            {nft.RecordType === 3 && (
               <>
                 <Box mb={3}>
                   <Typography color="primary" component="span">
@@ -308,17 +308,15 @@ const NFTTrait = ({ nft, prizeInfo, numCSTokenMints }) => {
                     {prizeInfo.AmountEth.toFixed(4)} ETH
                   </Typography>
                 </Box>
+                <Box mt={6}>
+                  <Button
+                    variant="outlined"
+                    onClick={() => router.push(`/prize/${nft.RoundNum}`)}
+                  >
+                    View Round Details
+                  </Button>
+                </Box>
               </>
-            )}
-            {nft.PrizeNum >= 0 && (
-              <Box mt={6}>
-                <Button
-                  variant="outlined"
-                  onClick={() => router.push(`/prize/${nft.PrizeNum}`)}
-                >
-                  View Round Details
-                </Button>
-              </Box>
             )}
             <Box>
               {account === nft.CurOwnerAddr && (

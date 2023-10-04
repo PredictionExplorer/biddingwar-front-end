@@ -65,6 +65,7 @@ const WinnerRow = ({ winner, type }) => {
 const RaffleWinnerTable = ({ RaffleETHDeposits, RaffleNFTWinners }) => {
   const perPage = 5;
   const list = [...RaffleETHDeposits, ...RaffleNFTWinners];
+  console.log(list);
   const [page, setPage] = useState(1);
   if (list.length === 0) {
     return <Typography>No winners yet.</Typography>;
