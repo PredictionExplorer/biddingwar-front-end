@@ -54,7 +54,6 @@ function MyApp(props: MyAppProps) {
       <Head>
         <title>Cosmic Signature</title>
         <meta name="viewport" content="width=device-width,initial-scale=1" />
-        <meta httpEquiv="Content-Security-Policy" content="upgrade-insecure-requests" /> 
         <meta name="theme-color" content={theme.palette.primary.main} />
         <meta
           name="google-site-verification"

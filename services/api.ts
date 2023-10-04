@@ -27,7 +27,7 @@ class ApiService {
   }
 
   public async get_dashboard_info() {
-    const { data } = await axios.get(cosmicGameBaseUrl + "statistics/dashboard", { method: 'get', headers: { "Access-Control-Allow-Origin": "*" }, });
+    const { data } = await axios.get(cosmicGameBaseUrl + "statistics/dashboard");
     return data;
   }
 
