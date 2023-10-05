@@ -90,16 +90,16 @@ const NFTTrait = ({ nft, prizeInfo, numCSTokenMints }) => {
       await nftContract
         .setTokenName(nft.TokenId, tokenName)
         .then((tx) => tx.wait());
+        setTimeout(async () => {
+          await fetchNameHistory();
+          setNotification({
+            text: "The token name has been changed successfully!",
+            visible: true,
+          });
+        }, 1000);
     } catch (err) {
       console.log(err);
     }
-    setTimeout(async () => {
-      await fetchNameHistory();
-      setNotification({
-        text: "The token name has been changed successfully!",
-        visible: true,
-      });
-    }, 1000);
   };
 
   const handlePrev = () =>
