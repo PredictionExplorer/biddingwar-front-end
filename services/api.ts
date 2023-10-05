@@ -1,7 +1,6 @@
 import axios from "axios";
 
 const baseUrl = "https://randomwalknft-api.com/";
-// export const cosmicGameBaseUrl = "https://170.187.142.12/api/cosmicgame/";
 const proxyUrl = "/api/proxy?url=";
 export const cosmicGameBaseUrl = "http://170.187.142.12:9090/api/cosmicgame/";
 
@@ -11,70 +10,135 @@ const getAPIUrl = (url: string) => {
 
 class ApiService {
   public async create(token_id: number, seed: string) {
-    const { data } = await axios.post(baseUrl + "cosmicgame_tokens", { token_id, seed });
-    return data?.task_id || -1;
+    try {
+      const { data } = await axios.post(baseUrl + "cosmicgame_tokens", { token_id, seed });
+      return data?.task_id || -1;
+    } catch (err) {
+      console.log(err);
+      return -1;
+    }
   }
 
   public async get_bid_list() {
-    const { data } = await axios.get(getAPIUrl("bid/list/0/1000000"));
-    return data.Bids;
+    try {
+      const { data } = await axios.get(getAPIUrl("bid/list/0/1000000"));
+      return data.Bids;
+    } catch (err) {
+      console.log(err);
+      return [];
+    }
   }
 
   public async get_bid_list_by_round(round: number, sortDir: string) {
-    const dir = sortDir === 'asc' ? 0 : 1;
-    const { data } = await axios.get(getAPIUrl(`bid/list_by_round/${round}/${dir}/0/1000000`));
-    return data.BidsByRound;
+    try {
+      const dir = sortDir === 'asc' ? 0 : 1;
+      const { data } = await axios.get(getAPIUrl(`bid/list_by_round/${round}/${dir}/0/1000000`));
+      return data.BidsByRound;
+    } catch (err) {
+      console.log(err);
+      return [];
+    }
   }
 
   public async get_bid_info(evtLogID: number) {
-    const { data } = await axios.get(getAPIUrl(`bid/info/${evtLogID}`));
-    return data.BidInfo;
+    try {
+      const { data } = await axios.get(getAPIUrl(`bid/info/${evtLogID}`));
+      return data.BidInfo;
+    } catch (err) {
+      console.log(err);
+      return null;
+    }
   }
 
   public async get_dashboard_info() {
-    const { data } = await axios.get(getAPIUrl("statistics/dashboard"));
-    return data;
+    try {
+      const { data } = await axios.get(getAPIUrl("statistics/dashboard"));
+      return data;
+    } catch (err) {
+      console.log(err);
+      return null;
+    }
   }
 
   public async get_unique_bidders() {
-    const { data } = await axios.get(getAPIUrl("user/unique_bidders"));
-    return data.UniqueBidders;
+    try {
+      const { data } = await axios.get(getAPIUrl("user/unique_bidders"));
+      return data.UniqueBidders;
+    } catch (err) {
+      console.log(err);
+      return [];
+    }
   }
 
   public async get_unique_winners() {
-    const { data } = await axios.get(getAPIUrl("user/unique_winners"));
-    return data.UniqueWinners;
+    try {
+      const { data } = await axios.get(getAPIUrl("user/unique_winners"));
+      return data.UniqueWinners;
+    } catch (err) {
+      console.log(err);
+      return [];
+    }
   }
 
   public async get_donations_nft_by_round(round: number) {
-    const { data } = await axios.get(getAPIUrl(`donations/nft/by_prize/${round}`));
-    if (data.status === 0) return [];
-    return data.NFTDonations;
+    try {
+      const { data } = await axios.get(getAPIUrl(`donations/nft/by_prize/${round}`));
+      if (data.status === 0) return [];
+      return data.NFTDonations;
+    } catch (err) {
+      console.log(err);
+      return [];
+    }
   }
 
   public async get_donations_nft_list() {
-    const { data } = await axios.get(getAPIUrl("donations/nft/list/0/1000000"));
-    return data.NFTDonations;
+    try {
+      const { data } = await axios.get(getAPIUrl("donations/nft/list/0/1000000"));
+      return data.NFTDonations;
+    } catch (err) {
+      console.log(err);
+      return [];
+    }
   }
 
   public async get_claimed_donated_nft_by_user(address: string) {
-    const { data } = await axios.get(getAPIUrl(`user/nft/claims/${address}`));
-    return data.DonatedNFTClaims;
+    try {
+      const { data } = await axios.get(getAPIUrl(`user/nft/claims/${address}`));
+      return data.DonatedNFTClaims;
+    } catch (err) {
+      console.log(err);
+      return [];
+    }
   }
 
   public async get_unclaimed_donated_nft_by_user(address: string) {
-    const { data } = await axios.get(getAPIUrl(`user/nft/unclaimed_by_user/${address}`));
-    return data.UnclaimedDonatedNFTs;
+    try {
+      const { data } = await axios.get(getAPIUrl(`user/nft/unclaimed_by_user/${address}`));
+      return data.UnclaimedDonatedNFTs;
+    } catch (err) {
+      console.log(err);
+      return [];
+    }
   }
 
   public async get_unclaimed_raffle_deposits_by_user(address: string) {
-    const { data } = await axios.get(getAPIUrl(`user/unclaimed_raffle_deposits/${address}/0/1000000`));
-    return data.UnclaimedDeposits;
+    try {
+      const { data } = await axios.get(getAPIUrl(`user/unclaimed_raffle_deposits/${address}/0/1000000`));
+      return data.UnclaimedDeposits;
+    } catch (err) {
+      console.log(err);
+      return [];
+    }
   }
 
   public async get_prize_list() {
-    const { data } = await axios.get(getAPIUrl("prize/list/0/1000000"));
-    return data.PrizeClaims;
+    try {
+      const { data } = await axios.get(getAPIUrl("prize/list/0/1000000"));
+      return data.PrizeClaims;
+    } catch (err) {
+      console.log(err);
+      return [];
+    }
   }
 
   public async get_prize_info(roundNum: number) {
@@ -84,82 +148,151 @@ class ApiService {
       const prizeInfo = data.PrizeInfo;
       return prizeInfo;
     } catch (err) {
+      console.log(err);
       return null;
     }
   }
 
   public async get_cst_list() {
-    const { data } = await axios.get(getAPIUrl("cst/list/0/1000000"));
-    const cstList = data.CosmicSignatureTokenList;
-    return cstList;
+    try {
+      const { data } = await axios.get(getAPIUrl("cst/list/0/1000000"));
+      const cstList = data.CosmicSignatureTokenList;
+      return cstList;
+    } catch (err) {
+      console.log(err);
+      return [];
+    }
   }
 
   public async get_cst_list_by_user(address: string) {
-    const { data } = await axios.get(getAPIUrl(`cst/list_by_user/${address}/0/1000000`));
-    return data.UserTokens;
+    try {
+      const { data } = await axios.get(getAPIUrl(`cst/list_by_user/${address}/0/1000000`));
+      return data.UserTokens;
+    } catch (err) {
+      console.log(err);
+      return [];
+    }
   }
 
   public async get_cst_info(tokenId: number) {
-    const { data } = await axios.get(getAPIUrl(`cst/info/${tokenId}`));
-    return data;
+    try {
+      const { data } = await axios.get(getAPIUrl(`cst/info/${tokenId}`));
+      return data;
+    } catch (err) {
+      console.log(err);
+      return null;
+    }
   }
 
   public async get_user_info(address: string) {
-    const { data } = await axios.get(getAPIUrl(`user/info/${address}`));
-    return data;
+    try {
+      const { data } = await axios.get(getAPIUrl(`user/info/${address}`));
+      return data;
+    } catch (err) {
+      console.log(err);
+      return null;
+    }
   }
 
   public async get_raffle_deposits_by_user(address: string) {
-    const { data } = await axios.get(getAPIUrl(`user/raffle_deposits/${address}`));
-    return data.UserRaffleDeposits;
+    try {
+      const { data } = await axios.get(getAPIUrl(`user/raffle_deposits/${address}`));
+      return data.UserRaffleDeposits;
+    } catch (err) {
+      console.log(err);
+      return [];
+    }
   }
 
   public async get_raffle_nft_winners_by_user(address: string) {
-    const { data } = await axios.get(getAPIUrl(`user/raffle_nft_winnings/${address}`));
-    return data.UserRaffleNFTWinnings;
+    try {
+      const { data } = await axios.get(getAPIUrl(`user/raffle_nft_winnings/${address}`));
+      return data.UserRaffleNFTWinnings;
+    } catch (err) {
+      console.log(err);
+      return [];
+    }
   }
 
   public async get_info(token_id: number | string) {
-    const { data } = await axios.get(baseUrl + "token_info/" + token_id);
-    return data;
+    try {
+      const { data } = await axios.get(baseUrl + "token_info/" + token_id);
+      return data;
+    } catch (err) {
+      console.log(err);
+      return null;
+    }
   }
 
   public async notify_red_box(address: string) {
-    const { data } = await axios.get(getAPIUrl(`user/notif_red_box/${address}`));
-    return data.Winnings;
+    try {
+      const { data } = await axios.get(getAPIUrl(`user/notif_red_box/${address}`));
+      return data.Winnings;
+    } catch (err) {
+      console.log(err);
+      return null;
+    }
   }
 
   public async get_name_history(token_id: number) {
-    const { data } = await axios.get(getAPIUrl(`cst/names/${token_id}`));
-    return data.TokenNameHistory;
+    try {
+      const { data } = await axios.get(getAPIUrl(`cst/names/${token_id}`));
+      return data.TokenNameHistory;
+    } catch (err) {
+      console.log(err);
+      return [];
+    }
   }
 
   public async get_transfer_history(token_id: number) {
-    const { data } = await axios.get(getAPIUrl(`cst/transfers/${token_id}/0/10000`));
-    return data.TokenTransfers;
+    try {
+      const { data } = await axios.get(getAPIUrl(`cst/transfers/${token_id}/0/10000`));
+      return data.TokenTransfers;
+    } catch (err) {
+      console.log(err);
+      return [];
+    }
   }
 
   public async get_claim_history() {
-    const { data } = await axios.get(getAPIUrl("prize/claim_history/0/100000"));
-    return data.GlobalClaimHistory;
+    try {
+      const { data } = await axios.get(getAPIUrl("prize/claim_history/0/100000"));
+      return data.GlobalClaimHistory;
+    } catch (err) {
+      console.log(err);
+      return [];
+    }
   }
 
   public async get_claim_history_by_user(address: string) {
-    const { data } = await axios.get(getAPIUrl(`user/claim_history/${address}/0/100000`));
-    return data.ClaimHistory;
+    try {
+      const { data } = await axios.get(getAPIUrl(`user/claim_history/${address}/0/100000`));
+      return data.ClaimHistory;
+    } catch (err) {
+      console.log(err);
+      return [];
+    }
   }
 
   public async get_prize_time() {
-    const { data } = await axios.get(getAPIUrl("prize/cur_round/time"));
-    return data.CurRoundPrizeTime;
+    try {
+      const { data } = await axios.get(getAPIUrl("prize/cur_round/time"));
+      return data.CurRoundPrizeTime;
+    } catch (err) {
+      console.log(err);
+      return 0;
+    }
   }
 
   public async get_current_time() {
-    const { data } = await axios.get(getAPIUrl("time/current"));
-    return data.CurrentTimeStamp;
+    try {
+      const { data } = await axios.get(getAPIUrl("time/current"));
+      return data.CurrentTimeStamp;
+    } catch (err) {
+      console.log(err);
+      return 0;
+    }
   }
-
-
 }
 
 export default new ApiService();
