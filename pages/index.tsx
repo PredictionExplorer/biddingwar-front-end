@@ -763,7 +763,7 @@ const NewHome = () => {
                           endAdornment: (
                             <InputAdornment position="end">%</InputAdornment>
                           ),
-                          inputProps: { min: 0 },
+                          inputProps: { min: 0, max: 50 },
                         }}
                         onChange={(e) =>
                           setBidPricePlus(Number(e.target.value))

@@ -113,7 +113,9 @@ const Statistics = () => {
               <StatisticsItem
                 title="Total CS tokens minted"
                 value={
-                  <Link href="/gallery" color="inherit">{data.MainStats.NumCSTokenMints}</Link>
+                  <Link href="/gallery" color="inherit">
+                    {data.MainStats.NumCSTokenMints}
+                  </Link>
                 }
               />
               <StatisticsItem
@@ -146,7 +148,11 @@ const Statistics = () => {
             <Box mt={4}>
               <StatisticsItem
                 title="Num Prizes Given"
-                value={data.TotalPrizes}
+                value={
+                  <Link href="/prize" color="inherit">
+                    {data.TotalPrizes}
+                  </Link>
+                }
               />
               <StatisticsItem
                 title="Total Amount Paid in Prizes"
