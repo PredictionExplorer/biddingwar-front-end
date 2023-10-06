@@ -82,6 +82,10 @@ const NFTTrait = ({ nft, prizeInfo, numCSTokenMints }) => {
       router.reload();
     } catch (err) {
       console.log(err);
+      setNotification({
+        text: "Please input the valid address for the token receiver!",
+        visible: true,
+      });
     }
   };
 
@@ -90,13 +94,28 @@ const NFTTrait = ({ nft, prizeInfo, numCSTokenMints }) => {
       await nftContract
         .setTokenName(nft.TokenId, tokenName)
         .then((tx) => tx.wait());
-        setTimeout(async () => {
-          await fetchNameHistory();
-          setNotification({
-            text: "The token name has been changed successfully!",
-            visible: true,
-          });
-        }, 1000);
+      setTimeout(async () => {
+        await fetchNameHistory();
+        setNotification({
+          text: "The token name has been changed successfully!",
+          visible: true,
+        });
+      }, 1000);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const handleClearName = async () => {
+    try {
+      await nftContract.setTokenName(nft.TokenId, "").then((tx) => tx.wait());
+      setTimeout(async () => {
+        await fetchNameHistory();
+        setNotification({
+          text: "The token name has been cleared successfully!",
+          visible: true,
+        });
+      }, 1000);
     } catch (err) {
       console.log(err);
     }
@@ -298,26 +317,24 @@ const NFTTrait = ({ nft, prizeInfo, numCSTokenMints }) => {
               </Typography>
             </Box>
             {nft.RecordType === 3 && (
-              <>
-                <Box mb={3}>
-                  <Typography color="primary" component="span">
-                    Prize Amount:
-                  </Typography>
-                  &nbsp;
-                  <Typography component="span">
-                    {prizeInfo.AmountEth.toFixed(4)} ETH
-                  </Typography>
-                </Box>
-                <Box mt={6}>
-                  <Button
-                    variant="outlined"
-                    onClick={() => router.push(`/prize/${nft.RoundNum}`)}
-                  >
-                    View Round Details
-                  </Button>
-                </Box>
-              </>
+              <Box mb={3}>
+                <Typography color="primary" component="span">
+                  Prize Amount:
+                </Typography>
+                &nbsp;
+                <Typography component="span">
+                  {prizeInfo.AmountEth.toFixed(4)} ETH
+                </Typography>
+              </Box>
             )}
+            <Box mt={6}>
+              <Button
+                variant="outlined"
+                onClick={() => router.push(`/prize/${nft.RoundNum}`)}
+              >
+                View Round Details
+              </Button>
+            </Box>
             <Box>
               {account === nft.CurOwnerAddr && (
                 <>
@@ -337,6 +354,7 @@ const NFTTrait = ({ nft, prizeInfo, numCSTokenMints }) => {
                       onClick={handleTransfer}
                       endIcon={<ArrowForward />}
                       sx={{ ml: 1 }}
+                      disabled={!address}
                     >
                       Transfer
                     </Button>
@@ -355,6 +373,7 @@ const NFTTrait = ({ nft, prizeInfo, numCSTokenMints }) => {
                         value={tokenName}
                         size="small"
                         fullWidth
+                        sx={{ flex: 1 }}
                         onChange={(e) => setTokenName(e.target.value)}
                       />
                       <Button
@@ -362,9 +381,20 @@ const NFTTrait = ({ nft, prizeInfo, numCSTokenMints }) => {
                         variant="contained"
                         onClick={handleSetTokenName}
                         sx={{ ml: 1, whiteSpace: "nowrap" }}
+                        disabled={!tokenName}
                       >
-                        {tokenName === "" ? "Set Name" : "Change Name"}
+                        {nft.TokenName === "" ? "Set Name" : "Change Name"}
                       </Button>
+                      {tokenName && (
+                        <Button
+                          color="secondary"
+                          variant="contained"
+                          onClick={handleClearName}
+                          sx={{ ml: 1, whiteSpace: "nowrap" }}
+                        >
+                          Clear name
+                        </Button>
+                      )}
                     </Box>
                   </Box>
                 </>
