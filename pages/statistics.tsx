@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Box, Grid, Pagination, Typography } from "@mui/material";
+import { Box, Grid, Link, Pagination, Typography } from "@mui/material";
 import Head from "next/head";
 import { MainWrapper } from "../components/styled";
 import api from "../services/api";
@@ -7,6 +7,7 @@ import BiddingHistoryTable from "../components/BiddingHistoryTable";
 import { UniqueBiddersTable } from "../components/UniqueBiddersTable";
 import { UniqueWinnersTable } from "../components/UniqueWinnersTable";
 import DonatedNFT from "../components/DonatedNFT";
+import { ZERO_ADDRESS } from "../config/misc";
 
 const convertTimestampToDateTime = (timestamp: any) => {
   var date_ob = new Date(timestamp * 1000);
@@ -95,7 +96,11 @@ const Statistics = () => {
               <StatisticsItem title="Current Round" value={data.CurRoundNum} />
               <StatisticsItem
                 title="Round Start Date"
-                value={convertTimestampToDateTime(data.TsRoundStart)}
+                value={
+                  data.LastBidderAddr === ZERO_ADDRESS
+                    ? "Round isn't started yet."
+                    : convertTimestampToDateTime(data.TsRoundStart)
+                }
               />
               <StatisticsItem
                 title="Current Bid Price"
@@ -107,7 +112,9 @@ const Statistics = () => {
               />
               <StatisticsItem
                 title="Total CS tokens minted"
-                value={data.MainStats.NumCSTokenMints}
+                value={
+                  <Link href="/gallery" color="inherit">{data.MainStats.NumCSTokenMints}</Link>
+                }
               />
               <StatisticsItem
                 title="Prize Amount"

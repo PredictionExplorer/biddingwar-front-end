@@ -1,7 +1,6 @@
 import { Badge } from "@mui/material";
 import { ReactNode } from "react";
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
-import { useApiData } from "../contexts/ApiDataContext";
 
 type NavItem = {
   title: string | ReactNode;
@@ -9,14 +8,16 @@ type NavItem = {
   children?: Array<NavItem>;
 };
 
-const getNAVs = (status) => {
-  const NAVS: NavItem[] = [
+const getNAVs = (status, account) => {
+  let NAVS: NavItem[] = [
     { title: "Gallery", route: "/gallery" },
     { title: "Contracts", route: "/contracts" },
     { title: "Prizes", route: "/prize" },
     { title: "Statistics", route: "/statistics" },
     { title: "FAQ", route: "/faq" },
-    {
+  ];
+  if (account) {
+    NAVS.push({
       title:
         status.ETHRaffleToClaim > 0 || status.NumDonatedNFTToClaim > 0 ? (
           <Badge color="error" variant="dot">
@@ -31,8 +32,8 @@ const getNAVs = (status) => {
         { title: "My Wallet", route: "/my-wallet" },
         { title: "History of Winnings", route: "/winning-history" },
       ],
-    },
-  ];
+    });
+  }
   return NAVS;
 };
 

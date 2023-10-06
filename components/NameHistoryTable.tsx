@@ -25,7 +25,9 @@ const NameHistoryRow = ({ record }) => {
       <TablePrimaryCell>
         {convertTimestampToDateTime(record.TimeStamp)}
       </TablePrimaryCell>
-      <TablePrimaryCell>{record.TokenName}</TablePrimaryCell>
+      <TablePrimaryCell>
+        {record.TokenName ? record.TokenName : "Token name was removed."}
+      </TablePrimaryCell>
     </TablePrimaryRow>
   );
 };

@@ -17,6 +17,7 @@ import { AppBarWrapper, DrawerList } from "./styled";
 import ListNavItem from "./ListNavItem";
 import ListItemButton from "./ListItemButton";
 import { useApiData } from "../contexts/ApiDataContext";
+import { useActiveWeb3React } from "../hooks/web3";
 
 const Header = () => {
   const [state, setState] = useState({
@@ -25,6 +26,7 @@ const Header = () => {
   });
   const { mobileView, drawerOpen } = state;
   const { apiData: status } = useApiData();
+  const { account } = useActiveWeb3React();
 
   useEffect(() => {
     const setResponsiveness = () => {
@@ -48,7 +50,7 @@ const Header = () => {
         <Link href="/">
           <Image src="/images/logo2.svg" width={240} height={48} alt="logo" />
         </Link>
-        {getNAVs(status).map((nav, i) => (
+        {getNAVs(status, account).map((nav, i) => (
           <ListNavItem key={i} nav={nav} />
         ))}
         <ConnectWalletButton isMobileView={false} />
@@ -83,7 +85,7 @@ const Header = () => {
             <ListItem>
               <ConnectWalletButton isMobileView />
             </ListItem>
-            {getNAVs(status).map((nav, i) => (
+            {getNAVs(status, account).map((nav, i) => (
               <ListItemButton
                 key={i}
                 nav={nav}
