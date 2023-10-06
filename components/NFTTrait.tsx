@@ -283,7 +283,9 @@ const NFTTrait = ({ nft, prizeInfo, numCSTokenMints }) => {
               </Typography>
               &nbsp;
               <Link style={{ color: "#fff" }} href={`/user/${nft.WinnerAddr}`}>
-                <Typography component="span">{nft.WinnerAddr}</Typography>
+                <Typography fontFamily="monospace" component="span">
+                  {nft.WinnerAddr}
+                </Typography>
               </Link>
             </Box>
             <Box mb={1}>
@@ -295,15 +297,28 @@ const NFTTrait = ({ nft, prizeInfo, numCSTokenMints }) => {
                 style={{ color: "#fff" }}
                 href={`/user/${nft.CurOwnerAddr}`}
               >
-                <Typography component="span">{nft.CurOwnerAddr}</Typography>
+                <Typography fontFamily="monospace" component="span">
+                  {nft.CurOwnerAddr}
+                </Typography>
               </Link>
             </Box>
-            <Box mb={1}>
+            <Box sx={{ mb: 1, display: "flex" }}>
               <Typography color="primary" component="span">
                 Seed:
               </Typography>
               &nbsp;
-              <Typography component="span">{nft.Seed}</Typography>
+              <Typography
+                fontFamily="monospace"
+                component="span"
+                sx={{
+                  fontFamily: "monospace",
+                  display: "inline-block",
+                  wordWrap: "break-word",
+                  width: "32ch",
+                }}
+              >
+                {nft.Seed}
+              </Typography>
             </Box>
             <Box mb={1}>
               <Typography color="primary" component="span">
