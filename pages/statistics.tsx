@@ -8,6 +8,7 @@ import { UniqueBiddersTable } from "../components/UniqueBiddersTable";
 import { UniqueWinnersTable } from "../components/UniqueWinnersTable";
 import DonatedNFT from "../components/DonatedNFT";
 import { ZERO_ADDRESS } from "../config/misc";
+import Countdown from "react-countdown";
 
 const convertTimestampToDateTime = (timestamp: any) => {
   var date_ob = new Date(timestamp * 1000);
@@ -35,7 +36,7 @@ const convertTimestampToDateTime = (timestamp: any) => {
 const StatisticsItem = ({ title, value }) => {
   return (
     <Box display="flex" flexWrap="wrap" my={1}>
-      <Typography color="primary" width="300px">
+      <Typography color="primary" width={{ md: "300px", xs: "200px" }}>
         {title}
       </Typography>
       <Typography>{value}</Typography>
@@ -80,6 +81,34 @@ const Statistics = () => {
     fetchData();
   }, []);
 
+  const renderer = ({ days, hours, minutes, seconds }) => {
+    let result = "";
+    if (days > 1) {
+      result = `${days} days `;
+    } else if (days === 1) {
+      result = `${days} day `;
+    }
+    if (hours > 1) {
+      result += `${hours} hours `;
+    } else if (hours === 1 || (hours === 0 && result !== "")) {
+      result += `${hours} hour `;
+    }
+    if (minutes > 1) {
+      result += `${minutes} minutes `;
+    } else if (minutes === 1 || (minutes === 0 && result !== "")) {
+      result += `${minutes} minute `;
+    }
+    if (seconds > 1) {
+      result += `${seconds} seconds`;
+    } else if (seconds === 1 || (seconds === 0 && result !== "")) {
+      result += `${seconds} second`;
+    }
+    if (result !== "") {
+      result += " left";
+    }
+    return result !== "" && <Typography>{result}</Typography>;
+  };
+
   return (
     <>
       <Head>
@@ -111,21 +140,25 @@ const Statistics = () => {
                 value={data.CurNumBids}
               />
               <StatisticsItem
-                title="Total CS tokens minted"
-                value={
-                  <Link href="/gallery" color="inherit">
-                    {data.MainStats.NumCSTokenMints}
-                  </Link>
-                }
-              />
-              <StatisticsItem
                 title="Prize Amount"
                 value={`${data.PrizeAmountEth.toFixed(6)} ETH`}
               />
-              <StatisticsItem
-                title="Prize Claim Date"
-                value={convertTimestampToDateTime(data.PrizeClaimTs)}
-              />
+              <Box display="flex" flexWrap="wrap" my={1}>
+                <Typography color="primary" width="300px">
+                  Prize Claim Date
+                </Typography>
+                <Box>
+                  <Typography>
+                    {convertTimestampToDateTime(data.PrizeClaimTs)}
+                  </Typography>
+                  {data.PrizeClaimTs > Date.now() / 1000 && (
+                    <Countdown
+                      date={data.PrizeClaimTs * 1000}
+                      renderer={renderer}
+                    />
+                  )}
+                </Box>
+              </Box>
               <StatisticsItem title="Last Bidder" value={data.LastBidderAddr} />
             </Box>
             <Box my={4}>
@@ -149,8 +182,16 @@ const Statistics = () => {
               <StatisticsItem
                 title="Num Prizes Given"
                 value={
-                  <Link href="/prize" color="inherit">
+                  <Link href="/prize" color="inherit" fontSize="inherit">
                     {data.TotalPrizes}
+                  </Link>
+                }
+              />
+              <StatisticsItem
+                title="Total CS tokens minted"
+                value={
+                  <Link href="/gallery" color="inherit" fontSize="inherit">
+                    {data.MainStats.NumCSTokenMints}
                   </Link>
                 }
               />
