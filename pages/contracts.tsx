@@ -10,6 +10,8 @@ import {
 import Head from "next/head";
 import { MainWrapper } from "../components/styled";
 import api from "../services/api";
+import { useActiveWeb3React } from "../hooks/web3";
+import { Network } from "@ethersproject/providers";
 
 export const ContractListItem = styled(ListItem)({
   justifyContent: "center",
@@ -28,7 +30,11 @@ const ContractItem = ({ name, value }) => {
       >
         {name}:
       </Typography>
-      <Typography fontFamily="monospace" variant={sm ? "subtitle1" : "body1"}>
+      <Typography
+        fontFamily="monospace"
+        variant={sm ? "subtitle1" : "body1"}
+        sx={{ width: "42ch" }}
+      >
         {value}
       </Typography>
     </ContractListItem>
@@ -38,12 +44,17 @@ const ContractItem = ({ name, value }) => {
 const Contracts = () => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [network, setNetwork] = useState<Network>();
+  const { library } = useActiveWeb3React();
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true);
         const newData = await api.get_dashboard_info();
         setData(newData);
+        const res = await library.getNetwork();
+        setNetwork(res);
         setLoading(false);
       } catch (err) {
         console.log(err);
@@ -70,6 +81,8 @@ const Contracts = () => {
           <Typography variant="h6">Loading...</Typography>
         ) : (
           <List sx={{ mt: 8 }}>
+            <ContractItem name="Network" value={network?.name} />
+            <ContractItem name="Chain ID" value={network?.chainId} />
             <ContractItem
               name="CosmicGame Address"
               value={data?.ContractAddrs.CosmicGameAddr}

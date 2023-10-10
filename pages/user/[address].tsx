@@ -6,12 +6,16 @@ import { GetServerSidePropsContext } from "next";
 import api from "../../services/api";
 import BiddingHistoryTable from "../../components/BiddingHistoryTable";
 import WinningHistoryTable from "../../components/WinningHistoryTable";
+import useCosmicSignatureTokenContract from "../../hooks/useCosmicSignatureTokenContract";
+import { ethers } from "ethers";
 
 const UserInfo = ({ address }) => {
   const [claimHistory, setClaimHistory] = useState(null);
   const [bidHistory, setBidHistory] = useState([]);
   const [userInfo, setUserInfo] = useState(null);
+  const [balance, setBalance] = useState(0);
   const [loading, setLoading] = useState(true);
+  const cosmicSignatureTokenContract = useCosmicSignatureTokenContract();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -21,6 +25,9 @@ const UserInfo = ({ address }) => {
       const { Bids, UserInfo } = await api.get_user_info(address);
       setBidHistory(Bids);
       setUserInfo(UserInfo);
+      const balance = await cosmicSignatureTokenContract.balanceOf(address);
+      setBalance(Number(ethers.utils.formatEther(balance)));
+
       setLoading(false);
     };
     if (address) {
@@ -47,6 +54,15 @@ const UserInfo = ({ address }) => {
           <Typography variant="h6">Loading...</Typography>
         ) : (
           <>
+            {balance && (
+              <Box mb={1}>
+                <Typography color="primary" component="span">
+                  Cosmic Tokens Balance:
+                </Typography>
+                &nbsp;
+                <Typography component="span">{balance.toFixed(2)}</Typography>
+              </Box>
+            )}
             <Box mb={1}>
               <Typography color="primary" component="span">
                 Number of Bids:
