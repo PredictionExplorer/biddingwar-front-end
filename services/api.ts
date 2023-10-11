@@ -293,6 +293,36 @@ class ApiService {
       return 0;
     }
   }
+
+  public async get_charity_cg_deposits() {
+    try {
+      const { data } = await axios.get(getAPIUrl("donations/charity/cg_deposits"));
+      return data.CharityDonations;
+    } catch (err) {
+      console.log(err);
+      return 0;
+    }
+  }
+
+  public async get_charity_voluntary() {
+    try {
+      const { data } = await axios.get(getAPIUrl("donations/charity/voluntary"));
+      return data.CharityDonations;
+    } catch (err) {
+      console.log(err);
+      return 0;
+    }
+  }
+
+  public async get_charity_withdrawals() {
+    try {
+      const { data } = await axios.get(getAPIUrl("donations/charity/withdrawals"));
+      return data.CharityWithdrawals;
+    } catch (err) {
+      console.log(err);
+      return 0;
+    }
+  }
 }
 
 export default new ApiService();

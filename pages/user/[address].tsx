@@ -54,7 +54,7 @@ const UserInfo = ({ address }) => {
           <Typography variant="h6">Loading...</Typography>
         ) : (
           <>
-            {balance && (
+            {balance !== 0 && (
               <Box mb={1}>
                 <Typography color="primary" component="span">
                   Cosmic Tokens Balance:

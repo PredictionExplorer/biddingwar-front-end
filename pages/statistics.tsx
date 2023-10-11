@@ -200,8 +200,34 @@ const Statistics = () => {
                 value={`${data.TotalPrizesPaidAmountEth.toFixed(6)} ETH`}
               />
               <StatisticsItem
+                title="Num Cosmic Game Donations"
+                value={
+                  <Link
+                    color="inherit"
+                    fontSize="inherit"
+                    href="/charity-deposits"
+                  >
+                    {data.MainStats.NumCosmicGameDonations}
+                  </Link>
+                }
+              />
+              <StatisticsItem
+                title="Sum of Cosmic Game Donations"
+                value={`${data.MainStats.SumCosmicGameDonationsEth.toFixed(
+                  6
+                )} ETH`}
+              />
+              <StatisticsItem
                 title="Voluntary Donations Received"
-                value={`${data.NumVoluntaryDonations} totalling ${data.SumVoluntaryDonationsEth} ETH`}
+                value={
+                  <Link
+                    color="inherit"
+                    fontSize="inherit"
+                    href="/charity-deposits"
+                  >
+                    {`${data.NumVoluntaryDonations} totalling ${data.SumVoluntaryDonationsEth} ETH`}
+                  </Link>
+                }
               />
               <StatisticsItem
                 title="RandomWalk Tokens Used"
