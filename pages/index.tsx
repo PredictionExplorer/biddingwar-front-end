@@ -553,7 +553,7 @@ const NewHome = () => {
                   src={
                     bannerTokenId === ""
                       ? "/images/qmark.png"
-                      : `https://cosmic-game.s3.us-east-2.amazonaws.com/${bannerTokenId}.png`
+                      : `https://cosmic-game2.s3.us-east-2.amazonaws.com/${bannerTokenId}.png`
                   }
                 />
               </CardActionArea>
@@ -661,33 +661,40 @@ const NewHome = () => {
               </>
             ) : (
               <>
-                <Typography variant="h4" mb={2}>
-                  Round #{data?.CurRoundNum} ended
-                </Typography>
-                <Box mb={1}>
-                  <Typography color="primary" component="span">
-                    Winner:
-                  </Typography>
-                  &nbsp;
-                  <Typography component="span">
-                    <Link
-                      href={`/user/${prizeInfo?.WinnerAddr}`}
-                      color="rgb(255, 255, 255)"
-                      fontSize="inherit"
-                    >
-                      {prizeInfo?.WinnerAddr}
-                    </Link>
-                  </Typography>
-                </Box>
-                <Box>
-                  <Typography color="primary" component="span">
-                    Previous Round Reward:
-                  </Typography>
-                  &nbsp;
-                  <Typography component="span">
-                    {data?.PrizeAmountEth.toFixed(4)} ETH
-                  </Typography>
-                </Box>
+                {data?.PrizeAmountEth > 0 ? (
+                  <>
+                    <Typography variant="h4" mb={2}>
+                      Round #{data?.CurRoundNum} ended
+                    </Typography>
+                    <Box mb={1}>
+                      <Typography color="primary" component="span">
+                        Winner:
+                      </Typography>
+                      &nbsp;
+                      <Typography component="span">
+                        <Link
+                          href={`/user/${prizeInfo?.WinnerAddr}`}
+                          color="rgb(255, 255, 255)"
+                          fontSize="inherit"
+                        >
+                          {prizeInfo?.WinnerAddr}
+                        </Link>
+                      </Typography>
+                    </Box>
+                    <Box>
+                      <Typography color="primary" component="span">
+                        Previous Round Reward:
+                      </Typography>
+                      &nbsp;
+                      <Typography component="span">
+                        {data?.PrizeAmountEth.toFixed(4)} ETH
+                      </Typography>
+                    </Box>
+                  </>
+                ) : (
+                  <Typography variant="h5">Game hasn't started yet!</Typography>
+                )}
+
                 <Typography mt="40px" mb={1}>
                   Be the first to start a new round, place a bid.
                 </Typography>
@@ -702,7 +709,6 @@ const NewHome = () => {
                 </Box>
               </>
             )}
-
             {account !== null && (
               <>
                 <Accordion>
