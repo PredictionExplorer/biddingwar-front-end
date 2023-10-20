@@ -553,7 +553,7 @@ const NewHome = () => {
                   src={
                     bannerTokenId === ""
                       ? "/images/qmark.png"
-                      : `https://cosmic-game2.s3.us-east-2.amazonaws.com/${bannerTokenId}.png`
+                      : `https://cosmic-game.s3.us-east-2.amazonaws.com/${bannerTokenId}.png`
                   }
                 />
               </CardActionArea>
