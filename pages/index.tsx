@@ -692,7 +692,9 @@ const NewHome = () => {
                     </Box>
                   </>
                 ) : (
-                  <Typography variant="h5">Start the game with your first bid!</Typography>
+                  <Typography variant="h5">
+                    Start the game with your first bid!
+                  </Typography>
                 )}
 
                 <Typography mt="40px" mb={1}>
@@ -771,9 +773,12 @@ const NewHome = () => {
                           ),
                           inputProps: { min: 0, max: 50 },
                         }}
-                        onChange={(e) =>
-                          setBidPricePlus(Number(e.target.value))
-                        }
+                        onChange={(e) => {
+                          let value = Number(e.target.value);
+                          if (value <= 50) {
+                            setBidPricePlus(value);
+                          }
+                        }}
                       />
                       <Typography
                         whiteSpace="nowrap"

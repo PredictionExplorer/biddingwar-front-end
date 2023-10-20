@@ -100,7 +100,7 @@ const NFTTrait = ({ nft, prizeInfo, numCSTokenMints }) => {
           text: "The token name has been changed successfully!",
           visible: true,
         });
-      }, 1000);
+      }, 2000);
     } catch (err) {
       console.log(err);
     }
@@ -115,7 +115,7 @@ const NFTTrait = ({ nft, prizeInfo, numCSTokenMints }) => {
           text: "The token name has been cleared successfully!",
           visible: true,
         });
-      }, 1000);
+      }, 2000);
     } catch (err) {
       console.log(err);
     }
@@ -400,7 +400,7 @@ const NFTTrait = ({ nft, prizeInfo, numCSTokenMints }) => {
                       >
                         {nft.TokenName === "" ? "Set Name" : "Change Name"}
                       </Button>
-                      {tokenName && (
+                      {nameHistory.length > 0 && nameHistory[0].TokenName && (
                         <Button
                           color="secondary"
                           variant="contained"
