@@ -199,22 +199,24 @@ const Statistics = () => {
                 title="Total Amount Paid in Prizes"
                 value={`${data.TotalPrizesPaidAmountEth.toFixed(6)} ETH`}
               />
-              <StatisticsItem
-                title="Num Cosmic Game Donations"
-                value={
-                  <Link
-                    color="inherit"
-                    fontSize="inherit"
-                    href="/charity-deposits"
-                  >
-                    {data.MainStats.NumCosmicGameDonations}
-                  </Link>
-                }
-              />
-              <StatisticsItem
-                title="Sum of Cosmic Game Donations"
-                value={
-                  data.MainStats.SumCosmicGameDonationsEth > 0 ? (
+              {data.MainStats.NumCosmicGameDonations > 0 && (
+                <StatisticsItem
+                  title="Num Cosmic Game Donations"
+                  value={
+                    <Link
+                      color="inherit"
+                      fontSize="inherit"
+                      href="/charity-deposits"
+                    >
+                      {data.MainStats.NumCosmicGameDonations}
+                    </Link>
+                  }
+                />
+              )}
+              {data.MainStats.SumCosmicGameDonationsEth > 0 && (
+                <StatisticsItem
+                  title="Sum of Cosmic Game Donations"
+                  value={
                     <Link
                       color="inherit"
                       fontSize="inherit"
@@ -224,15 +226,13 @@ const Statistics = () => {
                         6
                       )} ETH`}
                     </Link>
-                  ) : (
-                    `${data.MainStats.SumCosmicGameDonationsEth.toFixed(6)} ETH`
-                  )
-                }
-              />
-              <StatisticsItem
-                title="Voluntary Donations Received"
-                value={
-                  data.SumVoluntaryDonationsEth > 0 ? (
+                  }
+                />
+              )}
+              {data.SumVoluntaryDonationsEth > 0 && (
+                <StatisticsItem
+                  title="Voluntary Donations Received"
+                  value={
                     <Link
                       color="inherit"
                       fontSize="inherit"
@@ -240,16 +240,22 @@ const Statistics = () => {
                     >
                       {`${data.NumVoluntaryDonations} totalling ${data.SumVoluntaryDonationsEth} ETH`}
                     </Link>
-                  ) : (
-                    `${data.NumVoluntaryDonations} totalling ${data.SumVoluntaryDonationsEth} ETH`
-                  )
-                }
-              />
+                  }
+                />
+              )}
               {data.MainStats.NumWithdrawals > 0 && (
                 <>
                   <StatisticsItem
                     title="Withdrawals from Charity Wallet"
-                    value={data.MainStats.NumWithdrawals}
+                    value={
+                      <Link
+                        color="inherit"
+                        fontSize="inherit"
+                        href="/charity-withdrawals"
+                      >
+                        {data.MainStats.NumWithdrawals}
+                      </Link>
+                    }
                   />
                   <StatisticsItem
                     title="Total amount withdrawn"
