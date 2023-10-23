@@ -478,8 +478,9 @@ const NFTTrait = ({ nft, prizeInfo, numCSTokenMints }) => {
         </DialogTitle>
         <DialogContent>
           <DialogContentText>
-            The destination account doesn't exist. Please check the inputted
-            address.
+            {
+              "The destination account doesn't exist. Please check the inputted address."
+            }
           </DialogContentText>
         </DialogContent>
         <DialogActions>
