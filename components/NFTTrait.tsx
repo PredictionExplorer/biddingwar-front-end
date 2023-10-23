@@ -82,10 +82,12 @@ const NFTTrait = ({ nft, prizeInfo, numCSTokenMints }) => {
       router.reload();
     } catch (err) {
       console.log(err);
-      setNotification({
-        text: "Please input the valid address for the token receiver!",
-        visible: true,
-      });
+      if (err.code !== 4001) {
+        setNotification({
+          text: "Please input the valid address for the token receiver!",
+          visible: true,
+        });
+      }
     }
   };
 
