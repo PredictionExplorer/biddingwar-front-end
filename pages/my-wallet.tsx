@@ -333,11 +333,11 @@ const MyWallet = () => {
         <Box mt={6}>
           <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
             <Typography variant="h5">Raffle ETH</Typography>
-            {status.ETHRaffleToClaim > 0 && (
+            {status?.ETHRaffleToClaim > 0 && (
               <Box>
                 <Typography component="span" mr={2}>
                   Your claimable winnings are{" "}
-                  {`${status.ETHRaffleToClaim.toFixed(6)} ETH`}
+                  {`${status?.ETHRaffleToClaim.toFixed(6)} ETH`}
                 </Typography>
                 <Button
                   onClick={handleAllETHClaim}

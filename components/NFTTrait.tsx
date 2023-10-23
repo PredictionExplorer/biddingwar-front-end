@@ -13,6 +13,11 @@ import {
   MenuItem,
   Snackbar,
   Alert,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
 } from "@mui/material";
 
 import { CopyToClipboard } from "react-copy-to-clipboard";
@@ -54,11 +59,29 @@ const NFTTrait = ({ nft, prizeInfo, numCSTokenMints }) => {
   const [tokenName, setTokenName] = useState(nft.TokenName);
   const [nameHistory, setNameHistory] = useState([]);
   const [transferHistory, setTransferHistory] = useState([]);
-
+  const [openDialog, setOpenDialog] = useState(false);
   const router = useRouter();
   const nftContract = useCosmicSignatureContract();
   const { account } = useActiveWeb3React();
 
+  const handleClickTransfer = async () => {
+    const { ethereum } = window;
+    try {
+      const txCount = await ethereum.request({
+        method: "eth_getTransactionCount",
+        params: [address, "latest"],
+      });
+      if (Number(txCount) === 0) {
+        setOpenDialog(true);
+      }
+    } catch (err) {
+      console.log(err);
+      return;
+    }
+  };
+  const handleClose = () => {
+    setOpenDialog(false);
+  };
   const handlePlay = (videoPath) => {
     fetch(videoPath).then((res) => {
       if (res.ok) {
@@ -74,6 +97,7 @@ const NFTTrait = ({ nft, prizeInfo, numCSTokenMints }) => {
   };
 
   const handleTransfer = async () => {
+    handleClose();
     try {
       await nftContract
         .transferFrom(account, address, nft.TokenId)
@@ -194,7 +218,7 @@ const NFTTrait = ({ nft, prizeInfo, numCSTokenMints }) => {
                 {nameHistory.length > 0 && (
                   <NFTInfoWrapper sx={{ width: "calc(100% - 40px)" }}>
                     <Typography
-                      variant="body1"
+                      variant="subtitle1"
                       sx={{ color: "#FFFFFF", textAlign: "center" }}
                     >
                       {nameHistory[0].TokenName}
@@ -368,7 +392,7 @@ const NFTTrait = ({ nft, prizeInfo, numCSTokenMints }) => {
                     <Button
                       color="secondary"
                       variant="contained"
-                      onClick={handleTransfer}
+                      onClick={handleClickTransfer}
                       endIcon={<ArrowForward />}
                       sx={{ ml: 1 }}
                       disabled={!address}
@@ -448,6 +472,23 @@ const NFTTrait = ({ nft, prizeInfo, numCSTokenMints }) => {
           onClose={() => setOpen(false)}
         />
       </SectionWrapper>
+      <Dialog open={openDialog} onClose={handleClose} maxWidth="md">
+        <DialogTitle>
+          Are you sure to send the token to the destination address?
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            The destination account doesn't exist. Please check the inputted
+            address.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleTransfer} autoFocus>
+            Yes
+          </Button>
+          <Button onClick={handleClose}>No</Button>
+        </DialogActions>
+      </Dialog>
     </Container>
   );
 };
