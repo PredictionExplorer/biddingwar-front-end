@@ -236,7 +236,7 @@ class ApiService {
 
   public async get_name_history(token_id: number) {
     try {
-      const { data } = await axios.get(getAPIUrl(`cst/names/${token_id}`));
+      const { data } = await axios.get(getAPIUrl(`cst/names/history/${token_id}`));
       return data.TokenNameHistory;
     } catch (err) {
       console.log(err);
