@@ -244,6 +244,16 @@ class ApiService {
     }
   }
 
+  public async get_token_by_name(token_name: string) {
+    try {
+      const { data } = await axios.get(getAPIUrl(`cst/names/search/${token_name}`));
+      return data.TokenNameSearchResults;
+    } catch (err) {
+      console.log(err);
+      return [];
+    }
+  }
+
   public async get_transfer_history(token_id: number) {
     try {
       const { data } = await axios.get(getAPIUrl(`cst/transfers/${token_id}/0/10000`));

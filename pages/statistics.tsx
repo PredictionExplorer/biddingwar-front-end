@@ -291,7 +291,7 @@ const Statistics = () => {
               />
               <StatisticsItem
                 title="Raffle Holder NFT Winners"
-                value={data.CurRoundNum}
+                value={data.NumHolderNFTWinners}
               />
               <StatisticsItem
                 title="Charity Address"
