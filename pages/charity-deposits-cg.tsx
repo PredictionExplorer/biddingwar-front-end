@@ -28,7 +28,14 @@ const DonationRow = ({ donation }) => {
   return (
     <TablePrimaryRow>
       <TablePrimaryCell>
-        {convertTimestampToDateTime(donation.TimeStamp)}
+        <Link
+          color="inherit"
+          fontSize="inherit"
+          href={`https://arbiscan.io/tx/${donation.TxHash}`}
+          target="__blank"
+        >
+          {convertTimestampToDateTime(donation.TimeStamp)}
+        </Link>
       </TablePrimaryCell>
       <TablePrimaryCell align="center">{donation.RoundNum}</TablePrimaryCell>
       <TablePrimaryCell align="center">

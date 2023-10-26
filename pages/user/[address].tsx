@@ -33,7 +33,6 @@ const UserInfo = ({ address }) => {
       );
       const balance = await cosmicSignatureTokenContract.balanceOf(address);
       setBalance(Number(ethers.utils.formatEther(balance)));
-
       setLoading(false);
     };
     if (address) {
