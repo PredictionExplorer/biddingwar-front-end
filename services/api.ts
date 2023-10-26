@@ -333,6 +333,16 @@ class ApiService {
       return 0;
     }
   }
+
+  public async get_named_nfts() {
+    try {
+      const { data } = await axios.get(getAPIUrl("cst/names/named_only"));
+      return data.NamedTokens;
+    } catch (err) {
+      console.log(err);
+      return 0;
+    }
+  }
 }
 
 export default new ApiService();

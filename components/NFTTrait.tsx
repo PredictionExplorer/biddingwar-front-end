@@ -48,6 +48,7 @@ const NFTTrait = ({ nft, prizeInfo, numCSTokenMints }) => {
   const image = `https://cosmic-game.s3.us-east-2.amazonaws.com/${fileName}.png`;
   const video = `https://cosmic-game.s3.us-east-2.amazonaws.com/${fileName}.mp4`;
   const [open, setOpen] = useState(false);
+  const [data, setData] = useState(null);
   const [imageOpen, setImageOpen] = useState(false);
   const [videoPath, setVideoPath] = useState(null);
   const [address, setAddress] = useState("");
@@ -191,6 +192,14 @@ const NFTTrait = ({ nft, prizeInfo, numCSTokenMints }) => {
     fetchTransferHistory();
     setTokenName(nft.TokenName);
   }, [nft]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await api.get_dashboard_info();
+      setData(data);
+    };
+    fetchData();
+  }, []);
 
   return (
     <Container>
@@ -437,6 +446,11 @@ const NFTTrait = ({ nft, prizeInfo, numCSTokenMints }) => {
                         </Button>
                       )}
                     </Box>
+                    <Typography variant="body2" mt={1} fontStyle="italic">
+                      There are {data?.MainStats.TotalNamedTokens} tokens with a
+                      name, click <Link href="/named-nfts">here</Link> for a
+                      full list.
+                    </Typography>
                   </Box>
                 </>
               )}
