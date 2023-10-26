@@ -301,18 +301,6 @@ const Statistics = () => {
                 value={`${data.RafflePercentage} %`}
               />
               <StatisticsItem
-                title="NFT Holder Winners"
-                value={data.NumHolderNFTWinners}
-              />
-              <StatisticsItem
-                title="Raffle ETH Winners"
-                value={data.NumRaffleEthWinners}
-              />
-              <StatisticsItem
-                title="Raffle NFT Winners"
-                value={data.NumRaffleNFTWinners}
-              />
-              <StatisticsItem
                 title="Raffle Holder NFT Winners"
                 value={data.NumHolderNFTWinners}
               />
