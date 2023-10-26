@@ -81,7 +81,7 @@ const Contracts = () => {
           <Typography variant="h6">Loading...</Typography>
         ) : (
           <List sx={{ mt: 8 }}>
-            <ContractItem name="Network" value="Localhost:11845" />
+            <ContractItem name="Network" value="Local Network" />
             <ContractItem name="Chain ID" value={31337} />
             <ContractItem
               name="CosmicGame Address"

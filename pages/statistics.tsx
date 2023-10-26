@@ -201,7 +201,7 @@ const Statistics = () => {
                 }
               />
               <StatisticsItem
-                title="Total Amount Paid in Prizes"
+                title="Total Amount Paid in Main Prizes"
                 value={`${data.TotalPrizesPaidAmountEth.toFixed(6)} ETH`}
               />
               <StatisticsItem
