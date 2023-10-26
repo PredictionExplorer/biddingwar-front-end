@@ -424,6 +424,7 @@ const NFTTrait = ({ nft, prizeInfo, numCSTokenMints }) => {
                         size="small"
                         fullWidth
                         sx={{ flex: 1 }}
+                        inputProps={{ maxLength: 32 }}
                         onChange={(e) => setTokenName(e.target.value)}
                       />
                       <Button
