@@ -9,6 +9,7 @@ import { UniqueWinnersTable } from "../components/UniqueWinnersTable";
 import DonatedNFT from "../components/DonatedNFT";
 import { ZERO_ADDRESS } from "../config/misc";
 import Countdown from "react-countdown";
+import { DonatedNFTDistributionTable } from "../components/DonatedNFTDistributionTable";
 
 const convertTimestampToDateTime = (timestamp: any) => {
   var date_ob = new Date(timestamp * 1000);
@@ -140,6 +141,10 @@ const Statistics = () => {
                 value={data.CurNumBids}
               />
               <StatisticsItem
+                title="Total Donated NFTs"
+                value={data.CurRoundStats.TotalDonatedNFTs}
+              />
+              <StatisticsItem
                 title="Prize Amount"
                 value={`${data.PrizeAmountEth.toFixed(6)} ETH`}
               />
@@ -199,6 +204,24 @@ const Statistics = () => {
                 title="Total Amount Paid in Prizes"
                 value={`${data.TotalPrizesPaidAmountEth.toFixed(6)} ETH`}
               />
+              <StatisticsItem
+                title="Total Amount Paid in ETH Raffles"
+                value={`${data.MainStats.TotalRaffleEthDeposits.toFixed(
+                  6
+                )} ETH`}
+              />
+              <StatisticsItem
+                title="Amount of ETH collected by the winners from raffles"
+                value={`${data.MainStats.TotalRaffleEthWithdrawn.toFixed(
+                  6
+                )} ETH`}
+              />
+              <Typography color="primary">{`${
+                data.MainStats.NumWinnersWithPendingRaffleWithdrawal
+              } winners are yet to withdraw funds totalling an amount of ${(
+                data.MainStats.TotalRaffleEthDeposits -
+                data.MainStats.TotalRaffleEthWithdrawn
+              ).toFixed(4)} ETH`}</Typography>
               {data.MainStats.NumCosmicGameDonations > 0 && (
                 <StatisticsItem
                   title="Num Cosmic Game Donations"
@@ -317,6 +340,10 @@ const Statistics = () => {
                 title="Number of Donated NFTs"
                 value={data.NumDonatedNFTs}
               />
+              <StatisticsItem
+                title="Amount of Cosmic Signature tokens with assigned name"
+                value={data.MainStats.TotalNamedTokens}
+              />
             </Box>
             <Box mt={4}>
               <Typography variant="h6" mb={2}>
@@ -329,6 +356,14 @@ const Statistics = () => {
                 UNIQUE WINNERS
               </Typography>
               <UniqueWinnersTable list={uniqueWinners} />
+            </Box>
+            <Box mt={4}>
+              <Typography variant="h6" mb={2}>
+                DONATED TOKEN DISTRIBUTION
+              </Typography>
+              <DonatedNFTDistributionTable
+                list={data.MainStats.DonatedTokenDistribution}
+              />
             </Box>
             <Box mt={4}>
               <Typography variant="h6" mb={2}>
