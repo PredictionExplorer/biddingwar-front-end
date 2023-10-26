@@ -19,7 +19,6 @@ import {
   DialogContentText,
   DialogActions,
 } from "@mui/material";
-
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import Lightbox from "react-awesome-lightbox";
 import "react-awesome-lightbox/build/style.css";
@@ -53,8 +52,13 @@ const NFTTrait = ({ nft, prizeInfo, numCSTokenMints }) => {
   const [videoPath, setVideoPath] = useState(null);
   const [address, setAddress] = useState("");
   const [anchorEl, setAnchorEl] = useState(null);
-  const [notification, setNotification] = useState({
+  const [notification, setNotification] = useState<{
+    text: string;
+    type: "success" | "info" | "warning" | "error";
+    visible: boolean;
+  }>({
     text: "",
+    type: "success",
     visible: false,
   });
   const [tokenName, setTokenName] = useState(nft.TokenName);
@@ -91,6 +95,7 @@ const NFTTrait = ({ nft, prizeInfo, numCSTokenMints }) => {
       } else {
         setNotification({
           visible: true,
+          type: "info",
           text: "Video is being generated, come back later!",
         });
       }
@@ -110,6 +115,7 @@ const NFTTrait = ({ nft, prizeInfo, numCSTokenMints }) => {
       if (err.code !== 4001) {
         setNotification({
           text: "Please input the valid address for the token receiver!",
+          type: "error",
           visible: true,
         });
       }
@@ -125,6 +131,7 @@ const NFTTrait = ({ nft, prizeInfo, numCSTokenMints }) => {
         await fetchNameHistory();
         setNotification({
           text: "The token name has been changed successfully!",
+          type: "success",
           visible: true,
         });
       }, 2000);
@@ -140,6 +147,7 @@ const NFTTrait = ({ nft, prizeInfo, numCSTokenMints }) => {
         await fetchNameHistory();
         setNotification({
           text: "The token name has been cleared successfully!",
+          type: "success",
           visible: true,
         });
       }, 2000);
@@ -208,9 +216,11 @@ const NFTTrait = ({ nft, prizeInfo, numCSTokenMints }) => {
           anchorOrigin={{ vertical: "top", horizontal: "right" }}
           autoHideDuration={10000}
           open={notification.visible}
-          onClose={() => setNotification({ text: "", visible: false })}
+          onClose={() =>
+            setNotification({ text: "", type: "success", visible: false })
+          }
         >
-          <Alert severity="error" variant="filled">
+          <Alert severity={notification.type} variant="filled">
             {notification.text}
           </Alert>
         </Snackbar>
@@ -494,7 +504,7 @@ const NFTTrait = ({ nft, prizeInfo, numCSTokenMints }) => {
         <DialogContent>
           <DialogContentText>
             {
-              "The destination account doesn't exist. Please check the inputted address."
+              "The destination account doesn't exist. Please check the provided address."
             }
           </DialogContentText>
         </DialogContent>
