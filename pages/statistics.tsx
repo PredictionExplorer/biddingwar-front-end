@@ -37,7 +37,7 @@ const convertTimestampToDateTime = (timestamp: any) => {
 const StatisticsItem = ({ title, value }) => {
   return (
     <Box display="flex" flexWrap="wrap" my={1}>
-      <Typography color="primary" width={{ md: "300px", xs: "200px" }}>
+      <Typography color="primary" width={{ md: "400px", xs: "250px" }} mr={2}>
         {title}
       </Typography>
       <Typography>{value}</Typography>
@@ -149,7 +149,11 @@ const Statistics = () => {
                 value={`${data.PrizeAmountEth.toFixed(6)} ETH`}
               />
               <Box display="flex" flexWrap="wrap" my={1}>
-                <Typography color="primary" width="300px">
+                <Typography
+                  color="primary"
+                  width={{ md: "400px", xs: "250px" }}
+                  mr={2}
+                >
                   Prize Claim Date
                 </Typography>
                 <Box>
@@ -164,7 +168,17 @@ const Statistics = () => {
                   )}
                 </Box>
               </Box>
-              <StatisticsItem title="Last Bidder" value={data.LastBidderAddr} />
+              <StatisticsItem
+                title="Last Bidder"
+                value={
+                  <Link
+                    sx={{ color: "inherit", fontSize: "inherit" }}
+                    href={`/user/${data.LastBidderAddr}`}
+                  >
+                    {data.LastBidderAddr}
+                  </Link>
+                }
+              />
             </Box>
             <Box my={4}>
               <Box display="flex" alignItems="center" flexWrap="wrap">
@@ -193,7 +207,7 @@ const Statistics = () => {
                 }
               />
               <StatisticsItem
-                title="Total CS tokens minted"
+                title="Total Cosmic Signature tokens minted"
                 value={
                   <Link href="/gallery" color="inherit" fontSize="inherit">
                     {data.MainStats.NumCSTokenMints}
@@ -281,8 +295,8 @@ const Statistics = () => {
                     }
                   />
                   <StatisticsItem
-                    title="Total amount withdrawn"
-                    value={`${data.MainStats.SumWithdrawals.toFixed(2)} ETH`}
+                    title="Total amount withdrawn from Charity Wallet"
+                    value={`${data.MainStats.SumWithdrawals.toFixed(6)} ETH`}
                   />
                 </>
               )}
