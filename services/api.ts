@@ -343,6 +343,26 @@ class ApiService {
       return 0;
     }
   }
+
+  public async get_cst_distribution() {
+    try {
+      const { data } = await axios.get(getAPIUrl("cst/distribution"));
+      return data.CosmicSignatureTokenDistribution;
+    } catch (err) {
+      console.log(err);
+      return 0;
+    }
+  }
+
+  public async get_user_balance(address: string) {
+    try {
+      const { data } = await axios.get(getAPIUrl(`user/balances/${address}`));
+      return data.CosmicTokenBalance;
+    } catch (err) {
+      console.log(err);
+      return 0;
+    }
+  }
 }
 
 export default new ApiService();

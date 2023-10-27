@@ -1,4 +1,3 @@
-export const RPC_URL = "http://170.187.142.12:11845"
 export const INFURA_KEY = 'bbec1793df7a420a96239ce32e506c74'
 export const MARKET_ADDRESS = '0x47eF85Dfb775aCE0934fBa9EEd09D22e6eC0Cc08'
 

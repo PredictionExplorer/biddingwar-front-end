@@ -10,6 +10,7 @@ import DonatedNFT from "../components/DonatedNFT";
 import { ZERO_ADDRESS } from "../config/misc";
 import Countdown from "react-countdown";
 import { DonatedNFTDistributionTable } from "../components/DonatedNFTDistributionTable";
+import { CSTokenDistributionTable } from "../components/CSTokenDistributionTable";
 
 const convertTimestampToDateTime = (timestamp: any) => {
   var date_ob = new Date(timestamp * 1000);
@@ -53,6 +54,7 @@ const Statistics = () => {
   const [uniqueBidders, setUniqueBidders] = useState([]);
   const [uniqueWinners, setUniqueWinners] = useState([]);
   const [nftDonations, setNftDonations] = useState([]);
+  const [cstDistribution, setCSTDistribution] = useState([]);
   const [loading, setLoading] = useState(true);
   const gridLayout =
     nftDonations.length > 16
@@ -77,6 +79,8 @@ const Statistics = () => {
       setUniqueWinners(uniqueWinners);
       const nftDonations = await api.get_donations_nft_list();
       setNftDonations(nftDonations);
+      const distribution = await api.get_cst_distribution();
+      setCSTDistribution(distribution);
       setLoading(false);
     };
     fetchData();
@@ -366,6 +370,12 @@ const Statistics = () => {
               <DonatedNFTDistributionTable
                 list={data.MainStats.DonatedTokenDistribution}
               />
+            </Box>
+            <Box mt={4}>
+              <Typography variant="h6" mb={2}>
+                DONATED TOKEN DISTRIBUTION
+              </Typography>
+              <CSTokenDistributionTable list={cstDistribution} />
             </Box>
             <Box mt={4}>
               <Typography variant="h6" mb={2}>
