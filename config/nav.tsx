@@ -1,4 +1,4 @@
-import { Badge, Tooltip } from "@mui/material";
+import { Badge, Tooltip, Typography } from "@mui/material";
 import { ReactNode } from "react";
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 
@@ -19,22 +19,17 @@ const getNAVs = (status, account) => {
   if (account) {
     NAVS.push({
       title: (
-        <Tooltip title="If you have pending to claim prize, a red dot will be shown here.">
+        <>
           {status?.ETHRaffleToClaim > 0 || status?.NumDonatedNFTToClaim > 0 ? (
             <Badge color="error" variant="dot">
-              <EmojiEventsIcon />
+              <Typography>Claim</Typography>
             </Badge>
           ) : (
-            <EmojiEventsIcon />
+            <Typography>Claim</Typography>
           )}
-        </Tooltip>
+        </>
       ),
-      route: "",
-      children: [
-        { title: "Pending to Claim", route: "/my-winnings" },
-        { title: "My Wallet", route: "/my-wallet" },
-        { title: "History of Winnings", route: "/winning-history" },
-      ],
+      route: "/my-winnings",
     });
   }
   return NAVS;
