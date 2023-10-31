@@ -17,6 +17,7 @@ import ListNavItem from "./ListNavItem";
 import ListItemButton from "./ListItemButton";
 import { useApiData } from "../contexts/ApiDataContext";
 import { useActiveWeb3React } from "../hooks/web3";
+import api from "../services/api";
 
 const Header = () => {
   const [state, setState] = useState({
@@ -24,7 +25,7 @@ const Header = () => {
     drawerOpen: false,
   });
   const { mobileView, drawerOpen } = state;
-  const { apiData: status } = useApiData();
+  const { apiData: status, setApiData } = useApiData();
   const { account } = useActiveWeb3React();
 
   useEffect(() => {
@@ -42,6 +43,17 @@ const Header = () => {
       window.removeEventListener("resize", () => setResponsiveness());
     };
   }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const notify = await api.notify_red_box(account);
+      setApiData(notify);
+    };
+
+    if (account) {
+      fetchData();
+    }
+  }, [account]);
 
   const renderDesktop = () => {
     return (

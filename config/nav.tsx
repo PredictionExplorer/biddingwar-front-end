@@ -1,4 +1,3 @@
-import { Typography } from "@mui/material";
 import { ReactNode } from "react";
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 
