@@ -11,6 +11,15 @@ import { ZERO_ADDRESS } from "../config/misc";
 import Countdown from "react-countdown";
 import { DonatedNFTDistributionTable } from "../components/DonatedNFTDistributionTable";
 import { CSTokenDistributionTable } from "../components/CSTokenDistributionTable";
+import { CTBalanceDistributionTable } from "../components/CTBalanceDistributionTable";
+import {
+  Chart,
+  ChartArea,
+  ChartLegend,
+  ChartSeries,
+  ChartSeriesItem,
+} from "@progress/kendo-react-charts";
+import "@progress/kendo-theme-default/dist/all.css";
 
 const convertTimestampToDateTime = (timestamp: any) => {
   var date_ob = new Date(timestamp * 1000);
@@ -55,6 +64,7 @@ const Statistics = () => {
   const [uniqueWinners, setUniqueWinners] = useState([]);
   const [nftDonations, setNftDonations] = useState([]);
   const [cstDistribution, setCSTDistribution] = useState([]);
+  const [ctBalanceDistribution, setCTBalanceDistribution] = useState([]);
   const [loading, setLoading] = useState(true);
   const gridLayout =
     nftDonations.length > 16
@@ -81,6 +91,8 @@ const Statistics = () => {
       setNftDonations(nftDonations);
       const distribution = await api.get_cst_distribution();
       setCSTDistribution(distribution);
+      const ctbDistribution = await api.get_ct_balances_distribution();
+      setCTBalanceDistribution(ctbDistribution);
       setLoading(false);
     };
     fetchData();
@@ -353,19 +365,19 @@ const Statistics = () => {
             </Box>
             <Box mt={4}>
               <Typography variant="h6" mb={2}>
-                UNIQUE BIDDERS
+                Unique Bidders
               </Typography>
               <UniqueBiddersTable list={uniqueBidders} />
             </Box>
             <Box mt={4}>
               <Typography variant="h6" mb={2}>
-                UNIQUE WINNERS
+                Unique Winners
               </Typography>
               <UniqueWinnersTable list={uniqueWinners} />
             </Box>
             <Box mt={4}>
               <Typography variant="h6" mb={2}>
-                DONATED TOKEN DISTRIBUTION
+                Donated Token Distribution
               </Typography>
               <DonatedNFTDistributionTable
                 list={data.MainStats.DonatedTokenDistribution}
@@ -373,9 +385,42 @@ const Statistics = () => {
             </Box>
             <Box mt={4}>
               <Typography variant="h6" mb={2}>
-                DONATED TOKEN DISTRIBUTION
+                Cosmic Signature Token Distribution
               </Typography>
               <CSTokenDistributionTable list={cstDistribution} />
+            </Box>
+            <Box mt={4}>
+              <Chart transitions={false} style={{ width: "100%", height: 500 }}>
+                <ChartLegend visible={false} />
+                <ChartArea background="transparent" />
+                <ChartSeries>
+                  <ChartSeriesItem
+                    type="pie"
+                    data={ctBalanceDistribution.map((value) => ({
+                      category: value.OwnerAddr,
+                      value: value.BalanceFloat,
+                    }))}
+                    field="value"
+                    categoryField="category"
+                    labels={{
+                      visible: true,
+                      content: (props) => {
+                        return `${props.dataItem.category}: ${props.dataItem.value}`;
+                      },
+                      color: "white",
+                      background: "none",
+                    }}
+                  />
+                </ChartSeries>
+              </Chart>
+            </Box>
+            <Box mt={4}>
+              <Typography variant="h6" mb={2}>
+                Cosmic Token Balance Distribution
+              </Typography>
+              <CTBalanceDistributionTable
+                list={ctBalanceDistribution.slice(0, 20)}
+              />
             </Box>
             <Box mt={4}>
               <Typography variant="h6" mb={2}>

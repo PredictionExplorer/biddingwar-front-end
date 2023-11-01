@@ -56,7 +56,6 @@ import {
   ChartSeriesItem,
 } from "@progress/kendo-react-charts";
 import "@progress/kendo-theme-default/dist/all.css";
-import "@egjs/hammerjs";
 import getErrorMessage from "../utils/alert";
 import NFTImage from "../components/NFTImage";
 import { calculateTimeDiff } from "../utils";

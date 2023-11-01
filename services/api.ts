@@ -300,7 +300,7 @@ class ApiService {
       return data.CharityDonations;
     } catch (err) {
       console.log(err);
-      return 0;
+      return [];
     }
   }
 
@@ -310,7 +310,7 @@ class ApiService {
       return data.CharityDonations;
     } catch (err) {
       console.log(err);
-      return 0;
+      return [];
     }
   }
 
@@ -320,7 +320,7 @@ class ApiService {
       return data.CharityWithdrawals;
     } catch (err) {
       console.log(err);
-      return 0;
+      return [];
     }
   }
 
@@ -330,7 +330,7 @@ class ApiService {
       return data.NamedTokens;
     } catch (err) {
       console.log(err);
-      return 0;
+      return [];
     }
   }
 
@@ -340,7 +340,17 @@ class ApiService {
       return data.CosmicSignatureTokenDistribution;
     } catch (err) {
       console.log(err);
-      return 0;
+      return [];
+    }
+  }
+
+  public async get_ct_balances_distribution() {
+    try {
+      const { data } = await axios.get(getAPIUrl("ct/balances"));
+      return data.CosmicTokenBalances;
+    } catch (err) {
+      console.log(err);
+      return [];
     }
   }
 

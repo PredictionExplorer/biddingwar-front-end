@@ -16,7 +16,7 @@ import {
   TablePrimaryRow,
 } from "./styled";
 
-const CSTokenDistributionRow = ({ row }) => {
+const CTBalanceDistributionRow = ({ row }) => {
   if (!row) {
     return <TablePrimaryRow></TablePrimaryRow>;
   }
@@ -31,12 +31,12 @@ const CSTokenDistributionRow = ({ row }) => {
           {row.OwnerAddr}
         </Link>
       </TablePrimaryCell>
-      <TablePrimaryCell>{row.NumTokens}</TablePrimaryCell>
+      <TablePrimaryCell>{row.BalanceFloat}</TablePrimaryCell>
     </TablePrimaryRow>
   );
 };
 
-export const CSTokenDistributionTable = ({ list }) => {
+export const CTBalanceDistributionTable = ({ list }) => {
   const perPage = 5;
   const [page, setPage] = useState(1);
   if (list.length === 0) {
@@ -49,12 +49,12 @@ export const CSTokenDistributionTable = ({ list }) => {
           <TablePrimaryHead>
             <TableRow>
               <TableCell>Owner</TableCell>
-              <TableCell>Amount of tokens owned</TableCell>
+              <TableCell>Balance</TableCell>
             </TableRow>
           </TablePrimaryHead>
           <TableBody>
             {list.slice((page - 1) * perPage, page * perPage).map((row) => (
-              <CSTokenDistributionRow row={row} key={row.OwnerAid} />
+              <CTBalanceDistributionRow row={row} key={row.OwnerAid} />
             ))}
           </TableBody>
         </Table>
