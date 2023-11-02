@@ -363,6 +363,16 @@ class ApiService {
       return 0;
     }
   }
+
+  public async get_ct_transfers(address: string) {
+    try {
+      const { data } = await axios.get(getAPIUrl(`user/cosmictoken/transfers/${address}/0/1000`));
+      return data.CosmicTokenTransfers;
+    } catch (err) {
+      console.log(err);
+      return [];
+    }
+  }
 }
 
 export default new ApiService();

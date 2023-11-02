@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Box, Typography } from "@mui/material";
+import { Box, Link, Typography } from "@mui/material";
 import Head from "next/head";
 import { MainWrapper } from "../../components/styled";
 import { GetServerSidePropsContext } from "next";
@@ -48,7 +48,6 @@ const UserInfo = ({ address }) => {
           <Typography variant="h6">Invalid Address</Typography>
         ) : (
           <>
-            {" "}
             <Box mb={4}>
               <Typography variant="h6" color="primary" component="span" mr={2}>
                 User
@@ -162,6 +161,12 @@ const UserInfo = ({ address }) => {
                     {userInfo.RaffleNFTWon}
                   </Typography>
                 </Box>
+                <Typography>
+                  This account has {userInfo.CosmicTokenNumTransfers} of
+                  CosmicToken (ERC20), click{" "}
+                  <Link href={`/cosmic-token-transfers/${address}`}>here</Link>{" "}
+                  to see all the transfers made by this account.
+                </Typography>
                 <Box mt={6}>
                   <Typography variant="h6" lineHeight={1}>
                     Bid History
