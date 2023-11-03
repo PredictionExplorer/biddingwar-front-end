@@ -373,6 +373,16 @@ class ApiService {
       return [];
     }
   }
+
+  public async get_cst_transfers(address: string) {
+    try {
+      const { data } = await axios.get(getAPIUrl(`user/cosmicsignature/transfers/${address}/0/1000`));
+      return data.CosmicSignatureTransfers;
+    } catch (err) {
+      console.log(err);
+      return [];
+    }
+  }
 }
 
 export default new ApiService();

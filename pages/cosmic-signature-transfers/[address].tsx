@@ -22,7 +22,7 @@ import { convertTimestampToDateTime } from "../../utils";
 import { ethers } from "ethers";
 import { GetServerSidePropsContext } from "next";
 
-const CosmicTokenTransferRow = ({ row }) => {
+const CosmicSignatureTransferRow = ({ row }) => {
   if (!row) {
     return <TablePrimaryRow></TablePrimaryRow>;
   }
@@ -62,7 +62,7 @@ const CosmicTokenTransferRow = ({ row }) => {
         </Link>
       </TablePrimaryCell>
       <TablePrimaryCell align="right">
-        {row.ValueFloat.toFixed(2)}
+        {row.TokenId}
       </TablePrimaryCell>
     </TablePrimaryRow>
   );
@@ -89,12 +89,12 @@ export const CosmicTokenTransfersTable = ({ list }) => {
               <TableCell>Datetime</TableCell>
               <TableCell align="center">From</TableCell>
               <TableCell align="center">To</TableCell>
-              <TableCell align="right">Value (ETH)</TableCell>
+              <TableCell align="right">Token ID</TableCell>
             </TableRow>
           </TablePrimaryHead>
           <TableBody>
             {list.slice((page - 1) * perPage, page * perPage).map((row) => (
-              <CosmicTokenTransferRow row={row} key={row.EvtLogId} />
+              <CosmicSignatureTransferRow row={row} key={row.EvtLogId} />
             ))}
           </TableBody>
         </Table>
@@ -114,16 +114,16 @@ export const CosmicTokenTransfersTable = ({ list }) => {
   );
 };
 
-const CosmicTokenTransfers = ({ address }) => {
+const CosmicSignatureTransfers = ({ address }) => {
   const [loading, setLoading] = useState(true);
-  const [cosmicTokenTransfers, setCosmicTokenTransfers] = useState([]);
+  const [cosmicSignatureTransfers, setCosmicSignatureTransfers] = useState([]);
 
   useEffect(() => {
     const fetchTransfers = async () => {
       try {
         setLoading(true);
-        const transfers = await api.get_ct_transfers(address);
-        setCosmicTokenTransfers(transfers);
+        const transfers = await api.get_cst_transfers(address);
+        setCosmicSignatureTransfers(transfers);
         setLoading(false);
       } catch (err) {
         console.log(err);
@@ -146,7 +146,7 @@ const CosmicTokenTransfers = ({ address }) => {
         {loading ? (
           <Typography variant="h6">Loading...</Typography>
         ) : (
-          <CosmicTokenTransfersTable list={cosmicTokenTransfers} />
+          <CosmicTokenTransfersTable list={cosmicSignatureTransfers} />
         )}
       </MainWrapper>
     </>
@@ -164,4 +164,4 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   return { props: { address } };
 }
 
-export default CosmicTokenTransfers;
+export default CosmicSignatureTransfers;
