@@ -324,32 +324,6 @@ const Statistics = () => {
                 title="RandomWalk Tokens Used"
                 value={data.NumRwalkTokensUsed}
               />
-              <StatisticsItem title="Price Increase" value="1%" />
-              <StatisticsItem title="Time Increase" value="0.01%" />
-              <StatisticsItem
-                title="Prize Percentage"
-                value={`${data.PrizePercentage} %`}
-              />
-              <StatisticsItem
-                title="Raffle Percentage"
-                value={`${data.RafflePercentage} %`}
-              />
-              <StatisticsItem
-                title="Raffle Holder NFT Winners"
-                value={data.NumHolderNFTWinners}
-              />
-              <StatisticsItem
-                title="Charity Address"
-                value={
-                  <Typography sx={{ fontFamily: "monospace" }} component="span">
-                    {data.CharityAddr}
-                  </Typography>
-                }
-              />
-              <StatisticsItem
-                title="Charity Percentage"
-                value={`${data.CharityPercentage} %`}
-              />
               <StatisticsItem
                 title="Charity Balance"
                 value={`${data.CharityBalanceEth.toFixed(6)} ETH`}

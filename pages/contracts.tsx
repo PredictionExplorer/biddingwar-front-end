@@ -10,19 +10,13 @@ import {
 import Head from "next/head";
 import { MainWrapper } from "../components/styled";
 import api from "../services/api";
-import { useActiveWeb3React } from "../hooks/web3";
-import { Network } from "@ethersproject/providers";
-
-export const ContractListItem = styled(ListItem)({
-  justifyContent: "center",
-});
 
 const ContractItem = ({ name, value }) => {
   const theme = useTheme();
   const md = useMediaQuery(theme.breakpoints.up("md"));
   const sm = useMediaQuery(theme.breakpoints.up("sm"));
   return (
-    <ContractListItem>
+    <ListItem>
       <Typography
         color="primary"
         sx={{ mr: 2, width: md ? "300px" : sm ? "150px" : "100px" }}
@@ -37,15 +31,13 @@ const ContractItem = ({ name, value }) => {
       >
         {value}
       </Typography>
-    </ContractListItem>
+    </ListItem>
   );
 };
 
 const Contracts = () => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [network, setNetwork] = useState<Network>();
-  const { library } = useActiveWeb3React();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -53,8 +45,6 @@ const Contracts = () => {
         setLoading(true);
         const newData = await api.get_dashboard_info();
         setData(newData);
-        const res = await library.getNetwork();
-        setNetwork(res);
         setLoading(false);
       } catch (err) {
         console.log(err);
@@ -80,34 +70,72 @@ const Contracts = () => {
         {loading ? (
           <Typography variant="h6">Loading...</Typography>
         ) : (
-          <List sx={{ mt: 8 }}>
-            <ContractItem name="Network" value="Local Network" />
-            <ContractItem name="Chain ID" value={31337} />
-            <ContractItem
-              name="CosmicGame Address"
-              value={data?.ContractAddrs.CosmicGameAddr}
-            />
-            <ContractItem
-              name="CosmicToken Address"
-              value={data?.ContractAddrs.CosmicTokenAddr}
-            />
-            <ContractItem
-              name="CosmicSignature Address"
-              value={data?.ContractAddrs.CosmicSignatureAddr}
-            />
-            <ContractItem
-              name="CosmicDAO Address"
-              value={data?.ContractAddrs.CosmicDaoAddr}
-            />
-            <ContractItem
-              name="CharityWallet Address"
-              value={data?.ContractAddrs.CharityWalletAddr}
-            />
-            <ContractItem
-              name="RaffleWallet Address"
-              value={data?.ContractAddrs.RaffleWalletAddr}
-            />
-          </List>
+          <>
+            <List sx={{ mt: 4 }}>
+              <ContractItem name="Network" value="Local Network" />
+              <ContractItem name="Chain ID" value={31337} />
+              <ContractItem
+                name="CosmicGame Address"
+                value={data?.ContractAddrs.CosmicGameAddr}
+              />
+              <ContractItem
+                name="CosmicToken Address"
+                value={data?.ContractAddrs.CosmicTokenAddr}
+              />
+              <ContractItem
+                name="CosmicSignature Address"
+                value={data?.ContractAddrs.CosmicSignatureAddr}
+              />
+              <ContractItem
+                name="CosmicDAO Address"
+                value={data?.ContractAddrs.CosmicDaoAddr}
+              />
+              <ContractItem
+                name="CharityWallet Address"
+                value={data?.ContractAddrs.CharityWalletAddr}
+              />
+              <ContractItem
+                name="RaffleWallet Address"
+                value={data?.ContractAddrs.RaffleWalletAddr}
+              />
+            </List>
+            <Typography variant="h6" mt={5} mb={3}>
+              Current configuration of the contracts.
+            </Typography>
+            <List>
+              <ContractItem name="Price Increase" value="1%" />
+              <ContractItem name="Time Increase" value="0.01%" />
+              <ContractItem
+                name="Prize Percentage"
+                value={`${data.PrizePercentage} %`}
+              />
+              <ContractItem
+                name="Raffle Percentage"
+                value={`${data.RafflePercentage} %`}
+              />
+              <ContractItem
+                name="NFT Holder Winners"
+                value={data.NumHolderNFTWinners}
+              />
+              <ContractItem
+                name="Raffle ETH Winners"
+                value={data.NumRaffleEthWinners}
+              />
+              <ContractItem
+                name="Raffle NFT Winners"
+                value={data.NumRaffleNFTWinners}
+              />
+              <ContractItem
+                name="Raffle Holder NFT Winners"
+                value={data.NumHolderNFTWinners}
+              />
+              <ContractItem name="Charity Address" value={data.CharityAddr} />
+              <ContractItem
+                name="Charity Percentage"
+                value={`${data.CharityPercentage} %`}
+              />
+            </List>
+          </>
         )}
       </MainWrapper>
     </>
