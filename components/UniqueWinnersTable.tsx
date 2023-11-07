@@ -26,7 +26,11 @@ const UniqueWinnersRow = ({ winner }) => {
       <TablePrimaryCell>
         <Link
           href={`/user/${winner.WinnerAddr}`}
-          style={{ color: "rgba(255, 255, 255, 0.68)", fontSize: 14 }}
+          style={{
+            color: "inherit",
+            fontSize: "inherit",
+            fontFamily: "monospace",
+          }}
         >
           {winner.WinnerAddr}
         </Link>

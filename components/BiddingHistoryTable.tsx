@@ -36,7 +36,9 @@ const HistoryRow = ({ history }) => {
       </TablePrimaryCell>
       <TablePrimaryCell>
         <Tooltip title={history.BidderAddr}>
-          <Typography sx={{ fontSize: "inherit !important" }}>
+          <Typography
+            sx={{ fontSize: "inherit !important", fontFamily: "monospace" }}
+          >
             {shortenHex(history.BidderAddr, 6)}
           </Typography>
         </Tooltip>
@@ -55,7 +57,12 @@ const HistoryRow = ({ history }) => {
       <TablePrimaryCell>
         {history.NFTDonationTokenAddr ? (
           <Tooltip title={history.NFTDonationTokenAddr}>
-            <Typography sx={{ fontSize: "inherit !important" }}>
+            <Typography
+              sx={{
+                fontSize: "inherit !important",
+                fontFamily: "monospace",
+              }}
+            >
               {shortenHex(history.NFTDonationTokenAddr, 6)}
             </Typography>
           </Tooltip>

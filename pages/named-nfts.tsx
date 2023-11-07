@@ -37,7 +37,7 @@ const NamedNFTsRow = ({ nft }) => {
           {nft.TokenId}
         </Link>
       </TablePrimaryCell>
-      <TablePrimaryCell align="right">{nft.TokenName}</TablePrimaryCell>
+      <TablePrimaryCell>{nft.TokenName}</TablePrimaryCell>
     </TablePrimaryRow>
   );
 };
@@ -46,11 +46,16 @@ const NamedNFTsTable = ({ list }) => {
   return (
     <TablePrimaryContainer>
       <Table>
+        <colgroup>
+          <col width="15%" />
+          <col width="35%" />
+          <col width="50%" />
+        </colgroup>
         <TablePrimaryHead>
           <TableRow>
             <TableCell>DateTime</TableCell>
             <TableCell align="center">Token Id</TableCell>
-            <TableCell align="right">Token Name</TableCell>
+            <TableCell>Token Name</TableCell>
           </TableRow>
         </TablePrimaryHead>
         <TableBody>

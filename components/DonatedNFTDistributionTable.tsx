@@ -26,7 +26,11 @@ const DonatedNFTDistributionRow = ({ row }) => {
       <TablePrimaryCell>
         <Link
           href={`/user/${row.ContractAddr}`}
-          style={{ color: "inherit", fontSize: "inherit" }}
+          style={{
+            color: "inherit",
+            fontSize: "inherit",
+            fontFamily: "monospace",
+          }}
         >
           {row.ContractAddr}
         </Link>

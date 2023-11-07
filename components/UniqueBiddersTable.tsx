@@ -26,7 +26,11 @@ const UniqueBiddersRow = ({ bidder }) => {
       <TablePrimaryCell>
         <Link
           href={`/user/${bidder.BidderAddr}`}
-          style={{ color: "rgba(255, 255, 255, 0.68)", fontSize: 14 }}
+          style={{
+            color: "inherit",
+            fontSize: "inherit",
+            fontFamily: "monospace",
+          }}
         >
           {bidder.BidderAddr}
         </Link>

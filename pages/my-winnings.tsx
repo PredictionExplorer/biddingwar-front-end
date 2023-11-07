@@ -173,24 +173,9 @@ const MyWinnings = () => {
           Pending Winnings
         </Typography>
         <Box mt={6}>
-          <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
-            <Typography variant="h5">Claimable Raffle ETH</Typography>
-            {status?.ETHRaffleToClaim > 0 && (
-              <Box>
-                <Typography component="span" mr={2}>
-                  Your claimable winnings are{" "}
-                  {`${status?.ETHRaffleToClaim.toFixed(6)} ETH`}
-                </Typography>
-                <Button
-                  onClick={handleAllETHClaim}
-                  variant="contained"
-                  disabled={isClaiming.raffleETH}
-                >
-                  Claim All
-                </Button>
-              </Box>
-            )}
-          </Box>
+          <Typography variant="h5" mb={2}>
+            Claimable Raffle ETH
+          </Typography>
           {raffleETHToClaim.length > 0 ? (
             <>
               <MyWinningsTable
@@ -199,7 +184,29 @@ const MyWinnings = () => {
                   curPage * perPage
                 )}
               />
-              <Box display="flex" justifyContent="center" mt={4}>
+              {status?.ETHRaffleToClaim > 0 && (
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "end",
+                    alignItems: "center",
+                    mt: 2,
+                  }}
+                >
+                  <Typography mr={2}>
+                    Your claimable winnings are{" "}
+                    {`${status?.ETHRaffleToClaim.toFixed(6)} ETH`}
+                  </Typography>
+                  <Button
+                    onClick={handleAllETHClaim}
+                    variant="contained"
+                    disabled={isClaiming.raffleETH}
+                  >
+                    Claim All
+                  </Button>
+                </Box>
+              )}
+              <Box display="flex" justifyContent="center" mt={2}>
                 <Pagination
                   color="primary"
                   page={curPage}

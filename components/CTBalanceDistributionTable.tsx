@@ -26,7 +26,11 @@ const CTBalanceDistributionRow = ({ row }) => {
       <TablePrimaryCell>
         <Link
           href={`/user/${row.OwnerAddr}`}
-          style={{ color: "inherit", fontSize: "inherit" }}
+          style={{
+            color: "inherit",
+            fontSize: "inherit",
+            fontFamily: "monospace",
+          }}
         >
           {row.OwnerAddr}
         </Link>

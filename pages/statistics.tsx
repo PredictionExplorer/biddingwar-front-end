@@ -188,7 +188,11 @@ const Statistics = () => {
                 title="Last Bidder"
                 value={
                   <Link
-                    sx={{ color: "inherit", fontSize: "inherit" }}
+                    sx={{
+                      color: "inherit",
+                      fontSize: "inherit",
+                      fontFamily: "monospace",
+                    }}
                     href={`/user/${data.LastBidderAddr}`}
                   >
                     {data.LastBidderAddr}
@@ -336,7 +340,11 @@ const Statistics = () => {
               />
               <StatisticsItem
                 title="Charity Address"
-                value={data.CharityAddr}
+                value={
+                  <Typography sx={{ fontFamily: "monospace" }} component="span">
+                    {data.CharityAddr}
+                  </Typography>
+                }
               />
               <StatisticsItem
                 title="Charity Percentage"
@@ -390,6 +398,9 @@ const Statistics = () => {
               <CSTokenDistributionTable list={cstDistribution} />
             </Box>
             <Box mt={4}>
+              <Typography variant="h6" mb={2}>
+                Cosmic Token Balance Distribution
+              </Typography>
               <Chart transitions={false} style={{ width: "100%", height: 500 }}>
                 <ChartLegend visible={false} />
                 <ChartArea background="transparent" />
@@ -415,9 +426,6 @@ const Statistics = () => {
               </Chart>
             </Box>
             <Box mt={4}>
-              <Typography variant="h6" mb={2}>
-                Cosmic Token Balance Distribution
-              </Typography>
               <CTBalanceDistributionTable
                 list={ctBalanceDistribution.slice(0, 20)}
               />
