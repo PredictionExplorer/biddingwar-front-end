@@ -42,12 +42,11 @@ import { NameHistoryTable } from "./NameHistoryTable";
 import { TransferHistoryTable } from "./TransferHistoryTable";
 import api from "../services/api";
 
-const NFTTrait = ({ nft, prizeInfo, numCSTokenMints }) => {
-  const fileName = nft.TokenId.toString().padStart(6, "0");
+const NFTTrait = ({ tokenId }) => {
+  const fileName = tokenId.toString().padStart(6, "0");
   const image = `https://cosmic-game.s3.us-east-2.amazonaws.com/${fileName}.png`;
   const video = `https://cosmic-game.s3.us-east-2.amazonaws.com/${fileName}.mp4`;
   const [open, setOpen] = useState(false);
-  const [data, setData] = useState(null);
   const [imageOpen, setImageOpen] = useState(false);
   const [videoPath, setVideoPath] = useState(null);
   const [address, setAddress] = useState("");
@@ -61,7 +60,11 @@ const NFTTrait = ({ nft, prizeInfo, numCSTokenMints }) => {
     type: "success",
     visible: false,
   });
-  const [tokenName, setTokenName] = useState(nft.TokenName);
+  const [loading, setLoading] = useState(true);
+  const [nft, setNft] = useState(null);
+  const [prizeInfo, setPrizeInfo] = useState(null);
+  const [dashboard, setDashboard] = useState(null);
+  const [tokenName, setTokenName] = useState("");
   const [nameHistory, setNameHistory] = useState([]);
   const [transferHistory, setTransferHistory] = useState([]);
   const [openDialog, setOpenDialog] = useState(false);
@@ -101,12 +104,11 @@ const NFTTrait = ({ nft, prizeInfo, numCSTokenMints }) => {
       }
     });
   };
-
   const handleTransfer = async () => {
     handleClose();
     try {
       await nftContract
-        .transferFrom(account, address, nft.TokenId)
+        .transferFrom(account, address, tokenId)
         .then((tx) => tx.wait());
 
       router.reload();
@@ -121,14 +123,15 @@ const NFTTrait = ({ nft, prizeInfo, numCSTokenMints }) => {
       }
     }
   };
-
   const handleSetTokenName = async () => {
     try {
       await nftContract
-        .setTokenName(nft.TokenId, tokenName)
+        .setTokenName(tokenId, tokenName)
         .then((tx) => tx.wait());
       setTimeout(async () => {
+        await fetchCSTInfo();
         await fetchNameHistory();
+        setTokenName("");
         setNotification({
           text: "The token name has been changed successfully!",
           type: "success",
@@ -139,12 +142,13 @@ const NFTTrait = ({ nft, prizeInfo, numCSTokenMints }) => {
       console.log(err);
     }
   };
-
   const handleClearName = async () => {
     try {
-      await nftContract.setTokenName(nft.TokenId, "").then((tx) => tx.wait());
+      await nftContract.setTokenName(tokenId, "").then((tx) => tx.wait());
       setTimeout(async () => {
+        await fetchCSTInfo();
         await fetchNameHistory();
+        setTokenName("");
         setNotification({
           text: "The token name has been cleared successfully!",
           type: "success",
@@ -155,25 +159,17 @@ const NFTTrait = ({ nft, prizeInfo, numCSTokenMints }) => {
       console.log(err);
     }
   };
-
-  const handlePrev = () =>
-    router.push(`/detail/${Math.max(nft.TokenId - 1, 0)}`);
-
+  const handlePrev = () => router.push(`/detail/${Math.max(tokenId - 1, 0)}`);
   const handleNext = async () => {
     const totalSupply = await nftContract.totalSupply();
-    router.push(
-      `/detail/${Math.min(nft.TokenId + 1, totalSupply.toNumber() - 1)}`
-    );
+    router.push(`/detail/${Math.min(tokenId + 1, totalSupply.toNumber() - 1)}`);
   };
-
   const handleMenuOpen = (e) => {
     setAnchorEl(e.currentTarget);
   };
-
   const handleMenuClose = (e) => {
     setAnchorEl(null);
   };
-
   const convertTimestampToDateTime = (timestamp: any) => {
     var date_ob = new Date(timestamp * 1000);
     var year = date_ob.getFullYear();
@@ -185,29 +181,54 @@ const NFTTrait = ({ nft, prizeInfo, numCSTokenMints }) => {
     var result = `${month}/${date}/${year} ${hours}:${minutes}:${seconds}`;
     return result;
   };
-
   const fetchNameHistory = async () => {
-    const history = await api.get_name_history(nft.TokenId);
-    setNameHistory(history);
+    try {
+      const history = await api.get_name_history(tokenId);
+      setNameHistory(history);
+    } catch (e) {
+      console.log(e);
+    }
   };
   const fetchTransferHistory = async () => {
-    const history = await api.get_transfer_history(nft.TokenId);
-    setTransferHistory(history);
+    try {
+      const history = await api.get_transfer_history(tokenId);
+      setTransferHistory(history);
+    } catch (e) {
+      console.log(e);
+    }
   };
-
-  useEffect(() => {
-    fetchNameHistory();
-    fetchTransferHistory();
-    setTokenName(nft.TokenName);
-  }, [nft]);
+  const fetchCSTInfo = async () => {
+    try {
+      const res = await api.get_cst_info(tokenId);
+      setNft(res.TokenInfo);
+      setPrizeInfo(res.PrizeInfo);
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await api.get_dashboard_info();
-      setData(data);
+      setLoading(true);
+      const dashboardData = await api.get_dashboard_info();
+      setDashboard(dashboardData);
+      if (dashboardData.MainStats.NumCSTokenMints > tokenId) {
+        await fetchCSTInfo();
+        await fetchNameHistory();
+        await fetchTransferHistory();
+      }
+      setLoading(false);
     };
     fetchData();
-  }, []);
+  }, [tokenId]);
+
+  if (loading) {
+    return (
+      <Container>
+        <Typography variant="h6">Loading...</Typography>
+      </Container>
+    );
+  }
 
   return (
     <Container>
@@ -231,7 +252,7 @@ const NFTTrait = ({ nft, prizeInfo, numCSTokenMints }) => {
                 <NFTImage src={image} />
                 <NFTInfoWrapper>
                   <Typography variant="body1" sx={{ color: "#FFFFFF" }}>
-                    {formatId(nft.TokenId)}
+                    {formatId(tokenId)}
                   </Typography>
                 </NFTInfoWrapper>
                 {nameHistory.length > 0 && (
@@ -288,7 +309,7 @@ const NFTTrait = ({ nft, prizeInfo, numCSTokenMints }) => {
                         fullWidth
                         startIcon={<ArrowBack />}
                         onClick={handlePrev}
-                        disabled={nft.TokenId === 0}
+                        disabled={tokenId === 0}
                       >
                         Prev
                       </Button>
@@ -300,7 +321,9 @@ const NFTTrait = ({ nft, prizeInfo, numCSTokenMints }) => {
                         fullWidth
                         endIcon={<ArrowForward />}
                         onClick={handleNext}
-                        disabled={nft.TokenId === numCSTokenMints - 1}
+                        disabled={
+                          tokenId === dashboard.MainStats.NumCSTokenMints - 1
+                        }
                       >
                         Next
                       </Button>
@@ -458,9 +481,9 @@ const NFTTrait = ({ nft, prizeInfo, numCSTokenMints }) => {
                       )}
                     </Box>
                     <Typography variant="body2" mt={1} fontStyle="italic">
-                      There are {data?.MainStats.TotalNamedTokens} tokens with a
-                      name, click <Link href="/named-nfts">here</Link> for a
-                      full list.
+                      There are {dashboard?.MainStats.TotalNamedTokens} tokens
+                      with a name, click <Link href="/named-nfts">here</Link>{" "}
+                      for a full list.
                     </Typography>
                   </Box>
                 </>
