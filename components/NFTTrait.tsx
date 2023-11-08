@@ -124,6 +124,8 @@ const NFTTrait = ({ tokenId }) => {
     }
   };
   const handleSetTokenName = async () => {
+    console.log(tokenName);
+    console.log(tokenName.length);
     try {
       await nftContract
         .setTokenName(tokenId, tokenName)
@@ -158,6 +160,23 @@ const NFTTrait = ({ tokenId }) => {
     } catch (err) {
       console.log(err);
     }
+  };
+  const handleChange = (e) => {
+    let name = e.target.value;
+    let len = 0;
+    let i;
+    for (i = 0; i < name.length; i++) {
+      if (name.charCodeAt(i) > 255) {
+        len += 3;
+      } else {
+        len++;
+      }
+      if (len > 32) {
+        i--;
+        break;
+      }
+    }
+    setTokenName(name.slice(0, i));
   };
   const handlePrev = () => router.push(`/detail/${Math.max(tokenId - 1, 0)}`);
   const handleNext = async () => {
@@ -458,7 +477,7 @@ const NFTTrait = ({ tokenId }) => {
                         fullWidth
                         sx={{ flex: 1 }}
                         inputProps={{ maxLength: 32 }}
-                        onChange={(e) => setTokenName(e.target.value)}
+                        onChange={handleChange}
                       />
                       <Button
                         color="secondary"
