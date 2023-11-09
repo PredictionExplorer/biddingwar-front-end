@@ -26,6 +26,12 @@ const PaginationGrid = ({ data, loading }) => {
     }
   };
 
+  const handleSearchKeyPress = (e) => {
+    if (e.keyCode === 13 || e.which === 13) {
+      handleSearch();
+    }
+  };
+
   const isNumeric = (value) => {
     return /^\d+$/.test(value);
   };
@@ -60,12 +66,14 @@ const PaginationGrid = ({ data, loading }) => {
       <SearchBox>
         <SearchField
           variant="filled"
-          placeholder="Enter NFT ID"
+          placeholder="Enter NFT ID or Name"
           color="secondary"
           value={searchKey}
           onChange={handleSearchChange}
+          onKeyPress={handleSearchKeyPress}
         />
         <SearchButton
+          type="submit"
           size="large"
           variant="contained"
           color="primary"

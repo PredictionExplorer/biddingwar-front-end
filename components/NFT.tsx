@@ -22,6 +22,16 @@ const NFT = ({ nft }) => {
             <Typography variant="caption">{formatId(nft.TokenId)}</Typography>
           </NFTInfoWrapper>
         )}
+        {nft.TokenName !== "" && (
+          <NFTInfoWrapper sx={{ width: "calc(100% - 40px)" }}>
+            <Typography
+              variant="subtitle1"
+              sx={{ color: "#FFFFFF", textAlign: "center" }}
+            >
+              {nft.TokenName}
+            </Typography>
+          </NFTInfoWrapper>
+        )}
       </CardActionArea>
     </StyledCard>
   );
