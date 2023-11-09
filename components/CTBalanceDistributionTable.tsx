@@ -35,7 +35,7 @@ const CTBalanceDistributionRow = ({ row }) => {
           {row.OwnerAddr}
         </Link>
       </TablePrimaryCell>
-      <TablePrimaryCell>{row.BalanceFloat}</TablePrimaryCell>
+      <TablePrimaryCell align="center">{row.BalanceFloat}</TablePrimaryCell>
     </TablePrimaryRow>
   );
 };
@@ -50,10 +50,14 @@ export const CTBalanceDistributionTable = ({ list }) => {
     <>
       <TablePrimaryContainer>
         <Table>
+          <colgroup>
+            <col width="50%" />
+            <col width="50%" />
+          </colgroup>
           <TablePrimaryHead>
             <TableRow>
               <TableCell>Owner</TableCell>
-              <TableCell>Balance</TableCell>
+              <TableCell align="center">Balance</TableCell>
             </TableRow>
           </TablePrimaryHead>
           <TableBody>

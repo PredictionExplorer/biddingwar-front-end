@@ -35,7 +35,7 @@ const CSTokenDistributionRow = ({ row }) => {
           {row.OwnerAddr}
         </Link>
       </TablePrimaryCell>
-      <TablePrimaryCell>{row.NumTokens}</TablePrimaryCell>
+      <TablePrimaryCell align="center">{row.NumTokens}</TablePrimaryCell>
     </TablePrimaryRow>
   );
 };
@@ -50,10 +50,14 @@ export const CSTokenDistributionTable = ({ list }) => {
     <>
       <TablePrimaryContainer>
         <Table>
+          <colgroup>
+            <col width="50%" />
+            <col width="50%" />
+          </colgroup>
           <TablePrimaryHead>
             <TableRow>
               <TableCell>Owner</TableCell>
-              <TableCell>Amount of tokens owned</TableCell>
+              <TableCell align="center">Amount of tokens owned</TableCell>
             </TableRow>
           </TablePrimaryHead>
           <TableBody>

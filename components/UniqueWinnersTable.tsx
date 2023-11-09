@@ -35,9 +35,9 @@ const UniqueWinnersRow = ({ winner }) => {
           {winner.WinnerAddr}
         </Link>
       </TablePrimaryCell>
-      <TablePrimaryCell>{winner.PrizesCount}</TablePrimaryCell>
-      <TablePrimaryCell>{winner.MaxWinAmountEth.toFixed(6)}</TablePrimaryCell>
-      <TablePrimaryCell>{winner.PrizesSum.toFixed(6)}</TablePrimaryCell>
+      <TablePrimaryCell align="center">{winner.PrizesCount}</TablePrimaryCell>
+      <TablePrimaryCell align="center">{winner.MaxWinAmountEth.toFixed(6)}</TablePrimaryCell>
+      <TablePrimaryCell align="center">{winner.PrizesSum.toFixed(6)}</TablePrimaryCell>
     </TablePrimaryRow>
   );
 };
@@ -61,9 +61,9 @@ export const UniqueWinnersTable = ({ list }) => {
           <TablePrimaryHead>
             <TableRow>
               <TableCell>Winner Address</TableCell>
-              <TableCell>Prizes Taken</TableCell>
-              <TableCell>Max Prize</TableCell>
-              <TableCell>Prizes Sum (ETH)</TableCell>
+              <TableCell align="center">Prizes Taken</TableCell>
+              <TableCell align="center">Max Prize</TableCell>
+              <TableCell align="center">Prizes Sum (ETH)</TableCell>
             </TableRow>
           </TablePrimaryHead>
           <TableBody>
