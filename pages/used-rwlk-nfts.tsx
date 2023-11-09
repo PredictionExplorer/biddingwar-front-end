@@ -20,47 +20,61 @@ import {
 import { convertTimestampToDateTime } from "../utils";
 import api from "../services/api";
 
-const NamedNFTRow = ({ nft }) => {
+const UsedRwlkNftRow = ({ nft }) => {
   if (!nft) {
     return <TablePrimaryRow></TablePrimaryRow>;
   }
   return (
     <TablePrimaryRow>
       <TablePrimaryCell>
-        {convertTimestampToDateTime(nft.MintTimeStamp)}
+        {convertTimestampToDateTime(nft.TimeStamp)}
+      </TablePrimaryCell>
+      <TablePrimaryCell align="center">
+        <Link
+          sx={{
+            color: "inherit",
+            fontSize: "inherit",
+            fontFamily: "monospace",
+          }}
+          href={`/user/${nft.BidderAddr}`}
+        >
+          {nft.BidderAddr}
+        </Link>
       </TablePrimaryCell>
       <TablePrimaryCell align="center">
         <Link
           sx={{ color: "inherit", fontSize: "inherit" }}
-          href={`/detail/${nft.TokenId}`}
+          href={`/prize/${nft.RoundNum}`}
         >
-          {nft.TokenId}
+          {nft.RoundNum}
         </Link>
       </TablePrimaryCell>
-      <TablePrimaryCell>{nft.TokenName}</TablePrimaryCell>
+      <TablePrimaryCell align="center">{nft.RWalkTokenId}</TablePrimaryCell>
     </TablePrimaryRow>
   );
 };
 
-const NamedNFTsTable = ({ list }) => {
+const UsedRwlkNftsTable = ({ list }) => {
   return (
     <TablePrimaryContainer>
       <Table>
         <colgroup>
           <col width="15%" />
-          <col width="35%" />
-          <col width="50%" />
+          <col width="55%" />
+          <col width="15%" />
+          <col width="15%" />
         </colgroup>
         <TablePrimaryHead>
           <TableRow>
             <TableCell>DateTime</TableCell>
+            <TableCell align="center">Bidder Address</TableCell>
+            <TableCell align="center">Round</TableCell>
             <TableCell align="center">Token Id</TableCell>
-            <TableCell>Token Name</TableCell>
           </TableRow>
         </TablePrimaryHead>
         <TableBody>
           {list.map((nft, i) => (
-            <NamedNFTRow key={i} nft={nft} />
+            <UsedRwlkNftRow key={i} nft={nft} />
           ))}
         </TableBody>
       </Table>
@@ -68,17 +82,17 @@ const NamedNFTsTable = ({ list }) => {
   );
 };
 
-const NamedNFTs = () => {
+const UsedRwlkNfts = () => {
   const [curPage, setCurPage] = useState(1);
   const perPage = 5;
   const [loading, setLoading] = useState(true);
   const [list, setList] = useState([]);
 
   useEffect(() => {
-    const fetchNamedNFTs = async () => {
+    const fetchUsedRwlkNFTs = async () => {
       try {
         setLoading(true);
-        let nfts = await api.get_named_nfts();
+        let nfts = await api.get_used_rwlk_nfts();
         setList(nfts);
         setLoading(false);
       } catch (err) {
@@ -86,13 +100,13 @@ const NamedNFTs = () => {
         setLoading(false);
       }
     };
-    fetchNamedNFTs();
+    fetchUsedRwlkNFTs();
   }, []);
 
   return (
     <>
       <Head>
-        <title>Named CosmicSignature tokens | Cosmic Signature</title>
+        <title>Used RandomWalk NFTs | Cosmic Signature</title>
         <meta name="description" content="" />
       </Head>
       <MainWrapper>
@@ -102,14 +116,14 @@ const NamedNFTs = () => {
           gutterBottom
           textAlign="center"
         >
-          Named CosmicSignature tokens
+          Used RandomWalk NFTs
         </Typography>
         <Box mt={6}>
           {loading ? (
             <Typography variant="h6">Loading...</Typography>
           ) : list.length > 0 ? (
             <>
-              <NamedNFTsTable
+              <UsedRwlkNftsTable
                 list={list.slice((curPage - 1) * perPage, curPage * perPage)}
               />
               <Box display="flex" justifyContent="center" mt={4}>
@@ -133,4 +147,4 @@ const NamedNFTs = () => {
   );
 };
 
-export default NamedNFTs;
+export default UsedRwlkNfts;

@@ -38,6 +38,7 @@ const WithdrawalRow = ({ withdrawal }) => {
         <Link
           color="inherit"
           fontSize="inherit"
+          fontFamily="monospace"
           href={`/user/${withdrawal.DestinationAddr}`}
         >
           {withdrawal.DestinationAddr}

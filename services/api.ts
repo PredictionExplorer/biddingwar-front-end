@@ -383,6 +383,16 @@ class ApiService {
       return [];
     }
   }
+
+  public async get_used_rwlk_nfts() {
+    try {
+      const { data } = await axios.get(getAPIUrl('bid/used_rwalk_nfts'));
+      return data.UsedRwalkNFTs;
+    } catch (err) {
+      console.log(err);
+      return [];
+    }
+  }
 }
 
 export default new ApiService();

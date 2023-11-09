@@ -322,7 +322,15 @@ const Statistics = () => {
               )}
               <StatisticsItem
                 title="RandomWalk Tokens Used"
-                value={data.NumRwalkTokensUsed}
+                value={
+                  <Link
+                    color="inherit"
+                    fontSize="inherit"
+                    href="/used-rwlk-nfts"
+                  >
+                    {data.NumRwalkTokensUsed}
+                  </Link>
+                }
               />
               <StatisticsItem
                 title="Charity Balance"
