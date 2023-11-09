@@ -45,6 +45,7 @@ const CosmicSignatureTransferRow = ({ row }) => {
         <Link
           color="inherit"
           fontSize="inherit"
+          fontFamily="monospace"
           href={`/user/${row.FromAddr}`}
           target="__blank"
         >
@@ -55,15 +56,14 @@ const CosmicSignatureTransferRow = ({ row }) => {
         <Link
           color="inherit"
           fontSize="inherit"
+          fontFamily="monospace"
           href={`/user/${row.ToAddr}`}
           target="__blank"
         >
           {row.ToAddr}
         </Link>
       </TablePrimaryCell>
-      <TablePrimaryCell align="right">
-        {row.TokenId}
-      </TablePrimaryCell>
+      <TablePrimaryCell align="center">{row.TokenId}</TablePrimaryCell>
     </TablePrimaryRow>
   );
 };
@@ -89,7 +89,7 @@ export const CosmicTokenTransfersTable = ({ list }) => {
               <TableCell>Datetime</TableCell>
               <TableCell align="center">From</TableCell>
               <TableCell align="center">To</TableCell>
-              <TableCell align="right">Token ID</TableCell>
+              <TableCell align="center">Token ID</TableCell>
             </TableRow>
           </TablePrimaryHead>
           <TableBody>
@@ -136,12 +136,12 @@ const CosmicSignatureTransfers = ({ address }) => {
   return (
     <>
       <Head>
-        <title>Cosmic Token Transfers | Cosmic Signature</title>
+        <title>Cosmic Signature Transfers | Cosmic Signature</title>
         <meta name="description" content="" />
       </Head>
       <MainWrapper>
         <Typography variant="h4" color="primary" textAlign="center" mb={4}>
-          Cosmic Token Transfers
+          Cosmic Signature Transfers
         </Typography>
         {loading ? (
           <Typography variant="h6">Loading...</Typography>

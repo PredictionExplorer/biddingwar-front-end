@@ -45,6 +45,7 @@ const CosmicTokenTransferRow = ({ row }) => {
         <Link
           color="inherit"
           fontSize="inherit"
+          fontFamily="monospace"
           href={`/user/${row.FromAddr}`}
           target="__blank"
         >
@@ -55,13 +56,14 @@ const CosmicTokenTransferRow = ({ row }) => {
         <Link
           color="inherit"
           fontSize="inherit"
+          fontFamily="monospace"
           href={`/user/${row.ToAddr}`}
           target="__blank"
         >
           {row.ToAddr}
         </Link>
       </TablePrimaryCell>
-      <TablePrimaryCell align="right">
+      <TablePrimaryCell align="center">
         {row.ValueFloat.toFixed(2)}
       </TablePrimaryCell>
     </TablePrimaryRow>
@@ -89,7 +91,7 @@ export const CosmicTokenTransfersTable = ({ list }) => {
               <TableCell>Datetime</TableCell>
               <TableCell align="center">From</TableCell>
               <TableCell align="center">To</TableCell>
-              <TableCell align="right">Value (ETH)</TableCell>
+              <TableCell align="center">Value (ETH)</TableCell>
             </TableRow>
           </TablePrimaryHead>
           <TableBody>

@@ -263,7 +263,7 @@ const Statistics = () => {
                     <Link
                       color="inherit"
                       fontSize="inherit"
-                      href="/charity-deposits"
+                      href="/charity-deposits-cg"
                     >
                       {data.MainStats.NumCosmicGameDonations}
                     </Link>
