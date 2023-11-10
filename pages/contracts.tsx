@@ -19,7 +19,7 @@ const ContractItem = ({ name, value }) => {
     <ListItem>
       <Typography
         color="primary"
-        sx={{ mr: 2, width: md ? "300px" : sm ? "150px" : "100px" }}
+        sx={{ mr: 2, width: md ? "350px" : sm ? "150px" : "100px" }}
         variant={sm ? "subtitle1" : "body1"}
       >
         {name}:
@@ -133,6 +133,18 @@ const Contracts = () => {
               <ContractItem
                 name="Charity Percentage"
                 value={`${data.CharityPercentage} %`}
+              />
+
+              <ContractItem
+                name="Amount of CosmicTokens earned per bid"
+                value={100}
+              />
+              <ContractItem name="Timeout to claim prize" value="1 Day" />
+              <ContractItem name="Maximum message length" value={280} />
+              <ContractItem name="Initial increment first bid" value="1 Day" />
+              <ContractItem
+                name="Random Walk contract address"
+                value={data?.ContractAddrs.RandomWalkAddr}
               />
             </List>
           </>
