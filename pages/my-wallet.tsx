@@ -332,7 +332,7 @@ const MyWallet = () => {
         </Typography>
         <Box mt={6}>
           <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
-            <Typography variant="h5">Raffle ETH</Typography>
+            <Typography variant="h5">Raffle ETH I Won</Typography>
             {status?.ETHRaffleToClaim > 0 && (
               <Box>
                 <Typography component="span" mr={2}>
@@ -353,13 +353,13 @@ const MyWallet = () => {
         </Box>
         <Box mt={6}>
           <Typography variant="h5" mb={2}>
-            Cosmic Signature Tokens
+            Cosmic Signature Tokens I Won
           </Typography>
           <CSTTable list={CSTList} />
         </Box>
         <Box mt={6}>
           <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
-            <Typography variant="h5">Donated NFTs</Typography>
+            <Typography variant="h5">Donated NFTs I Won</Typography>
             {status.NumDonatedNFTToClaim > 0 && (
               <Button
                 onClick={handleAllDonatedNFTsClaim}
