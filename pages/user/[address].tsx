@@ -162,13 +162,13 @@ const UserInfo = ({ address }) => {
                   </Typography>
                 </Box>
                 <Typography mt={1}>
-                  This account has {userInfo.CosmicTokenNumTransfers} of
+                  This account has {userInfo.CosmicTokenNumTransfers}{" "}
                   CosmicToken (ERC20), click{" "}
                   <Link href={`/cosmic-token-transfers/${address}`}>here</Link>{" "}
                   to see all the transfers made by this account.
                 </Typography>
                 <Typography mt={1}>
-                  This account has {userInfo.CosmicSignatureNumTransfers} of
+                  This account has {userInfo.CosmicSignatureNumTransfers}{" "}
                   CosmicSignature (ERC721), click{" "}
                   <Link href={`/cosmic-signature-transfers/${address}`}>
                     here

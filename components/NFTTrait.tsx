@@ -28,7 +28,7 @@ import "react-modal-video/css/modal-video.min.css";
 
 import NFTVideo from "./NFTVideo";
 import { useActiveWeb3React } from "../hooks/web3";
-import { formatId } from "../utils";
+import { convertTimestampToDateTime, formatId } from "../utils";
 import { StyledCard, SectionWrapper, NFTInfoWrapper } from "./styled";
 import {
   ArrowBack,
@@ -188,17 +188,6 @@ const NFTTrait = ({ tokenId }) => {
   };
   const handleMenuClose = (e) => {
     setAnchorEl(null);
-  };
-  const convertTimestampToDateTime = (timestamp: any) => {
-    var date_ob = new Date(timestamp * 1000);
-    var year = date_ob.getFullYear();
-    var month = ("0" + (date_ob.getMonth() + 1)).slice(-2);
-    var date = ("0" + date_ob.getDate()).slice(-2);
-    var hours = ("0" + date_ob.getHours()).slice(-2);
-    var minutes = ("0" + date_ob.getMinutes()).slice(-2);
-    var seconds = ("0" + date_ob.getSeconds()).slice(-2);
-    var result = `${month}/${date}/${year} ${hours}:${minutes}:${seconds}`;
-    return result;
   };
   const fetchNameHistory = async () => {
     try {

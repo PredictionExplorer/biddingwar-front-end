@@ -22,20 +22,8 @@ import {
   TablePrimaryRow,
 } from "./styled";
 import Pagination from "@mui/material/Pagination";
-import { shortenHex } from "../utils";
+import { convertTimestampToDateTime, shortenHex } from "../utils";
 import axios from "axios";
-
-const convertTimestampToDateTime = (timestamp: any) => {
-  var date_ob = new Date(timestamp * 1000);
-  var year = date_ob.getFullYear();
-  var month = ("0" + (date_ob.getMonth() + 1)).slice(-2);
-  var date = ("0" + date_ob.getDate()).slice(-2);
-  var hours = ("0" + date_ob.getHours()).slice(-2);
-  var minutes = ("0" + date_ob.getMinutes()).slice(-2);
-  var seconds = ("0" + date_ob.getSeconds()).slice(-2);
-  var result = `${month}/${date}/${year} ${hours}:${minutes}:${seconds}`;
-  return result;
-};
 
 const HistoryRow = ({ history, showClaimedStatus }) => {
   const [tokenURI, setTokenURI] = useState(null);
@@ -93,7 +81,18 @@ const HistoryRow = ({ history, showClaimedStatus }) => {
       <TablePrimaryCell>
         {convertTimestampToDateTime(history.TimeStamp)}
       </TablePrimaryCell>
-      <TablePrimaryCell align="center">{history.RoundNum}</TablePrimaryCell>
+      <TablePrimaryCell align="center">
+        <Link
+          href={`/prize/${history.RoundNum}`}
+          sx={{
+            fontSize: "inherit",
+            color: "inherit",
+          }}
+          target="_blank"
+        >
+          {history.RoundNum}
+        </Link>
+      </TablePrimaryCell>
       <TablePrimaryCell align="right">
         {history.AmountEth.toFixed(4)}
       </TablePrimaryCell>
