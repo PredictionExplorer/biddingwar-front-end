@@ -35,7 +35,7 @@ const DonatedNFTDistributionRow = ({ row }) => {
           {row.ContractAddr}
         </Link>
       </TablePrimaryCell>
-      <TablePrimaryCell align="center">{row.NumDonatedTokens}</TablePrimaryCell>
+      <TablePrimaryCell align="right">{row.NumDonatedTokens}</TablePrimaryCell>
     </TablePrimaryRow>
   );
 };
@@ -57,7 +57,7 @@ export const DonatedNFTDistributionTable = ({ list }) => {
           <TablePrimaryHead>
             <TableRow>
               <TableCell>Contract Address</TableCell>
-              <TableCell align="center">Number of NFTs</TableCell>
+              <TableCell align="right">Number of NFTs</TableCell>
             </TableRow>
           </TablePrimaryHead>
           <TableBody>

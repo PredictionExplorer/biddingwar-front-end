@@ -339,7 +339,7 @@ const Statistics = () => {
             </Box>
             <Box mt={4}>
               <Typography variant="h6" mb={2}>
-                Donated Token Distribution
+                Donated Token Distribution per Contract Address
               </Typography>
               <DonatedNFTDistributionTable
                 list={data.MainStats.DonatedTokenDistribution}

@@ -35,8 +35,10 @@ const UniqueBiddersRow = ({ bidder }) => {
           {bidder.BidderAddr}
         </Link>
       </TablePrimaryCell>
-      <TablePrimaryCell align="center">{bidder.NumBids}</TablePrimaryCell>
-      <TablePrimaryCell align="center">{bidder.MaxBidAmountEth.toFixed(6)}</TablePrimaryCell>
+      <TablePrimaryCell align="right">{bidder.NumBids}</TablePrimaryCell>
+      <TablePrimaryCell align="right" sx={{ fontFamily: "monospace" }}>
+        {bidder.MaxBidAmountEth.toFixed(6)}
+      </TablePrimaryCell>
     </TablePrimaryRow>
   );
 };
@@ -59,8 +61,8 @@ export const UniqueBiddersTable = ({ list }) => {
           <TablePrimaryHead>
             <TableRow>
               <TableCell>Bidder Address</TableCell>
-              <TableCell align="center">Num Bids</TableCell>
-              <TableCell align="center">Max Bid (ETH)</TableCell>
+              <TableCell align="right">Num Bids</TableCell>
+              <TableCell align="right">Max Bid (ETH)</TableCell>
             </TableRow>
           </TablePrimaryHead>
           <TableBody>
