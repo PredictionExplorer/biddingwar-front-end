@@ -52,7 +52,7 @@ const UserInfo = ({ address }) => {
               <Typography variant="h6" color="primary" component="span" mr={2}>
                 User
               </Typography>
-              <Typography variant="h6" component="span">
+              <Typography variant="h6" component="span" fontFamily="monospace">
                 {address}
               </Typography>
             </Box>

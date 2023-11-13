@@ -36,7 +36,9 @@ const PrizeRow = ({ prize }) => {
       </TablePrimaryCell>
       <TablePrimaryCell>
         <Tooltip title={prize.WinnerAddr}>
-          <Typography sx={{ fontSize: "inherit !important" }}>
+          <Typography
+            sx={{ fontSize: "inherit !important", fontFamily: "monospace" }}
+          >
             {shortenHex(prize.WinnerAddr, 6)}
           </Typography>
         </Tooltip>

@@ -103,6 +103,7 @@ const HistoryRow = ({ history, showClaimedStatus }) => {
             sx={{
               fontSize: "inherit",
               color: "inherit",
+              fontFamily: "monospace",
             }}
             target="_blank"
           >

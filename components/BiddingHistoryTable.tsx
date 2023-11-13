@@ -75,7 +75,7 @@ const HistoryRow = ({ history }) => {
       </TablePrimaryCell>
       <TablePrimaryCell>
         <Link
-          sx={{ textDecoration: "none", color: "rgba(255, 255, 255, 0.68)" }}
+          sx={{ textDecoration: "none", color: "inherit" }}
         >
           <Typography
             sx={{

@@ -34,6 +34,7 @@ const DonationRow = ({ donation }) => {
         <Link
           color="inherit"
           fontSize="inherit"
+          fontFamily="monospace"
           href={`/user/${donation.DonorAddr}`}
         >
           {donation.DonorAddr}

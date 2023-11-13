@@ -78,7 +78,9 @@ const BidInfo = ({ bidId }) => {
                 href={`/user/${bidInfo.BidderAddr}`}
                 style={{ color: "rgb(255, 255, 255)" }}
               >
-                <Typography>{bidInfo.BidderAddr}</Typography>
+                <Typography fontFamily="monospace">
+                  {bidInfo.BidderAddr}
+                </Typography>
               </Link>
             </Box>
             <Box mb={1} display="flex" flexWrap="wrap">
@@ -108,7 +110,9 @@ const BidInfo = ({ bidId }) => {
                       Donated NFT Contract Address (aka Token):
                     </Typography>
                     &nbsp;
-                    <Typography>{bidInfo.NFTDonationTokenAddr}</Typography>
+                    <Typography fontFamily="monospace">
+                      {bidInfo.NFTDonationTokenAddr}
+                    </Typography>
                   </Box>
                   <Box mb={1} display="flex" flexWrap="wrap">
                     <Typography color="primary">

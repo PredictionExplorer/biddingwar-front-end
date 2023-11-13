@@ -47,18 +47,39 @@ const NFTRow = ({ nft, handleClaim }) => {
         <Tooltip title={nft.DonorAddr}>
           <Link
             href={`/user/${nft.DonorAddr}`}
-            style={{ color: "rgba(255, 255, 255, 0.68)", fontSize: "inherit" }}
+            style={{
+              color: "inherit",
+              fontSize: "inherit",
+              fontFamily: "monospace",
+            }}
+            target="_blank"
           >
             {shortenHex(nft.DonorAddr, 6)}
           </Link>
         </Tooltip>
       </TablePrimaryCell>
-      <TablePrimaryCell align="center">{nft.RoundNum}</TablePrimaryCell>
+      <TablePrimaryCell align="center">
+        <Link
+          href={`/prize/${nft.RoundNum}`}
+          style={{
+            color: "inherit",
+            fontSize: "inherit",
+          }}
+          target="_blank"
+        >
+          {nft.RoundNum}
+        </Link>
+      </TablePrimaryCell>
       <TablePrimaryCell>
         <Tooltip title={nft.TokenAddr}>
           <Link
             href={`https://arbiscan.io/address/${nft.TokenAddr}`}
-            style={{ color: "rgba(255, 255, 255, 0.68)", fontSize: "inherit" }}
+            style={{
+              color: "inherit",
+              fontSize: "inherit",
+              fontFamily: "monospace",
+            }}
+            target="_blank"
           >
             {shortenHex(nft.TokenAddr, 6)}
           </Link>

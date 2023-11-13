@@ -103,7 +103,11 @@ const CSTRow = ({ nft }) => {
       <TablePrimaryCell align="center">
         <Link
           href={`/user/${nft.WinnerAddr}`}
-          style={{ color: "rgba(255, 255, 255, 0.68)", fontSize: 14 }}
+          style={{
+            color: "inherit",
+            fontSize: "inherit",
+            fontFamily: "monospace",
+          }}
         >
           {nft.WinnerAddr}
         </Link>
@@ -111,7 +115,7 @@ const CSTRow = ({ nft }) => {
       <TablePrimaryCell align="center">
         <Link
           href={`/detail/${nft.TokenId}`}
-          style={{ color: "rgba(255, 255, 255, 0.68)", fontSize: 14 }}
+          style={{ color: "inherit", fontSize: "inherit" }}
         >
           {nft.TokenId}
         </Link>
@@ -120,7 +124,7 @@ const CSTRow = ({ nft }) => {
         {nft.RecordType === 3 ? (
           <Link
             href={`/prize/${nft.RoundNum}`}
-            style={{ color: "rgba(255, 255, 255, 0.68)", fontSize: 14 }}
+            style={{ color: "inherit", fontSize: "inherit" }}
           >
             Prize Winner (#{nft.RoundNum})
           </Link>
