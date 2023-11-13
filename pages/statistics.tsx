@@ -20,7 +20,7 @@ import {
   ChartSeriesItem,
 } from "@progress/kendo-react-charts";
 import "@progress/kendo-theme-default/dist/all.css";
-import { convertTimestampToDateTime } from "../utils";
+import { convertTimestampToDateTime, formatEthValue } from "../utils";
 
 const StatisticsItem = ({ title, value }) => {
   return (
@@ -128,7 +128,7 @@ const Statistics = () => {
               />
               <StatisticsItem
                 title="Current Bid Price"
-                value={`${data.BidPriceEth.toFixed(6)} ETH`}
+                value={formatEthValue(data.BidPriceEth)}
               />
               <StatisticsItem
                 title="Num Bids Since Round Start"
@@ -140,7 +140,7 @@ const Statistics = () => {
               />
               <StatisticsItem
                 title="Prize Amount"
-                value={`${data.PrizeAmountEth.toFixed(6)} ETH`}
+                value={formatEthValue(data.PrizeAmountEth)}
               />
               <Box display="flex" flexWrap="wrap" my={1}>
                 <Typography
@@ -214,26 +214,22 @@ const Statistics = () => {
               />
               <StatisticsItem
                 title="Total Amount Paid in Main Prizes"
-                value={`${data.TotalPrizesPaidAmountEth.toFixed(6)} ETH`}
+                value={formatEthValue(data.TotalPrizesPaidAmountEth)}
               />
               <StatisticsItem
                 title="Total Amount Paid in ETH Raffles"
-                value={`${data.MainStats.TotalRaffleEthDeposits.toFixed(
-                  6
-                )} ETH`}
+                value={formatEthValue(data.MainStats.TotalRaffleEthDeposits)}
               />
               <StatisticsItem
                 title="Amount of ETH collected by the winners from raffles"
-                value={`${data.MainStats.TotalRaffleEthWithdrawn.toFixed(
-                  6
-                )} ETH`}
+                value={formatEthValue(data.MainStats.TotalRaffleEthWithdrawn)}
               />
               <Typography color="primary">{`${
                 data.MainStats.NumWinnersWithPendingRaffleWithdrawal
-              } winners are yet to withdraw funds totalling an amount of ${(
+              } winners are yet to withdraw funds totalling an amount of ${formatEthValue(
                 data.MainStats.TotalRaffleEthDeposits -
-                data.MainStats.TotalRaffleEthWithdrawn
-              ).toFixed(4)} ETH`}</Typography>
+                  data.MainStats.TotalRaffleEthWithdrawn
+              )}`}</Typography>
               {data.MainStats.NumCosmicGameDonations > 0 && (
                 <StatisticsItem
                   title="Num Cosmic Game Donations"
@@ -257,9 +253,7 @@ const Statistics = () => {
                       fontSize="inherit"
                       href="/charity-deposits-cg"
                     >
-                      {`${data.MainStats.SumCosmicGameDonationsEth.toFixed(
-                        6
-                      )} ETH`}
+                      {formatEthValue(data.MainStats.SumCosmicGameDonationsEth)}
                     </Link>
                   }
                 />
@@ -294,7 +288,7 @@ const Statistics = () => {
                   />
                   <StatisticsItem
                     title="Total amount withdrawn from Charity Wallet"
-                    value={`${data.MainStats.SumWithdrawals.toFixed(6)} ETH`}
+                    value={formatEthValue(data.MainStats.SumWithdrawals)}
                   />
                 </>
               )}
@@ -312,7 +306,7 @@ const Statistics = () => {
               />
               <StatisticsItem
                 title="Charity Balance"
-                value={`${data.CharityBalanceEth.toFixed(6)} ETH`}
+                value={formatEthValue(data.CharityBalanceEth)}
               />
               <StatisticsItem
                 title="Number of Unique Bidders"

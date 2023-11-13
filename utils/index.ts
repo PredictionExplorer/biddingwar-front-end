@@ -89,4 +89,9 @@ export const calculateTimeDiff = (timestamp: any, current: any) => {
   }
   str += ("0" + seconds).slice(-2) + " Seconds";
   return str;
-}
+};
+
+export const formatEthValue = (value: number) => {
+  if (value < 10) return `${value.toFixed(4)} ETH`;
+  return `${value.toFixed(1)} ETH`;
+};
