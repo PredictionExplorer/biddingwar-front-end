@@ -355,29 +355,34 @@ const Statistics = () => {
               <Typography variant="h6" mb={2}>
                 Cosmic Token Balance Distribution
               </Typography>
-              <Chart transitions={false} style={{ width: "100%", height: 500 }}>
-                <ChartLegend visible={false} />
-                <ChartArea background="transparent" />
-                <ChartSeries>
-                  <ChartSeriesItem
-                    type="pie"
-                    data={ctBalanceDistribution.map((value) => ({
-                      category: value.OwnerAddr,
-                      value: value.BalanceFloat,
-                    }))}
-                    field="value"
-                    categoryField="category"
-                    labels={{
-                      visible: true,
-                      content: (props) => {
-                        return `${props.dataItem.category}: ${props.dataItem.value}`;
-                      },
-                      color: "white",
-                      background: "none",
-                    }}
-                  />
-                </ChartSeries>
-              </Chart>
+              {ctBalanceDistribution.length > 0 && (
+                <Chart
+                  transitions={false}
+                  style={{ width: "100%", height: 500 }}
+                >
+                  <ChartLegend visible={false} />
+                  <ChartArea background="transparent" />
+                  <ChartSeries>
+                    <ChartSeriesItem
+                      type="pie"
+                      data={ctBalanceDistribution.map((value) => ({
+                        category: value.OwnerAddr,
+                        value: value.BalanceFloat,
+                      }))}
+                      field="value"
+                      categoryField="category"
+                      labels={{
+                        visible: true,
+                        content: (props) => {
+                          return `${props.dataItem.category}: ${props.dataItem.value}`;
+                        },
+                        color: "white",
+                        background: "none",
+                      }}
+                    />
+                  </ChartSeries>
+                </Chart>
+              )}
             </Box>
             <Box mt={4}>
               <CTBalanceDistributionTable
