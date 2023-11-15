@@ -6,7 +6,7 @@ const switchRequest = (ethereum: any) => {
   return ethereum.request({
     method: 'wallet_switchEthereumChain',
     // params: [{ chainId: '0x66EED' }],
-    params: [{ chainId: '0x7A69' }],
+    params: [{ chainId: '0x66eee' }],
   })
 }
 
@@ -15,12 +15,12 @@ const addChainRequest = (ethereum: any) => {
     method: 'wallet_addEthereumChain',
     params: [
       {
-        chainId: '0x7A69',
-        chainName: 'Localhost 11845',
-        rpcUrls: ['http://170.187.142.12:11845'],
+        chainId: '0x66eee',
+        chainName: 'Arbitrum Sepolia',
+        rpcUrls: ['https://sepolia-rollup.arbitrum.io/rpc'],
         nativeCurrency: {
-          name: 'AGOR',
-          symbol: 'AGOR',
+          name: 'ETH',
+          symbol: 'ETH',
           decimals: 18,
         },
       },

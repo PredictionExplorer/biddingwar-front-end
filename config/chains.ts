@@ -3,15 +3,17 @@ export enum SupportedChainId {
   ARBITRUM_RINKEBY = 421611,
   ARBITRUM_GOERLI = 421613,
   LOCAL_NETWORK = 31337,
+  SEPOLIA = 421614
 }
 
-export const DEFAULT_CHAIN_ID = SupportedChainId.LOCAL_NETWORK;
+export const DEFAULT_CHAIN_ID = SupportedChainId.SEPOLIA;
 
 export const ALL_SUPPORTED_CHAIN_IDS: SupportedChainId[] = [
   SupportedChainId.ARBITRUM_ONE,
   SupportedChainId.ARBITRUM_RINKEBY,
   SupportedChainId.ARBITRUM_GOERLI,
   SupportedChainId.LOCAL_NETWORK,
+  SupportedChainId.SEPOLIA,
 ];
 
 export const L2_CHAIN_IDS = [
@@ -19,6 +21,7 @@ export const L2_CHAIN_IDS = [
   SupportedChainId.ARBITRUM_RINKEBY,
   SupportedChainId.ARBITRUM_GOERLI,
   SupportedChainId.LOCAL_NETWORK,
+  SupportedChainId.SEPOLIA,
 ] as const;
 
 export type SupportedL2ChainId = typeof L2_CHAIN_IDS[number];
@@ -65,5 +68,12 @@ export const CHAIN_INFO: ChainInfo = {
     explorer: "https://goerli.arbiscan.io/",
     infoLink: "https://info.uniswap.org/#/arbitrum/",
     label: "Local Network",
+  },
+  [SupportedChainId.SEPOLIA]: {
+    bridge: "https://bridge.arbitrum.io/",
+    docs: "https://offchainlabs.com/",
+    explorer: "https://sepolia-explorer.arbitrum.io/",
+    infoLink: "https://info.uniswap.org/#/arbitrum/",
+    label: "Arbitrum Sepolia",
   },
 };
