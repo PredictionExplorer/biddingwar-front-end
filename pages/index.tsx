@@ -215,7 +215,7 @@ const NewHome = () => {
       }
     } catch (err) {
       if (err?.data?.message) {
-        const msg = getErrorMessage(err?.data?.message);
+        const msg = err?.data?.message;
         setNotification({
           visible: true,
           text: msg,

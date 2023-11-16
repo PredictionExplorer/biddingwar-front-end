@@ -149,7 +149,7 @@ const MyWinnings = () => {
       deposits = deposits.sort((a, b) => b.TimeStamp - a.TimeStamp);
       setRaffleETHToClaim(deposits);
     };
-    if (status.NumDonatedNFTToClaim > 0) {
+    if (status?.NumDonatedNFTToClaim > 0) {
       fetchUnclaimedDonatedNFTs();
     }
     if (status?.ETHRaffleToClaim > 0) {

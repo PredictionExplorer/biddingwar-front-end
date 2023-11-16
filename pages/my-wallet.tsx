@@ -364,7 +364,7 @@ const MyWallet = () => {
         <Box mt={6}>
           <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
             <Typography variant="h5">Donated NFTs I Won</Typography>
-            {status.NumDonatedNFTToClaim > 0 && (
+            {status?.NumDonatedNFTToClaim > 0 && (
               <Button
                 onClick={handleAllDonatedNFTsClaim}
                 variant="contained"

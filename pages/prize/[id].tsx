@@ -36,7 +36,7 @@ const PrizeInfo = ({ roundNum }) => {
       const nfts = await api.get_unclaimed_donated_nft_by_user(account);
       setDonatedNFTToClaim(nfts);
     };
-    if (status.NumDonatedNFTToClaim > 0) {
+    if (status?.NumDonatedNFTToClaim > 0) {
       fetchUnclaimedDonatedNFTs();
     }
   }, [status]);
@@ -184,7 +184,7 @@ const PrizeInfo = ({ roundNum }) => {
                 }}
               >
                 <Typography variant="h6">Donated NFTs</Typography>
-                {status.NumDonatedNFTToClaim > 0 && (
+                {status?.NumDonatedNFTToClaim > 0 && (
                   <Button
                     variant="contained"
                     onClick={handleAllDonatedNFTsClaim}
