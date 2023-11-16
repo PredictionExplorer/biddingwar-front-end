@@ -1,5 +1,6 @@
 import { ReactNode } from "react";
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
+import { Badge, Typography } from "@mui/material";
 
 type NavItem = {
   title: string | ReactNode;
@@ -20,9 +21,9 @@ const getNAVs = (status, account) => {
       title: (
         <>
           {status?.ETHRaffleToClaim > 0 || status?.NumDonatedNFTToClaim > 0 ? (
-            <EmojiEventsIcon color="error" />
+            <Badge variant="dot" color="error">Claim</Badge>
           ) : (
-            <EmojiEventsIcon />
+            "Claim"
           )}
         </>
       ),
