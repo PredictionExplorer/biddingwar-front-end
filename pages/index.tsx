@@ -404,7 +404,7 @@ const NewHome = () => {
   useEffect(() => {
     const fetchData = async () => {
       const newData = await api.get_dashboard_info();
-      const round = newData.CurRoundNum - 1;
+      const round = newData.CurRoundNum;
       const newBidData = await api.get_bid_list_by_round(round, "desc");
       setCurBidList(newBidData);
       const nftData = await api.get_donations_nft_by_round(round);
@@ -594,7 +594,7 @@ const NewHome = () => {
                   Current Bid
                 </Typography>
                 <Typography variant="h5" component="span">
-                  (Round #{data?.CurRoundNum})
+                  (Round #{data?.CurRoundNum + 1})
                 </Typography>
                 {data?.LastBidderAddr !== constants.AddressZero &&
                   (prizeTime > Date.now() ? (
@@ -663,7 +663,7 @@ const NewHome = () => {
                 {data?.PrizeAmountEth > 0 ? (
                   <>
                     <Typography variant="h4" mb={2}>
-                      Round #{data?.CurRoundNum} ended
+                      Round #{data?.CurRoundNum + 1} ended
                     </Typography>
                     <Box mb={1}>
                       <Typography color="primary" component="span">
