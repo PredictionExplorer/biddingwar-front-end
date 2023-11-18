@@ -1107,3 +1107,13 @@ const NewHome = () => {
 };
 
 export default NewHome;
+
+/*
+ToDo list
+
+1. time difference
+2. fix claim issue
+3. bid price, reward fontsize
+
+
+*/
