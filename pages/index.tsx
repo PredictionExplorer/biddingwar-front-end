@@ -59,7 +59,6 @@ import "@progress/kendo-theme-default/dist/all.css";
 import getErrorMessage from "../utils/alert";
 import NFTImage from "../components/NFTImage";
 import { calculateTimeDiff } from "../utils";
-import { useCookies } from "react-cookie";
 import WinningHistoryTable from "../components/WinningHistoryTable";
 
 const NewHome = () => {
@@ -95,7 +94,6 @@ const NewHome = () => {
   // const ref = useRef(null);
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up("md"));
-  const [cookies, setCookie] = useCookies(["banner_id"]);
 
   const gridLayout =
     donatedNFTs.length > 16
@@ -484,14 +482,10 @@ const NewHome = () => {
   }, []);
 
   useEffect(() => {
-    if (data) {
-      let bannerId = cookies.banner_id;
-      if (!cookies.banner_id) {
-        bannerId = Math.floor(Math.random() * data?.MainStats.NumCSTokenMints);
-        const date = new Date();
-        date.setHours(date.getHours() + 1);
-        setCookie("banner_id", bannerId, { expires: date });
-      }
+    if (data && bannerTokenId === "") {
+      let bannerId = Math.floor(
+        Math.random() * data?.MainStats.NumCSTokenMints
+      );
       const fileName = bannerId.toString().padStart(6, "0");
       setBannerTokenId(fileName);
     }
