@@ -16,16 +16,15 @@ const getNAVs = (status, account) => {
     { title: "Statistics", route: "/statistics" },
     { title: "FAQ", route: "/faq" },
   ];
-  if (account) {
+  if (
+    account &&
+    (status?.ETHRaffleToClaim > 0 || status?.NumDonatedNFTToClaim > 0)
+  ) {
     NAVS.push({
       title: (
-        <>
-          {status?.ETHRaffleToClaim > 0 || status?.NumDonatedNFTToClaim > 0 ? (
-            <Badge variant="dot" color="error">Claim</Badge>
-          ) : (
-            "Claim"
-          )}
-        </>
+        <Badge variant="dot" color="error">
+          Claim
+        </Badge>
       ),
       route: "/my-winnings",
     });
