@@ -971,11 +971,7 @@ const NewHome = () => {
                   {data?.NumRaffleEthWinners} will receive
                 </Typography>
                 <GradientText variant="h3" textAlign="center">
-                  {(
-                    data?.CurRoundStats.TotalRaffleEthDepositsEth /
-                    data?.NumRaffleEthWinners
-                  ).toFixed(4)}{" "}
-                  ETH
+                  {data?.RaffleAmountEth.toFixed(4)} ETH
                 </GradientText>
                 <Typography
                   sx={{ fontSize: "22px !important" }}
@@ -1112,7 +1108,7 @@ export default NewHome;
 ToDo list
 
 1. time difference
-2. fix claim issue
+2. raffle eth
 3. bid price, reward fontsize
 
 
