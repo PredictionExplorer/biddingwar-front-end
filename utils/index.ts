@@ -69,8 +69,8 @@ export const convertTimestampToDateTime = (timestamp: any) => {
   return result;
 };
 
-export const calculateTimeDiff = (timestamp: any, current: any) => {
-  let seconds = current - timestamp;
+export const calculateTimeDiff = (timestamp: any) => {
+  let seconds = Math.floor(Date.now() / 1000) - timestamp;
   let minutes = Math.floor(seconds / 60);
   seconds = seconds % 60;
   let hours = Math.floor(minutes / 60);

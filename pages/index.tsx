@@ -81,7 +81,7 @@ const NewHome = () => {
   });
   const [bannerTokenId, setBannerTokenId] = useState("");
   const [rwlknftIds, setRwlknftIds] = useState([]);
-  const [roundStartedAgo, setRoundStartedAgo] = useState("");
+  const [roundStarted, setRoundStarted] = useState("");
   const [curPage, setCurrentPage] = useState(1);
   const [claimHistory, setClaimHistory] = useState(null);
   const perPage = 12;
@@ -422,9 +422,7 @@ const NewHome = () => {
 
     const fetchPrizeTime = async () => {
       const t = await api.get_prize_time();
-      const current = await api.get_current_time();
-      const offset = current * 1000 - Date.now();
-      setPrizeTime(t * 1000 - offset);
+      setPrizeTime(t * 1000);
     };
 
     const fetchPrizeInfo = async () => {
@@ -467,19 +465,13 @@ const NewHome = () => {
 
   useEffect(() => {
     const interval = setInterval(async () => {
-      if (data?.TsRoundStart) {
-        const current = await api.get_current_time();
-        const timeDiff = calculateTimeDiff(data?.TsRoundStart, current);
-        setRoundStartedAgo(timeDiff);
-      } else {
-        setRoundStartedAgo("");
-      }
+      setRoundStarted(calculateTimeDiff(data?.TsRoundStart));
     }, 1000);
 
     return () => {
       clearInterval(interval);
     };
-  }, []);
+  }, [data]);
 
   useEffect(() => {
     if (data && bannerTokenId === "") {
@@ -620,15 +612,13 @@ const NewHome = () => {
                     {data?.PrizeAmountEth.toFixed(4)} ETH
                   </Typography>
                 </Box>
-                {roundStartedAgo && (
+                {roundStarted && (
                   <Box>
                     <Typography color="primary" component="span">
                       Round Started:
                     </Typography>
                     &nbsp;
-                    <Typography component="span">
-                      {roundStartedAgo} ago
-                    </Typography>
+                    <Typography component="span">{roundStarted} ago</Typography>
                   </Box>
                 )}
                 <Box sx={{ mt: "24px" }}>
@@ -836,7 +826,7 @@ const NewHome = () => {
                           fullWidth
                           disabled={
                             data?.LastBidderAddr !== account &&
-                            prizeTime + 300000 > Date.now()
+                            prizeTime > Date.now()
                           }
                           sx={{
                             display: "flex",
@@ -845,11 +835,11 @@ const NewHome = () => {
                         >
                           Claim Prize
                           <Box sx={{ display: "flex", alignItems: "center" }}>
-                            {prizeTime + 300000 > Date.now() &&
+                            {prizeTime > Date.now() &&
                               data?.LastBidderAddr !== account && (
                                 <>
                                   available in &nbsp;
-                                  <Countdown date={prizeTime + 300000} />
+                                  <Countdown date={prizeTime} />
                                 </>
                               )}
                             &nbsp;
@@ -857,7 +847,7 @@ const NewHome = () => {
                           </Box>
                         </Button>
                         {data?.LastBidderAddr !== account &&
-                          prizeTime + 300000 > Date.now() && (
+                          prizeTime > Date.now() && (
                             <Typography
                               variant="body2"
                               fontStyle="italic"
