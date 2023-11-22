@@ -595,20 +595,20 @@ const NewHome = () => {
                     <Countdown key={1} date={Date.now()} renderer={Counter} />
                   ))}
                 <Box>
-                  <Typography color="primary" component="span">
+                  <Typography variant="subtitle1" color="primary" component="span">
                     Bid Price:
                   </Typography>
                   &nbsp;
-                  <Typography component="span">
+                  <Typography variant="subtitle1" component="span">
                     {data?.BidPriceEth.toFixed(6)} ETH
                   </Typography>
                 </Box>
                 <Box>
-                  <Typography color="primary" component="span">
+                  <Typography variant="subtitle1" color="primary" component="span">
                     Reward:
                   </Typography>
                   &nbsp;
-                  <Typography component="span">
+                  <Typography variant="subtitle1" component="span">
                     {data?.PrizeAmountEth.toFixed(4)} ETH
                   </Typography>
                 </Box>
@@ -1097,9 +1097,8 @@ export default NewHome;
 /*
 ToDo list
 
-1. time difference
-2. raffle eth
-3. bid price, reward fontsize
+1. bid price, reward fontsize
+2. 
 
 
 */
