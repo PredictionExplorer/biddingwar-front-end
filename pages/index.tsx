@@ -1097,7 +1097,7 @@ export default NewHome;
 /*
 ToDo list
 
-1. bid price, reward fontsize
+1. fix claim button error
 2. 
 
 

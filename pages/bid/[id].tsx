@@ -61,7 +61,7 @@ const BidInfo = ({ bidId }) => {
                   color: "inherit",
                 }}
               >
-                <Typography>{bidInfo.RoundNum}</Typography>
+                <Typography>{bidInfo.RoundNum + 1}</Typography>
               </Link>
             </Box>
             <Box mb={1} display="flex" flexWrap="wrap">

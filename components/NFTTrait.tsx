@@ -404,7 +404,7 @@ const NFTTrait = ({ tokenId }) => {
               <Typography component="span">
                 {nft.RecordType === 1
                   ? "Raffle Winner"
-                  : `Round Winner (round #${nft.RoundNum})`}
+                  : `Round Winner (round #${nft.RoundNum + 1})`}
               </Typography>
             </Box>
             {nft.RecordType === 3 && (

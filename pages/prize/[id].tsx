@@ -71,7 +71,7 @@ const PrizeInfo = ({ roundNum }) => {
             }}
           >
             <Typography variant="h4" color="primary" component="span" mr={2}>
-              {`Round #${roundNum}`}
+              {`Round #${roundNum + 1}`}
             </Typography>
           </Link>
           <Typography variant="h4" component="span">

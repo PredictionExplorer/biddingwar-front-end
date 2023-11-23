@@ -46,7 +46,7 @@ const UsedRwlkNftRow = ({ nft }) => {
           sx={{ color: "inherit", fontSize: "inherit" }}
           href={`/prize/${nft.RoundNum}`}
         >
-          {nft.RoundNum}
+          {nft.RoundNum + 1}
         </Link>
       </TablePrimaryCell>
       <TablePrimaryCell align="center">{nft.RWalkTokenId}</TablePrimaryCell>

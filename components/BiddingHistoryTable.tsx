@@ -50,7 +50,7 @@ const HistoryRow = ({ history }) => {
           : history.BidPriceEth?.toFixed(2)}
         Ξ
       </TablePrimaryCell>
-      <TablePrimaryCell align="center">{history.RoundNum}</TablePrimaryCell>
+      <TablePrimaryCell align="center">{history.RoundNum + 1}</TablePrimaryCell>
       <TablePrimaryCell>
         {history.RWalkNFTId < 0 ? "" : history.RWalkNFTId}
       </TablePrimaryCell>
