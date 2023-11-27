@@ -62,7 +62,7 @@ const Statistics = () => {
       );
       setBidHistory(bidHistory);
       let uniqueBidders = await api.get_unique_bidders();
-      uniqueBidders = uniqueBidders.sort((a, b) => a.NumBids - b.NumBids);
+      uniqueBidders = uniqueBidders.sort((a, b) => b.NumBids - a.NumBids);
       setUniqueBidders(uniqueBidders);
       const uniqueWinners = await api.get_unique_winners();
       setUniqueWinners(uniqueWinners);
