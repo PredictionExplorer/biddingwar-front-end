@@ -63,17 +63,9 @@ const PrizeInfo = ({ roundNum }) => {
       </Head>
       <MainWrapper>
         <Box mb={4}>
-          <Link
-            href={`/prize/${roundNum}`}
-            sx={{
-              textDecorationColor: "#15BFFD !important",
-              textDecorationThickness: "3px",
-            }}
-          >
-            <Typography variant="h4" color="primary" component="span" mr={2}>
-              {`Round #${roundNum + 1}`}
-            </Typography>
-          </Link>
+          <Typography variant="h4" color="primary" component="span" mr={2}>
+            {`Round #${roundNum + 1}`}
+          </Typography>
           <Typography variant="h4" component="span">
             Prize Information
           </Typography>
@@ -147,7 +139,7 @@ const PrizeInfo = ({ roundNum }) => {
               </Typography>
               &nbsp;
               <Typography component="span">
-                {prizeInfo.RoundStats.TotalRaffleEthDepositsEth.toFixed(4)}
+                {prizeInfo.RoundStats.TotalRaffleEthDepositsEth.toFixed(4)} ETH
               </Typography>
             </Box>
             <Box mb={1}>

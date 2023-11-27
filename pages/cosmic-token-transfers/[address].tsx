@@ -81,10 +81,10 @@ export const CosmicTokenTransfersTable = ({ list }) => {
       <TablePrimaryContainer>
         <Table>
           <colgroup>
-            <col width="20%" />
+            <col width="15%" />
             <col width="35%" />
             <col width="35%" />
-            <col width="10%" />
+            <col width="15%" />
           </colgroup>
           <TablePrimaryHead>
             <TableRow>

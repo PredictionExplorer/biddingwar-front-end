@@ -50,6 +50,9 @@ const MyWinningsRow = ({ winning }) => {
 const MyWinningsTable = ({ list }) => {
   const perPage = 5;
   const [curPage, setCurPage] = useState(1);
+  if (list.length === 0) {
+    return <Typography>No Raffle Eth yet.</Typography>;
+  }
   return (
     <>
       <TablePrimaryContainer>

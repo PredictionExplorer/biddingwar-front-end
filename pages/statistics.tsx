@@ -117,7 +117,10 @@ const Statistics = () => {
           <>
             <Typography variant="h5">Current Round Statistics</Typography>
             <Box my={4}>
-              <StatisticsItem title="Current Round" value={data.CurRoundNum + 1} />
+              <StatisticsItem
+                title="Current Round"
+                value={data.CurRoundNum + 1}
+              />
               <StatisticsItem
                 title="Round Start Date"
                 value={

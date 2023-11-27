@@ -961,7 +961,7 @@ const NewHome = () => {
                   {data?.NumRaffleEthWinners} will receive
                 </Typography>
                 <GradientText variant="h3" textAlign="center">
-                  {data?.RaffleAmountEth.toFixed(4)} ETH
+                  {data?.RaffleAmountEth.toFixed(2)} ETH
                 </GradientText>
                 <Typography
                   sx={{ fontSize: "22px !important" }}

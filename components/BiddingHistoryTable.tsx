@@ -74,22 +74,22 @@ const HistoryRow = ({ history }) => {
         {history.NFTDonationTokenId < 0 ? "" : history.NFTDonationTokenId}
       </TablePrimaryCell>
       <TablePrimaryCell>
-        <Link
-          sx={{ textDecoration: "none", color: "inherit" }}
-        >
-          <Typography
-            sx={{
-              maxWidth: "180px",
-              overflow: "hidden",
-              whiteSpace: "nowrap",
-              display: "inline-block",
-              textOverflow: "ellipsis",
-              lineHeight: 1,
-            }}
-            component="span"
-          >
-            {history.Message}
-          </Typography>
+        <Link sx={{ textDecoration: "none", color: "inherit" }}>
+          <Tooltip title={history.Message}>
+            <Typography
+              sx={{
+                maxWidth: "180px",
+                overflow: "hidden",
+                whiteSpace: "nowrap",
+                display: "inline-block",
+                textOverflow: "ellipsis",
+                lineHeight: 1,
+              }}
+              component="span"
+            >
+              {history.Message}
+            </Typography>
+          </Tooltip>
         </Link>
       </TablePrimaryCell>
     </TablePrimaryRow>

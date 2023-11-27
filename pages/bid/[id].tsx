@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Box, Grid, Link, Typography } from "@mui/material";
+import { Box, Grid, Link, Tooltip, Typography } from "@mui/material";
 import Head from "next/head";
 import { MainWrapper } from "../../components/styled";
 import { GetServerSidePropsContext } from "next";
@@ -45,10 +45,14 @@ const BidInfo = ({ bidId }) => {
               &nbsp;
               <Link
                 href={`https://arbiscan.io/tx/${bidInfo.TxHash}`}
-                style={{ color: "rgb(255, 255, 255)" }}
+                style={{ color: "inherit" }}
                 target="_blank"
               >
-                <Typography>{shortenHex(bidInfo.TxHash, 16)}</Typography>
+                <Tooltip title={bidInfo.TxHash}>
+                  <Typography sx={{ fontFamily: "monospace" }}>
+                    {shortenHex(bidInfo.TxHash, 16)}
+                  </Typography>
+                </Tooltip>
               </Link>
             </Box>
             <Box mb={1} display="flex" flexWrap="wrap">
@@ -86,7 +90,12 @@ const BidInfo = ({ bidId }) => {
             <Box mb={1} display="flex" flexWrap="wrap">
               <Typography color="primary">Bid Price:</Typography>
               &nbsp;
-              <Typography>{bidInfo.BidPriceEth.toFixed(6)} ETH</Typography>
+              <Typography>
+                {bidInfo.BidPriceEth && bidInfo.BidPriceEth < 1
+                  ? bidInfo.BidPriceEth?.toFixed(7)
+                  : bidInfo.BidPriceEth?.toFixed(2)}{" "}
+                ETH
+              </Typography>
             </Box>
             <Box mb={1} display="flex" flexWrap="wrap">
               <Typography color="primary">
