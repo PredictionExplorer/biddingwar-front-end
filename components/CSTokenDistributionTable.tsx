@@ -40,7 +40,7 @@ const CSTokenDistributionRow = ({ row }) => {
   );
 };
 
-export const CSTokenDistributionTable = ({ list }) => {
+const CSTokenDistributionTable = ({ list }) => {
   const perPage = 5;
   const [page, setPage] = useState(1);
   if (list.length === 0) {
@@ -81,3 +81,5 @@ export const CSTokenDistributionTable = ({ list }) => {
     </>
   );
 };
+
+export default CSTokenDistributionTable;
