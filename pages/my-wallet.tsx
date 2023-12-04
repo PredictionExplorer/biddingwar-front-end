@@ -25,7 +25,7 @@ import useRaffleWalletContract from "../hooks/useRaffleWalletContract";
 import { useRouter } from "next/router";
 import { useApiData } from "../contexts/ApiDataContext";
 import useCosmicGameContract from "../hooks/useCosmicGameContract";
-import { DonatedNFTTable } from "../components/DonatedNFTTable";
+import DonatedNFTTable from "../components/DonatedNFTTable";
 import Fireworks, { FireworksHandlers } from "@fireworks-js/react";
 import api from "../services/api";
 

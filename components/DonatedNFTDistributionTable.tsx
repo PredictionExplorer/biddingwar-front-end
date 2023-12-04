@@ -40,7 +40,7 @@ const DonatedNFTDistributionRow = ({ row }) => {
   );
 };
 
-export const DonatedNFTDistributionTable = ({ list }) => {
+const DonatedNFTDistributionTable = ({ list }) => {
   const perPage = 5;
   const [page, setPage] = useState(1);
   if (list.length === 0) {
@@ -81,3 +81,5 @@ export const DonatedNFTDistributionTable = ({ list }) => {
     </>
   );
 };
+
+export default DonatedNFTDistributionTable;

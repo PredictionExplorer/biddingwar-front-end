@@ -21,7 +21,7 @@ import {
   TablePrimaryRow,
 } from "../components/styled";
 import { convertTimestampToDateTime } from "../utils";
-import { DonatedNFTTable } from "../components/DonatedNFTTable";
+import DonatedNFTTable from "../components/DonatedNFTTable";
 import { useActiveWeb3React } from "../hooks/web3";
 import useCosmicGameContract from "../hooks/useCosmicGameContract";
 import useRaffleWalletContract from "../hooks/useRaffleWalletContract";

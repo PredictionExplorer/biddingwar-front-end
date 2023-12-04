@@ -104,6 +104,7 @@ const NFTRow = ({ nft, handleClaim }) => {
           <Button
             variant="contained"
             onClick={(e) => handleClaim(e, nft.Index)}
+            data-testid="Claim Button"
           >
             Claim
           </Button>
@@ -113,7 +114,7 @@ const NFTRow = ({ nft, handleClaim }) => {
   );
 };
 
-export const DonatedNFTTable = ({ list, handleClaim }) => {
+const DonatedNFTTable = ({ list, handleClaim }) => {
   const perPage = 5;
   const [page, setPage] = useState(1);
   if (list.length === 0) {
@@ -164,3 +165,5 @@ export const DonatedNFTTable = ({ list, handleClaim }) => {
     </>
   );
 };
+
+export default DonatedNFTTable;

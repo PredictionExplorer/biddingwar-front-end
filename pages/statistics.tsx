@@ -9,9 +9,9 @@ import { UniqueWinnersTable } from "../components/UniqueWinnersTable";
 import DonatedNFT from "../components/DonatedNFT";
 import { ZERO_ADDRESS } from "../config/misc";
 import Countdown from "react-countdown";
-import { DonatedNFTDistributionTable } from "../components/DonatedNFTDistributionTable";
-import { CSTokenDistributionTable } from "../components/CSTokenDistributionTable";
-import { CTBalanceDistributionTable } from "../components/CTBalanceDistributionTable";
+import DonatedNFTDistributionTable from "../components/DonatedNFTDistributionTable";
+import CSTokenDistributionTable from "../components/CSTokenDistributionTable";
+import CTBalanceDistributionTable from "../components/CTBalanceDistributionTable";
 import {
   Chart,
   ChartArea,
