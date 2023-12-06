@@ -38,7 +38,7 @@ import {
 } from "@mui/icons-material";
 import useCosmicSignatureContract from "../hooks/useCosmicSignatureContract";
 import NFTImage from "./NFTImage";
-import { NameHistoryTable } from "./NameHistoryTable";
+import NameHistoryTable from "./NameHistoryTable";
 import { TransferHistoryTable } from "./TransferHistoryTable";
 import api from "../services/api";
 
