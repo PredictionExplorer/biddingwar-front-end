@@ -201,7 +201,7 @@ const NewHome = () => {
       let receipt;
       if (!nftDonateAddress || nftId === -1) {
         receipt = await cosmicGameContract
-          .bid(message, {
+          .bid(message, -1, {
             value: ethers.utils.parseEther(newBidPrice.toFixed(10)),
           })
           .then((tx) => tx.wait());
@@ -262,7 +262,7 @@ const NewHome = () => {
             .then((tx) => tx.wait());
         }
         receipt = await cosmicGameContract
-          .bidAndDonateNFT(message, nftDonateAddress, nftId, {
+          .bidAndDonateNFT(message, -1, nftDonateAddress, nftId, {
             value: ethers.utils.parseEther(newBidPrice.toFixed(6)),
           })
           .then((tx) => tx.wait());
@@ -285,12 +285,18 @@ const NewHome = () => {
   };
 
   const onBidWithRWLK = async () => {
+    let bidPrice, newBidPrice;
     setIsBidding(true);
+    bidPrice = await cosmicGameContract.getBidPrice();
+    newBidPrice =
+      parseFloat(ethers.utils.formatEther(bidPrice)) * (1 + bidPricePlus / 100);
     try {
       let receipt;
       if (!nftDonateAddress || nftId === -1) {
         receipt = await cosmicGameContract
-          .bidWithRWLK(rwlkId, message)
+          .bid(message, rwlkId, {
+            value: ethers.utils.parseEther(newBidPrice.toFixed(10)),
+          })
           .then((tx) => tx.wait());
         console.log(receipt);
         setTimeout(() => {
@@ -348,7 +354,9 @@ const NewHome = () => {
           .then((tx) => tx.wait());
       }
       receipt = await cosmicGameContract
-        .bidWithRWLKAndDonateNFT(rwlkId, message, nftDonateAddress, nftId)
+        .bidAndDonateNFT(message, rwlkId, nftDonateAddress, nftId, {
+          value: ethers.utils.parseEther(newBidPrice.toFixed(10)),
+        })
         .then((tx) => tx.wait());
       console.log(receipt);
       setTimeout(() => {
@@ -357,6 +365,29 @@ const NewHome = () => {
     } catch (err) {
       if (err?.data?.message) {
         const msg = getErrorMessage(err?.data?.message);
+        setNotification({
+          visible: true,
+          text: msg,
+        });
+      }
+      console.log(err);
+      setIsBidding(false);
+    }
+  };
+
+  const onBidWithCST = async () => {
+    setIsBidding(true);
+    try {
+      let receipt = await cosmicGameContract
+        .bidWithCST(message)
+        .then((tx) => tx.wait());
+      console.log(receipt);
+      setTimeout(() => {
+        router.reload();
+      }, 3000);
+    } catch (err) {
+      if (err?.data?.message) {
+        const msg = err?.data?.message;
         setNotification({
           visible: true,
           text: msg,
@@ -595,7 +626,11 @@ const NewHome = () => {
                     <Countdown key={1} date={Date.now()} renderer={Counter} />
                   ))}
                 <Box>
-                  <Typography variant="subtitle1" color="primary" component="span">
+                  <Typography
+                    variant="subtitle1"
+                    color="primary"
+                    component="span"
+                  >
                     Bid Price:
                   </Typography>
                   &nbsp;
@@ -604,7 +639,11 @@ const NewHome = () => {
                   </Typography>
                 </Box>
                 <Box>
-                  <Typography variant="subtitle1" color="primary" component="span">
+                  <Typography
+                    variant="subtitle1"
+                    color="primary"
+                    component="span"
+                  >
                     Reward:
                   </Typography>
                   &nbsp;
@@ -653,7 +692,7 @@ const NewHome = () => {
                 {data?.PrizeAmountEth > 0 ? (
                   <>
                     <Typography variant="h4" mb={2}>
-                      Round #{data?.CurRoundNum + 1} ended
+                      Round #{data?.CurRoundNum} ended
                     </Typography>
                     <Box mb={1}>
                       <Typography color="primary" component="span">
@@ -800,7 +839,7 @@ const NewHome = () => {
                         Bid Now
                       </Button>
                     </Grid>
-                    <Grid item xs={12} sm={12} md={8} lg={8}>
+                    <Grid item xs={12} sm={12} md={4} lg={4}>
                       <Button
                         variant="outlined"
                         size="large"
@@ -810,6 +849,18 @@ const NewHome = () => {
                         disabled={isBidding}
                       >
                         Bid with Random Walk NFT
+                      </Button>
+                    </Grid>
+                    <Grid item xs={12} sm={12} md={4} lg={4}>
+                      <Button
+                        variant="outlined"
+                        size="large"
+                        endIcon={<ArrowForward />}
+                        onClick={onBidWithCST}
+                        fullWidth
+                        disabled={isBidding}
+                      >
+                        Bid with CST
                       </Button>
                     </Grid>
                   </Grid>
