@@ -73,7 +73,6 @@ const NewHome = () => {
   const [nftId, setNftId] = useState(-1);
   const [rwlkId, setRwlkId] = useState(-1);
   const [bidPricePlus, setBidPricePlus] = useState(2);
-  const [galleryVisibility, setGalleryVisibility] = useState(false);
   const [isBidding, setIsBidding] = useState(false);
   const [notification, setNotification] = useState({
     text: "",
@@ -201,7 +200,7 @@ const NewHome = () => {
       let receipt;
       if (!nftDonateAddress || nftId === -1) {
         receipt = await cosmicGameContract
-          .bid(message, -1, {
+          .bid(message, rwlkId, {
             value: ethers.utils.parseEther(newBidPrice.toFixed(10)),
           })
           .then((tx) => tx.wait());
@@ -262,8 +261,8 @@ const NewHome = () => {
             .then((tx) => tx.wait());
         }
         receipt = await cosmicGameContract
-          .bidAndDonateNFT(message, -1, nftDonateAddress, nftId, {
-            value: ethers.utils.parseEther(newBidPrice.toFixed(6)),
+          .bidAndDonateNFT(message, rwlkId, nftDonateAddress, nftId, {
+            value: ethers.utils.parseEther(newBidPrice.toFixed(10)),
           })
           .then((tx) => tx.wait());
         console.log(receipt);
@@ -271,97 +270,6 @@ const NewHome = () => {
           router.reload();
         }, 4000);
       }
-    } catch (err) {
-      if (err?.data?.message) {
-        const msg = getErrorMessage(err?.data?.message);
-        setNotification({
-          visible: true,
-          text: msg,
-        });
-      }
-      console.log(err);
-      setIsBidding(false);
-    }
-  };
-
-  const onBidWithRWLK = async () => {
-    let bidPrice, newBidPrice;
-    setIsBidding(true);
-    bidPrice = await cosmicGameContract.getBidPrice();
-    newBidPrice =
-      parseFloat(ethers.utils.formatEther(bidPrice)) * (1 + bidPricePlus / 100);
-    try {
-      let receipt;
-      if (!nftDonateAddress || nftId === -1) {
-        receipt = await cosmicGameContract
-          .bid(message, rwlkId, {
-            value: ethers.utils.parseEther(newBidPrice.toFixed(10)),
-          })
-          .then((tx) => tx.wait());
-        console.log(receipt);
-        setTimeout(() => {
-          router.reload();
-        }, 5000);
-        return;
-      }
-    } catch (err) {
-      if (err?.data?.message) {
-        const msg = getErrorMessage(err?.data?.message);
-        setNotification({
-          visible: true,
-          text: msg,
-        });
-      }
-      console.log(err);
-      setIsBidding(false);
-      return;
-    }
-
-    // check if the contract exists
-    const isExist = await checkIfContractExist(nftDonateAddress);
-    if (!isExist) {
-      setNotification({
-        visible: true,
-        text: "You selected address that doesn't belong to a contract address!",
-      });
-      setIsBidding(false);
-      return;
-    }
-
-    // owner of
-    const isOwner = await checkTokenOwnership(nftDonateAddress, nftId);
-    if (!isOwner) {
-      setIsBidding(false);
-      return;
-    }
-
-    try {
-      let receipt;
-      setIsBidding(true);
-      // setApprovalForAll
-      const nftDonateContract = new Contract(
-        nftDonateAddress,
-        NFT_ABI,
-        library.getSigner(account)
-      );
-      const isApprovedForAll = nftDonateContract.isApprovedForAll(
-        account,
-        COSMICGAME_ADDRESS
-      );
-      if (!isApprovedForAll) {
-        await nftDonateContract
-          .setApprovalForAll(COSMICGAME_ADDRESS, true)
-          .then((tx) => tx.wait());
-      }
-      receipt = await cosmicGameContract
-        .bidAndDonateNFT(message, rwlkId, nftDonateAddress, nftId, {
-          value: ethers.utils.parseEther(newBidPrice.toFixed(10)),
-        })
-        .then((tx) => tx.wait());
-      console.log(receipt);
-      setTimeout(() => {
-        router.reload();
-      }, 5000);
     } catch (err) {
       if (err?.data?.message) {
         const msg = getErrorMessage(err?.data?.message);
@@ -746,6 +654,22 @@ const NewHome = () => {
                     <Typography>Advanced Options</Typography>
                   </AccordionSummary>
                   <AccordionDetails>
+                    {/* Random Walk NFT list */}
+                    <Box mb={4}>
+                      <Typography variant="h6">
+                        Random Walk NFT Gallery
+                      </Typography>
+                      <Typography variant="body2">
+                        If you own some RandomWalkNFTs, you can use them to bid
+                        for free! Each NFT can be used only once!
+                      </Typography>
+                      <PaginationRWLKGrid
+                        loading={false}
+                        data={rwlknftIds}
+                        selectedToken={rwlkId}
+                        setSelectedToken={setRwlkId}
+                      />
+                    </Box>
                     <Typography variant="body2">
                       If you want to donate one of your NFTs while bidding, you
                       can put the contract address, NFT id, and comment here.
@@ -844,18 +768,6 @@ const NewHome = () => {
                         variant="outlined"
                         size="large"
                         endIcon={<ArrowForward />}
-                        onClick={() => setGalleryVisibility(!galleryVisibility)}
-                        fullWidth
-                        disabled={isBidding}
-                      >
-                        Bid with Random Walk NFT
-                      </Button>
-                    </Grid>
-                    <Grid item xs={12} sm={12} md={4} lg={4}>
-                      <Button
-                        variant="outlined"
-                        size="large"
-                        endIcon={<ArrowForward />}
                         onClick={onBidWithCST}
                         fullWidth
                         disabled={isBidding}
@@ -912,47 +824,6 @@ const NewHome = () => {
                       </Grid>
                     </Grid>
                   )}
-                  {/* Random Walk NFT list */}
-                  <Box
-                    sx={{
-                      border: "1px solid rgba(255, 255, 255, 0.09)",
-                      borderRadius: "5px",
-                      background: "#101441",
-                      padding: "24px",
-                      position: "absolute",
-                      zIndex: 1,
-                      top: matches ? "64px" : "128px",
-                    }}
-                    visibility={galleryVisibility ? "visible" : "hidden"}
-                  >
-                    <Typography variant="h6">
-                      Random Walk NFT Gallery
-                    </Typography>
-                    <Typography variant="body2">
-                      If you own some RandomWalkNFTs, you can use them to bid
-                      for free! Each NFT can be used only once!
-                    </Typography>
-                    <PaginationRWLKGrid
-                      loading={false}
-                      data={rwlknftIds}
-                      selectedToken={rwlkId}
-                      setSelectedToken={setRwlkId}
-                    />
-                    {rwlkId !== -1 && (
-                      <Button
-                        variant="outlined"
-                        size="small"
-                        sx={{
-                          position: "absolute",
-                          bottom: "24px",
-                          right: "24px",
-                        }}
-                        onClick={onBidWithRWLK}
-                      >
-                        Done
-                      </Button>
-                    )}
-                  </Box>
                 </Box>
               </>
             )}
