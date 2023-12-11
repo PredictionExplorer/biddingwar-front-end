@@ -751,7 +751,7 @@ const NewHome = () => {
                 </Accordion>
                 <Box mb={2} position="relative">
                   <Grid container spacing={2} mt="25px">
-                    <Grid item xs={12} sm={12} md={4} lg={4}>
+                    <Grid item xs={12} sm={12} md={6} lg={6}>
                       <Button
                         variant="contained"
                         size="large"
@@ -763,7 +763,7 @@ const NewHome = () => {
                         Bid Now
                       </Button>
                     </Grid>
-                    <Grid item xs={12} sm={12} md={4} lg={4}>
+                    <Grid item xs={12} sm={12} md={6} lg={6}>
                       <Button
                         variant="outlined"
                         size="large"
