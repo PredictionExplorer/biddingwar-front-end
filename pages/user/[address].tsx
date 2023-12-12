@@ -12,7 +12,7 @@ const UserInfo = ({ address }) => {
   const [claimHistory, setClaimHistory] = useState(null);
   const [bidHistory, setBidHistory] = useState([]);
   const [userInfo, setUserInfo] = useState(null);
-  const [balance, setBalance] = useState(0);
+  const [balance, setBalance] = useState({ CosmicToken: 0, ETH: 0 });
   const [loading, setLoading] = useState(true);
   const [invalidAddress, setInvalidAddress] = useState(false);
 
@@ -25,7 +25,12 @@ const UserInfo = ({ address }) => {
       setBidHistory(Bids);
       setUserInfo(UserInfo);
       const balance = await api.get_user_balance(addr);
-      setBalance(Number(ethers.utils.formatEther(balance)));
+      setBalance({
+        CosmicToken: Number(
+          ethers.utils.formatEther(balance.CosmicTokenBalance)
+        ),
+        ETH: Number(ethers.utils.formatEther(balance.ETH_Balance)),
+      });
       setLoading(false);
     };
     if (address) {
@@ -60,14 +65,25 @@ const UserInfo = ({ address }) => {
               <Typography variant="h6">Loading...</Typography>
             ) : (
               <>
-                {balance !== 0 && (
+                {balance.ETH !== 0 && (
+                  <Box mb={1}>
+                    <Typography color="primary" component="span">
+                      ETH Balance:
+                    </Typography>
+                    &nbsp;
+                    <Typography component="span">
+                      {balance.ETH.toFixed(2)} ETH
+                    </Typography>
+                  </Box>
+                )}
+                {balance.CosmicToken !== 0 && (
                   <Box mb={1}>
                     <Typography color="primary" component="span">
                       Cosmic Tokens Balance:
                     </Typography>
                     &nbsp;
                     <Typography component="span">
-                      {balance.toFixed(2)}
+                      {balance.CosmicToken.toFixed(2)}
                     </Typography>
                   </Box>
                 )}

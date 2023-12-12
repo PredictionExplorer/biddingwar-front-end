@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from "react";
-import { Box, Menu, MenuItem } from "@mui/material";
+import { Box, Menu, MenuItem, Typography } from "@mui/material";
 import { isMobile } from "react-device-detect";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
@@ -15,7 +15,7 @@ import { useActiveWeb3React } from "../hooks/web3";
 import { shortenHex } from "../utils";
 import { switchNetwork } from "../utils/switchNetwork";
 
-const ConnectWalletButton = ({ isMobileView }) => {
+const ConnectWalletButton = ({ isMobileView, balance }) => {
   const { account, activate } = useActiveWeb3React();
   const [anchorEl, setAnchorEl] = useState(null);
 
@@ -79,6 +79,16 @@ const ConnectWalletButton = ({ isMobileView }) => {
           open={Boolean(anchorEl)}
           onClose={handleMenuClose}
         >
+          <MenuItem style={{ minWidth: 166, pointerEvents: "none" }}>
+            <Typography
+              variant="body2"
+              color="secondary"
+              sx={{ fontStyle: "italic", fontWeight: 600, mx: "auto" }}
+            >
+              ETH: {balance.ETH.toFixed(2)}, CST:{" "}
+              {balance.CosmicToken.toFixed(2)}
+            </Typography>
+          </MenuItem>
           <MenuItem style={{ minWidth: 166 }} onClick={handleMenuClose}>
             <NavLink href="/my-wallet" sx={{ width: "100%" }}>
               MY WALLET

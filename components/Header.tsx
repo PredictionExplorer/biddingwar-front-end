@@ -7,6 +7,7 @@ import {
   ListItem,
   Container,
   Link,
+  Typography,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import getNAVs from "../config/nav";
@@ -18,6 +19,7 @@ import ListItemButton from "./ListItemButton";
 import { useApiData } from "../contexts/ApiDataContext";
 import { useActiveWeb3React } from "../hooks/web3";
 import api from "../services/api";
+import { ethers } from "ethers";
 
 const Header = () => {
   const [state, setState] = useState({
@@ -27,6 +29,7 @@ const Header = () => {
   const { mobileView, drawerOpen } = state;
   const { apiData: status, setApiData } = useApiData();
   const { account } = useActiveWeb3React();
+  const [balance, setBalance] = useState({ CosmicToken: 0, ETH: 0 });
 
   useEffect(() => {
     const setResponsiveness = () => {
@@ -48,6 +51,14 @@ const Header = () => {
     const fetchData = async () => {
       const notify = await api.notify_red_box(account);
       setApiData(notify);
+
+      const balance = await api.get_user_balance(account);
+      setBalance({
+        CosmicToken: Number(
+          ethers.utils.formatEther(balance.CosmicTokenBalance)
+        ),
+        ETH: Number(ethers.utils.formatEther(balance.ETH_Balance)),
+      });
     };
 
     if (account) {
@@ -64,7 +75,7 @@ const Header = () => {
         {getNAVs(status, account).map((nav, i) => (
           <ListNavItem key={i} nav={nav} />
         ))}
-        <ConnectWalletButton isMobileView={false} />
+        <ConnectWalletButton isMobileView={false} balance={balance} />
       </Toolbar>
     );
   };
@@ -94,7 +105,17 @@ const Header = () => {
         <Drawer anchor="right" open={drawerOpen} onClose={handleDrawerClose}>
           <DrawerList>
             <ListItem>
-              <ConnectWalletButton isMobileView />
+              <ConnectWalletButton isMobileView balance={balance} />
+            </ListItem>
+            <ListItem>
+              <Typography
+                variant="body2"
+                color="secondary"
+                sx={{ fontStyle: "italic", fontWeight: 600, mx: "auto" }}
+              >
+                ETH: {balance.ETH.toFixed(2)}, CST:{" "}
+                {balance.CosmicToken.toFixed(2)}
+              </Typography>
             </ListItem>
             {getNAVs(status, account).map((nav, i) => (
               <ListItemButton
@@ -103,6 +124,14 @@ const Header = () => {
                 sx={{ justifyContent: "center" }}
               />
             ))}
+            <ListItemButton
+              nav={{ title: "My Wallet", route: "/my-wallet" }}
+              sx={{ justifyContent: "center" }}
+            />
+            <ListItemButton
+              nav={{ title: "History of Winnings", route: "/winning-history" }}
+              sx={{ justifyContent: "center" }}
+            />
           </DrawerList>
         </Drawer>
       </Toolbar>

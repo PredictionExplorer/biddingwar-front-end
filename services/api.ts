@@ -347,10 +347,10 @@ class ApiService {
   public async get_user_balance(address: string) {
     try {
       const { data } = await axios.get(getAPIUrl(`user/balances/${address}`));
-      return data.CosmicTokenBalance;
+      return data;
     } catch (err) {
       console.log(err);
-      return 0;
+      return null;
     }
   }
 
