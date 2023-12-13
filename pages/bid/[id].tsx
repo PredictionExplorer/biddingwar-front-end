@@ -91,7 +91,11 @@ const BidInfo = ({ bidId }) => {
               <Typography color="primary">Bid Price:</Typography>
               &nbsp;
               <Typography>
-                {bidInfo.BidPriceEth && bidInfo.BidPriceEth < 1
+                {bidInfo.BidType === 2
+                  ? bidInfo.NumCSTTokensEth && bidInfo.NumCSTTokensEth < 1
+                    ? bidInfo.NumCSTTokensEth?.toFixed(7)
+                    : bidInfo.NumCSTTokensEth?.toFixed(2)
+                  : bidInfo.BidPriceEth && bidInfo.BidPriceEth < 1
                   ? bidInfo.BidPriceEth?.toFixed(7)
                   : bidInfo.BidPriceEth?.toFixed(2)}{" "}
                 ETH
@@ -103,6 +107,13 @@ const BidInfo = ({ bidId }) => {
               </Typography>
               &nbsp;
               <Typography>{bidInfo.RWalkNFTId < 0 ? "No" : "Yes"}</Typography>
+            </Box>
+            <Box mb={1} display="flex" flexWrap="wrap">
+              <Typography color="primary">
+                Was bid with Cosmic Signature Token:
+              </Typography>
+              &nbsp;
+              <Typography>{bidInfo.BidType === 2 ? "Yes" : "No"}</Typography>
             </Box>
             {bidInfo.RWalkNFTId >= 0 && (
               <Box mb={1} display="flex" flexWrap="wrap">

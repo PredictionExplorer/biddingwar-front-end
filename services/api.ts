@@ -91,6 +91,17 @@ class ApiService {
     }
   }
 
+  public async get_donations_nft_unclaimed_by_round(round: number) {
+    try {
+      const { data } = await axios.get(getAPIUrl(`donations/nft/unclaimed_by_prize/${round}`));
+      if (data.status === 0) return [];
+      return data.NFTDonations;
+    } catch (err) {
+      console.log(err);
+      return [];
+    }
+  }
+
   public async get_donations_nft_list() {
     try {
       const { data } = await axios.get(getAPIUrl("donations/nft/list/0/1000000"));

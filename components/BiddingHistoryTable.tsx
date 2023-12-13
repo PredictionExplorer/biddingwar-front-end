@@ -26,7 +26,15 @@ const HistoryRow = ({ history }) => {
 
   return (
     <TablePrimaryRow
-      sx={{ cursor: "pointer" }}
+      sx={{
+        cursor: "pointer",
+        background:
+          history.BidType === 2
+            ? "rgba(0,128,128, 0.1)"
+            : history.BidType === 1
+            ? "rgba(128,128,128, 0.1)"
+            : "rgba(0,0,0, 0.1)",
+      }}
       onClick={() => {
         router.push(`/bid/${history.EvtLogId}`);
       }}
@@ -45,33 +53,32 @@ const HistoryRow = ({ history }) => {
       </TablePrimaryCell>
 
       <TablePrimaryCell>
-        {history.BidPriceEth && history.BidPriceEth < 1
+        {history.BidType === 2
+          ? history.NumCSTTokensEth && history.NumCSTTokensEth < 1
+            ? history.NumCSTTokensEth?.toFixed(7)
+            : history.NumCSTTokensEth?.toFixed(2)
+          : history.BidPriceEth && history.BidPriceEth < 1
           ? history.BidPriceEth?.toFixed(7)
           : history.BidPriceEth?.toFixed(2)}
         Ξ
       </TablePrimaryCell>
       <TablePrimaryCell align="center">{history.RoundNum + 1}</TablePrimaryCell>
-      <TablePrimaryCell>
-        {history.RWalkNFTId < 0 ? "" : history.RWalkNFTId}
+      <TablePrimaryCell align="center">
+        {history.BidType === 2
+          ? "CST Bid"
+          : history.BidType === 1
+          ? "RWLK Token Bid"
+          : "ETH Bid"}
       </TablePrimaryCell>
       <TablePrimaryCell>
-        {history.NFTDonationTokenAddr ? (
-          <Tooltip title={history.NFTDonationTokenAddr}>
-            <Typography
-              sx={{
-                fontSize: "inherit !important",
-                fontFamily: "monospace",
-              }}
-            >
-              {shortenHex(history.NFTDonationTokenAddr, 6)}
-            </Typography>
-          </Tooltip>
-        ) : (
-          ""
-        )}
-      </TablePrimaryCell>
-      <TablePrimaryCell>
-        {history.NFTDonationTokenId < 0 ? "" : history.NFTDonationTokenId}
+        Bid was made using
+        {history.BidType === 2
+          ? " Cosmic Signature Tokens"
+          : history.BidType === 1
+          ? ` RandomWalk Token(id = ${history.RWalkNFTId})`
+          : " ETH"}
+        {!!history.NFTDonationTokenAddr &&
+          ` and a token(${history.NFTDonationTokenAddr}) with ID ${history.NFTDonationTokenId} was donated`}
       </TablePrimaryCell>
       <TablePrimaryCell>
         <Link sx={{ textDecoration: "none", color: "inherit" }}>
@@ -103,11 +110,10 @@ const HistoryTable = ({ biddingHistory, perPage, curPage }) => {
         <colgroup>
           <col width="11%" />
           <col width="16%" />
-          <col width="10%" />
-          <col width="10%" />
-          <col width="10%" />
-          <col width="15%" />
+          <col width="7%" />
           <col width="9%" />
+          <col width="14%" />
+          <col width="24%" />
           <col width="19%" />
         </colgroup>
         <TablePrimaryHead>
@@ -116,9 +122,8 @@ const HistoryTable = ({ biddingHistory, perPage, curPage }) => {
             <TableCell>Bidder</TableCell>
             <TableCell>Price</TableCell>
             <TableCell align="center">Round #</TableCell>
-            <TableCell>RWLK ID</TableCell>
-            <TableCell>Donated NFT Address</TableCell>
-            <TableCell>Donated NFT ID</TableCell>
+            <TableCell align="center">Bid Type</TableCell>
+            <TableCell>Bid Info</TableCell>
             <TableCell>Message</TableCell>
           </TableRow>
         </TablePrimaryHead>

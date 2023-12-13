@@ -13,7 +13,6 @@ import useCosmicGameContract from "../../hooks/useCosmicGameContract";
 import { useApiData } from "../../contexts/ApiDataContext";
 
 const PrizeInfo = ({ roundNum }) => {
-  const { account } = useActiveWeb3React();
   const cosmicGameContract = useCosmicGameContract();
   const { apiData: status } = useApiData();
   const [donatedNFTToClaim, setDonatedNFTToClaim] = useState([]);
@@ -33,7 +32,7 @@ const PrizeInfo = ({ roundNum }) => {
   };
   useEffect(() => {
     const fetchUnclaimedDonatedNFTs = async () => {
-      const nfts = await api.get_unclaimed_donated_nft_by_user(account);
+      const nfts = await api.get_donations_nft_unclaimed_by_round(roundNum);
       setDonatedNFTToClaim(nfts);
     };
     if (status?.NumDonatedNFTToClaim > 0) {
@@ -176,7 +175,7 @@ const PrizeInfo = ({ roundNum }) => {
                 }}
               >
                 <Typography variant="h6">Donated NFTs</Typography>
-                {status?.NumDonatedNFTToClaim > 0 && (
+                {donatedNFTToClaim.length > 0 && (
                   <Button
                     variant="contained"
                     onClick={handleAllDonatedNFTsClaim}

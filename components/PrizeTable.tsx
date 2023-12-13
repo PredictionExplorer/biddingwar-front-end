@@ -43,7 +43,7 @@ const PrizeRow = ({ prize }) => {
           </Typography>
         </Tooltip>
       </TablePrimaryCell>
-      <TablePrimaryCell align="center">{prize.PrizeNum}</TablePrimaryCell>
+      <TablePrimaryCell align="center">{prize.PrizeNum + 1}</TablePrimaryCell>
       <TablePrimaryCell align="right">
         {prize.AmountEth.toFixed(4)} ETH
       </TablePrimaryCell>
