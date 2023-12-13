@@ -78,13 +78,17 @@ const HistoryRow = ({ history }) => {
           ? ` RandomWalk Token(id = ${history.RWalkNFTId})`
           : " ETH"}
         {!!history.NFTDonationTokenAddr &&
-          ` and a token(${history.NFTDonationTokenAddr}) with ID ${history.NFTDonationTokenId} was donated`}
+          ` and a token(${shortenHex(
+            history.NFTDonationTokenAddr,
+            6
+          )}) with ID ${history.NFTDonationTokenId} was donated`}
       </TablePrimaryCell>
       <TablePrimaryCell>
-        <Link sx={{ textDecoration: "none", color: "inherit" }}>
+        <Link sx={{ textDecoration: "none", color: "inherit", fontSize: "inherit" }}>
           <Tooltip title={history.Message}>
             <Typography
               sx={{
+                fontSize: "inherit !important",
                 maxWidth: "180px",
                 overflow: "hidden",
                 whiteSpace: "nowrap",
