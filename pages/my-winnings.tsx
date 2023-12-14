@@ -73,6 +73,10 @@ const MyWinnings = () => {
   const [curPage, setCurPage] = useState(1);
   const { apiData: status } = useApiData();
   const perPage = 5;
+  const [loading, setLoading] = useState({
+    donatedNFT: false,
+    raffleETH: false,
+  });
   const [donatedNFTToClaim, setDonatedNFTToClaim] = useState([]);
   const [raffleETHToClaim, setRaffleETHToClaim] = useState([]);
   const [isClaiming, setIsClaiming] = useState({
@@ -140,14 +144,18 @@ const MyWinnings = () => {
 
   useEffect(() => {
     const fetchUnclaimedDonatedNFTs = async () => {
+      setLoading({ ...loading, donatedNFT: true });
       let nfts = await api.get_unclaimed_donated_nft_by_user(account);
       nfts = nfts.sort((a, b) => a.TimeStamp - b.TimeStamp);
       setDonatedNFTToClaim(nfts);
+      setLoading({ ...loading, donatedNFT: false });
     };
     const fetchUnclaimedRaffleETHDeposits = async () => {
+      setLoading({ ...loading, raffleETH: true });
       let deposits = await api.get_unclaimed_raffle_deposits_by_user(account);
       deposits = deposits.sort((a, b) => b.TimeStamp - a.TimeStamp);
       setRaffleETHToClaim(deposits);
+      setLoading({ ...loading, raffleETH: false });
     };
     if (status?.NumDonatedNFTToClaim > 0) {
       fetchUnclaimedDonatedNFTs();
@@ -176,7 +184,9 @@ const MyWinnings = () => {
           <Typography variant="h5" mb={2}>
             Claimable Raffle ETH
           </Typography>
-          {raffleETHToClaim.length > 0 ? (
+          {loading.raffleETH ? (
+            <Typography variant="h6">Loading...</Typography>
+          ) : raffleETHToClaim.length > 0 ? (
             <>
               <MyWinningsTable
                 list={raffleETHToClaim.slice(
@@ -235,10 +245,14 @@ const MyWinnings = () => {
               </Button>
             )}
           </Box>
-          <DonatedNFTTable
-            list={donatedNFTToClaim}
-            handleClaim={handleDonatedNFTsClaim}
-          />
+          {loading.donatedNFT ? (
+            <Typography variant="h6">Loading...</Typography>
+          ) : (
+            <DonatedNFTTable
+              list={donatedNFTToClaim}
+              handleClaim={handleDonatedNFTsClaim}
+            />
+          )}
         </Box>
         <Box mt={6}>
           <Button
