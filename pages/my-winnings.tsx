@@ -142,28 +142,36 @@ const MyWinnings = () => {
     }
   };
 
+  const fetchUnclaimedDonatedNFTs = async (updateStatus) => {
+    setLoading((prev) => ({ ...prev, donatedNFT: updateStatus && true }));
+    let nfts = await api.get_unclaimed_donated_nft_by_user(account);
+    nfts = nfts.sort((a, b) => a.TimeStamp - b.TimeStamp);
+    setDonatedNFTToClaim(nfts);
+    setLoading((prev) => ({ ...prev, donatedNFT: updateStatus && false }));
+  };
+  const fetchUnclaimedRaffleETHDeposits = async (updateStatus) => {
+    setLoading((prev) => ({ ...prev, raffleETH: updateStatus && true }));
+    let deposits = await api.get_unclaimed_raffle_deposits_by_user(account);
+    deposits = deposits.sort((a, b) => b.TimeStamp - a.TimeStamp);
+    setRaffleETHToClaim(deposits);
+    setLoading((prev) => ({ ...prev, raffleETH: updateStatus && false }));
+  };
   useEffect(() => {
-    const fetchUnclaimedDonatedNFTs = async () => {
-      setLoading({ ...loading, donatedNFT: true });
-      let nfts = await api.get_unclaimed_donated_nft_by_user(account);
-      nfts = nfts.sort((a, b) => a.TimeStamp - b.TimeStamp);
-      setDonatedNFTToClaim(nfts);
-      setLoading({ ...loading, donatedNFT: false });
-    };
-    const fetchUnclaimedRaffleETHDeposits = async () => {
-      setLoading({ ...loading, raffleETH: true });
-      let deposits = await api.get_unclaimed_raffle_deposits_by_user(account);
-      deposits = deposits.sort((a, b) => b.TimeStamp - a.TimeStamp);
-      setRaffleETHToClaim(deposits);
-      setLoading({ ...loading, raffleETH: false });
-    };
     if (status?.NumDonatedNFTToClaim > 0) {
-      fetchUnclaimedDonatedNFTs();
+      fetchUnclaimedDonatedNFTs(false);
     }
     if (status?.ETHRaffleToClaim > 0) {
-      fetchUnclaimedRaffleETHDeposits();
+      fetchUnclaimedRaffleETHDeposits(false);
     }
   }, [status]);
+  useEffect(() => {
+    if (status?.NumDonatedNFTToClaim > 0) {
+      fetchUnclaimedDonatedNFTs(true);
+    }
+    if (status?.ETHRaffleToClaim > 0) {
+      fetchUnclaimedRaffleETHDeposits(true);
+    }
+  }, []);
 
   return (
     <>

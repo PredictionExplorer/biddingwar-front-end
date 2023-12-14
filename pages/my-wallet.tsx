@@ -39,7 +39,18 @@ const MyWinningsRow = ({ winning }) => {
       <TablePrimaryCell>
         {convertTimestampToDateTime(winning.TimeStamp)}
       </TablePrimaryCell>
-      <TablePrimaryCell align="center">{winning.RoundNum + 1}</TablePrimaryCell>
+      <TablePrimaryCell align="center">
+        <Link
+          href={`/prize/${winning.RoundNum}`}
+          style={{
+            color: "inherit",
+            fontSize: "inherit",
+          }}
+          target="_blank"
+        >
+          {winning.RoundNum + 1}
+        </Link>
+      </TablePrimaryCell>
       <TablePrimaryCell align="right">
         {winning.Amount.toFixed(4)}
       </TablePrimaryCell>
@@ -51,7 +62,7 @@ const MyWinningsTable = ({ list }) => {
   const perPage = 5;
   const [curPage, setCurPage] = useState(1);
   if (list.length === 0) {
-    return <Typography>No Raffle Eth yet.</Typography>;
+    return <Typography>No Raffle ETH yet.</Typography>;
   }
   return (
     <>
@@ -193,10 +204,22 @@ const MyWallet = () => {
   const ref = useRef<FireworksHandlers>(null);
   const { account } = useActiveWeb3React();
   const { apiData: status } = useApiData();
-  const [raffleETHToClaim, setRaffleETHToClaim] = useState([]);
-  const [CSTList, setCSTList] = useState([]);
-  const [claimedDonatedNFTs, setClaimedDonatedNFTs] = useState([]);
-  const [unclaimedDonatedNFTs, setUnclaimedDonatedNFTs] = useState([]);
+  const [raffleETHToClaim, setRaffleETHToClaim] = useState({
+    data: [],
+    loading: false,
+  });
+  const [CSTList, setCSTList] = useState({
+    data: [],
+    loading: false,
+  });
+  const [claimedDonatedNFTs, setClaimedDonatedNFTs] = useState({
+    data: [],
+    loading: false,
+  });
+  const [unclaimedDonatedNFTs, setUnclaimedDonatedNFTs] = useState({
+    data: [],
+    loading: false,
+  });
   const [isClaiming, setIsClaiming] = useState({
     donatedNFT: false,
     raffleETH: false,
@@ -248,7 +271,7 @@ const MyWallet = () => {
         ...isClaiming,
         donatedNFT: true,
       });
-      const indexList = unclaimedDonatedNFTs.map((item) => item.Index);
+      const indexList = unclaimedDonatedNFTs.data.map((item) => item.Index);
       const res = await cosmicGameContract.claimManyDonatedNFTs(indexList);
       console.log(res);
       setTimeout(() => {
@@ -268,29 +291,41 @@ const MyWallet = () => {
     setFinishFireworks(true);
   };
 
+  const fetchRaffleETHDeposits = async (updateStatus) => {
+    setRaffleETHToClaim((prev) => ({ ...prev, loading: updateStatus && true }));
+    let deposits = await api.get_raffle_deposits_by_user(account);
+    deposits = deposits.sort((a, b) => b.TimeStamp - a.TimeStamp);
+    setRaffleETHToClaim({ data: deposits, loading: false });
+  };
+  const fetchCSTList = async (updateStatus) => {
+    setCSTList((prev) => ({ ...prev, loading: updateStatus && true }));
+    let cstList = await api.get_cst_list_by_user(account);
+    setCSTList({ data: cstList, loading: false });
+  };
+  const fetchDonatedNFTs = async (updateStatus) => {
+    setClaimedDonatedNFTs((prev) => ({
+      ...prev,
+      loading: updateStatus && true,
+    }));
+    const claimed = await api.get_claimed_donated_nft_by_user(account);
+    setClaimedDonatedNFTs({ data: claimed, loading: false });
+    setUnclaimedDonatedNFTs((prev) => ({
+      ...prev,
+      loading: updateStatus && true,
+    }));
+    const unclaimed = await api.get_unclaimed_donated_nft_by_user(account);
+    setUnclaimedDonatedNFTs({ data: unclaimed, loading: false });
+  };
   useEffect(() => {
-    const fetchRaffleETHDeposits = async () => {
-      let deposits = await api.get_raffle_deposits_by_user(account);
-      deposits = deposits.sort((a, b) => b.TimeStamp - a.TimeStamp);
-      setRaffleETHToClaim(deposits);
-    };
-    const fetchCSTList = async () => {
-      let cstList = await api.get_cst_list_by_user(account);
-      setCSTList(cstList);
-    };
-    const fetchClaimedDonatedNFTs = async () => {
-      const list = await api.get_claimed_donated_nft_by_user(account);
-      setClaimedDonatedNFTs(list);
-    };
-    const fetchUnclaimedDonatedNFTs = async () => {
-      const list = await api.get_unclaimed_donated_nft_by_user(account);
-      setUnclaimedDonatedNFTs(list);
-    };
-    fetchRaffleETHDeposits();
-    fetchCSTList();
-    fetchClaimedDonatedNFTs();
-    fetchUnclaimedDonatedNFTs();
+    fetchRaffleETHDeposits(false);
+    fetchCSTList(false);
+    fetchDonatedNFTs(false);
   }, [status]);
+  useEffect(() => {
+    fetchRaffleETHDeposits(true);
+    fetchCSTList(true);
+    fetchDonatedNFTs(true);
+  }, []);
 
   return (
     <>
@@ -356,13 +391,21 @@ const MyWallet = () => {
               </Box>
             )}
           </Box>
-          <MyWinningsTable list={raffleETHToClaim} />
+          {raffleETHToClaim.loading ? (
+            <Typography variant="h6">Loading...</Typography>
+          ) : (
+            <MyWinningsTable list={raffleETHToClaim.data} />
+          )}
         </Box>
         <Box mt={6}>
           <Typography variant="h5" mb={2}>
             Cosmic Signature Tokens I Won
           </Typography>
-          <CSTTable list={CSTList} />
+          {CSTList.loading ? (
+            <Typography variant="h6">Loading...</Typography>
+          ) : (
+            <CSTTable list={CSTList.data} />
+          )}
         </Box>
         <Box mt={6}>
           <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
@@ -377,10 +420,14 @@ const MyWallet = () => {
               </Button>
             )}
           </Box>
-          <DonatedNFTTable
-            list={[...unclaimedDonatedNFTs, ...claimedDonatedNFTs]}
-            handleClaim={handleDonatedNFTsClaim}
-          />
+          {unclaimedDonatedNFTs.loading || claimedDonatedNFTs.loading ? (
+            <Typography variant="h6">Loading...</Typography>
+          ) : (
+            <DonatedNFTTable
+              list={[...unclaimedDonatedNFTs.data, ...claimedDonatedNFTs.data]}
+              handleClaim={handleDonatedNFTsClaim}
+            />
+          )}
         </Box>
       </MainWrapper>
     </>
