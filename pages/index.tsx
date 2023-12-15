@@ -64,6 +64,7 @@ import WinningHistoryTable from "../components/WinningHistoryTable";
 const NewHome = () => {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState(null);
+  const [cstBidPrice, setCSTBidPrice] = useState(0);
   const [curBidList, setCurBidList] = useState([]);
   const [donatedNFTs, setDonatedNFTs] = useState([]);
   const [prizeTime, setPrizeTime] = useState(0);
@@ -403,6 +404,13 @@ const NewHome = () => {
   }, []);
 
   useEffect(() => {
+    if (data && bannerTokenId === "") {
+      let bannerId = Math.floor(
+        Math.random() * data?.MainStats.NumCSTokenMints
+      );
+      const fileName = bannerId.toString().padStart(6, "0");
+      setBannerTokenId(fileName);
+    }
     const interval = setInterval(async () => {
       setRoundStarted(calculateTimeDiff(data?.TsRoundStart));
     }, 1000);
@@ -413,14 +421,15 @@ const NewHome = () => {
   }, [data]);
 
   useEffect(() => {
-    if (data && bannerTokenId === "") {
-      let bannerId = Math.floor(
-        Math.random() * data?.MainStats.NumCSTokenMints
-      );
-      const fileName = bannerId.toString().padStart(6, "0");
-      setBannerTokenId(fileName);
+    const fetchCSTBidPrice = async () => {
+      let cstPrice = await cosmicGameContract.currentCSTPrice();
+      cstPrice = parseFloat(ethers.utils.formatEther(cstPrice))
+      setCSTBidPrice(cstPrice);
+    };
+    if (cosmicGameContract) {
+      fetchCSTBidPrice();
     }
-  }, [data]);
+  }, [cosmicGameContract]);
 
   return (
     <>
@@ -544,6 +553,19 @@ const NewHome = () => {
                   &nbsp;
                   <Typography variant="subtitle1" component="span">
                     {data?.BidPriceEth.toFixed(6)} ETH
+                  </Typography>
+                </Box>
+                <Box>
+                  <Typography
+                    variant="subtitle1"
+                    color="primary"
+                    component="span"
+                  >
+                    CST Bid Price:
+                  </Typography>
+                  &nbsp;
+                  <Typography variant="subtitle1" component="span">
+                    {cstBidPrice.toFixed(6)} ETH
                   </Typography>
                 </Box>
                 <Box>
