@@ -423,7 +423,7 @@ const NewHome = () => {
   useEffect(() => {
     const fetchCSTBidPrice = async () => {
       let cstPrice = await cosmicGameContract.currentCSTPrice();
-      cstPrice = parseFloat(ethers.utils.formatEther(cstPrice))
+      cstPrice = parseFloat(ethers.utils.formatEther(cstPrice));
       setCSTBidPrice(cstPrice);
     };
     if (cosmicGameContract) {

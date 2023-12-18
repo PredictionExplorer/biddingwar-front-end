@@ -125,8 +125,8 @@ const DonatedNFTTable = ({ list, handleClaim }) => {
       <TablePrimaryContainer>
         <Table>
           <colgroup>
-            <col width="15%" />
             <col width="20%" />
+            <col width="15%" />
             <col width="10%" />
             <col width="20%" />
             <col width="10%" />
@@ -140,7 +140,7 @@ const DonatedNFTTable = ({ list, handleClaim }) => {
               <TableCell align="center">Round #</TableCell>
               <TableCell>Token Address</TableCell>
               <TableCell align="right">Token ID</TableCell>
-              <TableCell>Token Image</TableCell>
+              <TableCell align="center">Token Image</TableCell>
               <TableCell></TableCell>
             </TableRow>
           </TablePrimaryHead>

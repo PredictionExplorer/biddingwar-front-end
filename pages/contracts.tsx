@@ -91,12 +91,20 @@ const Contracts = () => {
                 value={data?.ContractAddrs.CosmicDaoAddr}
               />
               <ContractItem
-                name="CharityWallet Address"
+                name="Charity Wallet Address"
                 value={data?.ContractAddrs.CharityWalletAddr}
               />
               <ContractItem
-                name="RaffleWallet Address"
+                name="Marketing Wallet Address"
+                value={data?.ContractAddrs.MarketingWalletAddr}
+              />
+              <ContractItem
+                name="Raffle Wallet Address"
                 value={data?.ContractAddrs.RaffleWalletAddr}
+              />
+              <ContractItem
+                name="Staking Wallet Address"
+                value={data?.ContractAddrs.StakingWalletAddr}
               />
             </List>
             <Typography variant="h6" mt={5} mb={3}>

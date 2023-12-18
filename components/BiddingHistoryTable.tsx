@@ -54,13 +54,16 @@ const HistoryRow = ({ history }) => {
 
       <TablePrimaryCell>
         {history.BidType === 2
-          ? history.NumCSTTokensEth && history.NumCSTTokensEth < 1
-            ? history.NumCSTTokensEth?.toFixed(7)
-            : history.NumCSTTokensEth?.toFixed(2)
-          : history.BidPriceEth && history.BidPriceEth < 1
-          ? history.BidPriceEth?.toFixed(7)
-          : history.BidPriceEth?.toFixed(2)}
-        Ξ
+          ? `${
+              history.NumCSTTokensEth && history.NumCSTTokensEth < 1
+                ? history.NumCSTTokensEth?.toFixed(7)
+                : history.NumCSTTokensEth?.toFixed(2)
+            } CST`
+          : `${
+              history.BidPriceEth && history.BidPriceEth < 1
+                ? history.BidPriceEth?.toFixed(7)
+                : history.BidPriceEth?.toFixed(2)
+            } Ξ`}
       </TablePrimaryCell>
       <TablePrimaryCell align="center">{history.RoundNum + 1}</TablePrimaryCell>
       <TablePrimaryCell align="center">
@@ -84,7 +87,9 @@ const HistoryRow = ({ history }) => {
           )}) with ID ${history.NFTDonationTokenId} was donated`}
       </TablePrimaryCell>
       <TablePrimaryCell>
-        <Link sx={{ textDecoration: "none", color: "inherit", fontSize: "inherit" }}>
+        <Link
+          sx={{ textDecoration: "none", color: "inherit", fontSize: "inherit" }}
+        >
           <Tooltip title={history.Message}>
             <Typography
               sx={{
@@ -113,10 +118,10 @@ const HistoryTable = ({ biddingHistory, perPage, curPage }) => {
       <Table>
         <colgroup>
           <col width="11%" />
-          <col width="16%" />
-          <col width="7%" />
-          <col width="9%" />
           <col width="14%" />
+          <col width="11%" />
+          <col width="9%" />
+          <col width="12%" />
           <col width="24%" />
           <col width="19%" />
         </colgroup>

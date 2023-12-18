@@ -83,7 +83,7 @@ const UserInfo = ({ address }) => {
                     </Typography>
                     &nbsp;
                     <Typography component="span">
-                      {balance.CosmicToken.toFixed(2)}
+                      {balance.CosmicToken.toFixed(2)} CST
                     </Typography>
                   </Box>
                 )}

@@ -92,13 +92,16 @@ const BidInfo = ({ bidId }) => {
               &nbsp;
               <Typography>
                 {bidInfo.BidType === 2
-                  ? bidInfo.NumCSTTokensEth && bidInfo.NumCSTTokensEth < 1
-                    ? bidInfo.NumCSTTokensEth?.toFixed(7)
-                    : bidInfo.NumCSTTokensEth?.toFixed(2)
-                  : bidInfo.BidPriceEth && bidInfo.BidPriceEth < 1
-                  ? bidInfo.BidPriceEth?.toFixed(7)
-                  : bidInfo.BidPriceEth?.toFixed(2)}{" "}
-                ETH
+                  ? `${
+                      bidInfo.NumCSTTokensEth && bidInfo.NumCSTTokensEth < 1
+                        ? bidInfo.NumCSTTokensEth?.toFixed(7)
+                        : bidInfo.NumCSTTokensEth?.toFixed(2)
+                    } CST`
+                  : `${
+                      bidInfo.BidPriceEth && bidInfo.BidPriceEth < 1
+                        ? bidInfo.BidPriceEth?.toFixed(7)
+                        : bidInfo.BidPriceEth?.toFixed(2)
+                    } ETH`}
               </Typography>
             </Box>
             <Box mb={1} display="flex" flexWrap="wrap">
