@@ -7,6 +7,7 @@ import api from "../../services/api";
 import BiddingHistoryTable from "../../components/BiddingHistoryTable";
 import WinningHistoryTable from "../../components/WinningHistoryTable";
 import { ethers } from "ethers";
+import { formatEthValue } from "../../utils";
 
 const UserInfo = ({ address }) => {
   const [claimHistory, setClaimHistory] = useState(null);
@@ -175,6 +176,44 @@ const UserInfo = ({ address }) => {
                   &nbsp;
                   <Typography component="span">
                     {userInfo.RaffleNFTWon}
+                  </Typography>
+                </Box>
+                <Box mb={1}>
+                  <Typography color="primary" component="span">
+                    Total Staked Tokens:
+                  </Typography>
+                  &nbsp;
+                  <Typography component="span">
+                    {userInfo.StakingStatistics.TotalTokensStaked}
+                  </Typography>
+                </Box>
+                <Box mb={1}>
+                  <Typography color="primary" component="span">
+                    Total Number of Stake Actions:
+                  </Typography>
+                  &nbsp;
+                  <Typography component="span">
+                    {userInfo.StakingStatistics.TotalNumStakeActions}
+                  </Typography>
+                </Box>
+                <Box mb={1}>
+                  <Typography color="primary" component="span">
+                    Total Reward:
+                  </Typography>
+                  &nbsp;
+                  <Typography component="span">
+                    {formatEthValue(userInfo.StakingStatistics.TotalRewardEth)}
+                  </Typography>
+                </Box>
+                <Box mb={1}>
+                  <Typography color="primary" component="span">
+                    Unclaimed Reward:
+                  </Typography>
+                  &nbsp;
+                  <Typography component="span">
+                    {formatEthValue(
+                      userInfo.StakingStatistics.UnclaimedRewardEth
+                    )}
                   </Typography>
                 </Box>
                 <Typography mt={1}>

@@ -20,7 +20,7 @@ import {
   ChartSeriesItem,
 } from "@progress/kendo-react-charts";
 import "@progress/kendo-theme-default/dist/all.css";
-import { convertTimestampToDateTime, formatEthValue } from "../utils";
+import { convertTimestampToDateTime, formatCSTValue, formatEthValue } from "../utils";
 
 const StatisticsItem = ({ title, value }) => {
   return (
@@ -225,6 +225,18 @@ const Statistics = () => {
                 value={formatEthValue(data.MainStats.TotalRaffleEthDeposits)}
               />
               <StatisticsItem
+                title="Total CST Consumed"
+                value={formatCSTValue(data.MainStats.TotalCSTConsumedEth)}
+              />
+              <StatisticsItem
+                title="Total Reward Paid to Marketing Agents with CST"
+                value={formatCSTValue(data.MainStats.TotalMktRewardsEth)}
+              />
+              <StatisticsItem
+                title="Number of Marketing Reward Transactions"
+                value={data.MainStats.NumMktRewards}
+              />
+              <StatisticsItem
                 title="Amount of ETH collected by the winners from raffles"
                 value={formatEthValue(data.MainStats.TotalRaffleEthWithdrawn)}
               />
@@ -311,6 +323,10 @@ const Statistics = () => {
               <StatisticsItem
                 title="Charity Balance"
                 value={formatEthValue(data.CharityBalanceEth)}
+              />
+              <StatisticsItem
+                title="Number of Bids with CST"
+                value={data.MainStats.NumBidsCST}
               />
               <StatisticsItem
                 title="Number of Unique Bidders"

@@ -14,6 +14,7 @@ import PriorityHighIcon from "@mui/icons-material/PriorityHigh";
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 import ConfirmationNumberIcon from "@mui/icons-material/ConfirmationNumber";
 import VolunteerActivismIcon from "@mui/icons-material/VolunteerActivism";
+import LayersIcon from "@mui/icons-material/Layers";
 import TokenIcon from "@mui/icons-material/Token";
 import {
   TablePrimaryContainer,
@@ -62,10 +63,15 @@ const HistoryRow = ({ history, showClaimedStatus }) => {
               <VolunteerActivismIcon />
               &nbsp;<span>Donated NFT</span>
             </>
-          ) : (
+          ) : history.RecordType === 3 ? (
             <>
               <EmojiEventsIcon />
               &nbsp;<span>Main Prize</span>
+            </>
+          ) : (
+            <>
+              <LayersIcon />
+              &nbsp;<span>Staking Deposit / Reward</span>
             </>
           )}
           &nbsp;
@@ -154,9 +160,9 @@ const HistoryTable = ({
     <TablePrimaryContainer>
       <Table>
         <colgroup>
-          <col width="20%" />
+          <col width="21%" />
           <col width="16%" />
-          <col width="9%" />
+          <col width="8%" />
           <col width="15%" />
           <col width="15%" />
           <col width="15%" />
