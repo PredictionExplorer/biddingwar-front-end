@@ -394,6 +394,46 @@ class ApiService {
       return [];
     }
   }
+
+  public async get_unclaimed_staking_rewards_by_user(address: string) {
+    try {
+      const { data } = await axios.get(getAPIUrl(`staking/rewards/to_claim/by_user/${address}`));
+      return data.UnclaimedEthDeposits;
+    } catch (err) {
+      console.log(err);
+      return [];
+    }
+  }
+
+  public async get_collected_staking_rewards_by_user(address: string) {
+    try {
+      const { data } = await axios.get(getAPIUrl(`staking/rewards/collected/by_user/${address}/0/10000`));
+      return data.CollectedStakingRewards;
+    } catch (err) {
+      console.log(err);
+      return [];
+    }
+  }
+
+  public async get_staking_actions_by_user(address: string) {
+    try {
+      const { data } = await axios.get(getAPIUrl(`staking/actions/by_user/${address}/0/10000`));
+      return data.StakingActions;
+    } catch (err) {
+      console.log(err);
+      return [];
+    }
+  }
+
+  public async get_staking_actions() {
+    try {
+      const { data } = await axios.get(getAPIUrl(`staking/actions/global/0/10000`));
+      return data.StakingActions;
+    } catch (err) {
+      console.log(err);
+      return [];
+    }
+  }
 }
 
 export default new ApiService();

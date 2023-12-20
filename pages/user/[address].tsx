@@ -8,6 +8,9 @@ import BiddingHistoryTable from "../../components/BiddingHistoryTable";
 import WinningHistoryTable from "../../components/WinningHistoryTable";
 import { ethers } from "ethers";
 import { formatEthValue } from "../../utils";
+import { UnclaimedStakingRewardsTable } from "../../components/UnclaimedStakingRewardsTable";
+import { CollectedStakingRewardsTable } from "../../components/CollectedStakingRewardsTable";
+import { StakingActionsTable } from "../../components/StakingActionsTable";
 
 const UserInfo = ({ address }) => {
   const [claimHistory, setClaimHistory] = useState(null);
@@ -16,6 +19,9 @@ const UserInfo = ({ address }) => {
   const [balance, setBalance] = useState({ CosmicToken: 0, ETH: 0 });
   const [loading, setLoading] = useState(true);
   const [invalidAddress, setInvalidAddress] = useState(false);
+  const [unclaimedStakingRewards, setUnclaimedStakingRewards] = useState([]);
+  const [collectedStakingRewards, setCollectedStakingRewards] = useState([]);
+  const [stakingActions, setStakingActions] = useState([]);
 
   useEffect(() => {
     const fetchData = async (addr: string) => {
@@ -32,6 +38,16 @@ const UserInfo = ({ address }) => {
         ),
         ETH: Number(ethers.utils.formatEther(balance.ETH_Balance)),
       });
+      const unclaimedStakingRewards = await api.get_unclaimed_staking_rewards_by_user(
+        addr
+      );
+      setUnclaimedStakingRewards(unclaimedStakingRewards);
+      const collectedStakingRewards = await api.get_collected_staking_rewards_by_user(
+        addr
+      );
+      setCollectedStakingRewards(collectedStakingRewards);
+      const stakingActions = await api.get_staking_actions_by_user(addr);
+      setStakingActions(stakingActions);
       setLoading(false);
     };
     if (address) {
@@ -244,6 +260,28 @@ const UserInfo = ({ address }) => {
                     winningHistory={claimHistory}
                     showClaimedStatus={true}
                   />
+                </Box>
+                <Box>
+                  <Typography variant="h6" lineHeight={1} mt={8} mb={2}>
+                    Unclaimed Staking Rewards
+                  </Typography>
+                  <UnclaimedStakingRewardsTable
+                    list={unclaimedStakingRewards}
+                  />
+                </Box>
+                <Box>
+                  <Typography variant="h6" lineHeight={1} mt={8} mb={2}>
+                    Collected Staking Rewards
+                  </Typography>
+                  <CollectedStakingRewardsTable
+                    list={collectedStakingRewards}
+                  />
+                </Box>
+                <Box>
+                  <Typography variant="h6" lineHeight={1} mt={8} mb={2}>
+                    Stake / Unstake Actions
+                  </Typography>
+                  <StakingActionsTable list={stakingActions} />
                 </Box>
               </>
             )}
