@@ -427,8 +427,28 @@ class ApiService {
 
   public async get_staking_actions() {
     try {
-      const { data } = await axios.get(getAPIUrl(`staking/actions/global/0/10000`));
+      const { data } = await axios.get(getAPIUrl("staking/actions/global/0/10000"));
       return data.StakingActions;
+    } catch (err) {
+      console.log(err);
+      return [];
+    }
+  }
+
+  public async get_marketing_rewards() {
+    try {
+      const { data } = await axios.get(getAPIUrl("marketing/rewards/global/0/10000"));
+      return data.MarketingRewards;
+    } catch (err) {
+      console.log(err);
+      return [];
+    }
+  }
+
+  public async get_marketing_rewards_by_user(address: string) {
+    try {
+      const { data } = await axios.get(getAPIUrl(`marketing/rewards/by_user/${address}/0/10000`));
+      return data.UserMarketingRewards;
     } catch (err) {
       console.log(err);
       return [];

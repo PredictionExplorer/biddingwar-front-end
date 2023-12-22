@@ -11,6 +11,7 @@ import { formatEthValue } from "../../utils";
 import { UnclaimedStakingRewardsTable } from "../../components/UnclaimedStakingRewardsTable";
 import { CollectedStakingRewardsTable } from "../../components/CollectedStakingRewardsTable";
 import { StakingActionsTable } from "../../components/StakingActionsTable";
+import { MarketingRewardsTable } from "../../components/MarketingRewardsTable";
 
 const UserInfo = ({ address }) => {
   const [claimHistory, setClaimHistory] = useState(null);
@@ -22,6 +23,7 @@ const UserInfo = ({ address }) => {
   const [unclaimedStakingRewards, setUnclaimedStakingRewards] = useState([]);
   const [collectedStakingRewards, setCollectedStakingRewards] = useState([]);
   const [stakingActions, setStakingActions] = useState([]);
+  const [marketingRewards, setMarketingRewards] = useState([]);
 
   useEffect(() => {
     const fetchData = async (addr: string) => {
@@ -48,6 +50,8 @@ const UserInfo = ({ address }) => {
       setCollectedStakingRewards(collectedStakingRewards);
       const stakingActions = await api.get_staking_actions_by_user(addr);
       setStakingActions(stakingActions);
+      const marketingRewards = await api.get_marketing_rewards_by_user(addr);
+      setMarketingRewards(marketingRewards);
       setLoading(false);
     };
     if (address) {
@@ -283,6 +287,14 @@ const UserInfo = ({ address }) => {
                   </Typography>
                   <StakingActionsTable list={stakingActions} />
                 </Box>
+                {marketingRewards.length > 0 && (
+                  <Box>
+                    <Typography variant="h6" lineHeight={1} mt={8} mb={2}>
+                      Marketing Rewards
+                    </Typography>
+                    <MarketingRewardsTable list={marketingRewards} />
+                  </Box>
+                )}
               </>
             )}
           </>
