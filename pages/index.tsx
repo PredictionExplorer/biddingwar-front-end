@@ -380,11 +380,19 @@ const NewHome = () => {
       const history = await api.get_claim_history();
       setClaimHistory(history);
     };
+    const fetchCSTBidPrice = async () => {
+      let cstPrice = await cosmicGameContract.currentCSTPrice();
+      cstPrice = parseFloat(ethers.utils.formatEther(cstPrice));
+      setCSTBidPrice(cstPrice);
+    };
 
     fetchData();
     fetchPrizeInfo();
     fetchPrizeTime();
     fetchClaimHistory();
+    if (cosmicGameContract) {
+      fetchCSTBidPrice();
+    }
 
     // setBlackVideo(
     //   `https://cosmic-game.s3.us-east-2.amazonaws.com/${fileName}.mp4`
@@ -395,6 +403,10 @@ const NewHome = () => {
       fetchPrizeInfo();
       fetchPrizeTime();
       fetchClaimHistory();
+      if (cosmicGameContract) {
+        fetchCSTBidPrice();
+      }
+
     }, 12000);
 
     // Clean up the interval when the component is unmounted
@@ -419,17 +431,6 @@ const NewHome = () => {
       clearInterval(interval);
     };
   }, [data]);
-
-  useEffect(() => {
-    const fetchCSTBidPrice = async () => {
-      let cstPrice = await cosmicGameContract.currentCSTPrice();
-      cstPrice = parseFloat(ethers.utils.formatEther(cstPrice));
-      setCSTBidPrice(cstPrice);
-    };
-    if (cosmicGameContract) {
-      fetchCSTBidPrice();
-    }
-  }, [cosmicGameContract]);
 
   return (
     <>
