@@ -73,12 +73,8 @@ const MyWinnings = () => {
   const [curPage, setCurPage] = useState(1);
   const { apiData: status } = useApiData();
   const perPage = 5;
-  const [loading, setLoading] = useState({
-    donatedNFT: false,
-    raffleETH: false,
-  });
-  const [donatedNFTToClaim, setDonatedNFTToClaim] = useState([]);
-  const [raffleETHToClaim, setRaffleETHToClaim] = useState([]);
+  const [donatedNFTToClaim, setDonatedNFTToClaim] = useState(null);
+  const [raffleETHToClaim, setRaffleETHToClaim] = useState(null);
   const [isClaiming, setIsClaiming] = useState({
     donatedNFT: false,
     raffleETH: false,
@@ -142,37 +138,24 @@ const MyWinnings = () => {
     }
   };
 
-  const fetchUnclaimedDonatedNFTs = async (updateStatus) => {
-    setLoading((prev) => ({ ...prev, donatedNFT: updateStatus && true }));
+  const fetchUnclaimedDonatedNFTs = async () => {
     let nfts = await api.get_unclaimed_donated_nft_by_user(account);
     nfts = nfts.sort((a, b) => a.TimeStamp - b.TimeStamp);
     setDonatedNFTToClaim(nfts);
-    setLoading((prev) => ({ ...prev, donatedNFT: updateStatus && false }));
   };
-  const fetchUnclaimedRaffleETHDeposits = async (updateStatus) => {
-    setLoading((prev) => ({ ...prev, raffleETH: updateStatus && true }));
+  const fetchUnclaimedRaffleETHDeposits = async () => {
     let deposits = await api.get_unclaimed_raffle_deposits_by_user(account);
     deposits = deposits.sort((a, b) => b.TimeStamp - a.TimeStamp);
     setRaffleETHToClaim(deposits);
-    setLoading((prev) => ({ ...prev, raffleETH: updateStatus && false }));
   };
   useEffect(() => {
     if (status?.NumDonatedNFTToClaim > 0) {
-      fetchUnclaimedDonatedNFTs(false);
+      fetchUnclaimedDonatedNFTs();
     }
     if (status?.ETHRaffleToClaim > 0) {
-      fetchUnclaimedRaffleETHDeposits(false);
+      fetchUnclaimedRaffleETHDeposits();
     }
   }, [status]);
-  useEffect(() => {
-    if (status?.NumDonatedNFTToClaim > 0) {
-      fetchUnclaimedDonatedNFTs(true);
-    }
-    if (status?.ETHRaffleToClaim > 0) {
-      fetchUnclaimedRaffleETHDeposits(true);
-    }
-  }, []);
-
   return (
     <>
       <Head>
@@ -192,7 +175,7 @@ const MyWinnings = () => {
           <Typography variant="h5" mb={2}>
             Claimable Raffle ETH
           </Typography>
-          {loading.raffleETH ? (
+          {raffleETHToClaim === null ? (
             <Typography variant="h6">Loading...</Typography>
           ) : raffleETHToClaim.length > 0 ? (
             <>
@@ -243,7 +226,7 @@ const MyWinnings = () => {
         <Box mt={6}>
           <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
             <Typography variant="h5">Donated NFTs</Typography>
-            {donatedNFTToClaim.length > 0 && (
+            {donatedNFTToClaim?.length > 0 && (
               <Button
                 onClick={handleAllDonatedNFTsClaim}
                 variant="contained"
@@ -253,7 +236,7 @@ const MyWinnings = () => {
               </Button>
             )}
           </Box>
-          {loading.donatedNFT ? (
+          {donatedNFTToClaim === null ? (
             <Typography variant="h6">Loading...</Typography>
           ) : (
             <DonatedNFTTable

@@ -1,6 +1,5 @@
 import { ReactNode } from "react";
-import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
-import { Badge, Typography } from "@mui/material";
+import { Badge } from "@mui/material";
 
 type NavItem = {
   title: string | ReactNode;
@@ -13,6 +12,14 @@ const getNAVs = (status, account) => {
     { title: "Gallery", route: "/gallery" },
     { title: "Contracts", route: "/contracts" },
     { title: "Prizes", route: "/prize" },
+    {
+      title: "Rewards",
+      route: "",
+      children: [
+        { title: "Staking", route: "/staking-actions" },
+        { title: "Marketing", route: "/marketing" },
+      ],
+    },
     { title: "Statistics", route: "/statistics" },
     { title: "FAQ", route: "/faq" },
   ];
