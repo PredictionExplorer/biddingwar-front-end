@@ -33,10 +33,10 @@ const UnclaimedStakingRewardsRow = ({ row }) => {
       <TablePrimaryCell align="right">
         {row.AmountPerTokenEth.toFixed(6)}
       </TablePrimaryCell>
+      <TablePrimaryCell align="right">{row.YourTokensStaked}</TablePrimaryCell>
       <TablePrimaryCell align="right">
         {row.YourClaimableAmountEth.toFixed(6)}
       </TablePrimaryCell>
-      <TablePrimaryCell align="right">{row.YourTokensStaked}</TablePrimaryCell>
     </TablePrimaryRow>
   );
 };
@@ -56,17 +56,19 @@ export const UnclaimedStakingRewardsTable = ({ list }) => {
             <col width="14%" />
             <col width="18%" />
             <col width="15%" />
-            <col width="19%" />
             <col width="17%" />
+            <col width="19%" />
           </colgroup>
           <TablePrimaryHead>
             <TableRow>
               <TableCell>Datetime</TableCell>
               <TableCell align="right">Deposit Amount</TableCell>
-              <TableCell align="center">Total Staked Tokens by all the Users</TableCell>
+              <TableCell align="center">
+                Total Staked Tokens by all the Users
+              </TableCell>
               <TableCell align="right">Reward Per Token</TableCell>
-              <TableCell align="right">Your Claimable Amount</TableCell>
               <TableCell align="right">Your Staked Tokens</TableCell>
+              <TableCell align="right">Your Claimable Amount</TableCell>
             </TableRow>
           </TablePrimaryHead>
           <TableBody>
@@ -78,6 +80,16 @@ export const UnclaimedStakingRewardsTable = ({ list }) => {
           </TableBody>
         </Table>
       </TablePrimaryContainer>
+      <Box display="flex" justifyContent="end" mt={1}>
+        <Typography mr={1}>Total Rewards:</Typography>
+        <Typography>
+          {list
+            .reduce((a, b) => {
+              return a + b.YourClaimableAmountEth;
+            }, 0)
+            .toFixed(6)}
+        </Typography>
+      </Box>
       <Box display="flex" justifyContent="center" mt={4}>
         <Pagination
           color="primary"

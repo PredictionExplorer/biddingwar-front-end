@@ -200,7 +200,7 @@ const UserInfo = ({ address }) => {
                 </Box>
                 <Box mb={1}>
                   <Typography color="primary" component="span">
-                    Total Staked Tokens:
+                    Total Staked Tokens at this moment:
                   </Typography>
                   &nbsp;
                   <Typography component="span">
