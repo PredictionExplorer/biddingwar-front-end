@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from "react";
-import { Box, Menu, MenuItem, Typography } from "@mui/material";
+import { Box, Divider, Menu, MenuItem, Typography } from "@mui/material";
 import { isMobile } from "react-device-detect";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
@@ -79,16 +79,6 @@ const ConnectWalletButton = ({ isMobileView, balance }) => {
           open={Boolean(anchorEl)}
           onClose={handleMenuClose}
         >
-          <MenuItem style={{ minWidth: 166, pointerEvents: "none" }}>
-            <Typography
-              variant="body2"
-              color="secondary"
-              sx={{ fontStyle: "italic", fontWeight: 600, mx: "auto" }}
-            >
-              ETH: {balance.ETH.toFixed(2)}, CST:{" "}
-              {balance.CosmicToken.toFixed(2)}
-            </Typography>
-          </MenuItem>
           <MenuItem style={{ minWidth: 166 }} onClick={handleMenuClose}>
             <NavLink href="/my-wallet" sx={{ width: "100%" }}>
               MY WALLET
@@ -98,6 +88,44 @@ const ConnectWalletButton = ({ isMobileView, balance }) => {
             <NavLink href="/winning-history" sx={{ width: "100%" }}>
               HISTORY OF WINNINGS
             </NavLink>
+          </MenuItem>
+          <Divider />
+          <MenuItem
+            style={{ minWidth: 166, pointerEvents: "none", display: "block" }}
+          >
+            <Typography sx={{ fontSize: "inherit" }}>BALANCE:</Typography>
+            <Box sx={{ display: "flex", justifyContent: "space-between", mt: 1 }}>
+              <Typography
+                variant="body2"
+                color="secondary"
+                sx={{ fontStyle: "italic", fontWeight: 600 }}
+              >
+                ETH:
+              </Typography>
+              <Typography
+                variant="body2"
+                color="secondary"
+                sx={{ fontStyle: "italic", fontWeight: 600 }}
+              >
+                {balance.ETH.toFixed(2)}
+              </Typography>
+            </Box>
+            <Box sx={{ display: "flex", justifyContent: "space-between", mt: 1 }}>
+              <Typography
+                variant="body2"
+                color="secondary"
+                sx={{ fontStyle: "italic", fontWeight: 600 }}
+              >
+                CST:
+              </Typography>
+              <Typography
+                variant="body2"
+                color="secondary"
+                sx={{ fontStyle: "italic", fontWeight: 600 }}
+              >
+                {balance.CosmicToken.toFixed(2)}
+              </Typography>
+            </Box>
           </MenuItem>
         </Menu>
       </>

@@ -8,6 +8,8 @@ import {
   Container,
   Link,
   Typography,
+  Box,
+  Divider,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import getNAVs from "../config/nav";
@@ -107,16 +109,6 @@ const Header = () => {
             <ListItem>
               <ConnectWalletButton isMobileView balance={balance} />
             </ListItem>
-            <ListItem>
-              <Typography
-                variant="body2"
-                color="secondary"
-                sx={{ fontStyle: "italic", fontWeight: 600, mx: "auto" }}
-              >
-                ETH: {balance.ETH.toFixed(2)}, CST:{" "}
-                {balance.CosmicToken.toFixed(2)}
-              </Typography>
-            </ListItem>
             {getNAVs(status, account).map((nav, i) => (
               <ListItemButton
                 key={i}
@@ -132,6 +124,47 @@ const Header = () => {
               nav={{ title: "History of Winnings", route: "/winning-history" }}
               sx={{ justifyContent: "center" }}
             />
+            <Divider />
+            <ListItem sx={{ display: "block" }}>
+              <Typography sx={{ fontSize: 16 }}>BALANCE:</Typography>
+
+              <Box
+                sx={{ display: "flex", justifyContent: "space-between", mt: 1 }}
+              >
+                <Typography
+                  variant="body2"
+                  color="secondary"
+                  sx={{ fontStyle: "italic", fontWeight: 600 }}
+                >
+                  ETH:
+                </Typography>
+                <Typography
+                  variant="body2"
+                  color="secondary"
+                  sx={{ fontStyle: "italic", fontWeight: 600 }}
+                >
+                  {balance.ETH.toFixed(2)}
+                </Typography>
+              </Box>
+              <Box
+                sx={{ display: "flex", justifyContent: "space-between", mt: 1 }}
+              >
+                <Typography
+                  variant="body2"
+                  color="secondary"
+                  sx={{ fontStyle: "italic", fontWeight: 600 }}
+                >
+                  CST:
+                </Typography>
+                <Typography
+                  variant="body2"
+                  color="secondary"
+                  sx={{ fontStyle: "italic", fontWeight: 600 }}
+                >
+                  {balance.CosmicToken.toFixed(2)}
+                </Typography>
+              </Box>
+            </ListItem>
           </DrawerList>
         </Drawer>
       </Toolbar>
