@@ -63,7 +63,7 @@ export const CollectedStakingRewardsTable = ({ list }) => {
             <TableRow>
               <TableCell>Datetime</TableCell>
               <TableCell align="right">Deposit Amount</TableCell>
-              <TableCell align="center">Total Staked Tokens</TableCell>
+              <TableCell align="center">Total Staked Tokens by all the Users</TableCell>
               <TableCell align="right">Reward Per Token</TableCell>
               <TableCell align="right">Your Collected Amount</TableCell>
               <TableCell align="right">Your Staked Tokens</TableCell>

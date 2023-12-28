@@ -32,7 +32,8 @@ const GlobalStakingActionsRow = ({ row }) => {
       </TablePrimaryCell>
       <TablePrimaryCell align="center">{row.TokenId}</TablePrimaryCell>
       <TablePrimaryCell>
-        {convertTimestampToDateTime(row.UnstakeTimeStamp)}
+        {row.ActionType === 0 &&
+          convertTimestampToDateTime(row.UnstakeTimeStamp)}
       </TablePrimaryCell>
       <TablePrimaryCell align="center">
         <Link
