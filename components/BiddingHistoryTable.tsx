@@ -74,12 +74,14 @@ const HistoryRow = ({ history }) => {
           : "ETH Bid"}
       </TablePrimaryCell>
       <TablePrimaryCell>
-        Bid was made using
-        {history.BidType === 2
-          ? " Cosmic Signature Tokens"
-          : history.BidType === 1
-          ? ` RandomWalk Token(id = ${history.RWalkNFTId})`
-          : " ETH"}
+        {history.BidType === 1 &&
+          `Bid was made using RandomWalk Token(id = ${history.RWalkNFTId})`}
+        {!!history.NFTDonationTokenAddr &&
+          history.BidType === 2 &&
+          "Bid was made using Cosmic Signature Tokens"}
+        {!!history.NFTDonationTokenAddr &&
+          history.BidType === 0 &&
+          "Bid was made using ETH"}
         {!!history.NFTDonationTokenAddr &&
           ` and a token(${shortenHex(
             history.NFTDonationTokenAddr,
