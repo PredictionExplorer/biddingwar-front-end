@@ -406,7 +406,6 @@ const NewHome = () => {
       if (cosmicGameContract) {
         fetchCSTBidPrice();
       }
-
     }, 12000);
 
     // Clean up the interval when the component is unmounted
@@ -783,7 +782,7 @@ const NewHome = () => {
                         fullWidth
                         disabled={isBidding}
                       >
-                        Bid Now
+                        Bid {rwlkId !== -1 ? "with RandomWalk" : "Now"}
                       </Button>
                     </Grid>
                     <Grid item xs={12} sm={12} md={6} lg={6}>
