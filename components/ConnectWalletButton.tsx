@@ -84,6 +84,11 @@ const ConnectWalletButton = ({ isMobileView, balance }) => {
               MY WALLET
             </NavLink>
           </MenuItem>
+          <MenuItem style={{ minWidth: 166 }} onClick={handleMenuClose}>
+            <NavLink href="/my-staking" sx={{ width: "100%" }}>
+              MY STAKING
+            </NavLink>
+          </MenuItem>
           <MenuItem onClick={handleMenuClose}>
             <NavLink href="/winning-history" sx={{ width: "100%" }}>
               HISTORY OF WINNINGS

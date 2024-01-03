@@ -35,7 +35,7 @@ const CTBalanceDistributionRow = ({ row }) => {
           {row.OwnerAddr}
         </Link>
       </TablePrimaryCell>
-      <TablePrimaryCell align="right">{row.BalanceFloat}</TablePrimaryCell>
+      <TablePrimaryCell align="right">{row.BalanceFloat.toFixed(6)}</TablePrimaryCell>
     </TablePrimaryRow>
   );
 };
