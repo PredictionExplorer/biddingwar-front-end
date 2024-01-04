@@ -1,31 +1,8 @@
 import React, { useEffect, useState } from "react";
-
-import {
-  Box,
-  Button,
-  Pagination,
-  Table,
-  TableBody,
-  TableCell,
-  TableRow,
-  Typography,
-} from "@mui/material";
-
+import { Box, Typography } from "@mui/material";
 import Head from "next/head";
-
-import {
-  MainWrapper,
-  TablePrimaryCell,
-  TablePrimaryContainer,
-  TablePrimaryHead,
-  TablePrimaryRow,
-} from "../components/styled";
-import DonatedNFTTable from "../components/DonatedNFTTable";
+import { MainWrapper } from "../components/styled";
 import { useActiveWeb3React } from "../hooks/web3";
-import useCosmicGameContract from "../hooks/useCosmicGameContract";
-import useRaffleWalletContract from "../hooks/useRaffleWalletContract";
-import router from "next/router";
-import { useApiData } from "../contexts/ApiDataContext";
 import api from "../services/api";
 import { UnclaimedStakingRewardsTable } from "../components/UnclaimedStakingRewardsTable";
 import { CollectedStakingRewardsTable } from "../components/CollectedStakingRewardsTable";
