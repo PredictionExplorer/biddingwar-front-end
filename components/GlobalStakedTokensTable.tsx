@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import {
   Box,
   Button,
+  Link,
   Pagination,
   Table,
   TableBody,
@@ -18,7 +19,7 @@ import {
 import { convertTimestampToDateTime } from "../utils";
 import useStakingWalletContract from "../hooks/useStakingWalletContract";
 
-const StakingTokensRow = ({ row, handleStake, handleUnstake }) => {
+const GlobalStakedTokensRow = ({ row, handleStake, handleUnstake }) => {
   if (!row) {
     return <TablePrimaryRow></TablePrimaryRow>;
   }
@@ -26,32 +27,40 @@ const StakingTokensRow = ({ row, handleStake, handleUnstake }) => {
   return (
     <TablePrimaryRow>
       <TablePrimaryCell>
-        {convertTimestampToDateTime(row.TimeStamp)}
+        {convertTimestampToDateTime(row.StakeTimeStamp)}
       </TablePrimaryCell>
-      <TablePrimaryCell align="center">
-        {row.ActionType === 1 ? "Stake" : "Unstake"}
-      </TablePrimaryCell>
-      <TablePrimaryCell align="center">{row.TokenId}</TablePrimaryCell>
       <TablePrimaryCell>
-        {row.ActionType === 0 &&
+        {row.UnstakeTimeStamp !== 0 &&
           convertTimestampToDateTime(row.UnstakeTimeStamp)}
       </TablePrimaryCell>
       <TablePrimaryCell align="center">
-        {row.ActionType === 0 ? (
-          <Button variant="text" onClick={() => handleStake(row.TokenId)}>
-            Stake
-          </Button>
-        ) : (
-          <Button variant="text" onClick={() => handleUnstake(row.TokenId)}>
-            Unstake
-          </Button>
-        )}
+        <Link
+          href={`/detail/${row.TokenInfo.TokenId}`}
+          sx={{
+            color: "inherit",
+            fontSize: "inherit",
+          }}
+        >
+          {row.TokenInfo.TokenId}
+        </Link>
+      </TablePrimaryCell>
+      <TablePrimaryCell align="center">
+        <Link
+          href={`/user/${row.TokenInfo.CurOwnerAddr}`}
+          sx={{
+            color: "inherit",
+            fontSize: "inherit",
+            fontFamily: "monospace",
+          }}
+        >
+          {row.TokenInfo.CurOwnerAddr}
+        </Link>
       </TablePrimaryCell>
     </TablePrimaryRow>
   );
 };
 
-export const StakingTokensTable = ({ list }) => {
+export const GlobalStakedTokensTable = ({ list }) => {
   const perPage = 5;
   const [page, setPage] = useState(1);
   const stakingContract = useStakingWalletContract();
@@ -74,27 +83,27 @@ export const StakingTokensTable = ({ list }) => {
             <col width="20%" />
             <col width="20%" />
             <col width="20%" />
-            <col width="20%" />
-            <col width="20%" />
+            <col width="40%" />
           </colgroup>
           <TablePrimaryHead>
             <TableRow>
-              <TableCell>Datetime</TableCell>
-              <TableCell align="center">Action Type</TableCell>
-              <TableCell align="center">Token ID</TableCell>
+              <TableCell>Stake Datetime</TableCell>
               <TableCell>Unstake Datetime</TableCell>
-              <TableCell align="center"></TableCell>
+              <TableCell align="center">Token ID</TableCell>
+              <TableCell align="center">Staker Address</TableCell>
             </TableRow>
           </TablePrimaryHead>
           <TableBody>
-            {list.slice((page - 1) * perPage, page * perPage).map((row) => (
-              <StakingTokensRow
-                key={row.EvtLogId}
-                row={row}
-                handleStake={handleStake}
-                handleUnstake={handleUnstake}
-              />
-            ))}
+            {list
+              .slice((page - 1) * perPage, page * perPage)
+              .map((row, index) => (
+                <GlobalStakedTokensRow
+                  key={index}
+                  row={row}
+                  handleStake={handleStake}
+                  handleUnstake={handleUnstake}
+                />
+              ))}
           </TableBody>
         </Table>
       </TablePrimaryContainer>

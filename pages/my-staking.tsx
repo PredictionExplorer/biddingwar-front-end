@@ -7,7 +7,7 @@ import api from "../services/api";
 import { UnclaimedStakingRewardsTable } from "../components/UnclaimedStakingRewardsTable";
 import { CollectedStakingRewardsTable } from "../components/CollectedStakingRewardsTable";
 import { StakingActionsTable } from "../components/StakingActionsTable";
-import { StakingTokensTable } from "../components/StakingTokensTable";
+import { StakedTokensTable } from "../components/StakedTokensTable";
 
 const MyStaking = () => {
   const { account } = useActiveWeb3React();
@@ -15,7 +15,7 @@ const MyStaking = () => {
   const [unclaimedStakingRewards, setUnclaimedStakingRewards] = useState([]);
   const [collectedStakingRewards, setCollectedStakingRewards] = useState([]);
   const [stakingActions, setStakingActions] = useState([]);
-  const [stakingTokens, setStakingTokens] = useState([]);
+  const [stakedTokens, setStakedTokens] = useState([]);
 
   useEffect(() => {
     const fetchData = async (addr: string) => {
@@ -30,19 +30,8 @@ const MyStaking = () => {
       setCollectedStakingRewards(collectedStakingRewards);
       const stakingActions = await api.get_staking_actions_by_user(addr);
       setStakingActions(stakingActions);
-      let tokens = [];
-      stakingActions.forEach((action) => {
-        if (tokens.filter((x) => x.TokenId === action.TokenId).length === 0) {
-          tokens.push({
-            EvtLogId: action.EvtLogId,
-            TimeStamp: action.TimeStamp,
-            UnstakeTimeStamp: action.UnstakeTimeStamp,
-            TokenId: action.TokenId,
-            ActionType: action.ActionType,
-          });
-        }
-      });
-      setStakingTokens(tokens);
+      const stakedTokens = await api.get_staked_tokens_by_user(addr);
+      setStakedTokens(stakedTokens);
       setLoading(false);
     };
     if (account) {
@@ -90,7 +79,7 @@ const MyStaking = () => {
               <Typography variant="h6" lineHeight={1} mt={8} mb={2}>
                 Stake / Unstake Tokens
               </Typography>
-              <StakingTokensTable list={stakingTokens} />
+              <StakedTokensTable list={stakedTokens} />
             </Box>
           </>
         )}

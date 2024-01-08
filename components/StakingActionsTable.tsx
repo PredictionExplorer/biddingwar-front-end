@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import {
   Box,
+  Link,
   Pagination,
   Table,
   TableBody,
@@ -29,7 +30,17 @@ const StakingActionsRow = ({ row }) => {
       <TablePrimaryCell align="center">
         {row.ActionType === 0 ? "Unstake" : "Stake"}
       </TablePrimaryCell>
-      <TablePrimaryCell align="center">{row.TokenId}</TablePrimaryCell>
+      <TablePrimaryCell align="center">
+        <Link
+          href={`/detail/${row.TokenId}`}
+          sx={{
+            color: "inherit",
+            fontSize: "inherit",
+          }}
+        >
+          {row.TokenId}
+        </Link>
+      </TablePrimaryCell>
       <TablePrimaryCell>
         {row.ActionType === 0 &&
           convertTimestampToDateTime(row.UnstakeTimeStamp)}

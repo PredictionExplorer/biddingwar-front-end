@@ -28,9 +28,19 @@ const GlobalStakingActionsRow = ({ row }) => {
         {convertTimestampToDateTime(row.TimeStamp)}
       </TablePrimaryCell>
       <TablePrimaryCell align="center">
-        {row.ActionType === 0 ? "Stake" : "Unstake"}
+        {row.ActionType === 1 ? "Stake" : "Unstake"}
       </TablePrimaryCell>
-      <TablePrimaryCell align="center">{row.TokenId}</TablePrimaryCell>
+      <TablePrimaryCell align="center">
+        <Link
+          href={`/detail/${row.TokenId}`}
+          sx={{
+            color: "inherit",
+            fontSize: "inherit",
+          }}
+        >
+          {row.TokenId}
+        </Link>
+      </TablePrimaryCell>
       <TablePrimaryCell>
         {row.ActionType === 0 &&
           convertTimestampToDateTime(row.UnstakeTimeStamp)}
@@ -76,7 +86,7 @@ export const GlobalStakingActionsTable = ({ list }) => {
               <TableCell align="center">Action Type</TableCell>
               <TableCell align="center">Token ID</TableCell>
               <TableCell>Unstake Datetime</TableCell>
-              <TableCell align="center">Staker</TableCell>
+              <TableCell align="center">Staker Address</TableCell>
               <TableCell align="center">Number of NFTs</TableCell>
             </TableRow>
           </TablePrimaryHead>

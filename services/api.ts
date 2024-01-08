@@ -454,6 +454,26 @@ class ApiService {
       return [];
     }
   }
+
+  public async get_staked_tokens() {
+    try {
+      const { data } = await axios.get(getAPIUrl("cst/staked"));
+      return data.StakedTokens;
+    } catch (err) {
+      console.log(err);
+      return [];
+    }
+  }
+
+  public async get_staked_tokens_by_user(address: string) {
+    try {
+      const { data } = await axios.get(getAPIUrl(`user/nft/staked/${address}`));
+      return data.StakedTokens;
+    } catch (err) {
+      console.log(err);
+      return [];
+    }
+  }
 }
 
 export default new ApiService();
