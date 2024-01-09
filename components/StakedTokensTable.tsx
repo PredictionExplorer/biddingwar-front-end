@@ -45,7 +45,7 @@ const StakedTokensRow = ({ row, handleStake, handleUnstake }) => {
         </Link>
       </TablePrimaryCell>
       <TablePrimaryCell align="center">
-        {row.UnstakeTimeStamp !== 0 ? (
+        {row.UnstakeTimeStamp === 0 ? (
           <Button
             variant="text"
             onClick={() => handleStake(row.TokenInfo.TokenId)}

@@ -16,7 +16,7 @@ const getNAVs = (status, account) => {
       title: "Rewards",
       route: "",
       children: [
-        { title: "Staking", route: "/staking-actions" },
+        { title: "Staking", route: "/staking" },
         { title: "Marketing", route: "/marketing" },
       ],
     },

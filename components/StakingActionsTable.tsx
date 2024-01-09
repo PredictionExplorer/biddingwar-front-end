@@ -28,7 +28,7 @@ const StakingActionsRow = ({ row }) => {
         {convertTimestampToDateTime(row.TimeStamp)}
       </TablePrimaryCell>
       <TablePrimaryCell align="center">
-        {row.ActionType === 0 ? "Unstake" : "Stake"}
+        {row.ActionType === 1 ? "Unstake" : "Stake"}
       </TablePrimaryCell>
       <TablePrimaryCell align="center">
         <Link
@@ -69,7 +69,7 @@ export const StakingActionsTable = ({ list }) => {
           </colgroup>
           <TablePrimaryHead>
             <TableRow>
-              <TableCell>Datetime</TableCell>
+              <TableCell>Stake Datetime</TableCell>
               <TableCell align="center">Action Type</TableCell>
               <TableCell align="center">Token ID</TableCell>
               <TableCell>Unstake Datetime</TableCell>
