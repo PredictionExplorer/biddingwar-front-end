@@ -29,9 +29,8 @@ const StakedTokensRow = ({ row, handleStake, handleUnstake }) => {
       <TablePrimaryCell>
         {convertTimestampToDateTime(row.StakeTimeStamp)}
       </TablePrimaryCell>
-      <TablePrimaryCell>
-        {row.UnstakeTimeStamp !== 0 &&
-          convertTimestampToDateTime(row.UnstakeTimeStamp)}
+      <TablePrimaryCell align="center">
+        {row.UnstakeTimeStamp !== 0 ? "Stake" : "Unstake"}
       </TablePrimaryCell>
       <TablePrimaryCell align="center">
         <Link
@@ -43,6 +42,10 @@ const StakedTokensRow = ({ row, handleStake, handleUnstake }) => {
         >
           {row.TokenInfo.TokenId}
         </Link>
+      </TablePrimaryCell>
+      <TablePrimaryCell>
+        {row.UnstakeTimeStamp !== 0 &&
+          convertTimestampToDateTime(row.UnstakeTimeStamp)}
       </TablePrimaryCell>
       <TablePrimaryCell align="center">
         {row.UnstakeTimeStamp === 0 ? (
@@ -70,12 +73,24 @@ export const StakedTokensTable = ({ list }) => {
   const [page, setPage] = useState(1);
   const stakingContract = useStakingWalletContract();
   const handleStake = async (tokenId) => {
-    const res = await stakingContract.stake(tokenId).then((tx) => tx.wait());
-    console.log(res);
+    try {
+      const res = await stakingContract.stake(tokenId).then((tx) => tx.wait());
+      console.log(res);
+    } catch (err) {
+      console.error(err);
+      alert(err.data.message);
+    }
   };
   const handleUnstake = async (tokenId) => {
-    const res = await stakingContract.unstake(tokenId).then((tx) => tx.wait());
-    console.log(res);
+    try {
+      const res = await stakingContract
+        .unstake(tokenId)
+        .then((tx) => tx.wait());
+      console.log(res);
+    } catch (err) {
+      console.error(err);
+      alert(err.data.message);
+    }
   };
   if (list.length === 0) {
     return <Typography>No tokens yet.</Typography>;
@@ -85,16 +100,18 @@ export const StakedTokensTable = ({ list }) => {
       <TablePrimaryContainer>
         <Table>
           <colgroup>
-            <col width="25%" />
-            <col width="25%" />
-            <col width="25%" />
-            <col width="25%" />
+            <col width="20%" />
+            <col width="20%" />
+            <col width="20%" />
+            <col width="20%" />
+            <col width="20%" />
           </colgroup>
           <TablePrimaryHead>
             <TableRow>
               <TableCell>Stake Datetime</TableCell>
-              <TableCell>Unstake Datetime</TableCell>
+              <TableCell align="center">Action Type</TableCell>
               <TableCell align="center">Token ID</TableCell>
+              <TableCell>Unstake Datetime</TableCell>
               <TableCell align="center"></TableCell>
             </TableRow>
           </TablePrimaryHead>
