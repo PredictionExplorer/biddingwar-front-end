@@ -77,7 +77,7 @@ const MyStaking = () => {
             </Box>
             <Box>
               <Typography variant="h6" lineHeight={1} mt={8} mb={2}>
-                Stake / Unstake Tokens
+                Tokens available for staking
               </Typography>
               <StakedTokensTable list={stakedTokens} />
             </Box>
