@@ -19,7 +19,7 @@ import {
 import { convertTimestampToDateTime } from "../utils";
 import useStakingWalletContract from "../hooks/useStakingWalletContract";
 
-const StakedTokensRow = ({ row, handleStake, handleUnstake }) => {
+const CSTokensRow = ({ row, handleStake, handleUnstake }) => {
   if (!row) {
     return <TablePrimaryRow></TablePrimaryRow>;
   }
@@ -27,38 +27,61 @@ const StakedTokensRow = ({ row, handleStake, handleUnstake }) => {
   return (
     <TablePrimaryRow>
       <TablePrimaryCell>
-        {convertTimestampToDateTime(row.StakeTimeStamp)}
-      </TablePrimaryCell>
-      <TablePrimaryCell align="center">
-        {row.UnstakeTimeStamp !== 0 ? "Stake" : "Unstake"}
+        {convertTimestampToDateTime(row.TimeStamp)}
       </TablePrimaryCell>
       <TablePrimaryCell align="center">
         <Link
-          href={`/detail/${row.TokenInfo.TokenId}`}
+          href={`/detail/${row.TokenId}`}
           sx={{
             color: "inherit",
             fontSize: "inherit",
           }}
+          target="_blank"
         >
-          {row.TokenInfo.TokenId}
+          {row.TokenId}
         </Link>
       </TablePrimaryCell>
-      <TablePrimaryCell>
-        {row.UnstakeTimeStamp !== 0 &&
-          convertTimestampToDateTime(row.UnstakeTimeStamp)}
+      <TablePrimaryCell align="center">
+        <Link
+          href={`/prize/${row.RoundNum}`}
+          style={{
+            color: "inherit",
+            fontSize: "inherit",
+          }}
+          target="_blank"
+        >
+          {row.RoundNum}
+        </Link>
       </TablePrimaryCell>
       <TablePrimaryCell align="center">
-        {row.UnstakeTimeStamp === 0 ? (
+        {row.Staked ? "Stake" : row.WasUnstaked ? "Unstake" : ""}
+      </TablePrimaryCell>
+      <TablePrimaryCell align="center">
+        <Link
+          href={`/user/${row.WinnerAddr}`}
+          sx={{
+            color: "inherit",
+            fontSize: "inherit",
+          }}
+          target="_blank"
+        >
+          {row.WinnerAddr}
+        </Link>
+      </TablePrimaryCell>
+      <TablePrimaryCell align="center">
+        {!row.Staked && (
           <Button
             variant="text"
-            onClick={() => handleStake(row.TokenInfo.TokenId)}
+            sx={{ mr: 1 }}
+            onClick={() => handleStake(row.TokenId)}
           >
             Stake
           </Button>
-        ) : (
+        )}
+        {row.Staked && !row.WasUnstaked && (
           <Button
             variant="text"
-            onClick={() => handleUnstake(row.TokenInfo.TokenId)}
+            onClick={() => handleUnstake(row.StakeActionId)}
           >
             Unstake
           </Button>
@@ -68,11 +91,11 @@ const StakedTokensRow = ({ row, handleStake, handleUnstake }) => {
   );
 };
 
-export const StakedTokensTable = ({ list }) => {
+export const CSTokensTable = ({ list }) => {
   const perPage = 5;
   const [page, setPage] = useState(1);
   const stakingContract = useStakingWalletContract();
-  const handleStake = async (tokenId) => {
+  const handleStake = async (tokenId: number) => {
     try {
       const res = await stakingContract.stake(tokenId).then((tx) => tx.wait());
       console.log(res);
@@ -81,10 +104,10 @@ export const StakedTokensTable = ({ list }) => {
       alert(err.data.message);
     }
   };
-  const handleUnstake = async (tokenId) => {
+  const handleUnstake = async (actionId: number) => {
     try {
       const res = await stakingContract
-        .unstake(tokenId)
+        .unstake(actionId)
         .then((tx) => tx.wait());
       console.log(res);
     } catch (err) {
@@ -100,18 +123,20 @@ export const StakedTokensTable = ({ list }) => {
       <TablePrimaryContainer>
         <Table>
           <colgroup>
-            <col width="20%" />
-            <col width="20%" />
-            <col width="20%" />
+            <col width="15%" />
+            <col width="10%" />
+            <col width="10%" />
+            <col width="15%" />
             <col width="20%" />
             <col width="20%" />
           </colgroup>
           <TablePrimaryHead>
             <TableRow>
-              <TableCell>Stake Datetime</TableCell>
-              <TableCell align="center">Action Type</TableCell>
+              <TableCell>Mint Datetime</TableCell>
               <TableCell align="center">Token ID</TableCell>
-              <TableCell>Unstake Datetime</TableCell>
+              <TableCell align="center">Round</TableCell>
+              <TableCell align="center">Action Type</TableCell>
+              <TableCell align="center">Winner Address</TableCell>
               <TableCell align="center"></TableCell>
             </TableRow>
           </TablePrimaryHead>
@@ -119,7 +144,7 @@ export const StakedTokensTable = ({ list }) => {
             {list
               .slice((page - 1) * perPage, page * perPage)
               .map((row, index) => (
-                <StakedTokensRow
+                <CSTokensRow
                   key={index}
                   row={row}
                   handleStake={handleStake}

@@ -487,6 +487,16 @@ class ApiService {
       return -1;
     }
   }
+
+  public async get_cst_tokens_by_user(address: string) {
+    try {
+      const { data } = await axios.get(getAPIUrl(`cst/list_by_user/${address}/0/10000`));
+      return data.UserTokens;
+    } catch (err) {
+      console.log(err);
+      return [];
+    }
+  }
 }
 
 export default new ApiService();

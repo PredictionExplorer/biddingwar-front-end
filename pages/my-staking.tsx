@@ -7,7 +7,7 @@ import api from "../services/api";
 import { UnclaimedStakingRewardsTable } from "../components/UnclaimedStakingRewardsTable";
 import { CollectedStakingRewardsTable } from "../components/CollectedStakingRewardsTable";
 import { StakingActionsTable } from "../components/StakingActionsTable";
-import { StakedTokensTable } from "../components/StakedTokensTable";
+import { CSTokensTable } from "../components/CSTokensTable";
 
 const MyStaking = () => {
   const { account } = useActiveWeb3React();
@@ -15,7 +15,7 @@ const MyStaking = () => {
   const [unclaimedStakingRewards, setUnclaimedStakingRewards] = useState([]);
   const [collectedStakingRewards, setCollectedStakingRewards] = useState([]);
   const [stakingActions, setStakingActions] = useState([]);
-  const [stakedTokens, setStakedTokens] = useState([]);
+  const [CSTokens, setCSTokens] = useState([]);
 
   useEffect(() => {
     const fetchData = async (addr: string) => {
@@ -30,8 +30,8 @@ const MyStaking = () => {
       setCollectedStakingRewards(collectedStakingRewards);
       const stakingActions = await api.get_staking_actions_by_user(addr);
       setStakingActions(stakingActions);
-      const stakedTokens = await api.get_staked_tokens_by_user(addr);
-      setStakedTokens(stakedTokens);
+      const CSTokens = await api.get_cst_tokens_by_user(addr);
+      setCSTokens(CSTokens);
       setLoading(false);
     };
     if (account) {
@@ -77,9 +77,9 @@ const MyStaking = () => {
             </Box>
             <Box>
               <Typography variant="h6" lineHeight={1} mt={8} mb={2}>
-                Tokens available for staking
+                Tokens Available for Staking
               </Typography>
-              <StakedTokensTable list={stakedTokens} />
+              <CSTokensTable list={CSTokens} />
             </Box>
           </>
         )}
