@@ -201,7 +201,7 @@ const NewHome = () => {
       let receipt;
       if (!nftDonateAddress || nftId === -1) {
         receipt = await cosmicGameContract
-          .bid(message, rwlkId, {
+          .bid([message, ethers.BigNumber.from(rwlkId)], {
             value: ethers.utils.parseEther(newBidPrice.toFixed(10)),
           })
           .then((tx) => tx.wait());
@@ -262,9 +262,14 @@ const NewHome = () => {
             .then((tx) => tx.wait());
         }
         receipt = await cosmicGameContract
-          .bidAndDonateNFT(message, rwlkId, nftDonateAddress, nftId, {
-            value: ethers.utils.parseEther(newBidPrice.toFixed(10)),
-          })
+          .bidAndDonateNFT(
+            [message, ethers.BigNumber.from(rwlkId)],
+            nftDonateAddress,
+            nftId,
+            {
+              value: ethers.utils.parseEther(newBidPrice.toFixed(10)),
+            }
+          )
           .then((tx) => tx.wait());
         console.log(receipt);
         setTimeout(() => {
