@@ -18,6 +18,9 @@ import {
 } from "./styled";
 import { convertTimestampToDateTime } from "../utils";
 import useStakingWalletContract from "../hooks/useStakingWalletContract";
+import { STAKING_WALLET_ADDRESS } from "../config/app";
+import { useActiveWeb3React } from "../hooks/web3";
+import useCosmicSignatureContract from "../hooks/useCosmicSignatureContract";
 
 const CSTokensRow = ({ row, handleStake, handleUnstake }) => {
   if (!row) {
@@ -94,14 +97,27 @@ const CSTokensRow = ({ row, handleStake, handleUnstake }) => {
 export const CSTokensTable = ({ list }) => {
   const perPage = 5;
   const [page, setPage] = useState(1);
+  const { account } = useActiveWeb3React();
   const stakingContract = useStakingWalletContract();
+  const cosmicSignatureContract = useCosmicSignatureContract();
   const handleStake = async (tokenId: number) => {
     try {
+      const approvedBy = await cosmicSignatureContract.getApproved(tokenId);
+      console.log(approvedBy);
+      const isApprovedForAll = await cosmicSignatureContract.isApprovedForAll(
+        account,
+        STAKING_WALLET_ADDRESS
+      );
+      if (!isApprovedForAll) {
+        await cosmicSignatureContract
+          .setApprovalForAll(STAKING_WALLET_ADDRESS, true)
+          .then((tx) => tx.wait());
+      }
       const res = await stakingContract.stake(tokenId).then((tx) => tx.wait());
       console.log(res);
     } catch (err) {
       console.error(err);
-      alert(err.data.message);
+      alert(err.data?.message || err.message);
     }
   };
   const handleUnstake = async (actionId: number) => {
