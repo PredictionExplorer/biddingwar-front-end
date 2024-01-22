@@ -51,7 +51,6 @@ const MyStaking = () => {
       const res = await stakingContract
         .unstake(actionId)
         .then((tx) => tx.wait());
-      // const res = await stakingContract.stakedNFTs(actionId);
       console.log(res);
       fetchData(account);
     } catch (err) {
