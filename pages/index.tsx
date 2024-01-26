@@ -344,15 +344,19 @@ const NewHome = () => {
 
   useEffect(() => {
     const getData = async () => {
-      const bidList = await api.get_bid_list();
-      const biddedRWLKIds = bidList.map((bid) => bid.RWalkNFTId);
-      if (nftRWLKContract && account) {
-        const tokens = await nftRWLKContract.walletOfOwner(account);
-        const nftIds = tokens
-          .map((t) => t.toNumber())
-          .filter((t) => !biddedRWLKIds.includes(t))
-          .reverse();
-        setRwlknftIds(nftIds);
+      try {
+        const bidList = await api.get_bid_list();
+        const biddedRWLKIds = bidList.map((bid) => bid.RWalkNFTId);
+        if (nftRWLKContract && account) {
+          const tokens = await nftRWLKContract.walletOfOwner(account);
+          const nftIds = tokens
+            .map((t) => t.toNumber())
+            .filter((t) => !biddedRWLKIds.includes(t))
+            .reverse();
+          setRwlknftIds(nftIds);
+        }
+      } catch (e) {
+        console.log(e);
       }
     };
     getData();
@@ -407,7 +411,8 @@ const NewHome = () => {
     };
     const fetchCSTBidPrice = async () => {
       let cstPrice = await api.get_cst_price();
-      setCSTBidPrice(parseFloat(cstPrice));
+      cstPrice = parseFloat(ethers.utils.formatEther(cstPrice));
+      setCSTBidPrice(cstPrice);
     };
 
     fetchData();

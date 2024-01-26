@@ -34,12 +34,14 @@ const UserInfo = ({ address }) => {
       setBidHistory(Bids);
       setUserInfo(UserInfo);
       const balance = await api.get_user_balance(addr);
-      setBalance({
-        CosmicToken: Number(
-          ethers.utils.formatEther(balance.CosmicTokenBalance)
-        ),
-        ETH: Number(ethers.utils.formatEther(balance.ETH_Balance)),
-      });
+      if (balance) {
+        setBalance({
+          CosmicToken: Number(
+            ethers.utils.formatEther(balance.CosmicTokenBalance)
+          ),
+          ETH: Number(ethers.utils.formatEther(balance.ETH_Balance)),
+        });
+      }
       const unclaimedStakingRewards = await api.get_unclaimed_staking_rewards_by_user(
         addr
       );

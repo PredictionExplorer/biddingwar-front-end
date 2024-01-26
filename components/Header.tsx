@@ -55,12 +55,14 @@ const Header = () => {
       setApiData(notify);
 
       const balance = await api.get_user_balance(account);
-      setBalance({
-        CosmicToken: Number(
-          ethers.utils.formatEther(balance.CosmicTokenBalance)
-        ),
-        ETH: Number(ethers.utils.formatEther(balance.ETH_Balance)),
-      });
+      if (balance) {
+        setBalance({
+          CosmicToken: Number(
+            ethers.utils.formatEther(balance.CosmicTokenBalance)
+          ),
+          ETH: Number(ethers.utils.formatEther(balance.ETH_Balance)),
+        });
+      }
     };
 
     if (account) {
