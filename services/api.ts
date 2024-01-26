@@ -497,6 +497,36 @@ class ApiService {
       return [];
     }
   }
+
+  public async get_staking_rewards() {
+    try {
+      const { data } = await axios.get(getAPIUrl("staking/rewards/global/0/10000"));
+      return data.StakingRewards;
+    } catch (err) {
+      console.log(err);
+      return [];
+    }
+  }
+
+  public async get_unique_stakers() {
+    try {
+      const { data } = await axios.get(getAPIUrl("user/unique_stakers"));
+      return data.UniqueStakers;
+    } catch (err) {
+      console.log(err);
+      return [];
+    }
+  }
+
+  public async get_cst_price() {
+    try {
+      const { data } = await axios.get(getAPIUrl("bid/cst_price"));
+      return data.CSTPrice;
+    } catch (err) {
+      console.log(err);
+      return -1;
+    }
+  }
 }
 
 export default new ApiService();

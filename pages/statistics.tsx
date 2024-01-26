@@ -21,6 +21,7 @@ import {
 } from "@progress/kendo-react-charts";
 import "@progress/kendo-theme-default/dist/all.css";
 import { convertTimestampToDateTime, formatCSTValue, formatEthValue } from "../utils";
+import { UniqueStakersTable } from "../components/UniqueStakersTable";
 
 const StatisticsItem = ({ title, value }) => {
   return (
@@ -40,6 +41,7 @@ const Statistics = () => {
   const [bidHistory, setBidHistory] = useState([]);
   const [uniqueBidders, setUniqueBidders] = useState([]);
   const [uniqueWinners, setUniqueWinners] = useState([]);
+  const [uniqueStakers, setUniqueStakers] = useState([]);
   const [nftDonations, setNftDonations] = useState([]);
   const [cstDistribution, setCSTDistribution] = useState([]);
   const [ctBalanceDistribution, setCTBalanceDistribution] = useState([]);
@@ -66,6 +68,8 @@ const Statistics = () => {
       setUniqueBidders(uniqueBidders);
       const uniqueWinners = await api.get_unique_winners();
       setUniqueWinners(uniqueWinners);
+      const uniqueStakers = await api.get_unique_stakers();
+      setUniqueStakers(uniqueStakers);
       const nftDonations = await api.get_donations_nft_list();
       setNftDonations(nftDonations);
       const distribution = await api.get_cst_distribution();
@@ -356,6 +360,12 @@ const Statistics = () => {
                 Unique Winners
               </Typography>
               <UniqueWinnersTable list={uniqueWinners} />
+            </Box>
+            <Box mt={4}>
+              <Typography variant="h6" mb={2}>
+                Unique Stakers
+              </Typography>
+              <UniqueStakersTable list={uniqueStakers} />
             </Box>
             <Box mt={4}>
               <Typography variant="h6" mb={2}>

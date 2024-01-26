@@ -15,9 +15,10 @@ import {
   TablePrimaryHead,
   TablePrimaryRow,
 } from "./styled";
+import { convertTimestampToDateTime } from "../utils";
 
-const UniqueWinnersRow = ({ winner }) => {
-  if (!winner) {
+const GlobalStakingRewardsRow = ({ row }) => {
+  if (!row) {
     return <TablePrimaryRow></TablePrimaryRow>;
   }
 
@@ -25,54 +26,53 @@ const UniqueWinnersRow = ({ winner }) => {
     <TablePrimaryRow>
       <TablePrimaryCell>
         <Link
-          href={`/user/${winner.WinnerAddr}`}
+          color="inherit"
+          fontSize="inherit"
+          href={`https://arbiscan.io/tx/${row.TxHash}`}
+          target="__blank"
+        >
+          {convertTimestampToDateTime(row.TimeStamp)}
+        </Link>
+      </TablePrimaryCell>
+      <TablePrimaryCell align="center">
+        <Link
+          href={`/user/${row.StakerAddr}`}
           style={{
             color: "inherit",
             fontSize: "inherit",
             fontFamily: "monospace",
           }}
         >
-          {winner.WinnerAddr}
+          {row.StakerAddr}
         </Link>
       </TablePrimaryCell>
-      <TablePrimaryCell align="right">{winner.PrizesCount}</TablePrimaryCell>
       <TablePrimaryCell align="right">
-        {winner.MaxWinAmountEth.toFixed(6)}
-      </TablePrimaryCell>
-      <TablePrimaryCell align="right">
-        {winner.PrizesSum.toFixed(6)}
+        {row.AmountEth.toFixed(6)}
       </TablePrimaryCell>
     </TablePrimaryRow>
   );
 };
 
-export const UniqueWinnersTable = ({ list }) => {
+export const GlobalStakingRewardsTable = ({ list }) => {
   const perPage = 5;
   const [page, setPage] = useState(1);
   if (list.length === 0) {
-    return <Typography>No bidders yet.</Typography>;
+    return <Typography>No rewards yet.</Typography>;
   }
   return (
     <>
       <TablePrimaryContainer>
         <Table>
-          <colgroup>
-            <col width="55%" />
-            <col width="15%" />
-            <col width="15%" />
-            <col width="15%" />
-          </colgroup>
           <TablePrimaryHead>
             <TableRow>
-              <TableCell>Winner Address</TableCell>
-              <TableCell align="right">Prizes Taken</TableCell>
-              <TableCell align="right">Max Prize</TableCell>
-              <TableCell align="right">Prizes Sum (ETH)</TableCell>
+              <TableCell>Stake Datetime</TableCell>
+              <TableCell align="center">Staker</TableCell>
+              <TableCell align="right">Amount</TableCell>
             </TableRow>
           </TablePrimaryHead>
           <TableBody>
-            {list.slice((page - 1) * perPage, page * perPage).map((winner) => (
-              <UniqueWinnersRow winner={winner} key={winner.WinnerAid} />
+            {list.slice((page - 1) * perPage, page * perPage).map((row) => (
+              <GlobalStakingRewardsRow row={row} key={row.RecordId} />
             ))}
           </TableBody>
         </Table>
@@ -81,7 +81,7 @@ export const UniqueWinnersTable = ({ list }) => {
         <Pagination
           color="primary"
           page={page}
-          onChange={(e, page) => setPage(page)}
+          onChange={(_e, page) => setPage(page)}
           count={Math.ceil(list.length / perPage)}
           hideNextButton
           hidePrevButton

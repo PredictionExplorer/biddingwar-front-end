@@ -16,8 +16,8 @@ import {
   TablePrimaryRow,
 } from "./styled";
 
-const UniqueWinnersRow = ({ winner }) => {
-  if (!winner) {
+const UniqueStakersRow = ({ row }) => {
+  if (!row) {
     return <TablePrimaryRow></TablePrimaryRow>;
   }
 
@@ -25,54 +25,50 @@ const UniqueWinnersRow = ({ winner }) => {
     <TablePrimaryRow>
       <TablePrimaryCell>
         <Link
-          href={`/user/${winner.WinnerAddr}`}
+          href={`/user/${row.StakerAddr}`}
           style={{
             color: "inherit",
             fontSize: "inherit",
             fontFamily: "monospace",
           }}
         >
-          {winner.WinnerAddr}
+          {row.StakerAddr}
         </Link>
       </TablePrimaryCell>
-      <TablePrimaryCell align="right">{winner.PrizesCount}</TablePrimaryCell>
-      <TablePrimaryCell align="right">
-        {winner.MaxWinAmountEth.toFixed(6)}
+      <TablePrimaryCell align="center">
+        {row.TotalTokensStaked}
       </TablePrimaryCell>
       <TablePrimaryCell align="right">
-        {winner.PrizesSum.toFixed(6)}
+        {row.TotalRewardEth.toFixed(6)}
+      </TablePrimaryCell>
+      <TablePrimaryCell align="right">
+        {row.UnclaimedRewardEth.toFixed(6)}
       </TablePrimaryCell>
     </TablePrimaryRow>
   );
 };
 
-export const UniqueWinnersTable = ({ list }) => {
+export const UniqueStakersTable = ({ list }) => {
   const perPage = 5;
   const [page, setPage] = useState(1);
   if (list.length === 0) {
-    return <Typography>No bidders yet.</Typography>;
+    return <Typography>No stakers yet.</Typography>;
   }
   return (
     <>
       <TablePrimaryContainer>
         <Table>
-          <colgroup>
-            <col width="55%" />
-            <col width="15%" />
-            <col width="15%" />
-            <col width="15%" />
-          </colgroup>
           <TablePrimaryHead>
             <TableRow>
-              <TableCell>Winner Address</TableCell>
-              <TableCell align="right">Prizes Taken</TableCell>
-              <TableCell align="right">Max Prize</TableCell>
-              <TableCell align="right">Prizes Sum (ETH)</TableCell>
+              <TableCell>Staker Address</TableCell>
+              <TableCell align="center">Num Stake Actions</TableCell>
+              <TableCell align="right">Total Reward (ETH)</TableCell>
+              <TableCell align="right">Unclaimed Reward (ETH)</TableCell>
             </TableRow>
           </TablePrimaryHead>
           <TableBody>
-            {list.slice((page - 1) * perPage, page * perPage).map((winner) => (
-              <UniqueWinnersRow winner={winner} key={winner.WinnerAid} />
+            {list.slice((page - 1) * perPage, page * perPage).map((row) => (
+              <UniqueStakersRow row={row} key={row.StakerAid} />
             ))}
           </TableBody>
         </Table>

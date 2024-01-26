@@ -61,6 +61,23 @@ import NFTImage from "../components/NFTImage";
 import { calculateTimeDiff } from "../utils";
 import WinningHistoryTable from "../components/WinningHistoryTable";
 
+const bidParamsEncoding: ethers.utils.ParamType = {
+  type: "tuple(string,int256)",
+  name: "bidparams",
+  components: [
+    { name: "msg", type: "string" },
+    { name: "rwalk", type: "int256" },
+  ] as Array<ethers.utils.ParamType>,
+  baseType: "",
+  indexed: false,
+  arrayLength: 0,
+  arrayChildren: null,
+  _isParamType: false,
+  format: function(format?: string): string {
+    throw new Error("Function not implemented.");
+  },
+};
+
 const NewHome = () => {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState(null);
@@ -200,8 +217,12 @@ const NewHome = () => {
         (1 + bidPricePlus / 100);
       let receipt;
       if (!nftDonateAddress || nftId === -1) {
+        let params = ethers.utils.defaultAbiCoder.encode(
+          [bidParamsEncoding],
+          [{ msg: message, rwalk: rwlkId }]
+        );
         receipt = await cosmicGameContract
-          .bid([message, ethers.BigNumber.from(rwlkId)], {
+          .bid(params, {
             value: ethers.utils.parseEther(newBidPrice.toFixed(10)),
           })
           .then((tx) => tx.wait());
@@ -261,15 +282,14 @@ const NewHome = () => {
             .setApprovalForAll(COSMICGAME_ADDRESS, true)
             .then((tx) => tx.wait());
         }
+        let params = ethers.utils.defaultAbiCoder.encode(
+          [bidParamsEncoding],
+          [{ msg: message, rwalk: rwlkId }]
+        );
         receipt = await cosmicGameContract
-          .bidAndDonateNFT(
-            [message, ethers.BigNumber.from(rwlkId)],
-            nftDonateAddress,
-            nftId,
-            {
-              value: ethers.utils.parseEther(newBidPrice.toFixed(10)),
-            }
-          )
+          .bidAndDonateNFT(params, nftDonateAddress, nftId, {
+            value: ethers.utils.parseEther(newBidPrice.toFixed(10)),
+          })
           .then((tx) => tx.wait());
         console.log(receipt);
         setTimeout(() => {
@@ -386,9 +406,8 @@ const NewHome = () => {
       setClaimHistory(history);
     };
     const fetchCSTBidPrice = async () => {
-      let cstPrice = await cosmicGameContract.currentCSTPrice();
-      cstPrice = parseFloat(ethers.utils.formatEther(cstPrice));
-      setCSTBidPrice(cstPrice);
+      let cstPrice = await api.get_cst_price();
+      setCSTBidPrice(parseFloat(cstPrice));
     };
 
     fetchData();
