@@ -140,9 +140,7 @@ const NewHome = () => {
   const onClaimPrize = async () => {
     try {
       const estimageGas = await cosmicGameContract.estimateGas.claimPrize();
-      let gasLimit = estimageGas
-        .mul(BigNumber.from(115))
-        .div(BigNumber.from(100));
+      let gasLimit = estimageGas.mul(BigNumber.from(2));
       gasLimit = gasLimit.gt(BigNumber.from(2000000))
         ? gasLimit
         : BigNumber.from(2000000);
