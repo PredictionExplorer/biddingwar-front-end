@@ -36,15 +36,21 @@ const Staking = () => {
         <meta name="description" content="" />
       </Head>
       <MainWrapper>
-        <Typography variant="h5" mb={4}>
-          Staking Rewards
+        <Typography
+          variant="h4"
+          color="primary"
+          gutterBottom
+          textAlign="center"
+          mb={6}
+        >
+          Marketing Rewards
         </Typography>
         {stakingRewards === null ? (
           <Typography variant="h6">Loading...</Typography>
         ) : (
           <GlobalStakingRewardsTable list={stakingRewards} />
         )}
-        <Typography variant="h5" mt={8} mb={4}>
+        {/* <Typography variant="h5" mt={8} mb={4}>
           Staking Actions
         </Typography>
         {stakingActions === null ? (
@@ -59,7 +65,7 @@ const Staking = () => {
           <Typography variant="h6">Loading...</Typography>
         ) : (
           <GlobalStakedTokensTable list={stakedTokens} />
-        )}
+        )} */}
       </MainWrapper>
     </>
   );

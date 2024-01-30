@@ -744,8 +744,8 @@ const NewHome = () => {
                         Random Walk NFT Gallery
                       </Typography>
                       <Typography variant="body2">
-                        If you own some RandomWalkNFTs, you can use them to bid
-                        for free! Each NFT can be used only once!
+                        If you own some RandomWalkNFTs and one of them is used
+                        when bidding, you can get a 50% discount!
                       </Typography>
                       <PaginationRWLKGrid
                         loading={false}
