@@ -81,7 +81,11 @@ const bidParamsEncoding: ethers.utils.ParamType = {
 const NewHome = () => {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState(null);
-  const [cstBidPrice, setCSTBidPrice] = useState(0);
+  const [cstBidData, setCSTBidData] = useState({
+    AuctionDuration: 0,
+    CSTPrice: 0,
+    SecondsElapsed: 0,
+  });
   const [curBidList, setCurBidList] = useState([]);
   const [donatedNFTs, setDonatedNFTs] = useState([]);
   const [prizeTime, setPrizeTime] = useState(0);
@@ -407,10 +411,15 @@ const NewHome = () => {
       const history = await api.get_claim_history();
       setClaimHistory(history);
     };
-    const fetchCSTBidPrice = async () => {
-      let cstPrice = await api.get_cst_price();
-      cstPrice = parseFloat(ethers.utils.formatEther(cstPrice));
-      setCSTBidPrice(cstPrice);
+    const fetchCSTBidData = async () => {
+      let cstData = await api.get_cst_price();
+      if (cstData) {
+        setCSTBidData({
+          AuctionDuration: parseInt(cstData.AuctionDuration),
+          CSTPrice: parseFloat(ethers.utils.formatEther(cstData.CSTPrice)),
+          SecondsElapsed: parseInt(cstData.SecondsElapsed),
+        });
+      }
     };
 
     fetchData();
@@ -418,7 +427,7 @@ const NewHome = () => {
     fetchPrizeTime();
     fetchClaimHistory();
     if (cosmicGameContract) {
-      fetchCSTBidPrice();
+      fetchCSTBidData();
     }
 
     // setBlackVideo(
@@ -431,7 +440,7 @@ const NewHome = () => {
       fetchPrizeTime();
       fetchClaimHistory();
       if (cosmicGameContract) {
-        fetchCSTBidPrice();
+        fetchCSTBidData();
       }
     }, 12000);
 
@@ -592,7 +601,33 @@ const NewHome = () => {
                   </Typography>
                   &nbsp;
                   <Typography variant="subtitle1" component="span">
-                    {cstBidPrice.toFixed(6)} CST
+                    {cstBidData?.CSTPrice.toFixed(6)} CST
+                  </Typography>
+                </Box>
+                <Box>
+                  <Typography
+                    variant="subtitle1"
+                    color="primary"
+                    component="span"
+                  >
+                    Elapsed Time:
+                  </Typography>
+                  &nbsp;
+                  <Typography variant="subtitle1" component="span">
+                    {cstBidData?.SecondsElapsed}
+                  </Typography>
+                </Box>
+                <Box>
+                  <Typography
+                    variant="subtitle1"
+                    color="primary"
+                    component="span"
+                  >
+                    Auction Duration:
+                  </Typography>
+                  &nbsp;
+                  <Typography variant="subtitle1" component="span">
+                    {cstBidData?.AuctionDuration}
                   </Typography>
                 </Box>
                 <Box>
