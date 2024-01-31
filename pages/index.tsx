@@ -614,7 +614,7 @@ const NewHome = () => {
                   </Typography>
                   &nbsp;
                   <Typography variant="subtitle1" component="span">
-                    {cstBidData?.SecondsElapsed}
+                    {calculateTimeDiff(cstBidData?.SecondsElapsed)}
                   </Typography>
                 </Box>
                 <Box>
@@ -627,7 +627,7 @@ const NewHome = () => {
                   </Typography>
                   &nbsp;
                   <Typography variant="subtitle1" component="span">
-                    {cstBidData?.AuctionDuration}
+                    {cstBidData?.AuctionDuration} Seconds
                   </Typography>
                 </Box>
                 <Box>
