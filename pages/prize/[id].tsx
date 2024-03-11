@@ -8,9 +8,10 @@ import { convertTimestampToDateTime } from "../../utils";
 import DonatedNFT from "../../components/DonatedNFT";
 import RaffleWinnerTable from "../../components/RaffleWinnerTable";
 import BiddingHistoryTable from "../../components/BiddingHistoryTable";
-import { useActiveWeb3React } from "../../hooks/web3";
 import useCosmicGameContract from "../../hooks/useCosmicGameContract";
 import { useApiData } from "../../contexts/ApiDataContext";
+import StakingWinnerTable from "../../components/StakingWinnerTable";
+import DonatedNFTTable from "../../components/DonatedNFTTable";
 
 const PrizeInfo = ({ roundNum }) => {
   const cosmicGameContract = useCosmicGameContract();
@@ -19,6 +20,7 @@ const PrizeInfo = ({ roundNum }) => {
   const [bidHistory, setBidHistory] = useState([]);
   const [nftDonations, setNftDonations] = useState([]);
   const [prizeInfo, setPrizeInfo] = useState(null);
+  const [stakingRewards, setStakingRewards] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const handleAllDonatedNFTsClaim = async () => {
@@ -49,6 +51,8 @@ const PrizeInfo = ({ roundNum }) => {
       setPrizeInfo(prizeInfo);
       const bidHistory = await api.get_bid_list_by_round(roundNum, "desc");
       setBidHistory(bidHistory);
+      const stakingRewards = await api.get_staking_rewards_by_round(roundNum);
+      setStakingRewards(stakingRewards);
       setLoading(false);
     };
     fetchData();
@@ -63,7 +67,7 @@ const PrizeInfo = ({ roundNum }) => {
       <MainWrapper>
         <Box mb={4}>
           <Typography variant="h4" color="primary" component="span" mr={2}>
-            {`Round #${roundNum + 1}`}
+            {`Round #${roundNum}`}
           </Typography>
           <Typography variant="h4" component="span">
             Prize Information
@@ -150,6 +154,22 @@ const PrizeInfo = ({ roundNum }) => {
                 {prizeInfo.RoundStats.TotalRaffleNFTs}
               </Typography>
             </Box>
+            <Box mb={1}>
+              <Typography color="primary" component="span">
+                Total Staking Deposit Amount:
+              </Typography>
+              &nbsp;
+              <Typography component="span">
+                {prizeInfo.StakingDepositAmountEth.toFixed(4)}
+              </Typography>
+            </Box>
+            <Box mb={1}>
+              <Typography color="primary" component="span">
+                Number of Stakers:
+              </Typography>
+              &nbsp;
+              <Typography component="span">{stakingRewards.length}</Typography>
+            </Box>
             <Box mt={4}>
               <Typography variant="h6" lineHeight={1}>
                 Bid History
@@ -166,6 +186,12 @@ const PrizeInfo = ({ roundNum }) => {
               />
             </Box>
             <Box mt={4}>
+              <Typography variant="h6" mb={2}>
+                Staking Rewards
+              </Typography>
+              <StakingWinnerTable list={stakingRewards} />
+            </Box>
+            <Box mt={8}>
               <Box
                 sx={{
                   mb: 2,
@@ -184,21 +210,7 @@ const PrizeInfo = ({ roundNum }) => {
                   </Button>
                 )}
               </Box>
-              <Grid container spacing={2}>
-                {nftDonations.length ? (
-                  nftDonations.map((nft) => (
-                    <Grid key={nft.RecordId} item xs={12} sm={12} md={4} lg={4}>
-                      <DonatedNFT nft={nft} />
-                    </Grid>
-                  ))
-                ) : (
-                  <Grid item>
-                    <Typography>
-                      No ERC721 tokens were donated on this round
-                    </Typography>
-                  </Grid>
-                )}
-              </Grid>
+              <DonatedNFTTable list={nftDonations} handleClaim={null} />
             </Box>
           </Box>
         ) : (

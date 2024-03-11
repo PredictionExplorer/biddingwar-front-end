@@ -15,7 +15,7 @@ import { useActiveWeb3React } from "../hooks/web3";
 import { shortenHex } from "../utils";
 import { switchNetwork } from "../utils/switchNetwork";
 
-const ConnectWalletButton = ({ isMobileView, balance }) => {
+const ConnectWalletButton = ({ isMobileView, balance, stakedTokens }) => {
   const { account, activate } = useActiveWeb3React();
   const [anchorEl, setAnchorEl] = useState(null);
 
@@ -80,8 +80,8 @@ const ConnectWalletButton = ({ isMobileView, balance }) => {
           onClose={handleMenuClose}
         >
           <MenuItem style={{ minWidth: 166 }} onClick={handleMenuClose}>
-            <NavLink href="/my-wallet" sx={{ width: "100%" }}>
-              MY WALLET
+            <NavLink href="/my-tokens" sx={{ width: "100%" }}>
+              MY TOKENS
             </NavLink>
           </MenuItem>
           <MenuItem style={{ minWidth: 166 }} onClick={handleMenuClose}>
@@ -99,7 +99,9 @@ const ConnectWalletButton = ({ isMobileView, balance }) => {
             style={{ minWidth: 166, pointerEvents: "none", display: "block" }}
           >
             <Typography sx={{ fontSize: "inherit" }}>BALANCE:</Typography>
-            <Box sx={{ display: "flex", justifyContent: "space-between", mt: 1 }}>
+            <Box
+              sx={{ display: "flex", justifyContent: "space-between", mt: 1 }}
+            >
               <Typography
                 variant="body2"
                 color="secondary"
@@ -115,13 +117,15 @@ const ConnectWalletButton = ({ isMobileView, balance }) => {
                 {balance.ETH.toFixed(2)}
               </Typography>
             </Box>
-            <Box sx={{ display: "flex", justifyContent: "space-between", mt: 1 }}>
+            <Box
+              sx={{ display: "flex", justifyContent: "space-between", mt: 1 }}
+            >
               <Typography
                 variant="body2"
                 color="secondary"
                 sx={{ fontStyle: "italic", fontWeight: 600 }}
               >
-                CST:
+                CST (ERC20):
               </Typography>
               <Typography
                 variant="body2"
@@ -131,6 +135,33 @@ const ConnectWalletButton = ({ isMobileView, balance }) => {
                 {balance.CosmicToken.toFixed(2)}
               </Typography>
             </Box>
+            <Box
+              sx={{ display: "flex", justifyContent: "space-between", mt: 1 }}
+            >
+              <Typography
+                variant="body2"
+                color="secondary"
+                sx={{ fontStyle: "italic", fontWeight: 600 }}
+              >
+                CSS (ERC721):
+              </Typography>
+              <Typography
+                variant="body2"
+                color="secondary"
+                sx={{ fontStyle: "italic", fontWeight: 600 }}
+              >
+                {balance.CosmicSignature} tokens
+              </Typography>
+            </Box>
+          </MenuItem>
+          <Divider />
+          <MenuItem
+            style={{ pointerEvents: "none", justifyContent: "space-between" }}
+          >
+            <Typography sx={{ fontSize: "inherit" }}>STAKED TOKENS:</Typography>
+            <Typography color="primary" sx={{ fontSize: "inherit" }}>
+              {stakedTokens?.length}
+            </Typography>
           </MenuItem>
         </Menu>
       </>

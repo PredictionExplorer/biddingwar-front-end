@@ -31,6 +31,7 @@ const PrizeRow = ({ prize }) => {
         router.push(`/prize/${prize.PrizeNum}`);
       }}
     >
+      <TablePrimaryCell align="center">{prize.PrizeNum}</TablePrimaryCell>
       <TablePrimaryCell>
         {convertTimestampToDateTime(prize.TimeStamp)}
       </TablePrimaryCell>
@@ -43,7 +44,6 @@ const PrizeRow = ({ prize }) => {
           </Typography>
         </Tooltip>
       </TablePrimaryCell>
-      <TablePrimaryCell align="center">{prize.PrizeNum + 1}</TablePrimaryCell>
       <TablePrimaryCell align="right">
         {prize.AmountEth.toFixed(4)} ETH
       </TablePrimaryCell>
@@ -55,6 +55,9 @@ const PrizeRow = ({ prize }) => {
       </TablePrimaryCell>
       <TablePrimaryCell align="right">
         {prize.RoundStats.TotalRaffleEthDepositsEth.toFixed(4)} ETH
+      </TablePrimaryCell>
+      <TablePrimaryCell align="right">
+        {prize.StakingDepositAmountEth.toFixed(4)} ETH
       </TablePrimaryCell>
       <TablePrimaryCell align="center">
         {prize.RoundStats.TotalRaffleNFTs}
@@ -77,24 +80,26 @@ export const PrizeTable = ({ list, loading }) => {
       <TablePrimaryContainer>
         <Table>
           <colgroup>
+            <col width="4%" />
             <col width="16%" />
-            <col width="15%" />
-            <col width="9%" />
-            <col width="12%" />
-            <col width="8%" />
+            <col width="14%" />
             <col width="13%" />
+            <col width="5%" />
+            <col width="10%" />
             <col width="15%" />
-            <col width="12%" />
+            <col width="13%" />
+            <col width="10%" />
           </colgroup>
           <TablePrimaryHead>
             <TableRow>
-              <TableCell>Datetime</TableCell>
-              <TableCell>Winner</TableCell>
-              <TableCell align="center">Round #</TableCell>
+              <TableCell align="center">Round</TableCell>
+              <TableCell align="center">Datetime</TableCell>
+              <TableCell align="center">Winner</TableCell>
               <TableCell align="right">Prize Amount</TableCell>
               <TableCell align="center">Bids</TableCell>
               <TableCell align="center">Donated NFTs</TableCell>
               <TableCell align="right">Raffle Deposits</TableCell>
+              <TableCell align="right">Staking Deposit</TableCell>
               <TableCell align="center">Raffle NFTs</TableCell>
             </TableRow>
           </TablePrimaryHead>

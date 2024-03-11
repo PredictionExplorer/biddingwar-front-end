@@ -201,7 +201,7 @@ class ApiService {
       return data;
     } catch (err) {
       console.log(err);
-      return null;
+      return { Bids: null, UserInfo: null };
     }
   }
 
@@ -289,6 +289,16 @@ class ApiService {
     try {
       const { data } = await axios.get(getAPIUrl("prize/cur_round/time"));
       return data.CurRoundPrizeTime;
+    } catch (err) {
+      console.log(err);
+      return 0;
+    }
+  }
+
+  public async get_current_time() {
+    try {
+      const { data } = await axios.get(getAPIUrl("time/current"));
+      return data.CurrentTimeStamp;
     } catch (err) {
       console.log(err);
       return 0;
@@ -475,16 +485,13 @@ class ApiService {
     }
   }
 
-  public async get_action_id_by_deposit_id(user_addr: string, deposit_id: number) {
+  public async get_action_ids_by_deposit_id(user_addr: string, deposit_id: number) {
     try {
       const { data } = await axios.get(getAPIUrl(`staking/rewards/action_ids_by_deposit/${user_addr}/${deposit_id}`));
-      if (data.ActionIds.length) {
-        return data.ActionIds[0].StakeActionId;
-      }
-      return -1;
+      return data.ActionIds;
     } catch (err) {
       console.log(err);
-      return -1;
+      return [];
     }
   }
 
@@ -518,13 +525,23 @@ class ApiService {
     }
   }
 
-  public async get_cst_price() {
+  public async get_ct_price() {
     try {
       const { data } = await axios.get(getAPIUrl("bid/cst_price"));
       return data;
     } catch (err) {
       console.log(err);
       return null;
+    }
+  }
+
+  public async get_staking_rewards_by_round(round: number) {
+    try {
+      const { data } = await axios.get(getAPIUrl(`staking/rewards/by_round/${round}`));
+      return data.Winners;
+    } catch (err) {
+      console.log(err);
+      return [];
     }
   }
 }

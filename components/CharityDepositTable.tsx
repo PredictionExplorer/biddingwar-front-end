@@ -17,68 +17,63 @@ import {
 } from "./styled";
 import { convertTimestampToDateTime } from "../utils";
 
-const GlobalMarketingRewardsRow = ({ row }) => {
-  if (!row) {
+const DonationRow = ({ donation }) => {
+  if (!donation) {
     return <TablePrimaryRow></TablePrimaryRow>;
   }
 
   return (
     <TablePrimaryRow>
       <TablePrimaryCell>
+        {convertTimestampToDateTime(donation.TimeStamp)}
+      </TablePrimaryCell>
+      <TablePrimaryCell align="center">{donation.RoundNum}</TablePrimaryCell>
+      <TablePrimaryCell align="center">
         <Link
           color="inherit"
           fontSize="inherit"
-          href={`https://arbiscan.io/tx/${row.TxHash}`}
-          target="__blank"
+          href={`/user/${donation.DonorAddr}`}
         >
-          {convertTimestampToDateTime(row.TimeStamp)}
-        </Link>
-      </TablePrimaryCell>
-      <TablePrimaryCell align="center">
-        <Link
-          href={`/marketing/${row.MarketerAddr}`}
-          style={{
-            color: "inherit",
-            fontSize: "inherit",
-            fontFamily: "monospace",
-          }}
-        >
-          {row.MarketerAddr}
+          {donation.DonorAddr}
         </Link>
       </TablePrimaryCell>
       <TablePrimaryCell align="right">
-        {row.AmountEth.toFixed(2)} CST
+        {donation.AmountEth.toFixed(6)}
       </TablePrimaryCell>
     </TablePrimaryRow>
   );
 };
 
-export const GlobalMarketingRewardsTable = ({ list }) => {
+export const CharityDepositTable = ({ list }) => {
   const perPage = 5;
   const [page, setPage] = useState(1);
   if (list.length === 0) {
-    return <Typography>No rewards yet.</Typography>;
+    return <Typography>No deposits yet.</Typography>;
   }
   return (
     <>
       <TablePrimaryContainer>
         <Table>
           <colgroup>
-            <col width="30%" />
+            <col width="20%" />
+            <col width="15%" />
             <col width="40%" />
-            <col width="30%" />
+            <col width="25%" />
           </colgroup>
           <TablePrimaryHead>
             <TableRow>
               <TableCell>Datetime</TableCell>
-              <TableCell align="center">Marketer</TableCell>
-              <TableCell align="right">Amount</TableCell>
+              <TableCell align="center">Round Num</TableCell>
+              <TableCell align="center">Donor Address</TableCell>
+              <TableCell align="right">Donation amount (ETH)</TableCell>
             </TableRow>
           </TablePrimaryHead>
           <TableBody>
-            {list.slice((page - 1) * perPage, page * perPage).map((row) => (
-              <GlobalMarketingRewardsRow row={row} key={row.EvtLogId} />
-            ))}
+            {list
+              .slice((page - 1) * perPage, page * perPage)
+              .map((donation) => (
+                <DonationRow donation={donation} key={donation.EvtLogId} />
+              ))}
           </TableBody>
         </Table>
       </TablePrimaryContainer>

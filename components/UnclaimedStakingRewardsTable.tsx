@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -19,8 +19,15 @@ import { convertTimestampToDateTime } from "../utils";
 import useStakingWalletContract from "../hooks/useStakingWalletContract";
 import api from "../services/api";
 import { useActiveWeb3React } from "../hooks/web3";
+import { useStakedToken } from "../contexts/StakedTokenContext";
 
-const UnclaimedStakingRewardsRow = ({ row, handleClaim }) => {
+const UnclaimedStakingRewardsRow = ({
+  row,
+  handleClaim,
+  owner,
+  stakedTokens,
+}) => {
+  const { account } = useActiveWeb3React();
   if (!row) {
     return <TablePrimaryRow></TablePrimaryRow>;
   }
@@ -41,54 +48,69 @@ const UnclaimedStakingRewardsRow = ({ row, handleClaim }) => {
       <TablePrimaryCell align="right">
         {row.YourClaimableAmountEth.toFixed(6)}
       </TablePrimaryCell>
-      <TablePrimaryCell>
-        <Button size="small" onClick={handleClaim}>
-          Claim
-        </Button>
-      </TablePrimaryCell>
+      {account === owner && (
+        <TablePrimaryCell>
+          <Button size="small" onClick={handleClaim}>
+            {stakedTokens.length > 0 ? "Unstake & Claim" : "Claim"}
+          </Button>
+        </TablePrimaryCell>
+      )}
     </TablePrimaryRow>
   );
 };
 
-export const UnclaimedStakingRewardsTable = ({ list }) => {
+export const UnclaimedStakingRewardsTable = ({ list, owner, fetchData }) => {
   const { account } = useActiveWeb3React();
   const stakingContract = useStakingWalletContract();
   const perPage = 5;
   const [page, setPage] = useState(1);
+  const { data: stakedTokens } = useStakedToken();
 
   const handleClaim = async (depositId: number) => {
     try {
-      const actionId = await api.get_action_id_by_deposit_id(
+      const response = await api.get_action_ids_by_deposit_id(
         account,
         depositId
       );
+      const actionIds = response.map((x) => x.StakeActionId);
+      if (stakedTokens.length > 0) {
+        await stakingContract.unstakeMany(actionIds).then((tx) => tx.wait());
+        fetchData(owner, false);
+      }
       const res = await stakingContract
-        .claimReward(actionId, depositId)
+        .claimManyRewards(
+          actionIds,
+          new Array(actionIds.length).fill(depositId)
+        )
         .then((tx) => tx.wait());
       console.log(res);
+      fetchData(owner, false);
     } catch (err) {
       console.error(err);
-      alert(err.data.message);
     }
   };
+
   const handleClaimAll = async () => {
-    const promiseArray = list.map(async (x) => {
-      const actionId = await api.get_action_id_by_deposit_id(
+    let actionIds = [],
+      depositIds = [];
+    for (const element of list) {
+      const depositId = element.DepositId;
+      const response = await api.get_action_ids_by_deposit_id(
         account,
-        x.DepositId
+        depositId
       );
-      return actionId;
-    });
-    const actionIds = await Promise.all(promiseArray);
-    const depositIds = list.map((x) => x.DepositId);
+      const ids = response.map((x) => x.StakeActionId);
+      actionIds = actionIds.concat(ids);
+      depositIds = depositIds.concat(new Array(ids.length).fill(depositId));
+    }
     try {
       const res = await stakingContract
         .claimManyRewards(actionIds, depositIds)
         .then((tx) => tx.wait());
       console.log(res);
-    } catch (err) {
-      console.error(err);
-      alert(err.data.message);
+      fetchData(owner, false);
+    } catch (e) {
+      console.error(e);
     }
   };
 
@@ -103,10 +125,10 @@ export const UnclaimedStakingRewardsTable = ({ list }) => {
             <col width="15%" />
             <col width="10%" />
             <col width="18%" />
-            <col width="16%" />
-            <col width="17%" />
-            <col width="20%" />
-            <col width="2%" />
+            <col width="12%" />
+            <col width="12%" />
+            <col width="15%" />
+            {account === owner && <col width="16%" />}
           </colgroup>
           <TablePrimaryHead>
             <TableRow>
@@ -118,7 +140,7 @@ export const UnclaimedStakingRewardsTable = ({ list }) => {
               <TableCell align="right">Reward Per Token</TableCell>
               <TableCell align="right">Your Staked Tokens</TableCell>
               <TableCell align="right">Your Claimable Amount</TableCell>
-              <TableCell></TableCell>
+              {account === owner && <TableCell></TableCell>}
             </TableRow>
           </TablePrimaryHead>
           <TableBody>
@@ -128,6 +150,8 @@ export const UnclaimedStakingRewardsTable = ({ list }) => {
                 <UnclaimedStakingRewardsRow
                   row={row}
                   key={index}
+                  owner={owner}
+                  stakedTokens={stakedTokens}
                   handleClaim={() => handleClaim(row.DepositId)}
                 />
               ))}
@@ -144,11 +168,13 @@ export const UnclaimedStakingRewardsTable = ({ list }) => {
             .toFixed(6)}
         </Typography>
       </Box>
-      <Box display="flex" justifyContent="end" mt={1}>
-        <Button size="small" onClick={handleClaimAll}>
-          Claim All
-        </Button>
-      </Box>
+      {stakedTokens.length === 0 && list.length > 0 && (
+        <Box display="flex" justifyContent="end" mt={1}>
+          <Button variant="text" onClick={handleClaimAll}>
+            Claim All
+          </Button>
+        </Box>
+      )}
       <Box display="flex" justifyContent="center" mt={4}>
         <Pagination
           color="primary"

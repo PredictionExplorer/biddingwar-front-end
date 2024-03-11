@@ -45,6 +45,30 @@ export const convertTimestampToDateTime = (timestamp: any) => {
   return result;
 };
 
+
+export const formatSeconds = (seconds: any) => {
+  if (seconds <= 0) {
+    return "";
+  }
+  let minutes = Math.floor(seconds / 60);
+  seconds = seconds % 60;
+  let hours = Math.floor(minutes / 60);
+  minutes = minutes % 60;
+  let days = Math.floor(hours / 24);
+  hours = hours % 24;
+  let str = "";
+  if (days) {
+    str = days + " Days ";
+  }
+  if (hours || str) {
+    str += hours + " Hours ";
+  }
+  if (minutes) {
+    str += minutes + " Minutes ";
+  }
+  return str;
+};
+
 export const calculateTimeDiff = (timestamp: any) => {
   let seconds = Math.floor(Date.now() / 1000) - timestamp;
   if (seconds <= 0) {
@@ -66,7 +90,6 @@ export const calculateTimeDiff = (timestamp: any) => {
   if (minutes) {
     str += ("0" + minutes).slice(-2) + " Minutes ";
   }
-  str += ("0" + seconds).slice(-2) + " Seconds";
   return str;
 };
 

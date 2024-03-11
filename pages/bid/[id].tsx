@@ -65,7 +65,7 @@ const BidInfo = ({ bidId }) => {
                   color: "inherit",
                 }}
               >
-                <Typography>{bidInfo.RoundNum + 1}</Typography>
+                <Typography>{bidInfo.RoundNum}</Typography>
               </Link>
             </Box>
             <Box mb={1} display="flex" flexWrap="wrap">
@@ -113,7 +113,7 @@ const BidInfo = ({ bidId }) => {
             </Box>
             <Box mb={1} display="flex" flexWrap="wrap">
               <Typography color="primary">
-                Was bid with Cosmic Signature Token:
+                Was bid with Cosmic Token:
               </Typography>
               &nbsp;
               <Typography>{bidInfo.BidType === 2 ? "Yes" : "No"}</Typography>

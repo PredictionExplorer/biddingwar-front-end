@@ -67,7 +67,7 @@ const NFTRow = ({ nft, handleClaim }) => {
           }}
           target="_blank"
         >
-          {nft.RoundNum + 1}
+          {nft.RoundNum}
         </Link>
       </TablePrimaryCell>
       <TablePrimaryCell>
@@ -99,17 +99,19 @@ const NFTRow = ({ nft, handleClaim }) => {
           <NFTImage src={tokenURI?.image} />
         </Link>
       </TablePrimaryCell>
-      <TablePrimaryCell>
-        {!nft.WinnerAddr && (
-          <Button
-            variant="contained"
-            onClick={(e) => handleClaim(e, nft.Index)}
-            data-testid="Claim Button"
-          >
-            Claim
-          </Button>
-        )}
-      </TablePrimaryCell>
+      {handleClaim && (
+        <TablePrimaryCell>
+          {!nft.WinnerAddr && (
+            <Button
+              variant="contained"
+              onClick={(e) => handleClaim(e, nft.Index)}
+              data-testid="Claim Button"
+            >
+              Claim
+            </Button>
+          )}
+        </TablePrimaryCell>
+      )}
     </TablePrimaryRow>
   );
 };
@@ -118,7 +120,7 @@ const DonatedNFTTable = ({ list, handleClaim }) => {
   const perPage = 5;
   const [page, setPage] = useState(1);
   if (list.length === 0) {
-    return <Typography variant="h6">No NFTs yet.</Typography>;
+    return <Typography>No donated NFTs yet.</Typography>;
   }
   return (
     <>
@@ -141,7 +143,7 @@ const DonatedNFTTable = ({ list, handleClaim }) => {
               <TableCell>Token Address</TableCell>
               <TableCell align="right">Token ID</TableCell>
               <TableCell align="center">Token Image</TableCell>
-              <TableCell></TableCell>
+              {handleClaim && <TableCell></TableCell>}
             </TableRow>
           </TablePrimaryHead>
           <TableBody>

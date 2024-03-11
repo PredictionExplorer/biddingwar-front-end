@@ -54,6 +54,7 @@ const Statistics = () => {
   const [stakingActions, setStakingActions] = useState(null);
   const [stakedTokens, setStakedTokens] = useState(null);
   const [loading, setLoading] = useState(true);
+
   const gridLayout =
     nftDonations.length > 16
       ? { xs: 6, sm: 3, md: 2, lg: 2 }
@@ -135,10 +136,7 @@ const Statistics = () => {
           <>
             <Typography variant="h5">Current Round Statistics</Typography>
             <Box my={4}>
-              <StatisticsItem
-                title="Current Round"
-                value={data.CurRoundNum + 1}
-              />
+              <StatisticsItem title="Current Round" value={data.CurRoundNum} />
               <StatisticsItem
                 title="Round Start Date"
                 value={
@@ -218,6 +216,10 @@ const Statistics = () => {
             <Typography variant="h5">Overall Statistics</Typography>
             <Box mt={4}>
               <StatisticsItem
+                title="CosmicGame contract balance"
+                value={`${data.CosmicGameBalanceEth.toFixed(4)} ETH`}
+              />
+              <StatisticsItem
                 title="Num Prizes Given"
                 value={
                   <Link href="/prize" color="inherit" fontSize="inherit">
@@ -226,7 +228,7 @@ const Statistics = () => {
                 }
               />
               <StatisticsItem
-                title="Total Cosmic Signature tokens minted"
+                title="Total Cosmic Signature Tokens minted"
                 value={
                   <Link href="/gallery" color="inherit" fontSize="inherit">
                     {data.MainStats.NumCSTokenMints}
@@ -358,7 +360,7 @@ const Statistics = () => {
                 value={data.NumDonatedNFTs}
               />
               <StatisticsItem
-                title="Amount of Cosmic Signature tokens with assigned name"
+                title="Amount of Cosmic Signature Tokens with assigned name"
                 value={data.MainStats.TotalNamedTokens}
               />
               <StatisticsItem
