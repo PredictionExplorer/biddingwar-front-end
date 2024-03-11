@@ -322,6 +322,17 @@ const NewHome = () => {
           NFT_ABI,
           library.getSigner(account)
         );
+        const isERC721 = await nftDonateContract.supportsInterface(
+          "0x80ac58cd"
+        );
+        if (!isERC721) {
+          setNotification({
+            visible: true,
+            text: "The donate NFT contract is not an ERC721 token contract.",
+          });
+          setIsBidding(false);
+          return;
+        }
         const approvedBy = await nftDonateContract.getApproved(nftId);
         const isApprovedForAll = await nftDonateContract.isApprovedForAll(
           account,

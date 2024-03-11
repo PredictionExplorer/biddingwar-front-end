@@ -6,7 +6,8 @@ const switchRequest = (ethereum: any) => {
   return ethereum.request({
     method: 'wallet_switchEthereumChain',
     // params: [{ chainId: '0x7A69' }],  // local testnet
-    params: [{ chainId: '0x66eee' }],  // sepolia
+    // params: [{ chainId: '0x66eee' }],  // arbitrum sepolia
+    params: [{ chainId: '0xaa36a7' }],  // sepolia
   })
 }
 
@@ -26,16 +27,31 @@ const addChainRequest = (ethereum: any) => {
   //     },
   //   ],
   // })
+  // return ethereum.request({
+  //   method: 'wallet_addEthereumChain',
+  //   params: [
+  //     {
+  //       chainId: '0x66eee',
+  //       chainName: 'Arbitrum Sepolia',
+  //       rpcUrls: ['https://sepolia-rollup.arbitrum.io/rpc'],
+  //       nativeCurrency: {
+  //         name: 'ETH',
+  //         symbol: 'ETH',
+  //         decimals: 18,
+  //       },
+  //     },
+  //   ],
+  // })
   return ethereum.request({
     method: 'wallet_addEthereumChain',
     params: [
       {
-        chainId: '0x66eee',
-        chainName: 'Arbitrum Sepolia',
-        rpcUrls: ['https://sepolia-rollup.arbitrum.io/rpc'],
+        chainId: '0xaa36a7',
+        chainName: 'Sepolia',
+        rpcUrls: ['https://eth-sepolia.g.alchemy.com/v2/demo'],
         nativeCurrency: {
           name: 'ETH',
-          symbol: 'ETH',
+          symbol: 'SepoliaETH',
           decimals: 18,
         },
       },
