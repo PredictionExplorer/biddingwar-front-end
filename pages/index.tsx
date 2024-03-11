@@ -225,18 +225,15 @@ const NewHome = () => {
 
   const checkBalance = async (type, amount) => {
     try {
+      if (type === "ETH") {
+        const ethBalance = await library.getBalance(account);
+        return Number(ethers.utils.formatEther(ethBalance)) >= amount;
+      }
       const balance = await api.get_user_balance(account);
       if (balance) {
-        if (type === "ETH") {
-          return (
-            Number(ethers.utils.formatEther(balance.ETH_Balance)) >= amount
-          );
-        } else if (type === "CST") {
-          return (
-            Number(ethers.utils.formatEther(balance.CosmicTokenBalance)) >=
-            amount
-          );
-        }
+        return (
+          Number(ethers.utils.formatEther(balance.CosmicTokenBalance)) >= amount
+        );
       }
     } catch (e) {
       console.log(e);
