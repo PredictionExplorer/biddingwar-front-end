@@ -508,7 +508,7 @@ const NewHome = () => {
   }, []);
 
   useEffect(() => {
-    if (data && bannerTokenId === "") {
+    if (data && data?.MainStats.NumCSTokenMints > 0 && bannerTokenId === "") {
       let bannerId = Math.floor(
         Math.random() * data?.MainStats.NumCSTokenMints
       );
