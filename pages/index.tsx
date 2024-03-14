@@ -303,33 +303,35 @@ const NewHome = () => {
       return;
     }
 
-    // owner of
-    const isOwner = await checkTokenOwnership(nftDonateAddress, nftId);
-    if (!isOwner) {
-      setIsBidding(false);
-      return;
-    }
+    let receipt;
+    if (nftDonateAddress && nftId !== -1) {
+      const nftDonateContract = new Contract(
+        nftDonateAddress,
+        NFT_ABI,
+        library.getSigner(account)
+      );
 
-    try {
-      let receipt;
-      if (nftDonateAddress && nftId !== -1) {
+      try {
+        await nftDonateContract.supportsInterface("0x80ac58cd");
+      } catch (err) {
+        console.log(err);
+        setNotification({
+          visible: true,
+          text: "The donate NFT contract is not an ERC721 token contract.",
+        });
+        setIsBidding(false);
+        return;
+      }
+
+      // owner of
+      const isOwner = await checkTokenOwnership(nftDonateAddress, nftId);
+      if (!isOwner) {
+        setIsBidding(false);
+        return;
+      }
+
+      try {
         // setApprovalForAll
-        const nftDonateContract = new Contract(
-          nftDonateAddress,
-          NFT_ABI,
-          library.getSigner(account)
-        );
-        const isERC721 = await nftDonateContract.supportsInterface(
-          "0x80ac58cd"
-        );
-        if (!isERC721) {
-          setNotification({
-            visible: true,
-            text: "The donate NFT contract is not an ERC721 token contract.",
-          });
-          setIsBidding(false);
-          return;
-        }
         const approvedBy = await nftDonateContract.getApproved(nftId);
         const isApprovedForAll = await nftDonateContract.isApprovedForAll(
           account,
@@ -353,17 +355,17 @@ const NewHome = () => {
         setTimeout(() => {
           router.reload();
         }, 4000);
+      } catch (err) {
+        if (err?.data?.message) {
+          const msg = getErrorMessage(err?.data?.message);
+          setNotification({
+            visible: true,
+            text: msg,
+          });
+        }
+        console.log(err);
+        setIsBidding(false);
       }
-    } catch (err) {
-      if (err?.data?.message) {
-        const msg = getErrorMessage(err?.data?.message);
-        setNotification({
-          visible: true,
-          text: msg,
-        });
-      }
-      console.log(err);
-      setIsBidding(false);
     }
   };
 
