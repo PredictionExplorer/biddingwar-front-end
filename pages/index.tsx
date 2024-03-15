@@ -488,9 +488,7 @@ const NewHome = () => {
     fetchPrizeInfo();
     fetchPrizeTime();
     fetchClaimHistory();
-    if (cosmicGameContract) {
-      fetchCSTBidData();
-    }
+    fetchCSTBidData();
 
     // Fetch data every 12 seconds
     const interval = setInterval(() => {
