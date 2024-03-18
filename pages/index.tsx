@@ -92,6 +92,7 @@ const NewHome = () => {
     SecondsElapsed: 0,
   });
   const [curBidList, setCurBidList] = useState([]);
+  const [winProbability, setWinProbability] = useState(null);
   const [donatedNFTs, setDonatedNFTs] = useState([]);
   const [prizeTime, setPrizeTime] = useState(0);
   const [prizeInfo, setPrizeInfo] = useState(null);
@@ -508,12 +509,36 @@ const NewHome = () => {
   }, []);
 
   useEffect(() => {
-    if (data && data?.MainStats.NumCSTokenMints > 0 && bannerTokenId === "") {
-      let bannerId = Math.floor(
-        Math.random() * data?.MainStats.NumCSTokenMints
+    const calculateProbability = async () => {
+      const { Bids } = await api.get_user_info(account);
+      const curRoundBids = Bids.filter(
+        (bid) => bid.RoundNum === data.CurRoundNum
       );
-      const fileName = bannerId.toString().padStart(6, "0");
-      setBannerTokenId(fileName);
+      setWinProbability({
+        raffle:
+          (curRoundBids.length / curBidList.length) *
+          data?.NumRaffleEthWinners *
+          100,
+        nft:
+          (curRoundBids.length / curBidList.length) *
+          data?.NumRaffleNFTWinners *
+          100,
+      });
+    };
+    if (data && account && curBidList.length) {
+      calculateProbability();
+    }
+  }, [data, account, curBidList]);
+
+  useEffect(() => {
+    if (data) {
+      if (data?.MainStats.NumCSTokenMints > 0 && bannerTokenId === "") {
+        let bannerId = Math.floor(
+          Math.random() * data?.MainStats.NumCSTokenMints
+        );
+        const fileName = bannerId.toString().padStart(6, "0");
+        setBannerTokenId(fileName);
+      }
     }
     const interval = setInterval(async () => {
       setRoundStarted(calculateTimeDiff(data?.TsRoundStart));
@@ -698,6 +723,14 @@ const NewHome = () => {
                   <Typography>{curBidList[0].Message}</Typography>
                 </Grid>
               </Grid>
+            )}
+            {curBidList.length && winProbability && (
+              <Typography>
+                {winProbability.raffle}% chance you will win{" "}
+                {data?.RaffleAmountEth.toFixed(2)} ETH if you bid.{" "}
+                {winProbability.nft}% chance you will win a Cosmic Signature NFT
+                if you bid.
+              </Typography>
             )}
           </Grid>
           <Grid item sm={12} md={6}>
