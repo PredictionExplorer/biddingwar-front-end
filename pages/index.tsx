@@ -84,6 +84,7 @@ const bidParamsEncoding: ethers.utils.ParamType = {
 
 const NewHome = () => {
   const [loading, setLoading] = useState(true);
+  const [systemMode, setSystemMode] = useState(0);
   const [data, setData] = useState(null);
   const [bidType, setBidType] = useState("");
   const [cstBidData, setCSTBidData] = useState({
@@ -484,12 +485,20 @@ const NewHome = () => {
         });
       }
     };
+    const fetchSystemMode = async () => {
+      const systemMode = await cosmicGameContract.systemMode();
+      console.log(Number(systemMode));
+      setSystemMode(Number(systemMode));
+    };
 
     fetchData();
     fetchPrizeInfo();
     fetchPrizeTime();
     fetchClaimHistory();
     fetchCSTBidData();
+    if (cosmicGameContract) {
+      fetchSystemMode();
+    }
 
     // Fetch data every 12 seconds
     const interval = setInterval(() => {
@@ -497,8 +506,9 @@ const NewHome = () => {
       fetchPrizeInfo();
       fetchPrizeTime();
       fetchClaimHistory();
+      fetchCSTBidData();
       if (cosmicGameContract) {
-        fetchCSTBidData();
+        fetchSystemMode();
       }
     }, 12000);
 
