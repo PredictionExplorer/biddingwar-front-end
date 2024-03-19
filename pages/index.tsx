@@ -64,6 +64,7 @@ import NFTImage from "../components/NFTImage";
 import { calculateTimeDiff, formatSeconds } from "../utils";
 import WinningHistoryTable from "../components/WinningHistoryTable";
 import AlertDialog from "../components/AlertDialog";
+import { useSystemMode } from "../contexts/SystemModeContext";
 
 const bidParamsEncoding: ethers.utils.ParamType = {
   type: "tuple(string,int256)",
@@ -84,7 +85,6 @@ const bidParamsEncoding: ethers.utils.ParamType = {
 
 const NewHome = () => {
   const [loading, setLoading] = useState(true);
-  const [systemMode, setSystemMode] = useState(0);
   const [data, setData] = useState(null);
   const [bidType, setBidType] = useState("");
   const [cstBidData, setCSTBidData] = useState({
@@ -103,8 +103,13 @@ const NewHome = () => {
   const [rwlkId, setRwlkId] = useState(-1);
   const [bidPricePlus, setBidPricePlus] = useState(2);
   const [isBidding, setIsBidding] = useState(false);
-  const [notification, setNotification] = useState({
+  const [notification, setNotification] = useState<{
+    text: string;
+    type: "success" | "info" | "warning" | "error";
+    visible: boolean;
+  }>({
     text: "",
+    type: "error",
     visible: false,
   });
   const [bannerTokenId, setBannerTokenId] = useState("");
@@ -123,6 +128,8 @@ const NewHome = () => {
   const cosmicGameContract = useCosmicGameContract();
   const nftRWLKContract = useRWLKNFTContract();
   const cosmicSignatureContract = useCosmicSignatureContract();
+  const {data: systemMode} = useSystemMode();
+
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up("md"));
 
@@ -179,6 +186,7 @@ const NewHome = () => {
       console.log(err);
       setNotification({
         visible: true,
+        type: "error",
         text: err.message,
       });
     }
@@ -207,6 +215,7 @@ const NewHome = () => {
       if (addr !== account) {
         setNotification({
           visible: true,
+          type: "error",
           text: "You aren't the owner of the token!",
         });
         return false;
@@ -216,6 +225,7 @@ const NewHome = () => {
         const msg = getErrorMessage(err?.data?.message);
         setNotification({
           visible: true,
+          type: "error",
           text: msg,
         });
       }
@@ -286,6 +296,7 @@ const NewHome = () => {
         const msg = err?.data?.message;
         setNotification({
           visible: true,
+          type: "error",
           text: msg,
         });
       }
@@ -299,6 +310,7 @@ const NewHome = () => {
     if (!isExist) {
       setNotification({
         visible: true,
+        type: "error",
         text: "You selected address that doesn't belong to a contract address!",
       });
       setIsBidding(false);
@@ -319,6 +331,7 @@ const NewHome = () => {
         console.log(err);
         setNotification({
           visible: true,
+          type: "error",
           text: "The donate NFT contract is not an ERC721 token contract.",
         });
         setIsBidding(false);
@@ -362,6 +375,7 @@ const NewHome = () => {
           const msg = getErrorMessage(err?.data?.message);
           setNotification({
             visible: true,
+            type: "error",
             text: msg,
           });
         }
@@ -396,6 +410,7 @@ const NewHome = () => {
         const msg = err?.data?.message;
         setNotification({
           visible: true,
+          type: "error",
           text: msg,
         });
       }
@@ -485,20 +500,12 @@ const NewHome = () => {
         });
       }
     };
-    const fetchSystemMode = async () => {
-      const systemMode = await cosmicGameContract.systemMode();
-      console.log(Number(systemMode));
-      setSystemMode(Number(systemMode));
-    };
 
     fetchData();
     fetchPrizeInfo();
     fetchPrizeTime();
     fetchClaimHistory();
     fetchCSTBidData();
-    if (cosmicGameContract) {
-      fetchSystemMode();
-    }
 
     // Fetch data every 12 seconds
     const interval = setInterval(() => {
@@ -507,9 +514,6 @@ const NewHome = () => {
       fetchPrizeTime();
       fetchClaimHistory();
       fetchCSTBidData();
-      if (cosmicGameContract) {
-        fetchSystemMode();
-      }
     }, 12000);
 
     // Clean up the interval when the component is unmounted
@@ -566,9 +570,11 @@ const NewHome = () => {
           anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
           autoHideDuration={10000}
           open={notification.visible}
-          onClose={() => setNotification({ text: "", visible: false })}
+          onClose={() =>
+            setNotification((prev) => ({ ...prev, visible: false }))
+          }
         >
-          <Alert severity="error" variant="filled">
+          <Alert severity={notification.type} variant="filled">
             {notification.text}
           </Alert>
         </Snackbar>
@@ -578,7 +584,6 @@ const NewHome = () => {
         >
           <CircularProgress color="inherit" />
         </Backdrop>
-
         <Grid container spacing={16} mb={4}>
           <Grid item sm={12} md={6}>
             {data?.TsRoundStart !== 0 ? (
@@ -947,39 +952,39 @@ const NewHome = () => {
                 </Accordion>
               </Grid>
               <Grid item xs={12} md={6}>
-                {bidType !== "" &&
-                  !(bidType === "RandomWalk" && rwlkId === -1) && (
-                    <Button
-                      variant="outlined"
-                      size="large"
-                      endIcon={<ArrowForward />}
-                      onClick={bidType === "CST" ? onBidWithCST : onBid}
-                      fullWidth
-                      disabled={isBidding}
-                      sx={{ mt: 3 }}
-                    >
-                      {`Bid now with ${bidType} ${
-                        bidType === "ETH"
-                          ? `(${
-                              data?.BidPriceEth > 0.1
-                                ? data?.BidPriceEth.toFixed(2)
-                                : data?.BidPriceEth.toFixed(5)
-                            } ETH)`
-                          : bidType === "RandomWalk"
-                          ? ` token ${rwlkId} (${
-                              data?.BidPriceEth > 0.2
-                                ? (data?.BidPriceEth / 2).toFixed(2)
-                                : (data?.BidPriceEth / 2).toFixed(5)
-                            } ETH)`
-                          : bidType === "CST"
-                          ? cstBidData?.SecondsElapsed >
-                            cstBidData?.AuctionDuration
-                            ? "(FREE BID)"
-                            : `(${cstBidData?.CSTPrice.toFixed(2)} CST)`
-                          : ""
-                      }`}
-                    </Button>
-                  )}
+                <Button
+                  variant="outlined"
+                  size="large"
+                  endIcon={<ArrowForward />}
+                  onClick={bidType === "CST" ? onBidWithCST : onBid}
+                  fullWidth
+                  disabled={
+                    isBidding ||
+                    (bidType === "RandomWalk" && rwlkId === -1) ||
+                    bidType === ""
+                  }
+                  sx={{ mt: 3 }}
+                >
+                  {`Bid now with ${bidType} ${
+                    bidType === "ETH"
+                      ? `(${
+                          data?.BidPriceEth > 0.1
+                            ? data?.BidPriceEth.toFixed(2)
+                            : data?.BidPriceEth.toFixed(5)
+                        } ETH)`
+                      : bidType === "RandomWalk"
+                      ? ` token ${rwlkId} (${
+                          data?.BidPriceEth > 0.2
+                            ? (data?.BidPriceEth / 2).toFixed(2)
+                            : (data?.BidPriceEth / 2).toFixed(5)
+                        } ETH)`
+                      : bidType === "CST"
+                      ? cstBidData?.SecondsElapsed > cstBidData?.AuctionDuration
+                        ? "(FREE BID)"
+                        : `(${cstBidData?.CSTPrice.toFixed(2)} CST)`
+                      : ""
+                  }`}
+                </Button>
                 {!(
                   prizeTime > Date.now() ||
                   data?.LastBidderAddr === constants.AddressZero
