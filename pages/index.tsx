@@ -128,7 +128,7 @@ const NewHome = () => {
   const cosmicGameContract = useCosmicGameContract();
   const nftRWLKContract = useRWLKNFTContract();
   const cosmicSignatureContract = useCosmicSignatureContract();
-  const {data: systemMode} = useSystemMode();
+  const { data: systemMode } = useSystemMode();
 
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up("md"));
@@ -239,7 +239,7 @@ const NewHome = () => {
     try {
       if (type === "ETH") {
         const ethBalance = await library.getBalance(account);
-        return Number(ethers.utils.formatEther(ethBalance)) >= amount;
+        return ethBalance.gte(amount);
       }
       const balance = await api.get_user_balance(account);
       if (balance) {
@@ -258,11 +258,11 @@ const NewHome = () => {
     setIsBidding(true);
     try {
       bidPrice = await cosmicGameContract.getBidPrice();
-      newBidPrice =
-        parseFloat(ethers.utils.formatEther(bidPrice)) *
-        (1 + bidPricePlus / 100);
+      newBidPrice = bidPrice
+        .mul(ethers.utils.parseEther((100 + bidPricePlus).toString()))
+        .div(ethers.utils.parseEther("100"));
       if (rwlkId !== -1) {
-        newBidPrice /= 2;
+        newBidPrice = newBidPrice.div(ethers.utils.parseEther("2"));
       }
       const enoughBalance = await checkBalance("ETH", newBidPrice);
       if (!enoughBalance) {
@@ -282,7 +282,7 @@ const NewHome = () => {
         );
         receipt = await cosmicGameContract
           .bid(params, {
-            value: ethers.utils.parseEther(newBidPrice.toFixed(10)),
+            value: newBidPrice,
           })
           .then((tx) => tx.wait());
         console.log(receipt);
@@ -525,19 +525,21 @@ const NewHome = () => {
   useEffect(() => {
     const calculateProbability = async () => {
       const { Bids } = await api.get_user_info(account);
-      const curRoundBids = Bids.filter(
-        (bid) => bid.RoundNum === data.CurRoundNum
-      );
-      setWinProbability({
-        raffle:
-          (curRoundBids.length / curBidList.length) *
-          data?.NumRaffleEthWinners *
-          100,
-        nft:
-          (curRoundBids.length / curBidList.length) *
-          data?.NumRaffleNFTWinners *
-          100,
-      });
+      if (Bids) {
+        const curRoundBids = Bids.filter(
+          (bid) => bid.RoundNum === data.CurRoundNum
+        );
+        setWinProbability({
+          raffle:
+            (curRoundBids.length / curBidList.length) *
+            data?.NumRaffleEthWinners *
+            100,
+          nft:
+            (curRoundBids.length / curBidList.length) *
+            data?.NumRaffleNFTWinners *
+            100,
+        });
+      }
     };
     if (data && account && curBidList.length) {
       calculateProbability();
