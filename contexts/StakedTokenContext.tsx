@@ -17,8 +17,10 @@ export const StakedTokenProvider = ({ children }) => {
     }
   };
   useEffect(() => {
-    fetchData();
-  }, []);
+    if (account) {
+      fetchData();
+    }
+  }, [account]);
 
   return (
     <StakedTokenContext.Provider value={{ data, fetchData }}>
