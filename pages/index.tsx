@@ -64,7 +64,6 @@ import NFTImage from "../components/NFTImage";
 import { calculateTimeDiff, formatSeconds } from "../utils";
 import WinningHistoryTable from "../components/WinningHistoryTable";
 import AlertDialog from "../components/AlertDialog";
-import { useSystemMode } from "../contexts/SystemModeContext";
 
 const bidParamsEncoding: ethers.utils.ParamType = {
   type: "tuple(string,int256)",
@@ -128,7 +127,6 @@ const NewHome = () => {
   const cosmicGameContract = useCosmicGameContract();
   const nftRWLKContract = useRWLKNFTContract();
   const cosmicSignatureContract = useCosmicSignatureContract();
-  const { data: systemMode } = useSystemMode();
 
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up("md"));
