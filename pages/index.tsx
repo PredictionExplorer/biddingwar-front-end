@@ -970,15 +970,29 @@ const NewHome = () => {
                   {`Bid now with ${bidType} ${
                     bidType === "ETH"
                       ? `(${
-                          data?.BidPriceEth > 0.1
-                            ? data?.BidPriceEth.toFixed(2)
-                            : data?.BidPriceEth.toFixed(5)
+                          data?.BidPriceEth * (1 + bidPricePlus / 100) > 0.1
+                            ? (
+                                data?.BidPriceEth *
+                                (1 + bidPricePlus / 100)
+                              ).toFixed(2)
+                            : (
+                                data?.BidPriceEth *
+                                (1 + bidPricePlus / 100)
+                              ).toFixed(5)
                         } ETH)`
                       : bidType === "RandomWalk"
                       ? ` token ${rwlkId} (${
-                          data?.BidPriceEth > 0.2
-                            ? (data?.BidPriceEth / 2).toFixed(2)
-                            : (data?.BidPriceEth / 2).toFixed(5)
+                          data?.BidPriceEth * (1 + bidPricePlus / 100) > 0.2
+                            ? (
+                                data?.BidPriceEth *
+                                (1 + bidPricePlus / 100) *
+                                0.5
+                              ).toFixed(2)
+                            : (
+                                data?.BidPriceEth *
+                                (1 + bidPricePlus / 100) *
+                                0.5
+                              ).toFixed(5)
                         } ETH)`
                       : bidType === "CST"
                       ? cstBidData?.SecondsElapsed > cstBidData?.AuctionDuration
