@@ -134,7 +134,7 @@ const HistoryRow = ({ history, showClaimedStatus }) => {
           </Tooltip>
         )}
       </TablePrimaryCell>
-      <TablePrimaryCell align="right">
+      <TablePrimaryCell align="center">
         {history.TokenId >= 0 &&
           (history.RecordType === 1 || history.RecordType === 3 ? (
             <Link
@@ -192,7 +192,7 @@ const HistoryTable = ({
             <TableCell align="center">Round</TableCell>
             <TableCell align="right">Amount (ETH)</TableCell>
             <TableCell align="center">Token Address</TableCell>
-            <TableCell align="right">Token ID</TableCell>
+            <TableCell align="center">Token ID</TableCell>
             <TableCell align="right">Position</TableCell>
           </TableRow>
         </TablePrimaryHead>
