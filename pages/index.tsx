@@ -528,20 +528,17 @@ const NewHome = () => {
         const curRoundBids = Bids.filter(
           (bid) => bid.RoundNum === data.CurRoundNum
         );
-        console.log(
-          curRoundBids.length,
-          curBidList.length,
-          data?.NumRaffleEthWinners
-        );
+        const raffle =
+          (curRoundBids.length / curBidList.length) *
+          data?.NumRaffleEthWinners *
+          100;
+        const nft =
+          (curRoundBids.length / curBidList.length) *
+          data?.NumRaffleNFTWinners *
+          100;
         setWinProbability({
-          raffle:
-            (curRoundBids.length / curBidList.length) *
-            data?.NumRaffleEthWinners *
-            100,
-          nft:
-            (curRoundBids.length / curBidList.length) *
-            data?.NumRaffleNFTWinners *
-            100,
+          raffle: raffle > 100 ? 100 : raffle,
+          nft: nft > 100 ? 100 : nft,
         });
       }
     };
