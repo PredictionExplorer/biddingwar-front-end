@@ -744,10 +744,10 @@ const NewHome = () => {
             )}
             {curBidList.length > 0 && winProbability && (
               <Typography>
-                {winProbability.raffle}% chance you will win{" "}
+                {winProbability.raffle.toFixed(2)}% chance you will win{" "}
                 {data?.RaffleAmountEth.toFixed(2)} ETH if you bid.{" "}
-                {winProbability.nft}% chance you will win a Cosmic Signature NFT
-                if you bid.
+                {winProbability.nft.toFixed(2)}% chance you will win a Cosmic
+                Signature NFT if you bid.
               </Typography>
             )}
           </Grid>
