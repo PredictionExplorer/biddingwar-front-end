@@ -528,7 +528,11 @@ const NewHome = () => {
         const curRoundBids = Bids.filter(
           (bid) => bid.RoundNum === data.CurRoundNum
         );
-        console.log(curRoundBids.length, curBidList.length, data?.NumRaffleEthWinners);
+        console.log(
+          curRoundBids.length,
+          curBidList.length,
+          data?.NumRaffleEthWinners
+        );
         setWinProbability({
           raffle:
             (curRoundBids.length / curBidList.length) *
