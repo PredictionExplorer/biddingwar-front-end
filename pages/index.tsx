@@ -259,8 +259,10 @@ const NewHome = () => {
       newBidPrice = bidPrice
         .mul(ethers.utils.parseEther((100 + bidPricePlus).toString()))
         .div(ethers.utils.parseEther("100"));
-      if (rwlkId !== -1) {
-        newBidPrice = newBidPrice.div(ethers.utils.parseEther("2"));
+      if (bidType === "RandomWalk") {
+        newBidPrice = newBidPrice
+          .mul(ethers.utils.parseEther("50"))
+          .div(ethers.utils.parseEther("100"));
       }
       const enoughBalance = await checkBalance("ETH", newBidPrice);
       if (!enoughBalance) {
@@ -279,9 +281,7 @@ const NewHome = () => {
           [{ msg: message, rwalk: rwlkId }]
         );
         receipt = await cosmicGameContract
-          .bid(params, {
-            value: newBidPrice,
-          })
+          .bid(params, { value: newBidPrice })
           .then((tx) => tx.wait());
         console.log(receipt);
         setTimeout(() => {
@@ -291,7 +291,7 @@ const NewHome = () => {
       }
     } catch (err) {
       if (err?.data?.message) {
-        const msg = err?.data?.message;
+        const msg = getErrorMessage(err?.data?.message);
         setNotification({
           visible: true,
           type: "error",
@@ -386,15 +386,17 @@ const NewHome = () => {
   const onBidWithCST = async () => {
     setIsBidding(true);
     try {
-      const enoughBalance = await checkBalance("CST", cstBidData?.CSTPrice);
-      if (!enoughBalance) {
-        setAlertDlg({
-          title: "Insufficient CST balance",
-          content: "There isn't enough Cosmic Token in you wallet.",
-          open: true,
-        });
-        setIsBidding(false);
-        return;
+      if (cstBidData?.CSTPrice > 0) {
+        const enoughBalance = await checkBalance("CST", cstBidData?.CSTPrice);
+        if (!enoughBalance) {
+          setAlertDlg({
+            title: "Insufficient CST balance",
+            content: "There isn't enough Cosmic Token in you wallet.",
+            open: true,
+          });
+          setIsBidding(false);
+          return;
+        }
       }
       let receipt = await cosmicGameContract
         .bidWithCST(message)
@@ -418,7 +420,6 @@ const NewHome = () => {
   };
 
   const playAudio = async () => {
-    console.log("play sounds");
     try {
       const audioElement = new Audio("/audio/notification.wav");
       await audioElement.play();
@@ -739,7 +740,7 @@ const NewHome = () => {
                 </Grid>
               </Grid>
             )}
-            {curBidList.length && winProbability && (
+            {curBidList.length > 0 && winProbability && (
               <Typography>
                 {winProbability.raffle}% chance you will win{" "}
                 {data?.RaffleAmountEth.toFixed(2)} ETH if you bid.{" "}

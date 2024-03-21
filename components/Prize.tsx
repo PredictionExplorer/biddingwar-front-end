@@ -1,11 +1,20 @@
 import React from "react";
 import Image from "next/image";
-import { Box, Typography, CardActionArea, Grid, useTheme, useMediaQuery } from "@mui/material";
+import {
+  Box,
+  Typography,
+  CardActionArea,
+  Grid,
+  useTheme,
+  useMediaQuery,
+} from "@mui/material";
 import { GradientText, StyledCard2 } from "./styled";
+import { useTokenPrice } from "../hooks/useTokenPrice";
 
 const Prize = ({ prizeAmount }) => {
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up("md"));
+  const ethPrice = useTokenPrice();
   return (
     <Box mt="130px">
       <Box
@@ -70,8 +79,12 @@ const Prize = ({ prizeAmount }) => {
                 alt="cosmic signture nft"
               />
               <GradientText variant="h5" marginLeft="16px">
-                {prizeAmount.toFixed(1)} ETH
+                {prizeAmount < 1
+                  ? prizeAmount.toFixed(5)
+                  : prizeAmount.toFixed(1)}{" "}
+                ETH
               </GradientText>
+              <Typography color="primary" ml={1}>(${(ethPrice * prizeAmount).toFixed(2)})</Typography>
             </CardActionArea>
           </StyledCard2>
         </Grid>
