@@ -498,7 +498,7 @@ const Statistics = () => {
             </Box>
             <Box>
               <Typography variant="h6" mb={2} mt={8}>
-                Staking Actions
+                Stake / Unstake Actions
               </Typography>
               {stakingActions === null ? (
                 <Typography variant="h6">Loading...</Typography>

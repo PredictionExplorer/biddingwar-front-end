@@ -160,7 +160,7 @@ const PrizeInfo = ({ roundNum }) => {
               </Typography>
               &nbsp;
               <Typography component="span">
-                {prizeInfo.StakingDepositAmountEth.toFixed(4)}
+                {prizeInfo.StakingDepositAmountEth.toFixed(4)} ETH
               </Typography>
             </Box>
             <Box mb={1}>

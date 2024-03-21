@@ -202,7 +202,7 @@ const MyWinnings = () => {
                 Claimable Raffle ETH
               </Typography>
               {!status?.ETHRaffleToClaim ? (
-                <Typography variant="h6">No winnings yet.</Typography>
+                <Typography>No winnings yet.</Typography>
               ) : status?.ETHRaffleToClaim > 0 && raffleETHToClaim === null ? (
                 <Typography variant="h6">Loading...</Typography>
               ) : raffleETHToClaim.length > 0 ? (
@@ -281,7 +281,7 @@ const MyWinnings = () => {
                 )}
               </Box>
               {!status?.NumDonatedNFTToClaim ? (
-                <Typography variant="h6">No NFTs yet.</Typography>
+                <Typography>No NFTs yet.</Typography>
               ) : status?.NumDonatedNFTToClaim > 0 &&
                 donatedNFTToClaim === null ? (
                 <Typography variant="h6">Loading...</Typography>
