@@ -103,7 +103,7 @@ const HistoryRow = ({ history, showClaimedStatus }) => {
       <TablePrimaryCell align="right">
         {history.AmountEth.toFixed(4)}
       </TablePrimaryCell>
-      <TablePrimaryCell>
+      <TablePrimaryCell align="center">
         {history.RecordType === 1 ? (
           <Tooltip title={COSMIC_SIGNATURE_TOKEN_ADDRESS}>
             <Link
@@ -191,7 +191,7 @@ const HistoryTable = ({
             <TableCell>Datetime</TableCell>
             <TableCell align="center">Round</TableCell>
             <TableCell align="right">Amount (ETH)</TableCell>
-            <TableCell>Token Address</TableCell>
+            <TableCell align="center">Token Address</TableCell>
             <TableCell align="right">Token ID</TableCell>
             <TableCell align="right">Position</TableCell>
           </TableRow>
