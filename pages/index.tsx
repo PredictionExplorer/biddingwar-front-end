@@ -590,27 +590,37 @@ const NewHome = () => {
         <Grid container spacing={16} mb={4}>
           <Grid item sm={12} md={6}>
             {data?.TsRoundStart !== 0 ? (
-              <Grid container spacing={2} alignItems="center" mb={2}>
-                <Grid item sm={12} md={4}>
-                  <Typography variant="h5">
-                    Round #{data?.CurRoundNum}
-                  </Typography>
-                </Grid>
-                <Grid item sm={12} md={8}>
-                  <Typography textAlign="center">finishes in</Typography>
-                  {data?.LastBidderAddr !== constants.AddressZero &&
-                    (prizeTime > Date.now() ? (
-                      <Countdown key={0} date={prizeTime} renderer={Counter} />
-                    ) : (
-                      <Countdown key={1} date={Date.now()} renderer={Counter} />
-                    ))}
-                  {roundStarted !== "" && (
-                    <Typography sx={{ fontSize: 12, textAlign: "center" }}>
-                      (Round started {roundStarted} ago)
+              <>
+                <Grid container spacing={2} alignItems="center" mb={2}>
+                  <Grid item sm={12} md={4}>
+                    <Typography variant="h5">
+                      Round #{data?.CurRoundNum}
                     </Typography>
-                  )}
+                  </Grid>
+                  <Grid item sm={12} md={8}>
+                    <Typography textAlign="center">finishes in</Typography>
+                    {data?.LastBidderAddr !== constants.AddressZero &&
+                      (prizeTime > Date.now() ? (
+                        <Countdown
+                          key={0}
+                          date={prizeTime}
+                          renderer={Counter}
+                        />
+                      ) : (
+                        <Countdown
+                          key={1}
+                          date={Date.now()}
+                          renderer={Counter}
+                        />
+                      ))}
+                  </Grid>
                 </Grid>
-              </Grid>
+                {roundStarted !== "" && (
+                  <Typography sx={{ fontSize: 12, textAlign: "center", mb: 4 }}>
+                    (Round started {roundStarted} ago)
+                  </Typography>
+                )}
+              </>
             ) : (
               <>
                 {data?.CurRoundNum > 0 && data?.TsRoundStart === 0 ? (

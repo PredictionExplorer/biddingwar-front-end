@@ -170,13 +170,9 @@ const Statistics = () => {
               <StatisticsItem
                 title="Current Bid Price using CST"
                 value={
-                  cstBidData?.CSTPrice > 0 ? (
-                    <Typography>
-                      {formatCSTValue(cstBidData?.CSTPrice)}
-                    </Typography>
-                  ) : (
-                    <Typography color="#ff0">FREE</Typography>
-                  )
+                  cstBidData?.CSTPrice > 0
+                    ? formatCSTValue(cstBidData?.CSTPrice)
+                    : "FREE"
                 }
               />
               <StatisticsItem
