@@ -626,7 +626,7 @@ const NewHome = () => {
                 {data?.CurRoundNum > 0 && data?.TsRoundStart === 0 ? (
                   <>
                     <Typography variant="h4" mb={2}>
-                      Round #{data?.CurRoundNum} ended
+                      Round {data?.CurRoundNum - 1} ended
                     </Typography>
                     <Grid container spacing={2} mb={2} alignItems="center">
                       <Grid item sm={12} md={4}>
