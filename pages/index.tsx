@@ -763,20 +763,19 @@ const NewHome = () => {
           </Grid>
           <Grid item sm={12} md={6}>
             <StyledCard>
-              <CardActionArea
-                onClick={
-                  bannerTokenId
-                    ? () => router.push(`/detail/${bannerTokenId}`)
-                    : null
-                }
-              >
-                <NFTImage
-                  src={
-                    bannerTokenId === ""
-                      ? "/images/qmark.png"
-                      : `https://cosmic-game.s3.us-east-2.amazonaws.com/${bannerTokenId}.png`
-                  }
-                />
+              <CardActionArea>
+                <Link
+                  href={bannerTokenId ? `/detail/${bannerTokenId}` : ""}
+                  sx={{ display: "block" }}
+                >
+                  <NFTImage
+                    src={
+                      bannerTokenId === ""
+                        ? "/images/qmark.png"
+                        : `https://cosmic-game.s3.us-east-2.amazonaws.com/${bannerTokenId}.png`
+                    }
+                  />
+                </Link>
               </CardActionArea>
             </StyledCard>
             <Typography color="primary" mt={4}>
