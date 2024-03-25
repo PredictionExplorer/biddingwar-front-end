@@ -477,7 +477,7 @@ const Statistics = () => {
                       labels={{
                         visible: true,
                         content: (props) => {
-                          return `${props.dataItem.category}: ${props.dataItem.value}`;
+                          return `${props.dataItem.category}: ${props.dataItem.value.toFixed(6)}`;
                         },
                         color: "white",
                         background: "none",
