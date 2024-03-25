@@ -662,7 +662,7 @@ const NewHome = () => {
                     Start the game with your first bid!
                   </Typography>
                 )}
-                <Typography variant="subtitle1" mt={2} mb={1}>
+                <Typography variant="subtitle1" mt={2} mb={2}>
                   Be the first to start a new round, place a bid.
                 </Typography>
               </>
