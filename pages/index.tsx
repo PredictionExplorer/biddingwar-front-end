@@ -361,7 +361,7 @@ const NewHome = () => {
         );
         receipt = await cosmicGameContract
           .bidAndDonateNFT(params, nftDonateAddress, nftId, {
-            value: ethers.utils.parseEther(newBidPrice.toFixed(10)),
+            value: newBidPrice,
           })
           .then((tx) => tx.wait());
         console.log(receipt);
