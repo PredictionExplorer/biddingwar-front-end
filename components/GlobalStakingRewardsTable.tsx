@@ -103,7 +103,7 @@ export const GlobalStakingRewardsTable = ({ list }) => {
       <Typography mt={4}>
         To participate in Staking go to{" "}
         <Link href="/my-staking" sx={{ color: "inherit" }}>
-          "MY STAKING"
+          &quot;MY STAKING&quot;
         </Link>
         . (option available from the Account menu)
       </Typography>
