@@ -10,15 +10,13 @@ import {
   Card,
   TextField,
   Skeleton,
-  TableContainer,
-  TableCell,
-  TableHead,
   AccordionDetails,
-  TableRow,
   Typography,
 } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import { isMobile, isSafari } from 'react-device-detect'
+import { Table, Thead, Tr, Th, Td } from 'react-super-responsive-table'
+
 
 export const StyledLink = styled(Link)({
   color: '#fff',
@@ -96,26 +94,47 @@ export const StyledCard2 = styled(Card)(!isSafari ? {
   }
 })
 
-export const TablePrimaryContainer = styled(TableContainer)({
+export const TablePrimaryContainer = styled(Box)({
   backgroundColor: 'rgba(255, 255, 255, 0.02)',
-  borderRadius: '8px 8px 0px 0px'
 })
 
-export const TablePrimaryHead = styled(TableHead)({
+export const TablePrimary = styled(Table)({
+  borderCollapse: "collapse"
+})
+
+export const TablePrimaryHead = styled(Thead)({
   backgroundColor: '#15BFFD',
 })
 
-export const TablePrimaryCell = styled(TableCell)({
-  fontSize: 14,
-  color: "rgba(255, 255, 255, 0.68)",
-  borderBottom: 0
-})
+export const TablePrimaryHeadCell = styled(Th)(({ theme }) => ({
+  fontWeight: 400,
+  lineHeight: 1.43,
+  borderBottom: "1px solid rgba(81, 81, 81, 1)",
+  padding: "16px",
+  fontSize: 16,
+  [theme.breakpoints.down('sm')]: {
+    fontSize: 12,
+  }
+}))
 
-export const TablePrimaryRow = styled(TableRow)({
+export const TablePrimaryCell = styled(Td)(({ theme }) => ({
+  fontWeight: 400,
+  color: "rgba(255, 255, 255, 0.68)",
+  lineHeight: 1.43,
+  borderBottom: 0,
+  padding: "16px",
+  fontSize: 14,
+  [theme.breakpoints.down('sm')]: {
+    fontSize: 12,
+  }
+}))
+
+export const TablePrimaryRow = styled(Tr)({
   border: "1px solid rgba(255, 255, 255, 0.06)"
 })
 
 export const NavLink = styled(StyledLink)({
+  fontSize: 16,
   textTransform: 'uppercase',
   textDecoration: 'none',
   ':hover': {
@@ -169,7 +188,7 @@ export const MainWrapper = styled(Container)(({ theme }) => ({
   minHeight: 'calc(100vh - 100px)',
   [theme.breakpoints.down('sm')]: {
     paddingTop: theme.spacing(18),
-    paddingBottom: theme.spacing(18),
+    paddingBottom: theme.spacing(12),
   },
 }))
 
@@ -219,7 +238,6 @@ export const CounterItem = styled(Box)({
   width: isMobile ? '80%' : '20%',
   padding: '8px 0',
   boxSizing: 'border-box',
-  marginBottom: isMobile ? 24 : 0,
 })
 
 export const QuestionIcon = styled('img')({

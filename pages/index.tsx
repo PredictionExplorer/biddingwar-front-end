@@ -64,6 +64,8 @@ import NFTImage from "../components/NFTImage";
 import { calculateTimeDiff, formatSeconds } from "../utils";
 import WinningHistoryTable from "../components/WinningHistoryTable";
 import AlertDialog from "../components/AlertDialog";
+import Lightbox from "react-awesome-lightbox";
+import "react-awesome-lightbox/build/style.css";
 
 const bidParamsEncoding: ethers.utils.ParamType = {
   type: "tuple(string,int256)",
@@ -116,6 +118,7 @@ const NewHome = () => {
   const [roundStarted, setRoundStarted] = useState("");
   const [curPage, setCurrentPage] = useState(1);
   const [claimHistory, setClaimHistory] = useState(null);
+  const [imageOpen, setImageOpen] = useState(false);
   const [alertDlg, setAlertDlg] = useState({
     title: "",
     content: "",
@@ -471,7 +474,9 @@ const NewHome = () => {
 
     const fetchPrizeTime = async () => {
       const t = await api.get_prize_time();
-      setPrizeTime(t * 1000);
+      const current = await api.get_current_time();
+      const offset = current * 1000 - Date.now();
+      setPrizeTime(t * 1000 - offset);
     };
 
     const fetchPrizeInfo = async () => {
@@ -587,18 +592,24 @@ const NewHome = () => {
         >
           <CircularProgress color="inherit" />
         </Backdrop>
-        <Grid container spacing={16} mb={4}>
+        <Grid container spacing={{ lg: 16, md: 8, sm: 8, xs: 4 }} mb={4}>
           <Grid item sm={12} md={6}>
             {data?.TsRoundStart !== 0 ? (
               <>
                 <Grid container spacing={2} alignItems="center" mb={2}>
-                  <Grid item sm={12} md={4}>
+                  <Grid item xs={12} sm={4} md={4}>
                     <Typography variant="h5">
                       Round #{data?.CurRoundNum}
                     </Typography>
                   </Grid>
-                  <Grid item sm={12} md={8}>
-                    <Typography textAlign="center">finishes in</Typography>
+                  <Grid item xs={12} sm={8} md={8} sx={{ width: "100%" }}>
+                    <Typography
+                      variant="subtitle1"
+                      textAlign="center"
+                      fontWeight={400}
+                    >
+                      Finishes In
+                    </Typography>
                     {data?.LastBidderAddr !== constants.AddressZero &&
                       (prizeTime > Date.now() ? (
                         <Countdown
@@ -616,7 +627,7 @@ const NewHome = () => {
                   </Grid>
                 </Grid>
                 {roundStarted !== "" && (
-                  <Typography sx={{ fontSize: 12, textAlign: "center", mb: 4 }}>
+                  <Typography sx={{ textAlign: "center", mb: 4 }}>
                     (Round started {roundStarted} ago)
                   </Typography>
                 )}
@@ -668,10 +679,10 @@ const NewHome = () => {
               </>
             )}
             <Grid container spacing={2} mb={2}>
-              <Grid item sm={12} md={4}>
+              <Grid item xs={12} sm={3} md={4}>
                 <Typography variant="subtitle1">Bid Price</Typography>
               </Grid>
-              <Grid item sm={12} md={8}>
+              <Grid item xs={8} sm={5} md={8}>
                 <Box
                   sx={{
                     display: "flex",
@@ -713,20 +724,20 @@ const NewHome = () => {
               </Grid>
             </Grid>
             <Grid container spacing={2} mb={2} alignItems="center">
-              <Grid item sm={12} md={4}>
+              <Grid item xs={12} sm={4} md={4}>
                 <Typography variant="subtitle1">Main Prize Reward</Typography>
               </Grid>
-              <Grid item sm={12} md={8}>
+              <Grid item xs={12} sm={8} md={8}>
                 <GradientText variant="h6" sx={{ display: "inline" }}>
                   {data?.PrizeAmountEth.toFixed(4)} ETH
                 </GradientText>
               </Grid>
             </Grid>
             <Grid container spacing={2} mb={2} alignItems="center">
-              <Grid item sm={12} md={4}>
+              <Grid item xs={12} sm={4} md={4}>
                 <Typography variant="subtitle1">Last Bidder Address</Typography>
               </Grid>
-              <Grid item sm={12} md={8}>
+              <Grid item xs={12} sm={8} md={8}>
                 <Typography>
                   {data?.LastBidderAddr === constants.AddressZero ? (
                     "There is no bidder yet."
@@ -735,6 +746,7 @@ const NewHome = () => {
                       href={`/user/${data?.LastBidderAddr}`}
                       color="rgb(255, 255, 255)"
                       fontSize="inherit"
+                      sx={{ wordBreak: "break-all" }}
                     >
                       {data?.LastBidderAddr}
                     </Link>
@@ -744,12 +756,12 @@ const NewHome = () => {
             </Grid>
             {!!(curBidList.length && curBidList[0].Message !== "") && (
               <Grid container spacing={2} mb={2} alignItems="center">
-                <Grid item sm={12} md={4}>
+                <Grid item xs={12} sm={4} md={4}>
                   <Typography variant="subtitle1">
                     Last Bidder Message
                   </Typography>
                 </Grid>
-                <Grid item sm={12} md={8}>
+                <Grid item xs={12} sm={8} md={8}>
                   <Typography>{curBidList[0].Message}</Typography>
                 </Grid>
               </Grid>
@@ -763,32 +775,34 @@ const NewHome = () => {
               </Typography>
             )}
           </Grid>
-          <Grid item sm={12} md={6}>
-            <StyledCard>
-              <CardActionArea>
-                <Link
-                  href={bannerTokenId ? `/detail/${bannerTokenId}` : ""}
-                  sx={{ display: "block" }}
-                >
-                  <NFTImage
-                    src={
-                      bannerTokenId === ""
-                        ? "/images/qmark.png"
-                        : `https://cosmic-game.s3.us-east-2.amazonaws.com/${bannerTokenId}.png`
-                    }
-                  />
-                </Link>
-              </CardActionArea>
-            </StyledCard>
-            <Typography color="primary" mt={4}>
-              Random sample of your possible NFT
-            </Typography>
-          </Grid>
+          {matches && (
+            <Grid item sm={12} md={6}>
+              <StyledCard>
+                <CardActionArea>
+                  <Link
+                    href={bannerTokenId ? `/detail/${bannerTokenId}` : ""}
+                    sx={{ display: "block" }}
+                  >
+                    <NFTImage
+                      src={
+                        bannerTokenId === ""
+                          ? "/images/qmark.png"
+                          : `https://cosmic-game.s3.us-east-2.amazonaws.com/${bannerTokenId}.png`
+                      }
+                    />
+                  </Link>
+                </CardActionArea>
+              </StyledCard>
+              <Typography color="primary" mt={4}>
+                Random sample of your possible NFT
+              </Typography>
+            </Grid>
+          )}
         </Grid>
         {account !== null && (
           <>
-            <Grid container spacing={8}>
-              <Grid item xs={12} md={6}>
+            <Grid container spacing={matches ? 8 : 0}>
+              <Grid item xs={12} sm={8} md={6}>
                 <Typography mb={1}>Make your bid with:</Typography>
                 <RadioGroup
                   row
@@ -969,7 +983,7 @@ const NewHome = () => {
                   </Accordion>
                 )}
               </Grid>
-              <Grid item xs={12} md={6}>
+              <Grid item xs={12} sm={4} md={6}>
                 <Button
                   variant="outlined"
                   size="large"
@@ -1059,6 +1073,17 @@ const NewHome = () => {
                         </Typography>
                       )}
                   </>
+                )}
+                {!matches && (
+                  <Button
+                    variant="outlined"
+                    size="large"
+                    fullWidth
+                    sx={{ mt: 3 }}
+                    onClick={() => setImageOpen(true)}
+                  >
+                    Show Random Sample NFT
+                  </Button>
                 )}
               </Grid>
             </Grid>
@@ -1224,7 +1249,7 @@ const NewHome = () => {
             </Typography>
           )}
         </Box>
-        <Box mt="120px">
+        <Box mt={matches ? "120px" : "80px"}>
           <Box>
             <Typography variant="h6" component="span">
               CURRENT ROUND
@@ -1277,6 +1302,17 @@ const NewHome = () => {
         open={alertDlg.open}
         setOpen={setAlertOpen}
       />
+      {imageOpen && (
+        <Lightbox
+          image={
+            bannerTokenId === ""
+              ? "/images/qmark.png"
+              : `https://cosmic-game.s3.us-east-2.amazonaws.com/${bannerTokenId}.png`
+          }
+          title="This is a possible image of the NFT you are going to receive."
+          onClose={() => setImageOpen(false)}
+        />
+      )}
     </>
   );
 };

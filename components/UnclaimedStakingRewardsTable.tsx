@@ -1,18 +1,11 @@
 import React, { useEffect, useState } from "react";
+import { Box, Button, Pagination, TableBody, Typography } from "@mui/material";
 import {
-  Box,
-  Button,
-  Pagination,
-  Table,
-  TableBody,
-  TableCell,
-  TableRow,
-  Typography,
-} from "@mui/material";
-import {
+  TablePrimary,
   TablePrimaryCell,
   TablePrimaryContainer,
   TablePrimaryHead,
+  TablePrimaryHeadCell,
   TablePrimaryRow,
 } from "./styled";
 import { convertTimestampToDateTime } from "../utils";
@@ -20,6 +13,8 @@ import useStakingWalletContract from "../hooks/useStakingWalletContract";
 import api from "../services/api";
 import { useActiveWeb3React } from "../hooks/web3";
 import { useStakedToken } from "../contexts/StakedTokenContext";
+import "react-super-responsive-table/dist/SuperResponsiveTableStyle.css";
+import { Tr } from "react-super-responsive-table";
 
 const UnclaimedStakingRewardsRow = ({ row, owner, fetchData }) => {
   const { account } = useActiveWeb3React();
@@ -44,7 +39,7 @@ const UnclaimedStakingRewardsRow = ({ row, owner, fetchData }) => {
               x.StakeActionId
             );
             if (Stake) {
-              if (Stake.UnstakeTimeStamp < Date.now()) {
+              if (Stake.UnstakeTimeStamp < Date.now() / 1000) {
                 if (!x.Claimed) {
                   unclaimableActionIds.push({
                     DepositId: x.DepositId,
@@ -110,20 +105,21 @@ const UnclaimedStakingRewardsRow = ({ row, owner, fetchData }) => {
       <TablePrimaryCell align="right">
         {row.YourClaimableAmountEth.toFixed(6)}
       </TablePrimaryCell>
-
-      <TablePrimaryCell align="center">
-        {account === owner &&
-          (unstakeableActionIds.length > 0 ||
-            unclaimedActionIds.length > 0) && (
-            <Button size="small" onClick={handleClaim}>
+      {account === owner && (
+        <TablePrimaryCell align="center" sx={{ p: "4px 8px !important" }}>
+          {unstakeableActionIds.length > 0 || unclaimedActionIds.length > 0 ? (
+            <Button size="small" onClick={handleClaim} sx={{ p: 0 }}>
               {(unstakeableActionIds.length === 0 &&
                 unclaimedActionIds.length === 0) ||
               unstakeableActionIds.length > 0
                 ? "Unstake & Claim"
                 : "Claim"}
             </Button>
+          ) : (
+            " "
           )}
-      </TablePrimaryCell>
+        </TablePrimaryCell>
+      )}
     </TablePrimaryRow>
   );
 };
@@ -167,28 +163,27 @@ export const UnclaimedStakingRewardsTable = ({ list, owner, fetchData }) => {
   return (
     <>
       <TablePrimaryContainer>
-        <Table>
-          <colgroup>
-            <col width="15%" />
-            <col width="10%" />
-            <col width="18%" />
-            <col width="12%" />
-            <col width="12%" />
-            <col width="15%" />
-            {account === owner && <col width="16%" />}
-          </colgroup>
+        <TablePrimary>
           <TablePrimaryHead>
-            <TableRow>
-              <TableCell>Datetime</TableCell>
-              <TableCell align="right">Deposit Amount</TableCell>
-              <TableCell align="center">
-                Total Staked Tokens by all the Users
-              </TableCell>
-              <TableCell align="right">Reward Per Token</TableCell>
-              <TableCell align="right">Your Staked Tokens</TableCell>
-              <TableCell align="right">Your Claimable Amount</TableCell>
-              {account === owner && <TableCell></TableCell>}
-            </TableRow>
+            <Tr>
+              <TablePrimaryHeadCell align="left">Datetime</TablePrimaryHeadCell>
+              <TablePrimaryHeadCell align="right">
+                Deposit Amount
+              </TablePrimaryHeadCell>
+              <TablePrimaryHeadCell>Total Staked Tokens</TablePrimaryHeadCell>
+              <TablePrimaryHeadCell align="right">
+                Reward Per Token
+              </TablePrimaryHeadCell>
+              <TablePrimaryHeadCell align="right">
+                Your Staked Tokens
+              </TablePrimaryHeadCell>
+              <TablePrimaryHeadCell align="right">
+                Your Claimable Amount
+              </TablePrimaryHeadCell>
+              {account === owner && (
+                <TablePrimaryHeadCell> </TablePrimaryHeadCell>
+              )}
+            </Tr>
           </TablePrimaryHead>
           <TableBody>
             {list
@@ -202,7 +197,7 @@ export const UnclaimedStakingRewardsTable = ({ list, owner, fetchData }) => {
                 />
               ))}
           </TableBody>
-        </Table>
+        </TablePrimary>
       </TablePrimaryContainer>
       <Box display="flex" justifyContent="end" mt={1}>
         <Typography mr={1}>Total Rewards:</Typography>
@@ -214,7 +209,7 @@ export const UnclaimedStakingRewardsTable = ({ list, owner, fetchData }) => {
             .toFixed(6)}
         </Typography>
       </Box>
-      {stakedTokens.length === 0 && list.length > 0 && (
+      {account === owner && stakedTokens.length === 0 && list.length > 0 && (
         <Box display="flex" justifyContent="end" mt={1}>
           <Button variant="text" onClick={handleClaimAll}>
             Claim All

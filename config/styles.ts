@@ -31,6 +31,16 @@ const theme = createTheme({
     fontSize: 16,
   },
   components: {
+    MuiAlert: {
+      styleOverrides: {
+        root: {
+          [breakpoints.down('md')]: {
+            fontSize: 12,
+            fontWeight: 400,
+          },
+        }
+      }
+    },
     MuiInputBase: {
       styleOverrides: {
         root: {
@@ -48,9 +58,11 @@ const theme = createTheme({
           fontSize: 16,
         },
         body1: {
-          fontSize: 12,
+          fontSize: 14,
+          fontWeight: 300,
           [breakpoints.up('md')]: {
             fontSize: 16,
+            fontWeight: 400,
           },
         },
         h3: {
@@ -64,7 +76,7 @@ const theme = createTheme({
         h4: {
           fontFamily: "ClashDisplay-Variable",
           fontWeight: 600,
-          fontSize: 40,
+          fontSize: 36,
           [breakpoints.up('md')]: {
             fontSize: 45,
           },
@@ -96,16 +108,26 @@ const theme = createTheme({
           fontSize: 14,
         },
         body2: {
-          fontSize: 12,
+          fontSize: 13,
           color: "rgba(255, 255, 255, 0.68)",
+          [breakpoints.up('sm')]: {
+            fontSize: 14,
+            fontWeight: 300,
+          },
           [breakpoints.up('md')]: {
-            fontSize: 13,
+            fontSize: 15,
           },
         }
       },
     },
     MuiButton: {
       styleOverrides: {
+        root: {
+          [breakpoints.down('md')]: {
+            fontSize: 13,
+            fontWeight: 400,
+          },
+        },
         outlined: !isSafari && {
           textTransform: "capitalize",
           position: "relative",
@@ -176,6 +198,12 @@ const theme = createTheme({
     },
     MuiPaginationItem: {
       styleOverrides: {
+        root: {
+          [breakpoints.down('md')]: {
+            fontSize: 12,
+            fontWeight: 400,
+          },
+        },
         rounded: !isSafari && {
           position: "relative",
           border: 0,

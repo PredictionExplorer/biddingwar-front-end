@@ -1,25 +1,28 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Button,
   Checkbox,
   Link,
   Pagination,
-  Table,
   TableBody,
-  TableCell,
-  TableRow,
   Typography,
 } from "@mui/material";
 import {
+  TablePrimary,
   TablePrimaryCell,
   TablePrimaryContainer,
   TablePrimaryHead,
+  TablePrimaryHeadCell,
   TablePrimaryRow,
 } from "./styled";
 import { convertTimestampToDateTime } from "../utils";
+import { Tr } from "react-super-responsive-table";
+import "react-super-responsive-table/dist/SuperResponsiveTableStyle.css";
+import api from "../services/api";
 
 const StakedTokensRow = ({
+  current,
   row,
   handleUnstake,
   isItemSelected,
@@ -28,10 +31,9 @@ const StakedTokensRow = ({
   if (!row) {
     return <TablePrimaryRow></TablePrimaryRow>;
   }
-
   return (
     <TablePrimaryRow
-      hover
+      hover="true"
       role="checkbox"
       aria-checked={isItemSelected}
       tabIndex={-1}
@@ -40,15 +42,14 @@ const StakedTokensRow = ({
       onClick={() => handleClick(row.TokenInfo.StakeActionId)}
       sx={{
         cursor: "pointer",
-        pointerEvents:
-          row.UnstakeTimeStamp * 1000 > new Date().getTime() ? "none" : "auto",
+        pointerEvents: row.UnstakeTimeStamp > current ? "none" : "auto",
       }}
     >
       <TablePrimaryCell padding="checkbox">
         <Checkbox
           color="primary"
           checked={isItemSelected}
-          disabled={row.UnstakeTimeStamp * 1000 > new Date().getTime()}
+          disabled={row.UnstakeTimeStamp > current}
         />
       </TablePrimaryCell>
       <TablePrimaryCell>
@@ -73,7 +74,7 @@ const StakedTokensRow = ({
         {convertTimestampToDateTime(row.UnstakeTimeStamp)}
       </TablePrimaryCell>
       <TablePrimaryCell align="center">
-        {row.UnstakeTimeStamp * 1000 <= new Date().getTime() && (
+        {row.UnstakeTimeStamp <= current && (
           <Button
             variant="text"
             sx={{ mr: 1 }}
@@ -96,9 +97,8 @@ export const StakedTokensTable = ({
   handleUnstakeMany,
 }) => {
   const perPage = 5;
-  const filtered = list.filter(
-    (x) => x.UnstakeTimeStamp * 1000 <= new Date().getTime()
-  );
+  const [current, setCurrent] = useState(Infinity);
+  const filtered = list.filter((x) => x.UnstakeTimeStamp <= Date.now());
   const [page, setPage] = useState(1);
   const [selected, setSelected] = useState([]);
   const isSelected = (id: number) => selected.indexOf(id) !== -1;
@@ -130,34 +130,30 @@ export const StakedTokensTable = ({
   };
   const onUnstakeMany = async () => {
     await handleUnstakeMany(selected);
-    setTimeout(() => {
-      setSelected([]);
-    }, 3000);
   };
   const onUnstake = async (id: number) => {
+    setSelected([id]);
     await handleUnstake(id);
-    setTimeout(() => {
-      setSelected([]);
-    }, 3000);
   };
+  useEffect(() => {
+    const fetchData = async () => {
+      const current = await api.get_current_time();
+      setCurrent(current);
+    };
+    fetchData();
+    setSelected([]);
+  }, [list]);
+
   if (list.length === 0) {
     return <Typography>No tokens yet.</Typography>;
   }
   return (
     <>
       <TablePrimaryContainer>
-        <Table>
-          <colgroup>
-            <col width="1%" />
-            <col width="19%" />
-            <col width="20%" />
-            <col width="20%" />
-            <col width="20%" />
-            <col width="20%" />
-          </colgroup>
+        <TablePrimary>
           <TablePrimaryHead>
-            <TableRow>
-              <TableCell padding="checkbox">
+            <Tr>
+              <TablePrimaryHeadCell padding="checkbox" align="left">
                 <Checkbox
                   color="info"
                   indeterminate={
@@ -171,13 +167,15 @@ export const StakedTokensTable = ({
                     "aria-label": "select all desserts",
                   }}
                 />
-              </TableCell>
-              <TableCell>Stake Datetime</TableCell>
-              <TableCell align="center">Token ID</TableCell>
-              <TableCell align="center">Stake Action ID</TableCell>
-              <TableCell align="center">Unstake Datetime</TableCell>
-              <TableCell></TableCell>
-            </TableRow>
+              </TablePrimaryHeadCell>
+              <TablePrimaryHeadCell align="left">
+                Stake Datetime
+              </TablePrimaryHeadCell>
+              <TablePrimaryHeadCell>Token ID</TablePrimaryHeadCell>
+              <TablePrimaryHeadCell>Stake Action ID</TablePrimaryHeadCell>
+              <TablePrimaryHeadCell>Unstake Datetime</TablePrimaryHeadCell>
+              <TablePrimaryHeadCell></TablePrimaryHeadCell>
+            </Tr>
           </TablePrimaryHead>
           <TableBody>
             {list
@@ -185,6 +183,7 @@ export const StakedTokensTable = ({
               .map((row, index) => (
                 <StakedTokensRow
                   key={index}
+                  current={current}
                   row={row}
                   handleUnstake={onUnstake}
                   isItemSelected={isSelected(row.TokenInfo.StakeActionId)}
@@ -192,8 +191,8 @@ export const StakedTokensTable = ({
                 />
               ))}
           </TableBody>
-        </Table>
-      </TablePrimaryContainer>{" "}
+        </TablePrimary>
+      </TablePrimaryContainer>
       {selected.length > 0 && (
         <Box display="flex" justifyContent="end" mt={2}>
           <Button variant="text" onClick={onUnstakeMany}>
