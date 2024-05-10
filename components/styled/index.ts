@@ -12,6 +12,7 @@ import {
   Skeleton,
   AccordionDetails,
   Typography,
+  MenuItem,
 } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import { isMobile, isSafari } from 'react-device-detect'
@@ -107,6 +108,7 @@ export const TablePrimaryHead = styled(Thead)({
 })
 
 export const TablePrimaryHeadCell = styled(Th)(({ theme }) => ({
+  color: '#fff',
   fontWeight: 400,
   lineHeight: 1.43,
   borderBottom: "1px solid rgba(81, 81, 81, 1)",
@@ -123,9 +125,9 @@ export const TablePrimaryCell = styled(Td)(({ theme }) => ({
   lineHeight: 1.43,
   borderBottom: 0,
   padding: "16px",
-  fontSize: 14,
+  fontSize: 16,
   [theme.breakpoints.down('sm')]: {
-    fontSize: 12,
+    fontSize: 14,
   }
 }))
 
@@ -438,3 +440,7 @@ export const StyledInput = styled('input')({
   }
 })
 
+export const PrimaryMenuItem = styled(MenuItem)({
+  fontSize: 'inherit',
+  minHeight: '32px'
+})

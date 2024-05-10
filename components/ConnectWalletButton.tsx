@@ -78,6 +78,7 @@ const ConnectWalletButton = ({ isMobileView, balance, stakedTokens }) => {
           keepMounted
           open={Boolean(anchorEl)}
           onClose={handleMenuClose}
+          sx={{ zIndex: 10003 }}
         >
           <MenuItem style={{ minWidth: 166 }} onClick={handleMenuClose}>
             <NavLink href="/my-tokens" sx={{ width: "100%" }}>
@@ -151,6 +152,24 @@ const ConnectWalletButton = ({ isMobileView, balance, stakedTokens }) => {
                 sx={{ fontStyle: "italic", fontWeight: 600 }}
               >
                 {balance.CosmicSignature} tokens
+              </Typography>
+            </Box>
+            <Box
+              sx={{ display: "flex", justifyContent: "space-between", mt: 1 }}
+            >
+              <Typography
+                variant="body2"
+                color="secondary"
+                sx={{ fontStyle: "italic", fontWeight: 600 }}
+              >
+                RWLK (ERC721):
+              </Typography>
+              <Typography
+                variant="body2"
+                color="secondary"
+                sx={{ fontStyle: "italic", fontWeight: 600 }}
+              >
+                {balance.RWLK} tokens
               </Typography>
             </Box>
           </MenuItem>

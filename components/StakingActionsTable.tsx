@@ -11,14 +11,21 @@ import {
 import { Tbody, Tr } from "react-super-responsive-table";
 import { convertTimestampToDateTime } from "../utils";
 import "react-super-responsive-table/dist/SuperResponsiveTableStyle.css";
+import { useRouter } from "next/router";
 
 const StakingActionsRow = ({ row }) => {
+  const router = useRouter();
   if (!row) {
     return <TablePrimaryRow></TablePrimaryRow>;
   }
 
   return (
-    <TablePrimaryRow>
+    <TablePrimaryRow
+      sx={{ cursor: "pointer" }}
+      onClick={() => {
+        router.push(`/staking-action/${row.ActionId}/${row.ActionType}`);
+      }}
+    >
       <TablePrimaryCell>
         {convertTimestampToDateTime(row.TimeStamp)}
       </TablePrimaryCell>
@@ -27,7 +34,11 @@ const StakingActionsRow = ({ row }) => {
       </TablePrimaryCell>
       <TablePrimaryCell align="center">
         <Link
-          href={`/detail/${row.TokenId}`}
+          href={
+            row.IsRandomWalk
+              ? `https://randomwalknft.com/detail/${row.TokenId}`
+              : `/detail/${row.TokenId}`
+          }
           sx={{
             color: "inherit",
             fontSize: "inherit",
@@ -35,6 +46,9 @@ const StakingActionsRow = ({ row }) => {
         >
           {row.TokenId}
         </Link>
+      </TablePrimaryCell>
+      <TablePrimaryCell align="center">
+        {row.IsRandomWalk ? "Yes" : "No"}
       </TablePrimaryCell>
       <TablePrimaryCell>
         {row.ActionType === 0
@@ -63,6 +77,7 @@ export const StakingActionsTable = ({ list }) => {
               </TablePrimaryHeadCell>
               <TablePrimaryHeadCell>Action Type</TablePrimaryHeadCell>
               <TablePrimaryHeadCell>Token ID</TablePrimaryHeadCell>
+              <TablePrimaryHeadCell>Is RandomWalk NFT?</TablePrimaryHeadCell>
               <TablePrimaryHeadCell align="left">
                 Unstake Datetime
               </TablePrimaryHeadCell>

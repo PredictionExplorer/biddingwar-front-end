@@ -4,18 +4,17 @@ import {
   Box,
   Link,
   Pagination,
-  Table,
   TableBody,
-  TableCell,
-  TableRow,
   Typography,
 } from "@mui/material";
 import Head from "next/head";
 import {
   MainWrapper,
+  TablePrimary,
   TablePrimaryCell,
   TablePrimaryContainer,
   TablePrimaryHead,
+  TablePrimaryHeadCell,
   TablePrimaryRow,
 } from "../components/styled";
 import { convertTimestampToDateTime } from "../utils";
@@ -24,6 +23,8 @@ import { useRouter } from "next/router";
 import { useApiData } from "../contexts/ApiDataContext";
 import Fireworks, { FireworksHandlers } from "@fireworks-js/react";
 import api from "../services/api";
+import { Tr } from "react-super-responsive-table";
+import "react-super-responsive-table/dist/SuperResponsiveTableStyle.css";
 
 const MyWinningsRow = ({ winning }) => {
   if (!winning) {
@@ -63,18 +64,15 @@ export const MyWinningsTable = ({ list }) => {
   return (
     <>
       <TablePrimaryContainer>
-        <Table>
-          <colgroup>
-            <col width="20%" />
-            <col width="60%" />
-            <col width="20%" />
-          </colgroup>
+        <TablePrimary>
           <TablePrimaryHead>
-            <TableRow>
-              <TableCell>Date</TableCell>
-              <TableCell align="center">Round</TableCell>
-              <TableCell align="right">Amount (ETH)</TableCell>
-            </TableRow>
+            <Tr>
+              <TablePrimaryHeadCell align="left">Date</TablePrimaryHeadCell>
+              <TablePrimaryHeadCell>Round</TablePrimaryHeadCell>
+              <TablePrimaryHeadCell align="right">
+                Amount (ETH)
+              </TablePrimaryHeadCell>
+            </Tr>
           </TablePrimaryHead>
           <TableBody>
             {list
@@ -83,7 +81,7 @@ export const MyWinningsTable = ({ list }) => {
                 <MyWinningsRow key={winning.EvtLogId} winning={winning} />
               ))}
           </TableBody>
-        </Table>
+        </TablePrimary>
       </TablePrimaryContainer>
       <Box display="flex" justifyContent="center" mt={4}>
         <Pagination
@@ -112,6 +110,15 @@ const CSTRow = ({ nft }) => {
       </TablePrimaryCell>
       <TablePrimaryCell align="center">
         <Link
+          href={`/detail/${nft.TokenId}`}
+          style={{ color: "inherit", fontSize: "inherit" }}
+        >
+          {nft.TokenId}
+        </Link>
+      </TablePrimaryCell>
+      <TablePrimaryCell align="center">{nft.TokenName || " "}</TablePrimaryCell>
+      <TablePrimaryCell align="center">
+        <Link
           href={`/user/${nft.WinnerAddr}`}
           style={{
             color: "inherit",
@@ -120,14 +127,6 @@ const CSTRow = ({ nft }) => {
           }}
         >
           {nft.WinnerAddr}
-        </Link>
-      </TablePrimaryCell>
-      <TablePrimaryCell align="center">
-        <Link
-          href={`/detail/${nft.TokenId}`}
-          style={{ color: "inherit", fontSize: "inherit" }}
-        >
-          {nft.TokenId}
         </Link>
       </TablePrimaryCell>
       <TablePrimaryCell align="right">
@@ -149,7 +148,7 @@ const CSTRow = ({ nft }) => {
 };
 
 const CSTTable = ({ list }) => {
-  const perPage = 5;
+  const perPage = 10;
   const [curPage, setCurPage] = useState(1);
   if (list.length === 0) {
     return <Typography>No tokens yet.</Typography>;
@@ -158,20 +157,17 @@ const CSTTable = ({ list }) => {
   return (
     <>
       <TablePrimaryContainer>
-        <Table>
-          <colgroup>
-            <col width="15%" />
-            <col width="55%" />
-            <col width="10%" />
-            <col width="30%" />
-          </colgroup>
+        <TablePrimary>
           <TablePrimaryHead>
-            <TableRow>
-              <TableCell>Date</TableCell>
-              <TableCell align="center">Winner Address</TableCell>
-              <TableCell align="center">Token ID</TableCell>
-              <TableCell align="right">Prize Type</TableCell>
-            </TableRow>
+            <Tr>
+              <TablePrimaryHeadCell align="left">Date</TablePrimaryHeadCell>
+              <TablePrimaryHeadCell>Token ID</TablePrimaryHeadCell>
+              <TablePrimaryHeadCell>Token Name</TablePrimaryHeadCell>
+              <TablePrimaryHeadCell>Winner Address</TablePrimaryHeadCell>
+              <TablePrimaryHeadCell align="right">
+                Prize Type
+              </TablePrimaryHeadCell>
+            </Tr>
           </TablePrimaryHead>
           <TableBody>
             {list
@@ -180,7 +176,7 @@ const CSTTable = ({ list }) => {
                 <CSTRow key={nft.EvtLogId} nft={nft} />
               ))}
           </TableBody>
-        </Table>
+        </TablePrimary>
       </TablePrimaryContainer>
       <Box display="flex" justifyContent="center" mt={4}>
         <Pagination
@@ -277,7 +273,7 @@ const MyWallet = () => {
         ) : (
           <>
             <Box mt={6}>
-              <Typography variant="h5" mb={2}>
+              <Typography variant="h6" mb={2}>
                 Cosmic Signature Tokens I Own
               </Typography>
               {CSTList.loading ? (

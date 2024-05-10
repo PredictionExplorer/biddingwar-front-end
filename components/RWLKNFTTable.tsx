@@ -21,125 +21,59 @@ import {
   TablePrimaryHeadCell,
   TablePrimaryRow,
 } from "./styled";
-import { convertTimestampToDateTime } from "../utils";
-import { Tr } from "react-super-responsive-table";
 import "react-super-responsive-table/dist/SuperResponsiveTableStyle.css";
+import { Tr } from "react-super-responsive-table";
 import api from "../services/api";
-import NFTImage from "./NFTImage";
 
-const StakedTokensRow = ({
-  offset,
-  row,
-  handleUnstake,
-  isItemSelected,
-  handleClick,
-}) => {
-  const [tokenName, setTokenName] = useState("");
-  const getTokenImageURL = () => {
-    const fileName = row.TokenInfo.TokenId.toString().padStart(6, "0");
-    if (row.StakedIsRandomWalk) {
-      return `https://randomwalknft.s3.us-east-2.amazonaws.com/${fileName}_black_thumb.jpg`;
-    }
-    return `https://cosmic-game.s3.us-east-2.amazonaws.com/${fileName}.png`;
-  };
+const RWLKNFTRow = ({ tokenId, handleStake, isItemSelected, handleClick }) => {
+  const [tokenInfo, setTokenInfo] = useState(null);
   useEffect(() => {
-    const getTokenName = async () => {
-      if (row.StakedIsRandomWalk) {
-        const res = await api.get_info(row.TokenInfo.TokenId);
-        setTokenName(res.CurName);
-      } else {
-        const names = await api.get_name_history(row.TokenInfo.TokenId);
-        if (names.length > 0) {
-          setTokenName(names[names.length - 1].TokenName);
-        }
-      }
+    const fetchTokenData = async () => {
+      const res = await api.get_info(tokenId);
+      setTokenInfo(res);
     };
-    getTokenName();
+    fetchTokenData();
   }, []);
-  if (!row) {
-    return <TablePrimaryRow />;
-  }
   return (
     <TablePrimaryRow
       hover="true"
       role="checkbox"
-      aria-checked={isItemSelected}
       tabIndex={-1}
-      key={row.id}
+      key={tokenId}
       selected={isItemSelected}
-      onClick={() => handleClick(row.TokenInfo.StakeActionId)}
-      sx={{
-        cursor: "pointer",
-        pointerEvents:
-          row.UnstakeTimeStamp > Date.now() / 1000 + offset ? "none" : "auto",
-      }}
+      onClick={() => handleClick(tokenId)}
+      sx={{ cursor: "pointer" }}
     >
       <TablePrimaryCell padding="checkbox">
-        <Checkbox
-          color="primary"
-          checked={isItemSelected}
-          disabled={row.UnstakeTimeStamp > Date.now() / 1000 + offset}
-          size="small"
-        />
+        <Checkbox color="primary" checked={isItemSelected} size="small" />
       </TablePrimaryCell>
-      <TablePrimaryCell sx={{ width: "120px" }}>
-        <NFTImage src={getTokenImageURL()} />
-        <Typography variant="caption" mt={1}>
-          {tokenName}
-        </Typography>
-      </TablePrimaryCell>
-      <TablePrimaryCell align="center">
+      <TablePrimaryCell>
         <Link
-          href={
-            row.StakedIsRandomWalk
-              ? `https://randomwalknft.com/detail/${row.TokenInfo.TokenId}`
-              : `/detail/${row.TokenInfo.TokenId}`
-          }
-          sx={{
-            color: "inherit",
-            fontSize: "inherit",
-          }}
-          target="_blank"
+          href={`/user/${tokenInfo?.CurOwnerAddr}`}
+          sx={{ color: "inherit", fontSize: "inherit" }}
         >
-          {row.TokenInfo.TokenId}
+          {tokenInfo?.CurOwnerAddr}
         </Link>
       </TablePrimaryCell>
+      <TablePrimaryCell align="center">{tokenId}</TablePrimaryCell>
       <TablePrimaryCell align="center">
-        {row.StakedIsRandomWalk ? "Yes" : "No"}
-      </TablePrimaryCell>
-      <TablePrimaryCell align="center">
-        {row.TokenInfo.StakeActionId}
-      </TablePrimaryCell>
-      <TablePrimaryCell align="center">
-        {convertTimestampToDateTime(row.StakeTimeStamp - offset)}
-      </TablePrimaryCell>
-      <TablePrimaryCell align="center">
-        {convertTimestampToDateTime(row.UnstakeTimeStamp - offset)}
-      </TablePrimaryCell>
-      <TablePrimaryCell align="center">
-        {row.UnstakeTimeStamp <= Date.now() / 1000 + offset && (
-          <Button
-            size="small"
-            sx={{ mr: 1 }}
-            onClick={(e) => {
-              e.stopPropagation();
-              handleUnstake(row.TokenInfo.StakeActionId, row.TokenInfo.TokenId);
-            }}
-          >
-            Unstake
-          </Button>
-        )}
+        <Button
+          size="small"
+          onClick={(e) => {
+            e.stopPropagation();
+            handleStake(tokenId);
+          }}
+        >
+          Stake
+        </Button>
       </TablePrimaryCell>
     </TablePrimaryRow>
   );
 };
 
-export const StakedTokensTable = ({
-  list,
-  handleUnstake,
-  handleUnstakeMany,
-}) => {
+export const RWLKNFTTable = ({ list, handleStake, handleStakeMany }) => {
   const perPage = 5;
+  const [anchorEl, setAnchorEl] = useState(null);
   const [notification, setNotification] = useState<{
     text: string;
     type: "success" | "info" | "warning" | "error";
@@ -149,12 +83,7 @@ export const StakedTokensTable = ({
     text: "",
     type: "success",
   });
-  const [offset, setOffset] = useState(0);
-  const filtered = list.filter(
-    (x) => x.UnstakeTimeStamp <= Date.now() / 1000 + offset
-  );
   const [page, setPage] = useState(1);
-  const [anchorEl, setAnchorEl] = useState(null);
   const [selected, setSelected] = useState([]);
   const isSelected = (id: number) => selected.indexOf(id) !== -1;
   const handleClick = (id: number) => {
@@ -176,14 +105,11 @@ export const StakedTokensTable = ({
     setSelected(newSelected);
   };
   const onSelectAllClick = () => {
-    const newSelected = filtered.map((n) => n.TokenInfo.StakeActionId);
-    setSelected(newSelected);
+    setSelected(list);
     setAnchorEl(null);
   };
   const onSelectCurPgClick = () => {
-    const newSelected = filtered
-      .slice((page - 1) * perPage, page * perPage)
-      .map((n) => n.TokenInfo.StakeActionId);
+    const newSelected = list.slice((page - 1) * perPage, page * perPage);
     setSelected(newSelected);
     setAnchorEl(null);
   };
@@ -191,43 +117,41 @@ export const StakedTokensTable = ({
     setSelected([]);
     setAnchorEl(null);
   };
-  const onUnstakeMany = async () => {
-    const res = await handleUnstakeMany(selected);
+  const onStakeMany = async () => {
+    const res = await handleStakeMany(
+      selected,
+      new Array(selected.length).fill(true)
+    );
     if (!res.code) {
       setNotification({
         visible: true,
-        text: "The selected tokens were unstaked successfully!",
+        text: "The selected tokens were staked successfully!",
         type: "success",
       });
     }
   };
-  const onUnstake = async (actionId: number, tokenId: number) => {
-    setSelected([actionId]);
-    const res = await handleUnstake(actionId);
+  const onStake = async (id: number) => {
+    setSelected([id]);
+    const res = await handleStake(id, true);
     if (!res.code) {
       setNotification({
         visible: true,
-        text: `You have successfully unstaked token ${tokenId}!`,
+        text: `You have successfully staked token ${id}!`,
         type: "success",
       });
     }
   };
-  const handleNotificationClose = () => {
+  const handleClose = () => {
     setNotification({ ...notification, visible: false });
   };
+
   useEffect(() => {
-    const fetchData = async () => {
-      const current = await api.get_current_time();
-      const offset = current - Date.now() / 1000;
-      setOffset(offset);
-    };
-    fetchData();
     setSelected([]);
     setPage(1);
   }, [list]);
 
   if (list.length === 0) {
-    return <Typography>No tokens yet.</Typography>;
+    return <Typography>No available tokens.</Typography>;
   }
   return (
     <>
@@ -235,12 +159,12 @@ export const StakedTokensTable = ({
         anchorOrigin={{ vertical: "top", horizontal: "right" }}
         autoHideDuration={10000}
         open={notification.visible}
-        onClose={handleNotificationClose}
+        onClose={handleClose}
       >
         <Alert
           severity={notification.type}
           variant="filled"
-          onClose={handleNotificationClose}
+          onClose={handleClose}
         >
           {notification.text}
         </Alert>
@@ -307,26 +231,22 @@ export const StakedTokensTable = ({
                   </MenuItem>
                 </Menu>
               </TablePrimaryHeadCell>
-              <TablePrimaryHeadCell>Token Image</TablePrimaryHeadCell>
+              <TablePrimaryHeadCell align="left">
+                Owner Address
+              </TablePrimaryHeadCell>
               <TablePrimaryHeadCell>Token ID</TablePrimaryHeadCell>
-              <TablePrimaryHeadCell>Is RandomWalk NFT?</TablePrimaryHeadCell>
-              <TablePrimaryHeadCell>Stake Action ID</TablePrimaryHeadCell>
-              <TablePrimaryHeadCell>Stake Datetime</TablePrimaryHeadCell>
-              <TablePrimaryHeadCell>Unstake Datetime</TablePrimaryHeadCell>
               <TablePrimaryHeadCell />
             </Tr>
           </TablePrimaryHead>
           <TableBody>
             {list
-              .sort((a, b) => a.StakeTimeStamp - b.StakeTimeStamp)
               .slice((page - 1) * perPage, page * perPage)
-              .map((row, index) => (
-                <StakedTokensRow
+              .map((tokenId, index) => (
+                <RWLKNFTRow
                   key={index}
-                  offset={offset}
-                  row={row}
-                  handleUnstake={onUnstake}
-                  isItemSelected={isSelected(row.TokenInfo.StakeActionId)}
+                  tokenId={tokenId}
+                  handleStake={onStake}
+                  isItemSelected={isSelected(tokenId)}
                   handleClick={handleClick}
                 />
               ))}
@@ -335,8 +255,8 @@ export const StakedTokensTable = ({
       </TablePrimaryContainer>
       {selected.length > 1 && (
         <Box display="flex" justifyContent="end" mt={2}>
-          <Button variant="text" onClick={onUnstakeMany}>
-            Unstake Many
+          <Button variant="text" onClick={onStakeMany}>
+            Stake Many
           </Button>
         </Box>
       )}

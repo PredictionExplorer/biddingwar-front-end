@@ -1,13 +1,18 @@
 import React, { useEffect, useState } from "react";
 import {
+  Alert,
   Box,
   Button,
   Checkbox,
   Link,
+  Menu,
+  MenuItem,
   Pagination,
+  Snackbar,
   TableBody,
   Typography,
 } from "@mui/material";
+import { ExpandLess, ExpandMore } from "@mui/icons-material";
 import {
   TablePrimary,
   TablePrimaryCell,
@@ -22,7 +27,7 @@ import { Tr } from "react-super-responsive-table";
 
 const CSTokensRow = ({ row, handleStake, isItemSelected, handleClick }) => {
   if (!row) {
-    return <TablePrimaryRow></TablePrimaryRow>;
+    return <TablePrimaryRow />;
   }
 
   return (
@@ -36,7 +41,7 @@ const CSTokensRow = ({ row, handleStake, isItemSelected, handleClick }) => {
       sx={{ cursor: "pointer" }}
     >
       <TablePrimaryCell padding="checkbox">
-        <Checkbox color="primary" checked={isItemSelected} />
+        <Checkbox color="primary" checked={isItemSelected} size="small" />
       </TablePrimaryCell>
       <TablePrimaryCell>
         {convertTimestampToDateTime(row.TimeStamp)}
@@ -80,7 +85,7 @@ const CSTokensRow = ({ row, handleStake, isItemSelected, handleClick }) => {
       <TablePrimaryCell align="center">
         {!row.Staked ? (
           <Button
-            variant="text"
+            size="small"
             onClick={(e) => {
               e.stopPropagation();
               handleStake(row.TokenId);
@@ -98,6 +103,16 @@ const CSTokensRow = ({ row, handleStake, isItemSelected, handleClick }) => {
 
 export const CSTokensTable = ({ list, handleStake, handleStakeMany }) => {
   const perPage = 5;
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [notification, setNotification] = useState<{
+    text: string;
+    type: "success" | "info" | "warning" | "error";
+    visible: boolean;
+  }>({
+    visible: false,
+    text: "",
+    type: "success",
+  });
   const [page, setPage] = useState(1);
   const [selected, setSelected] = useState([]);
   const isSelected = (id: number) => selected.indexOf(id) !== -1;
@@ -119,24 +134,53 @@ export const CSTokensTable = ({ list, handleStake, handleStakeMany }) => {
     }
     setSelected(newSelected);
   };
-  const onSelectAllClick = (e) => {
-    if (e.target.checked) {
-      const newSelected = list.map((n) => n.TokenId);
-      setSelected(newSelected);
-      return;
-    }
+  const onSelectAllClick = () => {
+    const newSelected = list.map((n) => n.TokenId);
+    setSelected(newSelected);
+    setAnchorEl(null);
+  };
+  const onSelectCurPgClick = () => {
+    const newSelected = list
+      .slice((page - 1) * perPage, page * perPage)
+      .map((n) => n.TokenId);
+    setSelected(newSelected);
+    setAnchorEl(null);
+  };
+  const onSelectNoneClick = () => {
     setSelected([]);
+    setAnchorEl(null);
   };
   const onStakeMany = async () => {
-    await handleStakeMany(selected);
+    const res = await handleStakeMany(
+      selected,
+      new Array(selected.length).fill(false)
+    );
+    if (!res.code) {
+      setNotification({
+        visible: true,
+        text: "The selected tokens were staked successfully!",
+        type: "success",
+      });
+    }
   };
   const onStake = async (id: number) => {
     setSelected([id]);
-    await handleStake(id);
+    const res = await handleStake(id, false);
+    if (!res.code) {
+      setNotification({
+        visible: true,
+        text: `You have successfully staked token ${id}!`,
+        type: "success",
+      });
+    }
+  };
+  const handleClose = () => {
+    setNotification({ ...notification, visible: false });
   };
 
   useEffect(() => {
     setSelected([]);
+    setPage(1);
   }, [list]);
 
   if (list.length === 0) {
@@ -144,22 +188,81 @@ export const CSTokensTable = ({ list, handleStake, handleStakeMany }) => {
   }
   return (
     <>
+      <Snackbar
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+        autoHideDuration={10000}
+        open={notification.visible}
+        onClose={handleClose}
+      >
+        <Alert
+          severity={notification.type}
+          variant="filled"
+          onClose={handleClose}
+        >
+          {notification.text}
+        </Alert>
+      </Snackbar>
       <TablePrimaryContainer>
         <TablePrimary>
           <TablePrimaryHead>
             <Tr>
               <TablePrimaryHeadCell padding="checkbox" align="left">
-                <Checkbox
-                  color="info"
-                  indeterminate={
-                    selected.length > 0 && selected.length < list.length
-                  }
-                  checked={list.length > 0 && selected.length === list.length}
-                  onChange={onSelectAllClick}
-                  inputProps={{
-                    "aria-label": "select all desserts",
+                <Box
+                  sx={{
+                    display: {
+                      md: "flex",
+                      sm: "flex",
+                      xs: "none",
+                    },
+                    alignItems: "center",
+                    cursor: "pointer",
                   }}
-                />
+                  onClick={(e) => setAnchorEl(e.currentTarget)}
+                >
+                  <Checkbox
+                    color="info"
+                    size="small"
+                    indeterminate={
+                      selected.length > 0 && selected.length < list.length
+                    }
+                    checked={list.length > 0 && selected.length === list.length}
+                  />
+                  {anchorEl ? <ExpandLess /> : <ExpandMore />}
+                </Box>
+                <Menu
+                  elevation={0}
+                  anchorOrigin={{
+                    vertical: "bottom",
+                    horizontal: "right",
+                  }}
+                  transformOrigin={{
+                    vertical: "top",
+                    horizontal: "center",
+                  }}
+                  anchorEl={anchorEl}
+                  keepMounted
+                  open={Boolean(anchorEl)}
+                  onClose={() => setAnchorEl(null)}
+                >
+                  <MenuItem
+                    style={{ minWidth: 166 }}
+                    onClick={onSelectAllClick}
+                  >
+                    <Typography>Select All</Typography>
+                  </MenuItem>
+                  <MenuItem
+                    style={{ minWidth: 166 }}
+                    onClick={onSelectCurPgClick}
+                  >
+                    <Typography>Select Current Page</Typography>
+                  </MenuItem>
+                  <MenuItem
+                    style={{ minWidth: 166 }}
+                    onClick={onSelectNoneClick}
+                  >
+                    <Typography>Select None</Typography>
+                  </MenuItem>
+                </Menu>
               </TablePrimaryHeadCell>
               <TablePrimaryHeadCell align="left">
                 Mint Datetime
@@ -167,7 +270,7 @@ export const CSTokensTable = ({ list, handleStake, handleStakeMany }) => {
               <TablePrimaryHeadCell>Token ID</TablePrimaryHeadCell>
               <TablePrimaryHeadCell>Round</TablePrimaryHeadCell>
               <TablePrimaryHeadCell>Winner Address</TablePrimaryHeadCell>
-              <TablePrimaryHeadCell></TablePrimaryHeadCell>
+              <TablePrimaryHeadCell />
             </Tr>
           </TablePrimaryHead>
           <TableBody>
@@ -185,7 +288,7 @@ export const CSTokensTable = ({ list, handleStake, handleStakeMany }) => {
           </TableBody>
         </TablePrimary>
       </TablePrimaryContainer>
-      {selected.length > 0 && (
+      {selected.length > 1 && (
         <Box display="flex" justifyContent="end" mt={2}>
           <Button variant="text" onClick={onStakeMany}>
             Stake Many

@@ -159,7 +159,12 @@ const UserInfo = ({ address }) => {
               <Typography variant="h6" color="primary" component="span" mr={2}>
                 User
               </Typography>
-              <Typography variant="h6" component="span" fontFamily="monospace">
+              <Typography
+                variant="h6"
+                component="span"
+                fontFamily="monospace"
+                sx={{ wordBreak: "break-all" }}
+              >
                 {address}
               </Typography>
             </Box>
@@ -357,7 +362,7 @@ const UserInfo = ({ address }) => {
                 </Box>
                 <Box>
                   <Typography variant="h6" lineHeight={1} mt={8} mb={2}>
-                    Unclaimed Staking Rewards
+                    Earned Staking Rewards
                   </Typography>
                   <UnclaimedStakingRewardsTable
                     list={unclaimedStakingRewards}

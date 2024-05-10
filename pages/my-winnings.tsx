@@ -5,10 +5,7 @@ import {
   Button,
   Link,
   Pagination,
-  Table,
   TableBody,
-  TableCell,
-  TableRow,
   Typography,
 } from "@mui/material";
 
@@ -16,9 +13,11 @@ import Head from "next/head";
 
 import {
   MainWrapper,
+  TablePrimary,
   TablePrimaryCell,
   TablePrimaryContainer,
   TablePrimaryHead,
+  TablePrimaryHeadCell,
   TablePrimaryRow,
 } from "../components/styled";
 import { convertTimestampToDateTime } from "../utils";
@@ -30,6 +29,8 @@ import router from "next/router";
 import { useApiData } from "../contexts/ApiDataContext";
 import api from "../services/api";
 import { UnclaimedStakingRewardsTable } from "../components/UnclaimedStakingRewardsTable";
+import { Tr } from "react-super-responsive-table";
+import "react-super-responsive-table/dist/SuperResponsiveTableStyle.css";
 
 const MyWinningsRow = ({ winning }) => {
   if (!winning) {
@@ -54,7 +55,7 @@ const MyWinningsRow = ({ winning }) => {
         </Link>
       </TablePrimaryCell>
       <TablePrimaryCell align="right">
-        {winning.Amount.toFixed(4)}
+        {winning.Amount.toFixed(7)}
       </TablePrimaryCell>
     </TablePrimaryRow>
   );
@@ -63,20 +64,22 @@ const MyWinningsRow = ({ winning }) => {
 const MyWinningsTable = ({ list }) => {
   return (
     <TablePrimaryContainer>
-      <Table>
+      <TablePrimary>
         <TablePrimaryHead>
-          <TableRow>
-            <TableCell>Date</TableCell>
-            <TableCell align="center">Round</TableCell>
-            <TableCell align="right">Amount (ETH)</TableCell>
-          </TableRow>
+          <Tr>
+            <TablePrimaryHeadCell align="left">Date</TablePrimaryHeadCell>
+            <TablePrimaryHeadCell>Round</TablePrimaryHeadCell>
+            <TablePrimaryHeadCell align="right">
+              Amount (ETH)
+            </TablePrimaryHeadCell>
+          </Tr>
         </TablePrimaryHead>
         <TableBody>
           {list.map((winning, i) => (
             <MyWinningsRow key={i} winning={winning} />
           ))}
         </TableBody>
-      </Table>
+      </TablePrimary>
     </TablePrimaryContainer>
   );
 };
@@ -255,7 +258,7 @@ const MyWinnings = () => {
             </Box>
             <Box mt={8}>
               <Typography variant="h5" mb={2}>
-                Unclaimed Staking Rewards
+                Earned Staking Rewards
               </Typography>
               {status?.UnclaimedStakingReward === 0 ? (
                 <Typography>No rewards yet.</Typography>

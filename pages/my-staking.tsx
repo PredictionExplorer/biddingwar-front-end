@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Box, Typography } from "@mui/material";
+import { Box, Tab, Tabs, Typography } from "@mui/material";
 import Head from "next/head";
 import { MainWrapper } from "../components/styled";
 import { useActiveWeb3React } from "../hooks/web3";
@@ -13,39 +13,47 @@ import useCosmicSignatureContract from "../hooks/useCosmicSignatureContract";
 import { STAKING_WALLET_ADDRESS } from "../config/app";
 import { StakedTokensTable } from "../components/StakedTokensTable";
 import { useStakedToken } from "../contexts/StakedTokenContext";
+import { RWLKNFTTable } from "../components/RWLKNFTTable";
+import useRWLKNFTContract from "../hooks/useRWLKNFTContract";
+
+interface TabPanelProps {
+  children?: React.ReactNode;
+  index: number;
+  value: number;
+}
+
+function CustomTabPanel(props: TabPanelProps) {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
+      {...other}
+    >
+      {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
+    </div>
+  );
+}
 
 const MyStaking = () => {
   const { account } = useActiveWeb3React();
+  const nftContract = useRWLKNFTContract();
   const [loading, setLoading] = useState(false);
   const [unclaimedStakingRewards, setUnclaimedStakingRewards] = useState([]);
   const [collectedStakingRewards, setCollectedStakingRewards] = useState([]);
   const [stakingActions, setStakingActions] = useState([]);
   const [CSTokens, setCSTokens] = useState([]);
+  const [rwlkTokens, setRwlkTokens] = useState([]);
+  const [stakingTable, setStakingTable] = useState(0);
   const { data: stakedTokens, fetchData: fetchStakedToken } = useStakedToken();
 
   const stakingContract = useStakingWalletContract();
   const cosmicSignatureContract = useCosmicSignatureContract();
 
-  const handleStake = async (tokenId: number) => {
-    try {
-      const isApprovedForAll = await cosmicSignatureContract.isApprovedForAll(
-        account,
-        STAKING_WALLET_ADDRESS
-      );
-      if (!isApprovedForAll) {
-        await cosmicSignatureContract
-          .setApprovalForAll(STAKING_WALLET_ADDRESS, true)
-          .then((tx) => tx.wait());
-      }
-      const res = await stakingContract.stake(tokenId).then((tx) => tx.wait());
-      console.log(res);
-      fetchData(account, false);
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  const handleStakeMany = async (tokenIds: number[]) => {
+  const handleStake = async (tokenId: number, isRwalk: boolean) => {
     try {
       const isApprovedForAll = await cosmicSignatureContract.isApprovedForAll(
         account,
@@ -57,12 +65,40 @@ const MyStaking = () => {
           .then((tx) => tx.wait());
       }
       const res = await stakingContract
-        .stakeMany(tokenIds)
+        .stake(tokenId, isRwalk)
         .then((tx) => tx.wait());
       console.log(res);
-      fetchData(account, false);
+      setTimeout(() => {
+        fetchData(account, false);
+      }, 2000);
+      return res;
     } catch (err) {
       console.error(err);
+      return err;
+    }
+  };
+
+  const handleStakeMany = async (tokenIds: number[], isRwalks: boolean[]) => {
+    try {
+      const isApprovedForAll = await cosmicSignatureContract.isApprovedForAll(
+        account,
+        STAKING_WALLET_ADDRESS
+      );
+      if (!isApprovedForAll) {
+        await cosmicSignatureContract
+          .setApprovalForAll(STAKING_WALLET_ADDRESS, true)
+          .then((tx) => tx.wait());
+      }
+      const res = await stakingContract
+        .stakeMany(tokenIds, isRwalks)
+        .then((tx) => tx.wait());
+      setTimeout(() => {
+        fetchData(account, false);
+      }, 2000);
+      return res;
+    } catch (err) {
+      console.error(err);
+      return err;
     }
   };
 
@@ -71,10 +107,13 @@ const MyStaking = () => {
       const res = await stakingContract
         .unstakeMany(actionIds)
         .then((tx) => tx.wait());
-      console.log(res);
-      fetchData(account, false);
+      setTimeout(() => {
+        fetchData(account, false);
+      }, 2000);
+      return res;
     } catch (err) {
       console.error(err);
+      return err;
     }
   };
 
@@ -83,33 +122,48 @@ const MyStaking = () => {
       const res = await stakingContract
         .unstake(actionId)
         .then((tx) => tx.wait());
-      console.log(res);
-      fetchData(account, false);
+
+      setTimeout(() => {
+        fetchData(account, false);
+      }, 2000);
+      return res;
     } catch (err) {
       console.error(err);
+      return err;
     }
   };
+
+  const handleTabChange = (_event, newValue) => {
+    setStakingTable(newValue);
+  };
+
   const fetchData = async (addr: string, reload: boolean = true) => {
     setLoading(reload);
-    setTimeout(
-      async () => {
-        const unclaimedStakingRewards = await api.get_unclaimed_staking_rewards_by_user(
-          addr
-        );
-        setUnclaimedStakingRewards(unclaimedStakingRewards);
-        const collectedStakingRewards = await api.get_collected_staking_rewards_by_user(
-          addr
-        );
-        setCollectedStakingRewards(collectedStakingRewards);
-        const stakingActions = await api.get_staking_actions_by_user(addr);
-        setStakingActions(stakingActions);
-        const CSTokens = await api.get_cst_tokens_by_user(addr);
-        setCSTokens(CSTokens);
-        fetchStakedToken();
-        setLoading(false);
-      },
-      reload ? 0 : 3000
+    const unclaimedStakingRewards = await api.get_unclaimed_staking_rewards_by_user(
+      addr
     );
+    setUnclaimedStakingRewards(unclaimedStakingRewards);
+    const collectedStakingRewards = await api.get_collected_staking_rewards_by_user(
+      addr
+    );
+    setCollectedStakingRewards(collectedStakingRewards);
+    const stakingActions = await api.get_staking_actions_by_user(addr);
+    setStakingActions(stakingActions);
+    const CSTokens = await api.get_cst_tokens_by_user(addr);
+    setCSTokens(CSTokens);
+    fetchStakedToken();
+
+    const rwlkStaked = stakedTokens
+      .filter((x) => x.IsRandomWalk)
+      .map((x) => x.TokenInfo.TokenId);
+    const tokens = await nftContract.walletOfOwner(account);
+    const nftIds = tokens
+      .map((t) => t.toNumber())
+      .reverse()
+      .filter((x) => !rwlkStaked.includes(x));
+    setRwlkTokens(nftIds);
+
+    setLoading(false);
   };
   useEffect(() => {
     if (account) {
@@ -141,7 +195,7 @@ const MyStaking = () => {
           <>
             <Box>
               <Typography variant="h6" lineHeight={1} mt={8} mb={2}>
-                Unclaimed Staking Rewards
+                Earned Staking Rewards
               </Typography>
               <UnclaimedStakingRewardsTable
                 list={unclaimedStakingRewards}
@@ -165,11 +219,26 @@ const MyStaking = () => {
               <Typography variant="h6" lineHeight={1} mt={8} mb={2}>
                 Tokens Available for Staking
               </Typography>
-              <CSTokensTable
-                list={CSTokens}
-                handleStake={handleStake}
-                handleStakeMany={handleStakeMany}
-              />
+              <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+                <Tabs value={stakingTable} onChange={handleTabChange}>
+                  <Tab label={<Typography>CosmicSignature Token</Typography>} />
+                  <Tab label={<Typography>RandomWalk Token</Typography>} />
+                </Tabs>
+              </Box>
+              <CustomTabPanel value={stakingTable} index={0}>
+                <CSTokensTable
+                  list={CSTokens}
+                  handleStake={handleStake}
+                  handleStakeMany={handleStakeMany}
+                />
+              </CustomTabPanel>
+              <CustomTabPanel value={stakingTable} index={1}>
+                <RWLKNFTTable
+                  list={rwlkTokens}
+                  handleStake={handleStake}
+                  handleStakeMany={handleStakeMany}
+                />
+              </CustomTabPanel>
             </Box>
             <Box>
               <Typography variant="h6" lineHeight={1} mt={8} mb={2}>
