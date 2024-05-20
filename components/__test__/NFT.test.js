@@ -27,7 +27,7 @@ test("NFT with mock data", () => {
   render(<NFT nft={mockData} />);
 
   const fileName = mockData.TokenId.toString().padStart(6, "0");
-  const image = `https://cosmic-game.s3.us-east-2.amazonaws.com/${fileName}.png`;
+  const image = `https://cosmic-game2.s3.us-east-2.amazonaws.com/${fileName}.png`;
   setTimeout(() => {
     expect(screen.getByAltText("nft image").getAttribute("src")).toEqual(image);
   }, 1000);

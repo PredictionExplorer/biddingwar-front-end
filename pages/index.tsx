@@ -829,7 +829,7 @@ const NewHome = () => {
                       src={
                         bannerTokenId === ""
                           ? "/images/qmark.png"
-                          : `https://cosmic-game.s3.us-east-2.amazonaws.com/${bannerTokenId}.png`
+                          : `https://cosmic-game2.s3.us-east-2.amazonaws.com/${bannerTokenId}.png`
                       }
                     />
                   </Link>
@@ -1075,7 +1075,8 @@ const NewHome = () => {
                 </Button>
                 {!(
                   prizeTime > Date.now() ||
-                  data?.LastBidderAddr === constants.AddressZero
+                  data?.LastBidderAddr === constants.AddressZero ||
+                  loading
                 ) && (
                   <>
                     <Button
@@ -1287,7 +1288,7 @@ const NewHome = () => {
             </>
           ) : (
             <Typography mt={2}>
-              No ERC721 tokens were donated on this round
+              No ERC721 tokens were donated on this round.
             </Typography>
           )}
         </Box>
@@ -1349,7 +1350,7 @@ const NewHome = () => {
           image={
             bannerTokenId === ""
               ? "/images/qmark.png"
-              : `https://cosmic-game.s3.us-east-2.amazonaws.com/${bannerTokenId}.png`
+              : `https://cosmic-game2.s3.us-east-2.amazonaws.com/${bannerTokenId}.png`
           }
           title="This is a possible image of the NFT you are going to receive."
           onClose={() => setImageOpen(false)}

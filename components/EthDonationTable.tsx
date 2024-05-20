@@ -8,38 +8,50 @@ import {
   TablePrimaryHeadCell,
   TablePrimaryRow,
 } from "./styled";
-import { Tr } from "react-super-responsive-table";
 import "react-super-responsive-table/dist/SuperResponsiveTableStyle.css";
+import { Tr } from "react-super-responsive-table";
+import { convertTimestampToDateTime } from "../utils";
 
-const CSTokenDistributionRow = ({ row }) => {
+const EthDonationRow = ({ row }) => {
   if (!row) {
-    return <TablePrimaryRow />;
+    return <TablePrimaryRow></TablePrimaryRow>;
   }
 
   return (
     <TablePrimaryRow>
       <TablePrimaryCell>
         <Link
-          href={`/user/${row.OwnerAddr}`}
-          style={{
-            color: "inherit",
-            fontSize: "inherit",
-            fontFamily: "monospace",
-          }}
+          color="inherit"
+          fontSize="inherit"
+          href={`https://arbiscan.io/tx/${row.TxHash}`}
+          target="__blank"
         >
-          {row.OwnerAddr}
+          {convertTimestampToDateTime(row.TimeStamp)}
         </Link>
       </TablePrimaryCell>
-      <TablePrimaryCell align="right">{row.NumTokens}</TablePrimaryCell>
+      <TablePrimaryCell align="center">
+        <Link
+          color="inherit"
+          fontSize="inherit"
+          fontFamily="monospace"
+          href={`/user/${row.DonorAddr}`}
+          target="__blank"
+        >
+          {row.DonorAddr}
+        </Link>
+      </TablePrimaryCell>
+      <TablePrimaryCell align="right">
+        {row.AmountEth.toFixed(2)}
+      </TablePrimaryCell>
     </TablePrimaryRow>
   );
 };
 
-const CSTokenDistributionTable = ({ list }) => {
+const EthDonationTable = ({ list }) => {
   const perPage = 5;
   const [page, setPage] = useState(1);
   if (list.length === 0) {
-    return <Typography>No tokens yet.</Typography>;
+    return <Typography>No donations yet.</Typography>;
   }
   return (
     <>
@@ -47,17 +59,16 @@ const CSTokenDistributionTable = ({ list }) => {
         <TablePrimary>
           <TablePrimaryHead>
             <Tr>
-              <TablePrimaryHeadCell align="left">
-                Owner Address
-              </TablePrimaryHeadCell>
+              <TablePrimaryHeadCell align="left">Datetime</TablePrimaryHeadCell>
+              <TablePrimaryHeadCell>Donor</TablePrimaryHeadCell>
               <TablePrimaryHeadCell align="right">
-                Number of Tokens Owned
+                Amount (ETH)
               </TablePrimaryHeadCell>
             </Tr>
           </TablePrimaryHead>
           <TableBody>
             {list.slice((page - 1) * perPage, page * perPage).map((row) => (
-              <CSTokenDistributionRow row={row} key={row.OwnerAid} />
+              <EthDonationRow row={row} key={row.EvtLogId} />
             ))}
           </TableBody>
         </TablePrimary>
@@ -77,4 +88,4 @@ const CSTokenDistributionTable = ({ list }) => {
   );
 };
 
-export default CSTokenDistributionTable;
+export default EthDonationTable;

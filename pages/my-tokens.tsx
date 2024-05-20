@@ -26,81 +26,9 @@ import api from "../services/api";
 import { Tr } from "react-super-responsive-table";
 import "react-super-responsive-table/dist/SuperResponsiveTableStyle.css";
 
-const MyWinningsRow = ({ winning }) => {
-  if (!winning) {
-    return <TablePrimaryRow></TablePrimaryRow>;
-  }
-
-  return (
-    <TablePrimaryRow>
-      <TablePrimaryCell>
-        {convertTimestampToDateTime(winning.TimeStamp)}
-      </TablePrimaryCell>
-      <TablePrimaryCell align="center">
-        <Link
-          href={`/prize/${winning.RoundNum}`}
-          style={{
-            color: "inherit",
-            fontSize: "inherit",
-          }}
-          target="_blank"
-        >
-          {winning.RoundNum}
-        </Link>
-      </TablePrimaryCell>
-      <TablePrimaryCell align="right">
-        {winning.Amount.toFixed(4)}
-      </TablePrimaryCell>
-    </TablePrimaryRow>
-  );
-};
-
-export const MyWinningsTable = ({ list }) => {
-  const perPage = 5;
-  const [curPage, setCurPage] = useState(1);
-  if (list.length === 0) {
-    return <Typography>No Raffle ETH yet.</Typography>;
-  }
-  return (
-    <>
-      <TablePrimaryContainer>
-        <TablePrimary>
-          <TablePrimaryHead>
-            <Tr>
-              <TablePrimaryHeadCell align="left">Date</TablePrimaryHeadCell>
-              <TablePrimaryHeadCell>Round</TablePrimaryHeadCell>
-              <TablePrimaryHeadCell align="right">
-                Amount (ETH)
-              </TablePrimaryHeadCell>
-            </Tr>
-          </TablePrimaryHead>
-          <TableBody>
-            {list
-              .slice((curPage - 1) * perPage, curPage * perPage)
-              .map((winning) => (
-                <MyWinningsRow key={winning.EvtLogId} winning={winning} />
-              ))}
-          </TableBody>
-        </TablePrimary>
-      </TablePrimaryContainer>
-      <Box display="flex" justifyContent="center" mt={4}>
-        <Pagination
-          color="primary"
-          page={curPage}
-          onChange={(_e, page) => setCurPage(page)}
-          count={Math.ceil(list.length / perPage)}
-          hideNextButton
-          hidePrevButton
-          shape="rounded"
-        />
-      </Box>
-    </>
-  );
-};
-
 const CSTRow = ({ nft }) => {
   if (!nft) {
-    return <TablePrimaryRow></TablePrimaryRow>;
+    return <TablePrimaryRow />;
   }
 
   return (
@@ -119,6 +47,14 @@ const CSTRow = ({ nft }) => {
       <TablePrimaryCell align="center">{nft.TokenName || " "}</TablePrimaryCell>
       <TablePrimaryCell align="center">
         <Link
+          href={`/prize/${nft.RoundNum}`}
+          style={{ color: "inherit", fontSize: "inherit" }}
+        >
+          {nft.RoundNum}
+        </Link>
+      </TablePrimaryCell>
+      <TablePrimaryCell align="center">
+        <Link
           href={`/user/${nft.WinnerAddr}`}
           style={{
             color: "inherit",
@@ -128,6 +64,9 @@ const CSTRow = ({ nft }) => {
         >
           {nft.WinnerAddr}
         </Link>
+      </TablePrimaryCell>
+      <TablePrimaryCell align="center">
+        {nft.Staked ? "Yes" : "No"}
       </TablePrimaryCell>
       <TablePrimaryCell align="right">
         {nft.RecordType === 3 ? (
@@ -163,7 +102,9 @@ const CSTTable = ({ list }) => {
               <TablePrimaryHeadCell align="left">Date</TablePrimaryHeadCell>
               <TablePrimaryHeadCell>Token ID</TablePrimaryHeadCell>
               <TablePrimaryHeadCell>Token Name</TablePrimaryHeadCell>
+              <TablePrimaryHeadCell>Round</TablePrimaryHeadCell>
               <TablePrimaryHeadCell>Winner Address</TablePrimaryHeadCell>
+              <TablePrimaryHeadCell>Staked</TablePrimaryHeadCell>
               <TablePrimaryHeadCell align="right">
                 Prize Type
               </TablePrimaryHeadCell>

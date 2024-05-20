@@ -329,7 +329,11 @@ const Statistics = () => {
                       fontSize="inherit"
                       href="/charity-deposits-voluntary"
                     >
-                      {`${data.NumVoluntaryDonations} totalling ${data.SumVoluntaryDonationsEth} ETH`}
+                      {`${
+                        data.NumVoluntaryDonations
+                      } totalling ${data.SumVoluntaryDonationsEth.toFixed(
+                        4
+                      )} ETH`}
                     </Link>
                   }
                 />
@@ -384,7 +388,15 @@ const Statistics = () => {
               />
               <StatisticsItem
                 title="Number of Donated NFTs"
-                value={data.NumDonatedNFTs}
+                value={
+                  <Link
+                    color="inherit"
+                    fontSize="inherit"
+                    href="/nft-donations"
+                  >
+                    {data.NumDonatedNFTs}
+                  </Link>
+                }
               />
               <StatisticsItem
                 title="Amount of Cosmic Signature Tokens with assigned name"
@@ -491,7 +503,6 @@ const Statistics = () => {
                 list={ctBalanceDistribution.slice(0, 20)}
               />
             </Box>
-
             <Box>
               <Typography variant="h6" mb={2} mt={8}>
                 Stake / Unstake Actions
@@ -548,7 +559,7 @@ const Statistics = () => {
                 </>
               ) : (
                 <Typography mt={2}>
-                  No ERC721 tokens were donated on this round
+                  No ERC721 tokens were donated on this round.
                 </Typography>
               )}
             </Box>

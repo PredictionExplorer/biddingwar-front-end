@@ -14,7 +14,7 @@ import { Tr } from "react-super-responsive-table";
 
 const GlobalStakedTokensRow = ({ row }) => {
   if (!row) {
-    return <TablePrimaryRow></TablePrimaryRow>;
+    return <TablePrimaryRow />;
   }
 
   return (
@@ -29,7 +29,22 @@ const GlobalStakedTokensRow = ({ row }) => {
       </TablePrimaryCell>
       <TablePrimaryCell align="center">
         <Link
-          href={`/detail/${row.TokenInfo.TokenId}`}
+          href={`/staking-action/${row.StakeActionId}`}
+          sx={{
+            color: "inherit",
+            fontSize: "inherit",
+          }}
+        >
+          {row.StakeActionId}
+        </Link>
+      </TablePrimaryCell>
+      <TablePrimaryCell align="center">
+        <Link
+          href={
+            row.StakedIsRandomWalk
+              ? `https://randomwalknft.com/detail/${row.TokenInfo.TokenId}`
+              : `/detail/${row.TokenInfo.TokenId}`
+          }
           sx={{
             color: "inherit",
             fontSize: "inherit",
@@ -39,15 +54,18 @@ const GlobalStakedTokensRow = ({ row }) => {
         </Link>
       </TablePrimaryCell>
       <TablePrimaryCell align="center">
+        {row.StakedIsRandomWalk ? "Yes" : "No"}
+      </TablePrimaryCell>
+      <TablePrimaryCell align="center">
         <Link
-          href={`/user/${row.TokenInfo.CurOwnerAddr}`}
+          href={`/user/${row.UserAddr}`}
           sx={{
             color: "inherit",
             fontSize: "inherit",
             fontFamily: "monospace",
           }}
         >
-          {row.TokenInfo.CurOwnerAddr}
+          {row.UserAddr}
         </Link>
       </TablePrimaryCell>
     </TablePrimaryRow>
@@ -72,16 +90,16 @@ export const GlobalStakedTokensTable = ({ list }) => {
               <TablePrimaryHeadCell align="left">
                 Unstake Datetime
               </TablePrimaryHeadCell>
+              <TablePrimaryHeadCell>Action ID</TablePrimaryHeadCell>
               <TablePrimaryHeadCell>Token ID</TablePrimaryHeadCell>
+              <TablePrimaryHeadCell>Is RandomWalk NFT?</TablePrimaryHeadCell>
               <TablePrimaryHeadCell>Staker Address</TablePrimaryHeadCell>
             </Tr>
           </TablePrimaryHead>
           <TableBody>
-            {list
-              .slice((page - 1) * perPage, page * perPage)
-              .map((row, index) => (
-                <GlobalStakedTokensRow key={index} row={row} />
-              ))}
+            {list.slice((page - 1) * perPage, page * perPage).map((row) => (
+              <GlobalStakedTokensRow key={row.StakeEvtLogId} row={row} />
+            ))}
           </TableBody>
         </TablePrimary>
       </TablePrimaryContainer>

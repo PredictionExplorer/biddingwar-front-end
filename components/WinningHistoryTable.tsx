@@ -39,7 +39,7 @@ const HistoryRow = ({ history, showClaimedStatus }) => {
   }, [history]);
 
   if (!history) {
-    return <TablePrimaryRow></TablePrimaryRow>;
+    return <TablePrimaryRow />;
   }
   return (
     <TablePrimaryRow
@@ -87,7 +87,14 @@ const HistoryRow = ({ history, showClaimedStatus }) => {
         </Box>
       </TablePrimaryCell>
       <TablePrimaryCell>
-        {convertTimestampToDateTime(history.TimeStamp)}
+        <Link
+          color="inherit"
+          fontSize="inherit"
+          href={`https://arbiscan.io/tx/${history.TxHash}`}
+          target="__blank"
+        >
+          {convertTimestampToDateTime(history.TimeStamp)}
+        </Link>
       </TablePrimaryCell>
       <TablePrimaryCell align="center">
         <Link
@@ -200,10 +207,10 @@ const HistoryTable = ({
         <TableBody>
           {winningHistory
             .slice((curPage - 1) * perPage, curPage * perPage)
-            .map((history, i) => (
+            .map((history, index) => (
               <HistoryRow
                 history={history}
-                key={i}
+                key={(curPage - 1) * perPage + index}
                 showClaimedStatus={showClaimedStatus}
               />
             ))}
@@ -217,7 +224,7 @@ const WinningHistoryTable = ({ winningHistory, showClaimedStatus = false }) => {
   const perPage = 5;
   const [curPage, setCurrentPage] = useState(1);
   if (winningHistory.length === 0) {
-    return <Typography variant="h6">No history yet.</Typography>;
+    return <Typography>No history yet.</Typography>;
   }
   return (
     <Box mt={2}>

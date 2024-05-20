@@ -8,7 +8,7 @@ import {
   TablePrimaryHeadCell,
   TablePrimaryRow,
 } from "./styled";
-import { convertTimestampToDateTime } from "../utils";
+import { convertTimestampToDateTime, shortenHex } from "../utils";
 import "react-super-responsive-table/dist/SuperResponsiveTableStyle.css";
 import { Tr } from "react-super-responsive-table";
 import { useRouter } from "next/router";
@@ -16,14 +16,14 @@ import { useRouter } from "next/router";
 const GlobalStakingActionsRow = ({ row }) => {
   const router = useRouter();
   if (!row) {
-    return <TablePrimaryRow></TablePrimaryRow>;
+    return <TablePrimaryRow />;
   }
 
   return (
     <TablePrimaryRow
       sx={{ cursor: "pointer" }}
       onClick={() => {
-        router.push(`/staking-action/${row.ActionId}/${row.ActionType}`);
+        router.push(`/staking-action/${row.ActionId}`);
       }}
     >
       <TablePrimaryCell>
@@ -34,14 +34,18 @@ const GlobalStakingActionsRow = ({ row }) => {
       </TablePrimaryCell>
       <TablePrimaryCell align="center">
         <Link
-          href={`/detail/${row.TokenId}`}
-          sx={{
-            color: "inherit",
-            fontSize: "inherit",
-          }}
+          href={
+            row.IsRandomWalk
+              ? `https://randomwalknft.com/detail/${row.TokenId}`
+              : `/detail/${row.TokenId}`
+          }
+          style={{ color: "inherit", fontSize: "inherit" }}
         >
           {row.TokenId}
         </Link>
+      </TablePrimaryCell>
+      <TablePrimaryCell align="center">
+        {row.IsRandomWalk ? "Yes" : "No"}
       </TablePrimaryCell>
       <TablePrimaryCell>
         {row.ActionType === 0
@@ -57,7 +61,7 @@ const GlobalStakingActionsRow = ({ row }) => {
             fontFamily: "monospace",
           }}
         >
-          {row.StakerAddr}
+          {shortenHex(row.StakerAddr, 6)}
         </Link>
       </TablePrimaryCell>
       <TablePrimaryCell align="center">{row.NumStakedNFTs}</TablePrimaryCell>
@@ -82,6 +86,7 @@ export const GlobalStakingActionsTable = ({ list }) => {
               </TablePrimaryHeadCell>
               <TablePrimaryHeadCell>Action Type</TablePrimaryHeadCell>
               <TablePrimaryHeadCell>Token ID</TablePrimaryHeadCell>
+              <TablePrimaryHeadCell>Is RandomWalk NFT?</TablePrimaryHeadCell>
               <TablePrimaryHeadCell align="left">
                 Unstake Datetime
               </TablePrimaryHeadCell>
