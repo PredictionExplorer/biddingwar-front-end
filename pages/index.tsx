@@ -206,11 +206,14 @@ const NewHome = () => {
       }, 1000);
     } catch (err) {
       console.log(err);
-      setNotification({
-        visible: true,
-        type: "error",
-        text: err.message,
-      });
+      if (err?.data?.message) {
+        const msg = getErrorMessage(err?.data?.message);
+        setNotification({
+          visible: true,
+          type: "error",
+          text: msg,
+        });
+      }
     }
   };
 
@@ -837,7 +840,7 @@ const NewHome = () => {
                       src={
                         bannerTokenId === ""
                           ? "/images/qmark.png"
-                          : `https://cosmic-game2.s3.us-east-2.amazonaws.com/${bannerTokenId}.png`
+                          : `https://cosmic-game.s3.us-east-2.amazonaws.com/${bannerTokenId}.png`
                       }
                     />
                   </Link>
@@ -973,7 +976,10 @@ const NewHome = () => {
                         onChange={(e) => setMessage(e.target.value)}
                       />
                       {bidType !== "CST" && (
-                        <>
+                        <Box sx={{ border: "1px solid #444", borderRadius: 1, p: 2, mt: 2 }}>
+                          <Typography variant="subtitle2">
+                            Bid price collision prevention
+                          </Typography>
                           <Box
                             sx={{
                               display: "flex",
@@ -1024,10 +1030,10 @@ const NewHome = () => {
                             </Typography>
                           </Box>
                           <Typography variant="body2" mt={2}>
-                            The bid price is increased {bidPricePlus}% to
-                            prevent bidding collision.
+                            The bid price is bumped {bidPricePlus}% to prevent
+                            bidding collision.
                           </Typography>
-                        </>
+                        </Box>
                       )}
                     </AccordionDetails>
                   </Accordion>
@@ -1060,7 +1066,7 @@ const NewHome = () => {
                                 (1 + bidPricePlus / 100)
                               ).toFixed(5)
                         } ETH)`
-                      : bidType === "RandomWalk"
+                      : bidType === "RandomWalk" && rwlkId !== -1
                       ? ` token ${rwlkId} (${
                           data?.BidPriceEth * (1 + bidPricePlus / 100) > 0.2
                             ? (
@@ -1082,9 +1088,7 @@ const NewHome = () => {
                   }`}
                 </Button>
                 {!(
-                  prizeTime > Date.now() ||
-                  data?.LastBidderAddr === constants.AddressZero ||
-                  loading
+                  data?.LastBidderAddr === constants.AddressZero || loading
                 ) && (
                   <>
                     <Button
@@ -1103,7 +1107,7 @@ const NewHome = () => {
                         {prizeTime > Date.now() &&
                           data?.LastBidderAddr !== account && (
                             <>
-                              available in &nbsp;
+                              &nbsp;available in &nbsp;
                               <Countdown date={prizeTime} />
                             </>
                           )}
@@ -1360,7 +1364,7 @@ const NewHome = () => {
           image={
             bannerTokenId === ""
               ? "/images/qmark.png"
-              : `https://cosmic-game2.s3.us-east-2.amazonaws.com/${bannerTokenId}.png`
+              : `https://cosmic-game.s3.us-east-2.amazonaws.com/${bannerTokenId}.png`
           }
           title="This is a possible image of the NFT you are going to receive."
           onClose={() => setImageOpen(false)}

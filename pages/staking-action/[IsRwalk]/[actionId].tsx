@@ -67,7 +67,7 @@ const StakingActionDetail = ({ IsRwalk, actionId }) => {
                                   6,
                                   "0"
                                 )}_black_thumb.jpg`
-                              : `https://cosmic-game2.s3.us-east-2.amazonaws.com/${actionInfo.Stake.TokenId.toString().padStart(
+                              : `https://cosmic-game.s3.us-east-2.amazonaws.com/${actionInfo.Stake.TokenId.toString().padStart(
                                   6,
                                   "0"
                                 )}.png`
