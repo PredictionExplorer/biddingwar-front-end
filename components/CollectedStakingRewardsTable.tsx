@@ -32,15 +32,18 @@ const DetailRow = ({ row }) => {
   return (
     <TablePrimaryRow sx={{ borderBottom: 0 }}>
       <TablePrimaryCell align="left">
-        {convertTimestampToDateTime(row.ClaimTimeStamp)}
+        <Link
+          color="inherit"
+          fontSize="inherit"
+          href={`https://arbiscan.io/tx/${row.ClaimTxHash}`}
+          target="__blank"
+        >
+          {convertTimestampToDateTime(row.ClaimTimeStamp)}
+        </Link>
       </TablePrimaryCell>
       <TablePrimaryCell align="center">
         <Link
-          href={
-            row.IsRandomWalk
-              ? `https://randomwalknft.com/detail/${row.TokenId}`
-              : `/detail/${row.TokenId}`
-          }
+          href={`/detail/${row.TokenId}`}
           style={{ color: "inherit", fontSize: "inherit" }}
         >
           {row.TokenId}
@@ -48,14 +51,11 @@ const DetailRow = ({ row }) => {
       </TablePrimaryCell>
       <TablePrimaryCell align="center">
         <Link
-          href={`/staking-action/${row.StakeActionId}`}
+          href={`/staking-action/0/${row.StakeActionId}`}
           style={{ color: "inherit", fontSize: "inherit" }}
         >
           {row.StakeActionId}
         </Link>
-      </TablePrimaryCell>
-      <TablePrimaryCell align="center">
-        {row.IsRandomWalk ? "Yes" : "No"}
       </TablePrimaryCell>
       <TablePrimaryCell align="right">
         {row.ClaimRewardAmountEth.toFixed(6)}
@@ -82,20 +82,15 @@ const DetailTable = ({ list }) => {
               <TablePrimaryHeadCell sx={{ py: 1 }}>
                 Action Id
               </TablePrimaryHeadCell>
-              <TablePrimaryHeadCell sx={{ py: 1 }}>
-                Is RandomWalk NFT?
-              </TablePrimaryHeadCell>
               <TablePrimaryHeadCell align="right" sx={{ py: 1 }}>
                 Reward
               </TablePrimaryHeadCell>
             </Tr>
           </TablePrimaryHead>
           <TableBody>
-            {list
-              .slice((page - 1) * perPage, page * perPage)
-              .map((row, index) => (
-                <DetailRow row={row} key={index} />
-              ))}
+            {list.slice((page - 1) * perPage, page * perPage).map((row) => (
+              <DetailRow row={row} key={row.RecordId} />
+            ))}
           </TableBody>
         </TablePrimary>
       </TablePrimaryContainer>
@@ -121,7 +116,7 @@ const CollectedStakingRewardsRow = ({ row }) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const res = await api.get_action_ids_by_deposit_with_claim_info(
+      const res = await api.get_cst_action_ids_by_deposit_with_claim_info(
         account,
         row.DepositId
       );
@@ -138,7 +133,7 @@ const CollectedStakingRewardsRow = ({ row }) => {
     <>
       <TablePrimaryRow sx={{ borderBottom: 0 }}>
         <TablePrimaryCell>
-          {list.length > 1 ? (
+          {list.length > 1 && (
             <IconButton
               aria-label="expand row"
               size="small"
@@ -146,12 +141,17 @@ const CollectedStakingRewardsRow = ({ row }) => {
             >
               {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
             </IconButton>
-          ) : (
-            " "
           )}
         </TablePrimaryCell>
         <TablePrimaryCell>
-          {convertTimestampToDateTime(row.TimeStamp)}
+          <Link
+            color="inherit"
+            fontSize="inherit"
+            href={`https://arbiscan.io/tx/${row.TxHash}`}
+            target="__blank"
+          >
+            {convertTimestampToDateTime(row.TimeStamp)}
+          </Link>
         </TablePrimaryCell>
         <TablePrimaryCell align="center">
           <Link
@@ -178,10 +178,13 @@ const CollectedStakingRewardsRow = ({ row }) => {
         <TablePrimaryCell align="center">
           {row.YourCollectedAmountEth.toFixed(6)}
         </TablePrimaryCell>
+        <TablePrimaryCell align="center">
+          {row.FullyClaimed ? "Yes" : "No"}
+        </TablePrimaryCell>
       </TablePrimaryRow>
       {list.length > 1 && (
         <TablePrimaryRow sx={{ borderTop: 0 }}>
-          <TablePrimaryCell sx={{ py: 0 }} colSpan={10}>
+          <TablePrimaryCell sx={{ py: 0 }} colSpan={11}>
             <Collapse in={open} timeout="auto" unmountOnExit>
               <Box sx={{ margin: 1, marginBottom: 4 }}>
                 <Typography variant="subtitle1" gutterBottom component="div">
@@ -210,7 +213,7 @@ export const CollectedStakingRewardsTable = ({ list }) => {
           <TablePrimaryHead>
             <Tr>
               <TablePrimaryHeadCell />
-              <TablePrimaryHeadCell align="left" sx={{ minWidth: "185px" }}>
+              <TablePrimaryHeadCell align="left" sx={{ minWidth: "145px" }}>
                 Datetime
               </TablePrimaryHeadCell>
               <TablePrimaryHeadCell>Round</TablePrimaryHeadCell>
@@ -221,6 +224,7 @@ export const CollectedStakingRewardsTable = ({ list }) => {
               <TablePrimaryHeadCell>Staked Tokens</TablePrimaryHeadCell>
               <TablePrimaryHeadCell>Collected Tokens</TablePrimaryHeadCell>
               <TablePrimaryHeadCell>Collected Rewards</TablePrimaryHeadCell>
+              <TablePrimaryHeadCell>Fully Claimed?</TablePrimaryHeadCell>
             </Tr>
           </TablePrimaryHead>
           <TableBody>

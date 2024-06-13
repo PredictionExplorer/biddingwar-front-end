@@ -13,7 +13,7 @@ import "react-super-responsive-table/dist/SuperResponsiveTableStyle.css";
 
 const UniqueBiddersRow = ({ bidder }) => {
   if (!bidder) {
-    return <TablePrimaryRow></TablePrimaryRow>;
+    return <TablePrimaryRow />;
   }
 
   return (

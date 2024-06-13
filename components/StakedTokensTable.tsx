@@ -33,19 +33,22 @@ const StakedTokensRow = ({
   handleUnstake,
   isItemSelected,
   handleClick,
+  IsRwalk,
 }) => {
   const [tokenName, setTokenName] = useState("");
   const getTokenImageURL = () => {
-    const fileName = row.TokenInfo.TokenId.toString().padStart(6, "0");
-    if (row.StakedIsRandomWalk) {
+    const fileName = (IsRwalk ? row.StakedTokenId : row.TokenInfo.TokenId)
+      .toString()
+      .padStart(6, "0");
+    if (IsRwalk) {
       return `https://randomwalknft.s3.us-east-2.amazonaws.com/${fileName}_black_thumb.jpg`;
     }
     return `https://cosmic-game2.s3.us-east-2.amazonaws.com/${fileName}.png`;
   };
   useEffect(() => {
     const getTokenName = async () => {
-      if (row.StakedIsRandomWalk) {
-        const res = await api.get_info(row.TokenInfo.TokenId);
+      if (IsRwalk) {
+        const res = await api.get_info(row.StakedTokenId);
         setTokenName(res.CurName);
       } else {
         const names = await api.get_name_history(row.TokenInfo.TokenId);
@@ -67,7 +70,9 @@ const StakedTokensRow = ({
       tabIndex={-1}
       key={row.id}
       selected={isItemSelected}
-      onClick={() => handleClick(row.TokenInfo.StakeActionId)}
+      onClick={() =>
+        handleClick(IsRwalk ? row.StakeActionId : row.TokenInfo.StakeActionId)
+      }
       sx={{
         cursor: "pointer",
         pointerEvents:
@@ -91,8 +96,8 @@ const StakedTokensRow = ({
       <TablePrimaryCell align="center">
         <Link
           href={
-            row.StakedIsRandomWalk
-              ? `https://randomwalknft.com/detail/${row.TokenInfo.TokenId}`
+            IsRwalk
+              ? `https://randomwalknft.com/detail/${row.StakedTokenId}`
               : `/detail/${row.TokenInfo.TokenId}`
           }
           sx={{
@@ -101,20 +106,28 @@ const StakedTokensRow = ({
           }}
           target="_blank"
         >
-          {row.TokenInfo.TokenId}
+          {IsRwalk ? row.StakedTokenId : row.TokenInfo.TokenId}
         </Link>
       </TablePrimaryCell>
       <TablePrimaryCell align="center">
-        {row.StakedIsRandomWalk ? "Yes" : "No"}
+        <Link
+          href={`/staking-action/${IsRwalk ? 1 : 0}/${
+            IsRwalk ? row.StakeActionId : row.TokenInfo.StakeActionId
+          }`}
+          sx={{
+            color: "inherit",
+            fontSize: "inherit",
+          }}
+          target="_blank"
+        >
+          {IsRwalk ? row.StakeActionId : row.TokenInfo.StakeActionId}
+        </Link>
       </TablePrimaryCell>
       <TablePrimaryCell align="center">
-        {row.TokenInfo.StakeActionId}
+        {convertTimestampToDateTime(row.StakeTimeStamp)}
       </TablePrimaryCell>
       <TablePrimaryCell align="center">
-        {convertTimestampToDateTime(row.StakeTimeStamp - offset)}
-      </TablePrimaryCell>
-      <TablePrimaryCell align="center">
-        {convertTimestampToDateTime(row.UnstakeTimeStamp - offset)}
+        {convertTimestampToDateTime(row.UnstakeTimeStamp)}
       </TablePrimaryCell>
       <TablePrimaryCell align="center">
         {row.UnstakeTimeStamp <= Date.now() / 1000 + offset && (
@@ -123,7 +136,10 @@ const StakedTokensRow = ({
             sx={{ mr: 1 }}
             onClick={(e) => {
               e.stopPropagation();
-              handleUnstake(row.TokenInfo.StakeActionId, row.TokenInfo.TokenId);
+              handleUnstake(
+                IsRwalk ? row.StakeActionId : row.TokenInfo.StakeActionId,
+                IsRwalk ? row.StakedTokenId : row.TokenInfo.TokenId
+              );
             }}
           >
             Unstake
@@ -138,6 +154,7 @@ export const StakedTokensTable = ({
   list,
   handleUnstake,
   handleUnstakeMany,
+  IsRwalk,
 }) => {
   const perPage = 5;
   const [notification, setNotification] = useState<{
@@ -176,14 +193,16 @@ export const StakedTokensTable = ({
     setSelected(newSelected);
   };
   const onSelectAllClick = () => {
-    const newSelected = filtered.map((n) => n.TokenInfo.StakeActionId);
+    const newSelected = filtered.map((n) =>
+      IsRwalk ? n.StakeActionId : n.TokenInfo.StakeActionId
+    );
     setSelected(newSelected);
     setAnchorEl(null);
   };
   const onSelectCurPgClick = () => {
     const newSelected = filtered
       .slice((page - 1) * perPage, page * perPage)
-      .map((n) => n.TokenInfo.StakeActionId);
+      .map((n) => (IsRwalk ? n.StakeActionId : n.TokenInfo.StakeActionId));
     setSelected(newSelected);
     setAnchorEl(null);
   };
@@ -192,7 +211,7 @@ export const StakedTokensTable = ({
     setAnchorEl(null);
   };
   const onUnstakeMany = async () => {
-    const res = await handleUnstakeMany(selected);
+    const res = await handleUnstakeMany(selected, IsRwalk);
     if (!res.code) {
       setNotification({
         visible: true,
@@ -203,7 +222,7 @@ export const StakedTokensTable = ({
   };
   const onUnstake = async (actionId: number, tokenId: number) => {
     setSelected([actionId]);
-    const res = await handleUnstake(actionId);
+    const res = await handleUnstake(actionId, IsRwalk);
     if (!res.code) {
       setNotification({
         visible: true,
@@ -309,7 +328,6 @@ export const StakedTokensTable = ({
               </TablePrimaryHeadCell>
               <TablePrimaryHeadCell>Token Image</TablePrimaryHeadCell>
               <TablePrimaryHeadCell>Token ID</TablePrimaryHeadCell>
-              <TablePrimaryHeadCell>Is RandomWalk NFT?</TablePrimaryHeadCell>
               <TablePrimaryHeadCell>Stake Action ID</TablePrimaryHeadCell>
               <TablePrimaryHeadCell>Stake Datetime</TablePrimaryHeadCell>
               <TablePrimaryHeadCell>Unstake Datetime</TablePrimaryHeadCell>
@@ -322,12 +340,15 @@ export const StakedTokensTable = ({
               .slice((page - 1) * perPage, page * perPage)
               .map((row, index) => (
                 <StakedTokensRow
-                  key={index}
+                  key={(page - 1) * perPage + index}
                   offset={offset}
                   row={row}
                   handleUnstake={onUnstake}
-                  isItemSelected={isSelected(row.TokenInfo.StakeActionId)}
+                  isItemSelected={isSelected(
+                    IsRwalk ? row.StakeActionId : row.TokenInfo.StakeActionId
+                  )}
                   handleClick={handleClick}
+                  IsRwalk={IsRwalk}
                 />
               ))}
           </TableBody>

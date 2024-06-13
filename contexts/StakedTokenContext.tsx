@@ -5,14 +5,17 @@ import { useActiveWeb3React } from "../hooks/web3";
 const StakedTokenContext = createContext(undefined);
 
 export const StakedTokenProvider = ({ children }) => {
-  const [data, setData] = useState([]);
+  const [cstokens, setCsTokens] = useState([]);
+  const [rwlktokens, setRwlkTokens] = useState([]);
   const { account } = useActiveWeb3React();
 
   const fetchData = async () => {
     try {
       if (account) {
-        const tokens = await api.get_staked_tokens_by_user(account);
-        setData(tokens);
+        const cst = await api.get_staked_cst_tokens_by_user(account);
+        setCsTokens(cst);
+        const rwlk = await api.get_staked_rwalk_tokens_by_user(account);
+        setRwlkTokens(rwlk);
       }
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -23,7 +26,7 @@ export const StakedTokenProvider = ({ children }) => {
   }, [account]);
 
   return (
-    <StakedTokenContext.Provider value={{ data, fetchData }}>
+    <StakedTokenContext.Provider value={{ cstokens, rwlktokens, fetchData }}>
       {children}
     </StakedTokenContext.Provider>
   );

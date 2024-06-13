@@ -19,15 +19,22 @@ import { convertTimestampToDateTime, shortenHex } from "../utils";
 import "react-super-responsive-table/dist/SuperResponsiveTableStyle.css";
 import { Tr } from "react-super-responsive-table";
 
-const WinnerRow = ({ winner, type }) => {
+const WinnerRow = ({ winner }) => {
   if (!winner) {
-    return <TablePrimaryRow></TablePrimaryRow>;
+    return <TablePrimaryRow />;
   }
 
   return (
     <TablePrimaryRow>
       <TablePrimaryCell>
-        {convertTimestampToDateTime(winner.TimeStamp)}
+        <Link
+          color="inherit"
+          fontSize="inherit"
+          href={`https://arbiscan.io/tx/${winner.TxHash}`}
+          target="__blank"
+        >
+          {convertTimestampToDateTime(winner.TimeStamp)}
+        </Link>
       </TablePrimaryCell>
       <TablePrimaryCell>
         <Tooltip title={winner.WinnerAddr}>
@@ -51,7 +58,15 @@ const WinnerRow = ({ winner, type }) => {
           {winner.RoundNum}
         </Link>
       </TablePrimaryCell>
-      <TablePrimaryCell>{type}</TablePrimaryCell>
+      <TablePrimaryCell>
+        {winner.Amount
+          ? "ETH Deposit"
+          : winner.IsStaker && winner.IsRwalk
+          ? "Random Walk Staking Raffle Token"
+          : winner.IsStaker && !winner.IsRwalk
+          ? "Cosmic Signature Staking Raffle Token"
+          : "Cosmic Signature Token"}
+      </TablePrimaryCell>
       <TablePrimaryCell align="right">
         {winner.Amount ? `${winner.Amount.toFixed(4)} ETH` : " "}
       </TablePrimaryCell>
@@ -97,17 +112,9 @@ const RaffleWinnerTable = ({ RaffleETHDeposits, RaffleNFTWinners }) => {
             </Tr>
           </TablePrimaryHead>
           <TableBody>
-            {list
-              .slice((page - 1) * perPage, page * perPage)
-              .map((winner, i) => (
-                <WinnerRow
-                  key={winner.EvtLogId}
-                  winner={winner}
-                  type={
-                    winner.Amount ? "ETH Deposit" : "Cosmic Signature Token"
-                  }
-                />
-              ))}
+            {list.slice((page - 1) * perPage, page * perPage).map((winner) => (
+              <WinnerRow key={winner.EvtLogId} winner={winner} />
+            ))}
           </TableBody>
         </TablePrimary>
       </TablePrimaryContainer>

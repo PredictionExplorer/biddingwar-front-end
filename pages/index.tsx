@@ -177,7 +177,10 @@ const NewHome = () => {
       const balance = await cosmicSignatureContract.totalSupply();
       let token_id = balance.toNumber() - 1;
       const count =
-        data?.NumRaffleNFTWinners + data?.NumHolderNFTWinners * 2 + 1;
+        data?.NumRaffleNFTWinnersBidding +
+        data?.NumRaffleNFTWinnersBidding +
+        data?.NumRaffleNFTWinnersStakingRWalk +
+        1;
       await Promise.all(
         Array(count)
           .fill(1)
@@ -192,12 +195,15 @@ const NewHome = () => {
             }
           })
       );
-      router.push({
-        pathname: "/my-tokens",
-        query: {
-          message: "success",
-        },
-      });
+      setTimeout(() => {
+        router.push({
+          pathname: "/prize-claimed",
+          query: {
+            round: data?.CurRoundNum,
+            message: "success",
+          },
+        });
+      }, 1000);
     } catch (err) {
       console.log(err);
       setNotification({
@@ -454,19 +460,20 @@ const NewHome = () => {
       try {
         const bidList = await api.get_bid_list();
         const biddedRWLKIds = bidList.map((bid) => bid.RWalkNFTId);
-        if (nftRWLKContract && account) {
-          const tokens = await nftRWLKContract.walletOfOwner(account);
-          const nftIds = tokens
-            .map((t) => t.toNumber())
-            .filter((t) => !biddedRWLKIds.includes(t))
-            .reverse();
-          setRwlknftIds(nftIds);
-        }
+        const tokens = await nftRWLKContract.walletOfOwner(account);
+        const nftIds = tokens
+          .map((t) => t.toNumber())
+          .filter((t) => !biddedRWLKIds.includes(t))
+          .reverse();
+        setRwlknftIds(nftIds);
       } catch (e) {
         console.log(e);
       }
     };
-    getData();
+
+    if (nftRWLKContract && account) {
+      getData();
+    }
   }, [nftRWLKContract, account]);
 
   useEffect(() => {
@@ -478,16 +485,16 @@ const NewHome = () => {
 
     const fetchData = async () => {
       const newData = await api.get_dashboard_info();
-      const round = newData.CurRoundNum;
+      const round = newData?.CurRoundNum;
       const newBidData = await api.get_bid_list_by_round(round, "desc");
       setCurBidList(newBidData);
       const nftData = await api.get_donations_nft_by_round(round);
       setDonatedNFTs(nftData);
       setData((prevData) => {
         if (
-          account !== newData.LastBidderAddr &&
+          account !== newData?.LastBidderAddr &&
           prevData &&
-          prevData.CurNumBids < newData.CurNumBids
+          prevData.CurNumBids < newData?.CurNumBids
         ) {
           playAudio();
         }
@@ -518,6 +525,7 @@ const NewHome = () => {
       const history = await api.get_claim_history();
       setClaimHistory(history);
     };
+
     const fetchCSTBidData = async () => {
       let ctData = await api.get_ct_price();
       if (ctData) {
@@ -560,11 +568,11 @@ const NewHome = () => {
         );
         const raffle =
           (curRoundBids.length / curBidList.length) *
-          data?.NumRaffleEthWinners *
+          data?.NumRaffleEthWinnersBidding *
           100;
         const nft =
           (curRoundBids.length / curBidList.length) *
-          data?.NumRaffleNFTWinners *
+          data?.NumRaffleNFTWinnersBidding *
           100;
         setWinProbability({
           raffle: raffle > 100 ? 100 : raffle,
@@ -1140,12 +1148,13 @@ const NewHome = () => {
               </Typography>
               <Typography variant="body2" component="span">
                 When you bid, you are also buying a raffle ticket.{" "}
-                {data?.NumRaffleEthWinners} raffle tickets will be chosen and
-                these people will win {data?.RafflePercentage}% of the pot each.
-                Also, {data?.NumRaffleNFTWinners} additional winners and{" "}
-                {data?.NumHolderNFTWinners} Random Walk NFT holders and{" "}
-                {data?.NumHolderNFTWinners} Cosmic Token holders will be chosen
-                which will receive a Cosmic Signature NFT.
+                {data?.NumRaffleETHWinnersBidding} raffle tickets will be chosen
+                and these people will win {data?.RafflePercentage}% of the pot
+                each. Also, {data?.NumRaffleNFTWinnersBidding} additional
+                winners and {data?.NumRaffleNFTWinnersStakingRWalk} Random Walk
+                NFT stakers and {data?.NumRaffleNFTWinnersStakingCST} Cosmic
+                Token stakers will be chosen which will receive a Cosmic
+                Signature NFT.
               </Typography>
             </Box>
           </>
@@ -1189,9 +1198,8 @@ const NewHome = () => {
           >
             you are also buying a raffle ticket. When the round ends, there
             are&nbsp;
-            {data?.NumRaffleEthWinners +
-              data?.NumRaffleNFTWinners +
-              data?.NumHolderNFTWinners * 2}
+            {data?.NumRaffleEthWinnersBidding +
+              data?.NumRaffleNFTWinnersBidding}
             &nbsp;raffle winners:
           </Typography>
           <Box textAlign="center" marginBottom="56px">
@@ -1209,7 +1217,7 @@ const NewHome = () => {
                   sx={{ fontSize: "26px !important" }}
                   textAlign="center"
                 >
-                  {data?.NumRaffleEthWinners} will receive
+                  {data?.NumRaffleEthWinnersBidding} will receive
                 </Typography>
                 <GradientText variant="h3" textAlign="center">
                   {data?.RaffleAmountEth.toFixed(2)} ETH
@@ -1229,7 +1237,9 @@ const NewHome = () => {
                   sx={{ fontSize: "26px !important" }}
                   textAlign="center"
                 >
-                  {data?.NumRaffleNFTWinners + data?.NumHolderNFTWinners * 2}{" "}
+                  {data?.NumRaffleNFTWinnersBidding +
+                    data?.NumRaffleNFTWinnersStakingCST +
+                    data?.NumRaffleNFTWinnersStakingRWalk}{" "}
                   will receive
                 </Typography>
                 <GradientText variant="h3" textAlign="center">

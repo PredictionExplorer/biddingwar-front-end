@@ -1,12 +1,5 @@
-import React, { useEffect, useRef, useState } from "react";
-import {
-  Alert,
-  Box,
-  Link,
-  Pagination,
-  TableBody,
-  Typography,
-} from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { Box, Link, Pagination, TableBody, Typography } from "@mui/material";
 import Head from "next/head";
 import {
   MainWrapper,
@@ -17,24 +10,37 @@ import {
   TablePrimaryHeadCell,
   TablePrimaryRow,
 } from "../components/styled";
-import { convertTimestampToDateTime } from "../utils";
+import { convertTimestampToDateTime, shortenHex } from "../utils";
 import { useActiveWeb3React } from "../hooks/web3";
-import { useRouter } from "next/router";
 import { useApiData } from "../contexts/ApiDataContext";
-import Fireworks, { FireworksHandlers } from "@fireworks-js/react";
 import api from "../services/api";
 import { Tr } from "react-super-responsive-table";
 import "react-super-responsive-table/dist/SuperResponsiveTableStyle.css";
+import NFTImage from "../components/NFTImage";
 
 const CSTRow = ({ nft }) => {
+  const getTokenImageURL = () => {
+    const fileName = nft.TokenId.toString().padStart(6, "0");
+    return `https://cosmic-game2.s3.us-east-2.amazonaws.com/${fileName}.png`;
+  };
   if (!nft) {
     return <TablePrimaryRow />;
   }
 
   return (
     <TablePrimaryRow>
+      <TablePrimaryCell sx={{ width: "120px" }}>
+        <NFTImage src={getTokenImageURL()} />
+      </TablePrimaryCell>
       <TablePrimaryCell>
-        {convertTimestampToDateTime(nft.TimeStamp)}
+        <Link
+          color="inherit"
+          fontSize="inherit"
+          href={`https://arbiscan.io/tx/${nft.TxHash}`}
+          target="__blank"
+        >
+          {convertTimestampToDateTime(nft.TimeStamp)}
+        </Link>
       </TablePrimaryCell>
       <TablePrimaryCell align="center">
         <Link
@@ -62,7 +68,7 @@ const CSTRow = ({ nft }) => {
             fontFamily: "monospace",
           }}
         >
-          {nft.WinnerAddr}
+          {shortenHex(nft.WinnerAddr, 6)}
         </Link>
       </TablePrimaryCell>
       <TablePrimaryCell align="center">
@@ -77,7 +83,7 @@ const CSTRow = ({ nft }) => {
             Prize Winner (#{nft.RoundNum})
           </Link>
         ) : nft.RecordType === 4 ? (
-          "Staking Deposit / Reward"
+          "Random Walk Staking Raffle Token"
         ) : (
           "Raffle Winner"
         )}
@@ -87,7 +93,7 @@ const CSTRow = ({ nft }) => {
 };
 
 const CSTTable = ({ list }) => {
-  const perPage = 10;
+  const perPage = 5;
   const [curPage, setCurPage] = useState(1);
   if (list.length === 0) {
     return <Typography>No tokens yet.</Typography>;
@@ -99,12 +105,13 @@ const CSTTable = ({ list }) => {
         <TablePrimary>
           <TablePrimaryHead>
             <Tr>
+              <TablePrimaryHeadCell />
               <TablePrimaryHeadCell align="left">Date</TablePrimaryHeadCell>
               <TablePrimaryHeadCell>Token ID</TablePrimaryHeadCell>
               <TablePrimaryHeadCell>Token Name</TablePrimaryHeadCell>
               <TablePrimaryHeadCell>Round</TablePrimaryHeadCell>
               <TablePrimaryHeadCell>Winner Address</TablePrimaryHeadCell>
-              <TablePrimaryHeadCell>Staked</TablePrimaryHeadCell>
+              <TablePrimaryHeadCell>Staked?</TablePrimaryHeadCell>
               <TablePrimaryHeadCell align="right">
                 Prize Type
               </TablePrimaryHeadCell>
@@ -135,21 +142,12 @@ const CSTTable = ({ list }) => {
 };
 
 const MyWallet = () => {
-  const router = useRouter();
-  const ref = useRef<FireworksHandlers>(null);
   const { account } = useActiveWeb3React();
   const { apiData: status } = useApiData();
   const [CSTList, setCSTList] = useState({
     data: [],
     loading: false,
   });
-  const [finishFireworks, setFinishFireworks] = useState(false);
-
-  const handleFireworksClick = () => {
-    ref.current.stop();
-    setFinishFireworks(true);
-  };
-
   const fetchCSTList = async (updateStatus) => {
     setCSTList((prev) => ({ ...prev, loading: updateStatus && true }));
     let cstList = await api.get_cst_list_by_user(account);
@@ -169,36 +167,6 @@ const MyWallet = () => {
         <meta name="description" content="" />
       </Head>
       <MainWrapper>
-        {router.query && router.query.message && (
-          <>
-            <Box px={8} mb={8} sx={{ zIndex: 10002, position: "relative" }}>
-              <Alert
-                variant="filled"
-                severity="success"
-                sx={{ boxShadow: "3px 3px 4px 1px #ffffff7f" }}
-              >
-                {router.query.message === "success"
-                  ? "Congratulations! You claimed the prize successfully."
-                  : ""}
-              </Alert>
-            </Box>
-            {!finishFireworks && (
-              <Fireworks
-                ref={ref}
-                options={{ opacity: 0.5 }}
-                style={{
-                  top: 0,
-                  left: 0,
-                  width: "100%",
-                  height: "100%",
-                  position: "fixed",
-                  zIndex: 10000,
-                }}
-                onClick={handleFireworksClick}
-              />
-            )}
-          </>
-        )}
         <Typography
           variant="h4"
           color="primary"

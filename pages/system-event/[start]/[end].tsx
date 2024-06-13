@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Box, Link, Pagination, TableBody, Typography } from "@mui/material";
+import { Box, Link, Pagination, TableBody, Tooltip, Typography } from "@mui/material";
 import Head from "next/head";
 import {
   MainWrapper,
@@ -9,15 +9,16 @@ import {
   TablePrimaryHead,
   TablePrimaryHeadCell,
   TablePrimaryRow,
-} from "../../components/styled";
-import api from "../../services/api";
-import { convertTimestampToDateTime } from "../../utils";
-import { ethers } from "ethers";
+} from "../../../components/styled";
+import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
+import api from "../../../services/api";
+import { convertTimestampToDateTime } from "../../../utils";
 import { GetServerSidePropsContext } from "next";
 import { Tr } from "react-super-responsive-table";
 import "react-super-responsive-table/dist/SuperResponsiveTableStyle.css";
+import { ADMIN_EVENTS } from "../../../config/misc";
 
-const CosmicTokenTransferRow = ({ row }) => {
+const AdminEventsRow = ({ row }) => {
   if (!row) {
     return <TablePrimaryRow />;
   }
@@ -26,6 +27,17 @@ const CosmicTokenTransferRow = ({ row }) => {
     <TablePrimaryRow
       sx={row.TransferType > 0 && { background: "rgba(255, 255, 255, 0.06)" }}
     >
+      <TablePrimaryCell>
+        {ADMIN_EVENTS[row.RecordType].name}
+        <Tooltip
+          title={
+            <Typography>{ADMIN_EVENTS[row.RecordType].description}</Typography>
+          }
+          sx={{ ml: 1 }}
+        >
+          <ErrorOutlineIcon fontSize="inherit" />
+        </Tooltip>
+      </TablePrimaryCell>
       <TablePrimaryCell>
         <Link
           color="inherit"
@@ -37,39 +49,23 @@ const CosmicTokenTransferRow = ({ row }) => {
         </Link>
       </TablePrimaryCell>
       <TablePrimaryCell align="center">
-        <Link
-          color="inherit"
-          fontSize="inherit"
-          fontFamily="monospace"
-          href={`/user/${row.FromAddr}`}
-          target="__blank"
-        >
-          {row.FromAddr}
-        </Link>
-      </TablePrimaryCell>
-      <TablePrimaryCell align="center">
-        <Link
-          color="inherit"
-          fontSize="inherit"
-          fontFamily="monospace"
-          href={`/user/${row.ToAddr}`}
-          target="__blank"
-        >
-          {row.ToAddr}
-        </Link>
-      </TablePrimaryCell>
-      <TablePrimaryCell align="center">
-        {row.ValueFloat.toFixed(2)}
+        {row.RecordType === 0 ? (
+          "Undefined"
+        ) : row.RecordType < 8 || row.RecordType > 15 ? (
+          row.IntegerValue
+        ) : (
+          <Typography fontFamily="monospace">{row.AddressValue}</Typography>
+        )}
       </TablePrimaryCell>
     </TablePrimaryRow>
   );
 };
 
-const CosmicTokenTransfersTable = ({ list }) => {
+const AdminEventsTable = ({ list }) => {
   const perPage = 5;
   const [page, setPage] = useState(1);
   if (list.length === 0) {
-    return <Typography variant="h6">No transfers yet.</Typography>;
+    return <Typography variant="h6">No events yet.</Typography>;
   }
   return (
     <>
@@ -77,15 +73,14 @@ const CosmicTokenTransfersTable = ({ list }) => {
         <TablePrimary>
           <TablePrimaryHead>
             <Tr>
+              <TablePrimaryHeadCell align="left">Event</TablePrimaryHeadCell>
               <TablePrimaryHeadCell align="left">Datetime</TablePrimaryHeadCell>
-              <TablePrimaryHeadCell>From</TablePrimaryHeadCell>
-              <TablePrimaryHeadCell>To</TablePrimaryHeadCell>
-              <TablePrimaryHeadCell>Value (ETH)</TablePrimaryHeadCell>
+              <TablePrimaryHeadCell>New Value</TablePrimaryHeadCell>
             </Tr>
           </TablePrimaryHead>
           <TableBody>
             {list.slice((page - 1) * perPage, page * perPage).map((row) => (
-              <CosmicTokenTransferRow row={row} key={row.EvtLogId} />
+              <AdminEventsRow row={row} key={row.EvtLogId} />
             ))}
           </TableBody>
         </TablePrimary>
@@ -105,16 +100,16 @@ const CosmicTokenTransfersTable = ({ list }) => {
   );
 };
 
-const CosmicTokenTransfers = ({ address }) => {
+const AdminEvent = ({ start, end }) => {
   const [loading, setLoading] = useState(true);
-  const [cosmicTokenTransfers, setCosmicTokenTransfers] = useState([]);
+  const [events, setEvents] = useState([]);
 
   useEffect(() => {
     const fetchTransfers = async () => {
       try {
         setLoading(true);
-        const transfers = await api.get_ct_transfers(address);
-        setCosmicTokenTransfers(transfers);
+        const sys_events = await api.get_system_events(start, end);
+        setEvents(sys_events);
         setLoading(false);
       } catch (err) {
         console.log(err);
@@ -127,17 +122,17 @@ const CosmicTokenTransfers = ({ address }) => {
   return (
     <>
       <Head>
-        <title>Cosmic Token Transfers | Cosmic Signature</title>
+        <title>Admin Events | Cosmic Signature</title>
         <meta name="description" content="" />
       </Head>
       <MainWrapper>
         <Typography variant="h4" color="primary" textAlign="center" mb={4}>
-          Cosmic Token Transfers
+          Admin Events
         </Typography>
         {loading ? (
           <Typography variant="h6">Loading...</Typography>
         ) : (
-          <CosmicTokenTransfersTable list={cosmicTokenTransfers} />
+          <AdminEventsTable list={events} />
         )}
       </MainWrapper>
     </>
@@ -145,14 +140,11 @@ const CosmicTokenTransfers = ({ address }) => {
 };
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
-  const params = context.params!.address;
-  let address = Array.isArray(params) ? params[0] : params;
-  if (ethers.utils.isAddress(address.toLowerCase())) {
-    address = ethers.utils.getAddress(address.toLowerCase());
-  } else {
-    address = "Invalid Address";
-  }
-  return { props: { address } };
+  let start = context.params!.start;
+  let end = context.params!.end;
+  start = Array.isArray(start) ? start[0] : start;
+  end = Array.isArray(end) ? end[0] : end;
+  return { props: { start, end } };
 }
 
-export default CosmicTokenTransfers;
+export default AdminEvent;

@@ -8,17 +8,23 @@ import {
   TablePrimaryHeadCell,
   TablePrimaryRow,
 } from "./styled";
-import { convertTimestampToDateTime } from "../utils";
-import "react-super-responsive-table/dist/SuperResponsiveTableStyle.css";
 import { Tr } from "react-super-responsive-table";
+import "react-super-responsive-table/dist/SuperResponsiveTableStyle.css";
+import { convertTimestampToDateTime } from "../utils";
+import router from "next/router";
 
-const MarketingRewardsRow = ({ row }) => {
+const SystemModesRow = ({ row }) => {
   if (!row) {
     return <TablePrimaryRow />;
   }
 
   return (
-    <TablePrimaryRow>
+    <TablePrimaryRow
+      style={{ cursor: "pointer" }}
+      onClick={() => {
+        router.push(`/system-event/${row.EvtLogId}/${row.NextEvtLogId}`);
+      }}
+    >
       <TablePrimaryCell>
         <Link
           color="inherit"
@@ -29,16 +35,16 @@ const MarketingRewardsRow = ({ row }) => {
           {convertTimestampToDateTime(row.TimeStamp)}
         </Link>
       </TablePrimaryCell>
-      <TablePrimaryCell>{row.AmountEth.toFixed(2)}</TablePrimaryCell>
+      <TablePrimaryCell align="right">{row.SystemMode}</TablePrimaryCell>
     </TablePrimaryRow>
   );
 };
 
-export const MarketingRewardsTable = ({ list }) => {
+export const SystemModesTable = ({ list }) => {
   const perPage = 5;
   const [page, setPage] = useState(1);
   if (list.length === 0) {
-    return <Typography>No rewards yet.</Typography>;
+    return <Typography>No mode changes yet.</Typography>;
   }
   return (
     <>
@@ -47,14 +53,12 @@ export const MarketingRewardsTable = ({ list }) => {
           <TablePrimaryHead>
             <Tr>
               <TablePrimaryHeadCell align="left">Datetime</TablePrimaryHeadCell>
-              <TablePrimaryHeadCell align="left">
-                Amount (CST)
-              </TablePrimaryHeadCell>
+              <TablePrimaryHeadCell align="right">Mode</TablePrimaryHeadCell>
             </Tr>
           </TablePrimaryHead>
           <TableBody>
             {list.slice((page - 1) * perPage, page * perPage).map((row) => (
-              <MarketingRewardsRow row={row} key={row.EvtLogId} />
+              <SystemModesRow row={row} key={row.EvtLogId} />
             ))}
           </TableBody>
         </TablePrimary>
@@ -63,7 +67,7 @@ export const MarketingRewardsTable = ({ list }) => {
         <Pagination
           color="primary"
           page={page}
-          onChange={(_e, page) => setPage(page)}
+          onChange={(e, page) => setPage(page)}
           count={Math.ceil(list.length / perPage)}
           hideNextButton
           hidePrevButton

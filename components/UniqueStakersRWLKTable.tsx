@@ -8,11 +8,10 @@ import {
   TablePrimaryHeadCell,
   TablePrimaryRow,
 } from "./styled";
-import { convertTimestampToDateTime } from "../utils";
-import "react-super-responsive-table/dist/SuperResponsiveTableStyle.css";
 import { Tr } from "react-super-responsive-table";
+import "react-super-responsive-table/dist/SuperResponsiveTableStyle.css";
 
-const MarketingRewardsRow = ({ row }) => {
+const UniqueStakersRWLKRow = ({ row }) => {
   if (!row) {
     return <TablePrimaryRow />;
   }
@@ -21,24 +20,35 @@ const MarketingRewardsRow = ({ row }) => {
     <TablePrimaryRow>
       <TablePrimaryCell>
         <Link
-          color="inherit"
-          fontSize="inherit"
-          href={`https://arbiscan.io/tx/${row.TxHash}`}
-          target="__blank"
+          href={`/user/${row.StakerAddr}`}
+          style={{
+            color: "inherit",
+            fontSize: "inherit",
+            fontFamily: "monospace",
+          }}
         >
-          {convertTimestampToDateTime(row.TimeStamp)}
+          {row.StakerAddr}
         </Link>
       </TablePrimaryCell>
-      <TablePrimaryCell>{row.AmountEth.toFixed(2)}</TablePrimaryCell>
+      <TablePrimaryCell align="center">{row.NumStakeActions}</TablePrimaryCell>
+      <TablePrimaryCell align="center">
+        {row.NumUnstakeActions}
+      </TablePrimaryCell>
+      <TablePrimaryCell align="center">
+        {row.TotalTokensStaked}
+      </TablePrimaryCell>
+      <TablePrimaryCell align="center">
+        {row.TotalTokensMinted}
+      </TablePrimaryCell>
     </TablePrimaryRow>
   );
 };
 
-export const MarketingRewardsTable = ({ list }) => {
+export const UniqueStakersRWLKTable = ({ list }) => {
   const perPage = 5;
   const [page, setPage] = useState(1);
   if (list.length === 0) {
-    return <Typography>No rewards yet.</Typography>;
+    return <Typography>No stakers yet.</Typography>;
   }
   return (
     <>
@@ -46,15 +56,18 @@ export const MarketingRewardsTable = ({ list }) => {
         <TablePrimary>
           <TablePrimaryHead>
             <Tr>
-              <TablePrimaryHeadCell align="left">Datetime</TablePrimaryHeadCell>
               <TablePrimaryHeadCell align="left">
-                Amount (CST)
+                Staker Address
               </TablePrimaryHeadCell>
+              <TablePrimaryHeadCell>Num Stake Actions</TablePrimaryHeadCell>
+              <TablePrimaryHeadCell>Num Unstake Actions</TablePrimaryHeadCell>
+              <TablePrimaryHeadCell>Total Staked Tokens</TablePrimaryHeadCell>
+              <TablePrimaryHeadCell>Total Minted Tokens</TablePrimaryHeadCell>
             </Tr>
           </TablePrimaryHead>
           <TableBody>
             {list.slice((page - 1) * perPage, page * perPage).map((row) => (
-              <MarketingRewardsRow row={row} key={row.EvtLogId} />
+              <UniqueStakersRWLKRow row={row} key={row.StakerAid} />
             ))}
           </TableBody>
         </TablePrimary>
@@ -63,7 +76,7 @@ export const MarketingRewardsTable = ({ list }) => {
         <Pagination
           color="primary"
           page={page}
-          onChange={(_e, page) => setPage(page)}
+          onChange={(e, page) => setPage(page)}
           count={Math.ceil(list.length / perPage)}
           hideNextButton
           hidePrevButton

@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Box, CardActionArea, Grid, Link, Typography } from "@mui/material";
 import Head from "next/head";
-import { MainWrapper, StyledCard } from "../../components/styled";
+import { MainWrapper, StyledCard } from "../../../components/styled";
 import { GetServerSidePropsContext } from "next";
-import api from "../../services/api";
-import { convertTimestampToDateTime } from "../../utils";
-import NFTImage from "../../components/NFTImage";
+import api from "../../../services/api";
+import { convertTimestampToDateTime } from "../../../utils";
+import NFTImage from "../../../components/NFTImage";
 
-const StakingActionDetail = ({ actionId }) => {
+const StakingActionDetail = ({ IsRwalk, actionId }) => {
   const [actionInfo, setActionInfo] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -15,7 +15,7 @@ const StakingActionDetail = ({ actionId }) => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const info = await api.get_staking_actions_info(actionId);
+        const info = await api.get_staking_cst_actions_info(actionId);
         setActionInfo(info);
         setLoading(false);
       } catch (e) {
@@ -35,7 +35,9 @@ const StakingActionDetail = ({ actionId }) => {
       <MainWrapper>
         <Box mb={4}>
           <Typography variant="h4" color="primary" component="span" mr={2}>
-            {`Staking Action Id=${actionId}`}
+            {`Staking Action for ${
+              IsRwalk ? "RandomWalk" : "Cosmic Signature"
+            } Token`}
           </Typography>
           <Typography variant="h4" component="span">
             Information
@@ -52,7 +54,7 @@ const StakingActionDetail = ({ actionId }) => {
                     <CardActionArea>
                       <Link
                         href={
-                          actionInfo.Stake.IsRandomWalk
+                          IsRwalk
                             ? `https://randomwalknft.com/detail/${actionInfo.Stake.TokenId}`
                             : `/detail/${actionInfo.Stake.TokenId}`
                         }
@@ -60,7 +62,7 @@ const StakingActionDetail = ({ actionId }) => {
                       >
                         <NFTImage
                           src={
-                            actionInfo.Stake.IsRandomWalk
+                            IsRwalk
                               ? `https://randomwalknft.s3.us-east-2.amazonaws.com/${actionInfo.Stake.TokenId.toString().padStart(
                                   6,
                                   "0"
@@ -77,12 +79,10 @@ const StakingActionDetail = ({ actionId }) => {
                 </Box>
                 <Box mb={1}>
                   <Typography color="primary" component="span">
-                    Is RandomWalk Token?
+                    Action Id:
                   </Typography>
                   &nbsp;
-                  <Typography component="span">
-                    {actionInfo.Stake.IsRandomWalk ? "Yes" : "No"}
-                  </Typography>
+                  <Typography component="span">{actionId}</Typography>
                 </Box>
                 <Box mb={1}>
                   <Typography color="primary" component="span">
@@ -105,7 +105,7 @@ const StakingActionDetail = ({ actionId }) => {
                   &nbsp;
                   <Link
                     href={
-                      actionInfo.Stake.IsRandomWalk
+                      IsRwalk
                         ? `https://randomwalknft.com/detail/${actionInfo.Stake.TokenId}`
                         : `/detail/${actionInfo.Stake.TokenId}`
                     }
@@ -201,8 +201,10 @@ const StakingActionDetail = ({ actionId }) => {
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const id = context.params!.actionId;
   const actionId = Array.isArray(id) ? id[0] : id;
+  const rwalk = context.params!.IsRwalk;
+  const IsRwalk = Array.isArray(rwalk) ? rwalk[0] : rwalk;
   return {
-    props: { actionId: parseInt(actionId) },
+    props: { actionId: parseInt(actionId), IsRwalk: parseInt(IsRwalk) },
   };
 }
 

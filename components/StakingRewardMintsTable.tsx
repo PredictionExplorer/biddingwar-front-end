@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Box, Link, Pagination, TableBody, Typography } from "@mui/material";
+import { Box, Link, Pagination, Typography } from "@mui/material";
 import {
   TablePrimary,
   TablePrimaryCell,
@@ -8,11 +8,11 @@ import {
   TablePrimaryHeadCell,
   TablePrimaryRow,
 } from "./styled";
+import { Tbody, Tr } from "react-super-responsive-table";
 import { convertTimestampToDateTime } from "../utils";
 import "react-super-responsive-table/dist/SuperResponsiveTableStyle.css";
-import { Tr } from "react-super-responsive-table";
 
-const MarketingRewardsRow = ({ row }) => {
+const StakingRewardMintsRow = ({ row }) => {
   if (!row) {
     return <TablePrimaryRow />;
   }
@@ -29,12 +29,39 @@ const MarketingRewardsRow = ({ row }) => {
           {convertTimestampToDateTime(row.TimeStamp)}
         </Link>
       </TablePrimaryCell>
-      <TablePrimaryCell>{row.AmountEth.toFixed(2)}</TablePrimaryCell>
+      <TablePrimaryCell align="center">
+        <Link
+          href={`/user/${row.WinnerAddr}`}
+          style={{
+            color: "inherit",
+            fontSize: "inherit",
+            fontFamily: "monospace",
+          }}
+        >
+          {row.WinnerAddr}
+        </Link>
+      </TablePrimaryCell>
+      <TablePrimaryCell align="center">
+        <Link
+          href={`/prize/${row.RoundNum}`}
+          style={{ color: "inherit", fontSize: "inherit" }}
+        >
+          {row.RoundNum}
+        </Link>
+      </TablePrimaryCell>
+      <TablePrimaryCell align="center">
+        <Link
+          href={`/detail/${row.TokenId}`}
+          style={{ color: "inherit", fontSize: "inherit" }}
+        >
+          {row.TokenId}
+        </Link>
+      </TablePrimaryCell>
     </TablePrimaryRow>
   );
 };
 
-export const MarketingRewardsTable = ({ list }) => {
+export const StakingRewardMintsTable = ({ list }) => {
   const perPage = 5;
   const [page, setPage] = useState(1);
   if (list.length === 0) {
@@ -47,16 +74,16 @@ export const MarketingRewardsTable = ({ list }) => {
           <TablePrimaryHead>
             <Tr>
               <TablePrimaryHeadCell align="left">Datetime</TablePrimaryHeadCell>
-              <TablePrimaryHeadCell align="left">
-                Amount (CST)
-              </TablePrimaryHeadCell>
+              <TablePrimaryHeadCell>Winner</TablePrimaryHeadCell>
+              <TablePrimaryHeadCell>Round</TablePrimaryHeadCell>
+              <TablePrimaryHeadCell>Token ID</TablePrimaryHeadCell>
             </Tr>
           </TablePrimaryHead>
-          <TableBody>
+          <Tbody>
             {list.slice((page - 1) * perPage, page * perPage).map((row) => (
-              <MarketingRewardsRow row={row} key={row.EvtLogId} />
+              <StakingRewardMintsRow row={row} key={row.EvtLogId} />
             ))}
-          </TableBody>
+          </Tbody>
         </TablePrimary>
       </TablePrimaryContainer>
       <Box display="flex" justifyContent="center" mt={4}>

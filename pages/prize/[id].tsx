@@ -50,7 +50,9 @@ const PrizeInfo = ({ roundNum }) => {
       setPrizeInfo(prizeInfo);
       const bidHistory = await api.get_bid_list_by_round(roundNum, "desc");
       setBidHistory(bidHistory);
-      const stakingRewards = await api.get_staking_rewards_by_round(roundNum);
+      const stakingRewards = await api.get_staking_cst_rewards_by_round(
+        roundNum
+      );
       setStakingRewards(stakingRewards);
       setLoading(false);
     };
@@ -82,7 +84,14 @@ const PrizeInfo = ({ roundNum }) => {
               </Typography>
               &nbsp;
               <Typography component="span">
-                {convertTimestampToDateTime(prizeInfo.TimeStamp)}
+                <Link
+                  color="inherit"
+                  fontSize="inherit"
+                  href={`https://arbiscan.io/tx/${prizeInfo.TxHash}`}
+                  target="__blank"
+                >
+                  {convertTimestampToDateTime(prizeInfo.TimeStamp)}
+                </Link>
               </Typography>
             </Box>
             <Box mb={1}>
@@ -137,6 +146,15 @@ const PrizeInfo = ({ roundNum }) => {
             </Box>
             <Box mb={1}>
               <Typography color="primary" component="span">
+                Total Donated NFTs:
+              </Typography>
+              &nbsp;
+              <Typography component="span">
+                {prizeInfo.RoundStats.TotalDonatedNFTs}
+              </Typography>
+            </Box>
+            <Box mb={1}>
+              <Typography color="primary" component="span">
                 Total Raffle Eth Deposits:
               </Typography>
               &nbsp;
@@ -160,6 +178,15 @@ const PrizeInfo = ({ roundNum }) => {
               &nbsp;
               <Typography component="span">
                 {prizeInfo.StakingDepositAmountEth.toFixed(4)} ETH
+              </Typography>
+            </Box>
+            <Box mb={1}>
+              <Typography color="primary" component="span">
+                Number of Staked Tokens:
+              </Typography>
+              &nbsp;
+              <Typography component="span">
+                {prizeInfo.StakingNumStakedTokens}
               </Typography>
             </Box>
             <Box mb={1}>

@@ -9,7 +9,7 @@ const Staking = () => {
   const [stakingRewards, setStakingRewards] = useState(null);
   useEffect(() => {
     const fetchStakingRewards = async () => {
-      const rewards = await api.get_staking_rewards();
+      const rewards = await api.get_staking_cst_rewards();
       setStakingRewards(rewards);
     };
     fetchStakingRewards();
@@ -28,7 +28,7 @@ const Staking = () => {
           gutterBottom
           textAlign="center"
         >
-          Staking Rewards
+          Staking Rewards for staking Cosmic Signature Token
         </Typography>
         <Typography
           variant="h5"

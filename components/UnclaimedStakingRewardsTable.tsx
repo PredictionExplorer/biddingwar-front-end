@@ -4,6 +4,7 @@ import {
   Box,
   Button,
   IconButton,
+  Link,
   Menu,
   Pagination,
   Snackbar,
@@ -24,7 +25,7 @@ import {
 } from "./styled";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import { convertTimestampToDateTime, formatSeconds } from "../utils";
-import useStakingWalletContract from "../hooks/useStakingWalletContract";
+import useStakingWalletCSTContract from "../hooks/useStakingWalletCSTContract";
 import api from "../services/api";
 import { useActiveWeb3React } from "../hooks/web3";
 import { useStakedToken } from "../contexts/StakedTokenContext";
@@ -35,14 +36,19 @@ import AdvancedClaimDialog from "./AdvancedClaimDialog";
 import getErrorMessage from "../utils/alert";
 
 const fetchInfo = async (account, depositId, stakedActionIds) => {
-  const response = await api.get_action_ids_by_deposit_id(account, depositId);
   let unstakeableActionIds = [],
     claimableActionIds = [],
-    claimableAmounts = {};
+    claimableAmounts = {},
+    waitingActionIds = [];
+  const response = await api.get_cst_action_ids_by_deposit_id(
+    account,
+    depositId
+  );
+  const current = await api.get_current_time();
   await Promise.all(
     response.map(async (x) => {
       try {
-        if (x.UnstakeEligibleTimeStamp < x.CurChainTimeStamp) {
+        if (x.UnstakeEligibleTimeStamp < current) {
           if (!x.Claimed) {
             claimableActionIds.push({
               DepositId: x.DepositId,
@@ -52,6 +58,11 @@ const fetchInfo = async (account, depositId, stakedActionIds) => {
           if (stakedActionIds.includes(x.StakeActionId)) {
             unstakeableActionIds.push(x.StakeActionId);
           }
+        } else {
+          waitingActionIds.push({
+            DepositId: x.DepositId,
+            StakeActionId: x.StakeActionId,
+          });
         }
         if (!x.Claimed) {
           if (x.TimeStampDiff > 0) {
@@ -78,14 +89,14 @@ const fetchInfo = async (account, depositId, stakedActionIds) => {
     unstakeableActionIds,
     claimableActionIds,
     claimableAmounts,
+    waitingActionIds,
     actionIds: response.filter(
-      (x) => x.UnstakeEligibleTimeStamp < x.CurChainTimeStamp && !x.Claimed
+      (x) => x.UnstakeEligibleTimeStamp < current && !x.Claimed
     ),
   };
 };
 
 interface stakeStateInterface {
-  IsRandomWalk: boolean;
   TokenId: number;
   DepositId: number;
   StakeActionId: number;
@@ -99,15 +110,17 @@ const UnclaimedStakingRewardsRow = ({
   owner,
   offset,
   handleUnstakeClaimRestake,
+  showWaitingTokensColumn,
 }) => {
   const { account } = useActiveWeb3React();
   const [unstakeableActionIds, setUnstakeableActionIds] = useState([]);
   const [claimableActionIds, setClaimableActionIds] = useState([]);
+  const [waitingActionIds, setWaitingActionIds] = useState([]);
   const [claimableAmounts, setClaimableAmounts] = useState({});
-  const { data: stakedTokens } = useStakedToken();
   const [anchorEl, setAnchorEl] = useState(null);
   const [openDlg, setOpenDlg] = useState(false);
   const [stakeState, setStakeState] = useState<stakeStateInterface[]>([]);
+  const { cstokens: stakedTokens } = useStakedToken();
   const stakedActionIds = stakedTokens.map((x) => x.TokenInfo.StakeActionId);
   const stakedTokenIds = stakedTokens.map((x) => x.TokenInfo.TokenId);
 
@@ -119,6 +132,7 @@ const UnclaimedStakingRewardsRow = ({
     setUnstakeableActionIds(res.unstakeableActionIds);
     setClaimableActionIds(res.claimableActionIds);
     setClaimableAmounts(res.claimableAmounts);
+    setWaitingActionIds(res.waitingActionIds);
     setStakeState(
       res.actionIds.map((x) => ({
         ...x,
@@ -173,7 +187,14 @@ const UnclaimedStakingRewardsRow = ({
     <>
       <TablePrimaryRow>
         <TablePrimaryCell>
-          {convertTimestampToDateTime(row.TimeStamp - offset)}
+          <Link
+            color="inherit"
+            fontSize="inherit"
+            href={`https://arbiscan.io/tx/${row.TxHash}`}
+            target="__blank"
+          >
+            {convertTimestampToDateTime(row.TimeStamp - offset)}
+          </Link>
         </TablePrimaryCell>
         <TablePrimaryCell align="center">{row.DepositId}</TablePrimaryCell>
         <TablePrimaryCell align="right">
@@ -192,41 +213,43 @@ const UnclaimedStakingRewardsRow = ({
         <TablePrimaryCell align="right">
           {claimableActionIds.length}
         </TablePrimaryCell>
-        <TablePrimaryCell align="right">
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: sm ? "end" : "start",
-            }}
-          >
-            {row.YourTokensStaked - claimableActionIds.length}
-            {Object.keys(claimableAmounts).length > 0 && (
-              <Tooltip
-                title={
-                  <Typography>
-                    You can claim the reward for&nbsp;
-                    {Object.keys(claimableAmounts).map(
-                      (key, index, arr) =>
-                        `${claimableAmounts[key].toFixed(
-                          6
-                        )} ETH in ${formatSeconds(parseInt(key))}${
-                          index !== arr.length - 1 ? ", " : ""
-                        }`
-                    )}
-                  </Typography>
-                }
-                sx={{ ml: 1 }}
-              >
-                <ErrorOutlineIcon fontSize="inherit" />
-              </Tooltip>
-            )}
-          </Box>
-        </TablePrimaryCell>
+        {showWaitingTokensColumn && (
+          <TablePrimaryCell align="right">
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: sm ? "end" : "start",
+              }}
+            >
+              {waitingActionIds.length}
+              {Object.keys(claimableAmounts).length > 0 && (
+                <Tooltip
+                  title={
+                    <Typography>
+                      You can claim the reward for&nbsp;
+                      {Object.keys(claimableAmounts).map(
+                        (key, index, arr) =>
+                          `${claimableAmounts[key].toFixed(
+                            6
+                          )} ETH in ${formatSeconds(parseInt(key))}${
+                            index !== arr.length - 1 ? ", " : ""
+                          }`
+                      )}
+                    </Typography>
+                  }
+                  sx={{ ml: 1 }}
+                >
+                  <ErrorOutlineIcon fontSize="inherit" />
+                </Tooltip>
+              )}
+            </Box>
+          </TablePrimaryCell>
+        )}
         {account === owner && (
           <TablePrimaryCell align="center">
             {claimableActionIds.length > 0 ? (
-              row.YourTokensStaked === 1 ? (
+              claimableActionIds.length === 1 ? (
                 <>
                   <Box sx={{ display: "flex" }}>
                     <Button
@@ -434,14 +457,15 @@ const UnclaimedStakingRewardsRow = ({
 
 export const UnclaimedStakingRewardsTable = ({ list, owner, fetchData }) => {
   const { account } = useActiveWeb3React();
-  const stakingContract = useStakingWalletContract();
+  const stakingContract = useStakingWalletCSTContract();
   const perPage = 5;
   const [page, setPage] = useState(1);
-  const { data: stakedTokens } = useStakedToken();
+  const { cstokens: stakedTokens } = useStakedToken();
   const stakedActionIds = stakedTokens.map((x) => x.TokenInfo.StakeActionId);
   const [offset, setOffset] = useState(undefined);
   const [claimableActionIds, setClaimableActionIds] = useState([]);
   const [unstakableActionIds, setUnstakeableActionIds] = useState([]);
+  const [waitingActionIds, setWaitingActionIds] = useState([]);
   const [notification, setNotification] = useState<{
     text: string;
     type: "success" | "info" | "warning" | "error";
@@ -515,6 +539,7 @@ export const UnclaimedStakingRewardsTable = ({ list, owner, fetchData }) => {
       console.error(e);
     }
   };
+
   const handleNotificationClose = () => {
     setNotification({ ...notification, visible: false });
   };
@@ -527,16 +552,19 @@ export const UnclaimedStakingRewardsTable = ({ list, owner, fetchData }) => {
     };
     const fetchActionIds = async () => {
       let cl_actionIds = [],
-        us_actionIds = [];
+        us_actionIds = [],
+        wa_actionIds = [];
       await Promise.all(
         list.map(async (item) => {
           const depositId = item.DepositId;
           const {
             claimableActionIds: cl,
             unstakeableActionIds: us,
+            waitingActionIds: wa,
           } = await fetchInfo(account, depositId, stakedActionIds);
           cl_actionIds = cl_actionIds.concat(cl);
           us_actionIds = us_actionIds.concat(us);
+          wa_actionIds = wa_actionIds.concat(wa);
         })
       );
       setClaimableActionIds(cl_actionIds);
@@ -544,6 +572,7 @@ export const UnclaimedStakingRewardsTable = ({ list, owner, fetchData }) => {
         return index === us_actionIds.findIndex((o) => o === item);
       });
       setUnstakeableActionIds(us_actionIds);
+      setWaitingActionIds(wa_actionIds);
     };
     fetchActionIds();
     calculateOffset();
@@ -575,7 +604,7 @@ export const UnclaimedStakingRewardsTable = ({ list, owner, fetchData }) => {
         <TablePrimary>
           <TablePrimaryHead>
             <Tr>
-              <TablePrimaryHeadCell align="left" sx={{ minWidth: "185px" }}>
+              <TablePrimaryHeadCell align="left" sx={{ minWidth: "150px" }}>
                 Datetime
               </TablePrimaryHeadCell>
               <TablePrimaryHeadCell>Deposit Id</TablePrimaryHeadCell>
@@ -595,9 +624,11 @@ export const UnclaimedStakingRewardsTable = ({ list, owner, fetchData }) => {
               <TablePrimaryHeadCell align="right">
                 Claimable Tokens
               </TablePrimaryHeadCell>
-              <TablePrimaryHeadCell align="right">
-                Wait Period Tokens
-              </TablePrimaryHeadCell>
+              {waitingActionIds.length > 0 && (
+                <TablePrimaryHeadCell align="right">
+                  Wait Period Tokens
+                </TablePrimaryHeadCell>
+              )}
               {account === owner && (
                 <TablePrimaryHeadCell> </TablePrimaryHeadCell>
               )}
@@ -611,6 +642,7 @@ export const UnclaimedStakingRewardsTable = ({ list, owner, fetchData }) => {
                 owner={owner}
                 handleUnstakeClaimRestake={handleUnstakeClaimRestake}
                 offset={offset}
+                showWaitingTokensColumn={waitingActionIds.length > 0}
               />
             ))}
           </TableBody>
@@ -632,7 +664,7 @@ export const UnclaimedStakingRewardsTable = ({ list, owner, fetchData }) => {
           the current date.
         </Typography>
       </Box>
-      {account === owner && list.length > 0 && (
+      {account === owner && claimableActionIds.length > 0 && (
         <Box display="flex" justifyContent="end" mt={1}>
           <Button
             variant="contained"

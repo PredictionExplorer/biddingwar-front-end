@@ -70,11 +70,23 @@ const HistoryRow = ({ history, showClaimedStatus }) => {
               <EmojiEventsIcon />
               &nbsp;<span>Main Prize</span>
             </>
-          ) : (
+          ) : history.RecordType === 4 ? (
+            <>
+              <EmojiEventsIcon />
+              &nbsp;<span>Cosmic Signature Staking ETH Deposit</span>
+            </>
+          ) : history.RecordType === 5 ? (
             <>
               <LayersIcon />
-              &nbsp;<span>Staking Deposit / Reward</span>
+              &nbsp;<span>Random Walk Staking Raffle Token</span>
             </>
+          ) : history.RecordType === 6 ? (
+            <>
+              <LayersIcon />
+              &nbsp;<span>Cosmic Signature Staking Raffle Token</span>
+            </>
+          ) : (
+            " "
           )}
           &nbsp;
           {!history.Claimed && showClaimedStatus && (
@@ -109,13 +121,23 @@ const HistoryRow = ({ history, showClaimedStatus }) => {
         </Link>
       </TablePrimaryCell>
       <TablePrimaryCell align="right">
-        {history.AmountEth.toFixed(4)}
+        {history.RecordType === 1 ||
+        history.RecordType === 5 ||
+        history.RecordType === 6
+          ? "N/A"
+          : history.AmountEth.toFixed(4)}
       </TablePrimaryCell>
       <TablePrimaryCell align="center">
         {history.RecordType === 0 ? (
           " "
         ) : history.RecordType === 1 ? (
-          <Tooltip title={COSMIC_SIGNATURE_TOKEN_ADDRESS}>
+          <Tooltip
+            title={
+              <Typography fontFamily="monospace">
+                {COSMIC_SIGNATURE_TOKEN_ADDRESS}
+              </Typography>
+            }
+          >
             <Link
               href={`https://arbiscan.io/address/${COSMIC_SIGNATURE_TOKEN_ADDRESS}`}
               sx={{
@@ -128,8 +150,14 @@ const HistoryRow = ({ history, showClaimedStatus }) => {
               {shortenHex(COSMIC_SIGNATURE_TOKEN_ADDRESS.toString(), 6)}
             </Link>
           </Tooltip>
-        ) : (
-          <Tooltip title={history.TokenAddress}>
+        ) : history.TokenAddress !== "" ? (
+          <Tooltip
+            title={
+              <Typography fontFamily="monospace">
+                {history.TokenAddress}
+              </Typography>
+            }
+          >
             <Link
               href={`https://arbiscan.io/address/${history.TokenAddress}`}
               sx={{
@@ -142,6 +170,8 @@ const HistoryRow = ({ history, showClaimedStatus }) => {
               {shortenHex(history.TokenAddress.toString(), 6)}
             </Link>
           </Tooltip>
+        ) : (
+          " "
         )}
       </TablePrimaryCell>
       <TablePrimaryCell align="center">
@@ -149,6 +179,17 @@ const HistoryRow = ({ history, showClaimedStatus }) => {
           history.RecordType === 1 || history.RecordType === 3 ? (
             <Link
               href={`/detail/${history.TokenId}`}
+              sx={{
+                fontSize: "inherit",
+                color: "inherit",
+              }}
+              target="_blank"
+            >
+              {history.TokenId}
+            </Link>
+          ) : history.RecordType === 5 || history.RecordType === 6 ? (
+            <Link
+              href={`https://randomwalknft.com/detail/${history.TokenId}`}
               sx={{
                 fontSize: "inherit",
                 color: "inherit",

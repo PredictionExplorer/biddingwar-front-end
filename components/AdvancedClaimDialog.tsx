@@ -27,7 +27,7 @@ import api from "../services/api";
 
 const TokenRow = ({ row, stakeState, setStakeState }) => {
   const [tokenName, setTokenName] = useState("");
-  const { data: stakedTokens } = useStakedToken();
+  const { cstokens: stakedTokens } = useStakedToken();
   const stakedActionIds = stakedTokens.map((x) => x.TokenInfo.StakeActionId);
   const stakedTokenIds = stakedTokens.map((x) => x.TokenInfo.TokenId);
   const isDisabled = (field) => {
@@ -92,9 +92,6 @@ const TokenRow = ({ row, stakeState, setStakeState }) => {
         {tokenName === "" ? " " : tokenName}
       </TablePrimaryCell>
       <TablePrimaryCell align="center">
-        {row.IsRandomWalk ? "Yes" : "No"}
-      </TablePrimaryCell>
-      <TablePrimaryCell align="center">
         {!isDisabled("unstake") ? (
           <Checkbox
             size="small"
@@ -150,7 +147,7 @@ const TokenRow = ({ row, stakeState, setStakeState }) => {
 const TokensTable = ({ stakeState, setStakeState }) => {
   const perPage = 5;
   const [page, setPage] = useState(1);
-  const { data: stakedTokens } = useStakedToken();
+  const { cstokens: stakedTokens } = useStakedToken();
   const stakedActionIds = stakedTokens.map((x) => x.TokenInfo.StakeActionId);
   const stakedTokenIds = stakedTokens.map((x) => x.TokenInfo.TokenId);
   const [isAllSelected, setAllSelected] = useState({
@@ -242,7 +239,6 @@ const TokensTable = ({ stakeState, setStakeState }) => {
               <TablePrimaryHeadCell style={{ maxWidth: "100px" }}>
                 Token Name
               </TablePrimaryHeadCell>
-              <TablePrimaryHeadCell>Is RandomWalk NFT?</TablePrimaryHeadCell>
               <TablePrimaryHeadCell>Unstake</TablePrimaryHeadCell>
               <TablePrimaryHeadCell>Claim</TablePrimaryHeadCell>
               <TablePrimaryHeadCell>Restake</TablePrimaryHeadCell>
@@ -314,8 +310,8 @@ export default function AdvancedClaimDialog({
   setOpen,
   handleUnstakeClaimRestake,
 }) {
-  const { data: stakedTokens } = useStakedToken();
-  const stakedActionIds = stakedTokens.map((x) => x.TokenInfo.StakeActionId);
+  const { cstokens: stakedCSTTokens } = useStakedToken();
+  const stakedActionIds = stakedCSTTokens.map((x) => x.TokenInfo.StakeActionId);
   const handleClose = () => {
     setOpen(false);
   };

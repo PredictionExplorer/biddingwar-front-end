@@ -21,13 +21,20 @@ import "react-super-responsive-table/dist/SuperResponsiveTableStyle.css";
 
 const WinnerRow = ({ winner }) => {
   if (!winner) {
-    return <TablePrimaryRow></TablePrimaryRow>;
+    return <TablePrimaryRow />;
   }
 
   return (
     <TablePrimaryRow>
       <TablePrimaryCell>
-        {convertTimestampToDateTime(winner.TimeStamp)}
+        <Link
+          color="inherit"
+          fontSize="inherit"
+          href={`https://arbiscan.io/tx/${winner.TxHash}`}
+          target="__blank"
+        >
+          {convertTimestampToDateTime(winner.TimeStamp)}
+        </Link>
       </TablePrimaryCell>
       <TablePrimaryCell align="left">
         <Tooltip title={winner.StakerAddr}>
@@ -57,7 +64,12 @@ const StakingWinnerTable = ({ list }) => {
   const perPage = 5;
   const [page, setPage] = useState(1);
   if (list.length === 0) {
-    return <Typography>No rewards yet.</Typography>;
+    return (
+      <Typography>
+        There were no staked tokens at the time round ended, the deposit amount
+        was sent to charity address.
+      </Typography>
+    );
   }
   return (
     <>

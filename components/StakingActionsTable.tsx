@@ -13,7 +13,7 @@ import { convertTimestampToDateTime } from "../utils";
 import "react-super-responsive-table/dist/SuperResponsiveTableStyle.css";
 import { useRouter } from "next/router";
 
-const StakingActionsRow = ({ row }) => {
+const StakingActionsRow = ({ row, IsRwalk }) => {
   const router = useRouter();
   if (!row) {
     return <TablePrimaryRow />;
@@ -23,7 +23,7 @@ const StakingActionsRow = ({ row }) => {
     <TablePrimaryRow
       sx={{ cursor: "pointer" }}
       onClick={() => {
-        router.push(`/staking-action/${row.ActionId}`);
+        router.push(`/staking-action/${IsRwalk ? 1 : 0}/${row.ActionId}`);
       }}
     >
       <TablePrimaryCell>
@@ -35,7 +35,7 @@ const StakingActionsRow = ({ row }) => {
       <TablePrimaryCell align="center">
         <Link
           href={
-            row.IsRandomWalk
+            IsRwalk
               ? `https://randomwalknft.com/detail/${row.TokenId}`
               : `/detail/${row.TokenId}`
           }
@@ -47,9 +47,6 @@ const StakingActionsRow = ({ row }) => {
           {row.TokenId}
         </Link>
       </TablePrimaryCell>
-      <TablePrimaryCell align="center">
-        {row.IsRandomWalk ? "Yes" : "No"}
-      </TablePrimaryCell>
       <TablePrimaryCell>
         {row.ActionType === 0
           ? convertTimestampToDateTime(row.UnstakeTimeStamp)
@@ -60,7 +57,7 @@ const StakingActionsRow = ({ row }) => {
   );
 };
 
-export const StakingActionsTable = ({ list }) => {
+export const StakingActionsTable = ({ list, IsRwalk }) => {
   const perPage = 5;
   const [page, setPage] = useState(1);
   if (list.length === 0) {
@@ -77,7 +74,6 @@ export const StakingActionsTable = ({ list }) => {
               </TablePrimaryHeadCell>
               <TablePrimaryHeadCell>Action Type</TablePrimaryHeadCell>
               <TablePrimaryHeadCell>Token ID</TablePrimaryHeadCell>
-              <TablePrimaryHeadCell>Is RandomWalk NFT?</TablePrimaryHeadCell>
               <TablePrimaryHeadCell align="left">
                 Unstake Datetime
               </TablePrimaryHeadCell>
@@ -86,7 +82,11 @@ export const StakingActionsTable = ({ list }) => {
           </TablePrimaryHead>
           <Tbody>
             {list.slice((page - 1) * perPage, page * perPage).map((row) => (
-              <StakingActionsRow row={row} key={row.EvtLogId} />
+              <StakingActionsRow
+                row={row}
+                IsRwalk={IsRwalk}
+                key={row.EvtLogId}
+              />
             ))}
           </Tbody>
         </TablePrimary>

@@ -37,13 +37,17 @@ const Header = () => {
   const { mobileView, drawerOpen } = state;
   const { apiData: status, setApiData } = useApiData();
   const { account } = useActiveWeb3React();
+  const [loading, setLoading] = useState(true);
   const [balance, setBalance] = useState({
     CosmicToken: 0,
     ETH: 0,
     CosmicSignature: 0,
     RWLK: 0,
   });
-  const { data: stakedTokens } = useStakedToken();
+  const {
+    cstokens: stakedCSTokens,
+    rwlktokens: stakedRWLKTokens,
+  } = useStakedToken();
   const { data: systemMode } = useSystemMode();
   const nftContract = useRWLKNFTContract();
 
@@ -65,29 +69,34 @@ const Header = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const notify = await api.notify_red_box(account);
-      setApiData(notify);
-      const balance = await api.get_user_balance(account);
-      const { UserInfo } = await api.get_user_info(account);
-      if (nftContract) {
+      setLoading(true);
+      try {
+        const notify = await api.notify_red_box(account);
+        setApiData(notify);
+        const user_balance = await api.get_user_balance(account);
+        const { UserInfo } = await api.get_user_info(account);
         const rwlkTokens = await nftContract.walletOfOwner(account);
-        if (balance) {
+        if (user_balance) {
           setBalance({
             CosmicToken: Number(
-              ethers.utils.formatEther(balance.CosmicTokenBalance)
+              ethers.utils.formatEther(user_balance.CosmicTokenBalance)
             ),
-            ETH: Number(ethers.utils.formatEther(balance.ETH_Balance)),
+            ETH: Number(ethers.utils.formatEther(user_balance.ETH_Balance)),
             CosmicSignature: UserInfo?.TotalCSTokensWon,
             RWLK: rwlkTokens.length,
           });
+          setLoading(false);
         }
+      } catch (e) {
+        console.log(e);
+        setLoading(false);
       }
     };
 
-    if (account) {
+    if (account && nftContract) {
       fetchData();
     }
-  }, [account]);
+  }, [account, nftContract]);
 
   useEffect(() => {
     const navs = getNAVs(status, account);
@@ -103,11 +112,17 @@ const Header = () => {
         {navs.map((nav, i) => (
           <ListNavItem key={i} nav={nav} />
         ))}
-        <ConnectWalletButton
-          isMobileView={false}
-          balance={balance}
-          stakedTokens={stakedTokens}
-        />
+        {
+          <ConnectWalletButton
+            isMobileView={false}
+            loading={loading}
+            balance={balance}
+            stakedTokenCount={{
+              cst: stakedCSTokens?.length,
+              rwalk: stakedRWLKTokens?.length,
+            }}
+          />
+        }
       </Toolbar>
     );
   };
@@ -149,7 +164,11 @@ const Header = () => {
               <ConnectWalletButton
                 isMobileView
                 balance={balance}
-                stakedTokens={stakedTokens}
+                loading={loading}
+                stakedTokenCount={{
+                  cst: stakedCSTokens?.length,
+                  rwalk: stakedRWLKTokens?.length,
+                }}
               />
             </ListItem>
             {navs.map((nav, i) => (
@@ -180,103 +199,118 @@ const Header = () => {
                 <Divider />
                 <ListItem sx={{ display: "block" }}>
                   <Typography sx={{ fontSize: 16 }}>BALANCE:</Typography>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      mt: 1,
-                    }}
-                  >
-                    <Typography
-                      variant="body2"
-                      color="secondary"
-                      sx={{ fontStyle: "italic", fontWeight: 600 }}
-                    >
-                      ETH:
-                    </Typography>
-                    <Typography
-                      variant="body2"
-                      color="secondary"
-                      sx={{ fontStyle: "italic", fontWeight: 600 }}
-                    >
-                      {balance.ETH.toFixed(2)}
-                    </Typography>
-                  </Box>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      mt: 1,
-                    }}
-                  >
-                    <Typography
-                      variant="body2"
-                      color="secondary"
-                      sx={{ fontStyle: "italic", fontWeight: 600 }}
-                    >
-                      CST (ERC20):
-                    </Typography>
-                    <Typography
-                      variant="body2"
-                      color="secondary"
-                      sx={{ fontStyle: "italic", fontWeight: 600 }}
-                    >
-                      {balance.CosmicToken.toFixed(2)}
-                    </Typography>
-                  </Box>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      mt: 1,
-                    }}
-                  >
-                    <Typography
-                      variant="body2"
-                      color="secondary"
-                      sx={{ fontStyle: "italic", fontWeight: 600 }}
-                    >
-                      CSS (ERC721):
-                    </Typography>
-                    <Typography
-                      variant="body2"
-                      color="secondary"
-                      sx={{ fontStyle: "italic", fontWeight: 600 }}
-                    >
-                      {balance.CosmicSignature} tokens
-                    </Typography>
-                  </Box>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      mt: 1,
-                    }}
-                  >
-                    <Typography
-                      variant="body2"
-                      color="secondary"
-                      sx={{ fontStyle: "italic", fontWeight: 600 }}
-                    >
-                      RWLK (ERC721):
-                    </Typography>
-                    <Typography
-                      variant="body2"
-                      color="secondary"
-                      sx={{ fontStyle: "italic", fontWeight: 600 }}
-                    >
-                      {balance.RWLK} tokens
-                    </Typography>
-                  </Box>
+                  {loading ? (
+                    <Typography color="primary">Loading...</Typography>
+                  ) : (
+                    <>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          mt: 1,
+                        }}
+                      >
+                        <Typography
+                          variant="body2"
+                          color="secondary"
+                          sx={{ fontStyle: "italic", fontWeight: 600 }}
+                        >
+                          ETH:
+                        </Typography>
+                        <Typography
+                          variant="body2"
+                          color="secondary"
+                          sx={{ fontStyle: "italic", fontWeight: 600 }}
+                        >
+                          {balance.ETH.toFixed(2)}
+                        </Typography>
+                      </Box>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          mt: 1,
+                        }}
+                      >
+                        <Typography
+                          variant="body2"
+                          color="secondary"
+                          sx={{ fontStyle: "italic", fontWeight: 600 }}
+                        >
+                          CST (ERC20):
+                        </Typography>
+                        <Typography
+                          variant="body2"
+                          color="secondary"
+                          sx={{ fontStyle: "italic", fontWeight: 600 }}
+                        >
+                          {balance.CosmicToken.toFixed(2)}
+                        </Typography>
+                      </Box>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          mt: 1,
+                        }}
+                      >
+                        <Typography
+                          variant="body2"
+                          color="secondary"
+                          sx={{ fontStyle: "italic", fontWeight: 600 }}
+                        >
+                          CSS (ERC721):
+                        </Typography>
+                        <Typography
+                          variant="body2"
+                          color="secondary"
+                          sx={{ fontStyle: "italic", fontWeight: 600 }}
+                        >
+                          {balance.CosmicSignature} tokens
+                        </Typography>
+                      </Box>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          mt: 1,
+                        }}
+                      >
+                        <Typography
+                          variant="body2"
+                          color="secondary"
+                          sx={{ fontStyle: "italic", fontWeight: 600 }}
+                        >
+                          RWLK (ERC721):
+                        </Typography>
+                        <Typography
+                          variant="body2"
+                          color="secondary"
+                          sx={{ fontStyle: "italic", fontWeight: 600 }}
+                        >
+                          {balance.RWLK} tokens
+                        </Typography>
+                      </Box>
+                    </>
+                  )}
                 </ListItem>
                 <Divider />
                 <ListItem sx={{ justifyContent: "space-between" }}>
-                  <Typography sx={{ fontSize: 16 }}>STAKED TOKENS:</Typography>
+                  <Typography sx={{ fontSize: 16 }}>STAKED CST:</Typography>
                   <Typography
                     color="secondary"
                     sx={{ fontSize: 16, fontWeight: 600 }}
                   >
-                    {stakedTokens?.length}
+                    {stakedCSTokens?.length}
+                  </Typography>
+                </ListItem>
+                <ListItem sx={{ justifyContent: "space-between" }}>
+                  <Typography sx={{ fontSize: 16 }}>STAKED RWALK:</Typography>
+                  <Typography
+                    color="secondary"
+                    sx={{ fontSize: 16, fontWeight: 600 }}
+                  >
+                    {stakedRWLKTokens?.length}
                   </Typography>
                 </ListItem>
               </>
