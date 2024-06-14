@@ -21,7 +21,7 @@ import NFTImage from "../components/NFTImage";
 const CSTRow = ({ nft }) => {
   const getTokenImageURL = () => {
     const fileName = nft.TokenId.toString().padStart(6, "0");
-    return `https://cosmic-game.s3.us-east-2.amazonaws.com/${fileName}.png`;
+    return `https://cosmic-game2.s3.us-east-2.amazonaws.com/${fileName}.png`;
   };
   if (!nft) {
     return <TablePrimaryRow />;
