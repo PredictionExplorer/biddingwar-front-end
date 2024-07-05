@@ -1,13 +1,10 @@
 import React, { useEffect, useState } from "react";
 import {
-  Alert,
   Box,
   Button,
   IconButton,
   Link,
   Menu,
-  Pagination,
-  Snackbar,
   TableBody,
   Tooltip,
   Typography,
@@ -34,7 +31,8 @@ import { Tr } from "react-super-responsive-table";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import AdvancedClaimDialog from "./AdvancedClaimDialog";
 import getErrorMessage from "../utils/alert";
-import { useApiData } from "../contexts/ApiDataContext";
+import { CustomPagination } from "./CustomPagination";
+import { useNotification } from "../contexts/NotificationContext";
 
 const fetchInfo = async (account, depositId, stakedActionIds) => {
   let unstakeableActionIds = [],
@@ -150,19 +148,6 @@ const UnclaimedStakingRewardsRow = ({
   const handleMenuClose = () => {
     setAnchorEl(null);
   };
-
-  useEffect(() => {
-    fetchRowData();
-    const interval = setInterval(() => {
-      fetchRowData();
-    }, 30000);
-
-    // Clean up the interval when the component is unmounted
-    return () => {
-      clearInterval(interval);
-    };
-  }, [stakedTokens]);
-
   const handleUnstakeClaimRestakeWrapper = (
     type,
     unstakeActions,
@@ -179,6 +164,21 @@ const UnclaimedStakingRewardsRow = ({
       claimDeposits
     );
   };
+
+  useEffect(() => {
+    fetchRowData();
+  }, [stakedTokens]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      fetchRowData();
+    }, 30000);
+
+    // Clean up the interval when the component is unmounted
+    return () => {
+      clearInterval(interval);
+    };
+  }, []);
 
   if (!row) {
     return <TablePrimaryRow />;
@@ -457,21 +457,17 @@ const UnclaimedStakingRewardsRow = ({
 };
 
 export const UnclaimedStakingRewardsTable = ({ list, owner, fetchData }) => {
-  const { account } = useActiveWeb3React();
-  const stakingContract = useStakingWalletCSTContract();
   const perPage = 5;
   const [page, setPage] = useState(1);
-  const { apiData: stakingStatus } = useApiData();
+  const { cstokens: stakedTokens } = useStakedToken();
+  const stakedActionIds = stakedTokens.map((x) => x.TokenInfo.StakeActionId);
   const [offset, setOffset] = useState(undefined);
-  const [notification, setNotification] = useState<{
-    text: string;
-    type: "success" | "info" | "warning" | "error";
-    visible: boolean;
-  }>({
-    visible: false,
-    text: "",
-    type: "success",
-  });
+  const [claimableActionIds, setClaimableActionIds] = useState([]);
+  const [unstakableActionIds, setUnstakeableActionIds] = useState([]);
+  const [waitingActionIds, setWaitingActionIds] = useState([]);
+  const { account } = useActiveWeb3React();
+  const stakingContract = useStakingWalletCSTContract();
+  const { setNotification } = useNotification();
 
   const handleUnstakeClaimRestake = async (
     type,
@@ -504,7 +500,7 @@ export const UnclaimedStakingRewardsTable = ({ list, owner, fetchData }) => {
         const msg = getErrorMessage(e?.data?.message);
         setNotification({
           visible: true,
-          text: `${msg}. Please try again.`,
+          text: msg,
           type: "error",
         });
       } else {
@@ -517,10 +513,10 @@ export const UnclaimedStakingRewardsTable = ({ list, owner, fetchData }) => {
     try {
       const res = await stakingContract
         .unstakeClaimRestakeMany(
-          stakingStatus.unstakeableActionIds,
+          unstakableActionIds,
           [],
-          stakingStatus.claimableActionIds.map((x) => x.StakeActionId),
-          stakingStatus.claimableActionIds.map((x) => x.DepositId)
+          claimableActionIds.map((x) => x.StakeActionId),
+          claimableActionIds.map((x) => x.DepositId)
         )
         .then((tx) => tx.wait());
       console.log(res);
@@ -533,12 +529,16 @@ export const UnclaimedStakingRewardsTable = ({ list, owner, fetchData }) => {
         type: "success",
       });
     } catch (e) {
+      if (e?.data?.message) {
+        const msg = getErrorMessage(e?.data?.message);
+        setNotification({
+          visible: true,
+          text: msg,
+          type: "error",
+        });
+      }
       console.error(e);
     }
-  };
-
-  const handleNotificationClose = () => {
-    setNotification({ ...notification, visible: false });
   };
 
   useEffect(() => {
@@ -547,8 +547,29 @@ export const UnclaimedStakingRewardsTable = ({ list, owner, fetchData }) => {
       const offset = current - Date.now() / 1000;
       setOffset(offset);
     };
+    const fetchActionIds = async () => {
+      let cl_actionIds = [],
+        us_actionIds = [],
+        wa_actionIds = [];
+      await Promise.all(
+        list.map(async (item) => {
+          const depositId = item.DepositId;
+          const res = await fetchInfo(owner, depositId, stakedActionIds);
+          cl_actionIds = cl_actionIds.concat(res.claimableActionIds);
+          us_actionIds = us_actionIds.concat(res.unstakeableActionIds);
+          wa_actionIds = wa_actionIds.concat(res.waitingActionIds);
+        })
+      );
+      setClaimableActionIds(cl_actionIds);
+      us_actionIds = us_actionIds.filter((item, index) => {
+        return index === us_actionIds.findIndex((o) => o === item);
+      });
+      setUnstakeableActionIds(us_actionIds);
+      setWaitingActionIds(wa_actionIds);
+    };
+    fetchActionIds();
     calculateOffset();
-  }, [list]);
+  }, [list, stakedTokens]);
 
   if (offset === undefined) return;
 
@@ -558,20 +579,6 @@ export const UnclaimedStakingRewardsTable = ({ list, owner, fetchData }) => {
 
   return (
     <>
-      <Snackbar
-        anchorOrigin={{ vertical: "top", horizontal: "right" }}
-        autoHideDuration={10000}
-        open={notification.visible}
-        onClose={handleNotificationClose}
-      >
-        <Alert
-          severity={notification.type}
-          variant="filled"
-          onClose={handleNotificationClose}
-        >
-          {notification.text}
-        </Alert>
-      </Snackbar>
       <TablePrimaryContainer>
         <TablePrimary>
           <TablePrimaryHead>
@@ -596,7 +603,7 @@ export const UnclaimedStakingRewardsTable = ({ list, owner, fetchData }) => {
               <TablePrimaryHeadCell align="right">
                 Claimable Tokens
               </TablePrimaryHeadCell>
-              {stakingStatus.waitingActionIds.length > 0 && (
+              {waitingActionIds.length > 0 && (
                 <TablePrimaryHeadCell align="right">
                   Wait Period Tokens
                 </TablePrimaryHeadCell>
@@ -614,9 +621,7 @@ export const UnclaimedStakingRewardsTable = ({ list, owner, fetchData }) => {
                 owner={owner}
                 handleUnstakeClaimRestake={handleUnstakeClaimRestake}
                 offset={offset}
-                showWaitingTokensColumn={
-                  stakingStatus.waitingActionIds.length > 0
-                }
+                showWaitingTokensColumn={waitingActionIds.length > 0}
               />
             ))}
           </TableBody>
@@ -638,30 +643,25 @@ export const UnclaimedStakingRewardsTable = ({ list, owner, fetchData }) => {
           the current date.
         </Typography>
       </Box>
-      {account === owner && stakingStatus.claimableActionIds.length > 0 && (
+      {account === owner && claimableActionIds.length > 0 && (
         <Box display="flex" justifyContent="end" mt={1}>
           <Button
             variant="contained"
             size="small"
             onClick={handleUnstakeClaimAll}
           >
-            {stakingStatus.unstakeableActionIds.length > 0
+            {unstakableActionIds.length > 0
               ? "Unstake & Claim All"
               : "Claim All"}
           </Button>
         </Box>
       )}
-      <Box display="flex" justifyContent="center" mt={4}>
-        <Pagination
-          color="primary"
-          page={page}
-          onChange={(_e, page) => setPage(page)}
-          count={Math.ceil(list.length / perPage)}
-          hideNextButton
-          hidePrevButton
-          shape="rounded"
-        />
-      </Box>
+      <CustomPagination
+        page={page}
+        setPage={setPage}
+        totalLength={list.length}
+        perPage={perPage}
+      />
     </>
   );
 };

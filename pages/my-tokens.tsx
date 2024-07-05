@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Box, Link, Pagination, TableBody, Typography } from "@mui/material";
+import { Box, Link, TableBody, Typography } from "@mui/material";
 import Head from "next/head";
 import {
   MainWrapper,
@@ -17,6 +17,7 @@ import api from "../services/api";
 import { Tr } from "react-super-responsive-table";
 import "react-super-responsive-table/dist/SuperResponsiveTableStyle.css";
 import NFTImage from "../components/NFTImage";
+import { CustomPagination } from "../components/CustomPagination";
 
 const CSTRow = ({ nft }) => {
   const getTokenImageURL = () => {
@@ -92,7 +93,7 @@ const CSTRow = ({ nft }) => {
   );
 };
 
-const CSTTable = ({ list }) => {
+export const CSTTable = ({ list }) => {
   const perPage = 5;
   const [curPage, setCurPage] = useState(1);
   if (list.length === 0) {
@@ -126,17 +127,12 @@ const CSTTable = ({ list }) => {
           </TableBody>
         </TablePrimary>
       </TablePrimaryContainer>
-      <Box display="flex" justifyContent="center" mt={4}>
-        <Pagination
-          color="primary"
-          page={curPage}
-          onChange={(_e, page) => setCurPage(page)}
-          count={Math.ceil(list.length / perPage)}
-          hideNextButton
-          hidePrevButton
-          shape="rounded"
-        />
-      </Box>
+      <CustomPagination
+        page={curPage}
+        setPage={setCurPage}
+        totalLength={list.length}
+        perPage={perPage}
+      />
     </>
   );
 };
@@ -150,7 +146,7 @@ const MyWallet = () => {
   });
   const fetchCSTList = async (updateStatus) => {
     setCSTList((prev) => ({ ...prev, loading: updateStatus && true }));
-    let cstList = await api.get_cst_list_by_user(account);
+    let cstList = await api.get_cst_tokens_by_user(account);
     setCSTList({ data: cstList, loading: false });
   };
   useEffect(() => {

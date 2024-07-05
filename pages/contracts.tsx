@@ -6,38 +6,27 @@ import {
   useTheme,
   useMediaQuery,
   Box,
-  Alert,
-  Snackbar,
+  Button,
+  TextField,
 } from "@mui/material";
 import Head from "next/head";
 import { MainWrapper } from "../components/styled";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import api from "../services/api";
-import useStakingWalletCSTContract from "../hooks/useStakingWalletCSTContract";
-import useStakingWalletRWLKContract from "../hooks/useStakingWalletRWLKContract";
+import useCosmicGameContract from "../hooks/useCosmicGameContract";
+import { formatSeconds } from "../utils";
+import { useNotification } from "../contexts/NotificationContext";
+import { ethers } from "ethers";
 
 const ContractItem = ({ name, value, copyable = false }) => {
   const theme = useTheme();
   const md = useMediaQuery(theme.breakpoints.up("md"));
   const sm = useMediaQuery(theme.breakpoints.up("sm"));
-  const [notification, setNotification] = useState(false);
+  const { setNotification } = useNotification();
+
   return (
     <>
-      <Snackbar
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
-        autoHideDuration={6000}
-        open={notification}
-        onClose={() => setNotification(false)}
-      >
-        <Alert
-          severity="success"
-          variant="filled"
-          onClose={() => setNotification(false)}
-        >
-          Address copied!
-        </Alert>
-      </Snackbar>
       <ListItem>
         <Typography
           color="primary"
@@ -54,7 +43,13 @@ const ContractItem = ({ name, value, copyable = false }) => {
           <CopyToClipboard text={value}>
             <Box
               sx={{ display: "flex", cursor: "pointer", alignItems: "center" }}
-              onClick={() => setNotification(true)}
+              onClick={() =>
+                setNotification({
+                  text: "Address copied!",
+                  type: "success",
+                  visible: true,
+                })
+              }
             >
               <Typography
                 fontFamily="monospace"
@@ -83,10 +78,29 @@ const ContractItem = ({ name, value, copyable = false }) => {
 const Contracts = () => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [minStakeCSTPeriod, setMinStakeCSTPeriod] = useState(0);
-  const [minStakeRWalkPeriod, setMinStakeRWalkPeriod] = useState(0);
-  const stakingWalletCSTContract = useStakingWalletCSTContract();
-  const stakingWalletRWalkContract = useStakingWalletRWLKContract();
+  const [timeoutClaimPrize, setTimeoutClaimPrize] = useState(0);
+  const [donateAmount, setDonateAmount] = useState("");
+  const [initialSecondsUntilPrize, setInitialSecondsUntilPrize] = useState(0);
+  const [auctionLength, setAuctionLength] = useState(0);
+  const cosmicGameContract = useCosmicGameContract();
+  const { setNotification } = useNotification();
+
+  const handleDonate = async () => {
+    try {
+      const res = await cosmicGameContract.donate({
+        value: ethers.utils.parseEther(donateAmount),
+      });
+      console.log(res);
+      setNotification({
+        text: `${donateAmount} ETH was donated successfully!`,
+        type: "success",
+        visible: true,
+      });
+      setDonateAmount("");
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -105,15 +119,17 @@ const Contracts = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      let minStakePeriod = await stakingWalletCSTContract.minStakePeriod();
-      setMinStakeCSTPeriod(Number(minStakePeriod));
-      minStakePeriod = await stakingWalletRWalkContract.minStakePeriod();
-      setMinStakeRWalkPeriod(Number(minStakePeriod));
+      const timeout = await cosmicGameContract.timeoutClaimPrize();
+      setTimeoutClaimPrize(Number(timeout));
+      const initialSeconds = await cosmicGameContract.initialSecondsUntilPrize();
+      setInitialSecondsUntilPrize(Number(initialSeconds));
+      const auctionLength = await cosmicGameContract.RoundStartCSTAuctionLength();
+      setAuctionLength(Number(auctionLength));
     };
-    if (stakingWalletCSTContract && stakingWalletRWalkContract) {
+    if (cosmicGameContract) {
       fetchData();
     }
-  }, [stakingWalletCSTContract, stakingWalletRWalkContract]);
+  }, [cosmicGameContract]);
 
   return (
     <>
@@ -140,6 +156,28 @@ const Contracts = () => {
                 value={data?.ContractAddrs.CosmicGameAddr}
                 copyable={true}
               />
+              {!!cosmicGameContract && (
+                <Box sx={{ display: "flex", p: 2 }}>
+                  <Box sx={{ display: "flex", alignItems: "center", mr: 4 }}>
+                    <TextField
+                      placeholder="Donation amount"
+                      type="number"
+                      value={donateAmount}
+                      size="small"
+                      sx={{ mr: 1 }}
+                      onChange={(e) => setDonateAmount(e.target.value)}
+                    />
+                    <Typography>ETH</Typography>
+                  </Box>
+                  <Button
+                    variant="contained"
+                    disabled={donateAmount === "0" || donateAmount === ""}
+                    onClick={handleDonate}
+                  >
+                    Donate
+                  </Button>
+                </Box>
+              )}
               <ContractItem
                 name="Cosmic Token Address"
                 value={data?.ContractAddrs.CosmicTokenAddr}
@@ -234,21 +272,23 @@ const Contracts = () => {
                 name="Amount of CosmicTokens earned per bid"
                 value={100}
               />
-              <ContractItem name="Timeout to claim prize" value="1 Day" />
+              <ContractItem
+                name="Auction Duration"
+                value={formatSeconds(auctionLength)}
+              />
+              <ContractItem
+                name="Timeout to claim prize"
+                value={formatSeconds(timeoutClaimPrize)}
+              />
               <ContractItem name="Maximum message length" value={280} />
-              <ContractItem name="Initial increment first bid" value="1 Day" />
+              <ContractItem
+                name="Initial increment first bid"
+                value={formatSeconds(initialSecondsUntilPrize)}
+              />
               <ContractItem
                 name="Random Walk contract address"
                 value={data?.ContractAddrs.RandomWalkAddr}
                 copyable={true}
-              />
-              <ContractItem
-                name="Minimal Stake Period for Cosmic Signature"
-                value={minStakeCSTPeriod}
-              />
-              <ContractItem
-                name="Minimal Stake Period for RandomWalk"
-                value={minStakeRWalkPeriod}
               />
             </List>
           </>

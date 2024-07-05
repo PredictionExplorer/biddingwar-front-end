@@ -1,14 +1,11 @@
 import React, { useEffect, useState } from "react";
 import {
-  Alert,
   Box,
   Button,
   Checkbox,
   Link,
   Menu,
   MenuItem,
-  Pagination,
-  Snackbar,
   TableBody,
   Typography,
 } from "@mui/material";
@@ -24,6 +21,7 @@ import {
 import { convertTimestampToDateTime } from "../utils";
 import "react-super-responsive-table/dist/SuperResponsiveTableStyle.css";
 import { Tr } from "react-super-responsive-table";
+import { CustomPagination } from "./CustomPagination";
 
 const CSTokensRow = ({ row, handleStake, isItemSelected, handleClick }) => {
   if (!row) {
@@ -112,15 +110,6 @@ const CSTokensRow = ({ row, handleStake, isItemSelected, handleClick }) => {
 export const CSTokensTable = ({ list, handleStake, handleStakeMany }) => {
   const perPage = 5;
   const [anchorEl, setAnchorEl] = useState(null);
-  const [notification, setNotification] = useState<{
-    text: string;
-    type: "success" | "info" | "warning" | "error";
-    visible: boolean;
-  }>({
-    visible: false,
-    text: "",
-    type: "success",
-  });
   const [page, setPage] = useState(1);
   const [selected, setSelected] = useState([]);
   const isSelected = (id: number) => selected.indexOf(id) !== -1;
@@ -160,29 +149,11 @@ export const CSTokensTable = ({ list, handleStake, handleStakeMany }) => {
   };
   const onStakeMany = async () => {
     const res = await handleStakeMany(selected, false);
-    if (!res.code) {
-      setNotification({
-        visible: true,
-        text: "The selected tokens were staked successfully!",
-        type: "success",
-      });
-    }
   };
   const onStake = async (id: number) => {
     setSelected([id]);
-    const res = await handleStake(id, false);
-    if (!res.code) {
-      setNotification({
-        visible: true,
-        text: `You have successfully staked token ${id}!`,
-        type: "success",
-      });
-    }
+    await handleStake(id, false);
   };
-  const handleClose = () => {
-    setNotification({ ...notification, visible: false });
-  };
-
   useEffect(() => {
     setSelected([]);
     setPage(1);
@@ -193,20 +164,6 @@ export const CSTokensTable = ({ list, handleStake, handleStakeMany }) => {
   }
   return (
     <>
-      <Snackbar
-        anchorOrigin={{ vertical: "top", horizontal: "right" }}
-        autoHideDuration={10000}
-        open={notification.visible}
-        onClose={handleClose}
-      >
-        <Alert
-          severity={notification.type}
-          variant="filled"
-          onClose={handleClose}
-        >
-          {notification.text}
-        </Alert>
-      </Snackbar>
       <TablePrimaryContainer>
         <TablePrimary>
           <TablePrimaryHead>
@@ -301,17 +258,12 @@ export const CSTokensTable = ({ list, handleStake, handleStakeMany }) => {
           </Button>
         </Box>
       )}
-      <Box display="flex" justifyContent="center" mt={4}>
-        <Pagination
-          color="primary"
-          page={page}
-          onChange={(_e, page) => setPage(page)}
-          count={Math.ceil(list.length / perPage)}
-          hideNextButton
-          hidePrevButton
-          shape="rounded"
-        />
-      </Box>
+      <CustomPagination
+        page={page}
+        setPage={setPage}
+        totalLength={list.length}
+        perPage={perPage}
+      />
     </>
   );
 };

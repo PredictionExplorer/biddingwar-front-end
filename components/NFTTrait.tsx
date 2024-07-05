@@ -10,8 +10,6 @@ import {
   Link,
   Container,
   Menu,
-  Snackbar,
-  Alert,
   Dialog,
   DialogTitle,
   DialogContent,
@@ -45,6 +43,7 @@ import NFTImage from "./NFTImage";
 import NameHistoryTable from "./NameHistoryTable";
 import { TransferHistoryTable } from "./TransferHistoryTable";
 import api from "../services/api";
+import { useNotification } from "../contexts/NotificationContext";
 
 const NFTTrait = ({ tokenId }) => {
   const fileName = tokenId.toString().padStart(6, "0");
@@ -55,15 +54,6 @@ const NFTTrait = ({ tokenId }) => {
   const [videoPath, setVideoPath] = useState(null);
   const [address, setAddress] = useState("");
   const [anchorEl, setAnchorEl] = useState(null);
-  const [notification, setNotification] = useState<{
-    text: string;
-    type: "success" | "info" | "warning" | "error";
-    visible: boolean;
-  }>({
-    text: "",
-    type: "success",
-    visible: false,
-  });
   const [loading, setLoading] = useState(true);
   const [nft, setNft] = useState(null);
   const [prizeInfo, setPrizeInfo] = useState(null);
@@ -75,6 +65,7 @@ const NFTTrait = ({ tokenId }) => {
   const router = useRouter();
   const nftContract = useCosmicSignatureContract();
   const { account } = useActiveWeb3React();
+  const { setNotification } = useNotification();
 
   const handleClickTransfer = async () => {
     const { ethereum } = window;
@@ -116,8 +107,11 @@ const NFTTrait = ({ tokenId }) => {
       await nftContract
         .transferFrom(account, address, tokenId)
         .then((tx) => tx.wait());
-
-      router.reload();
+      setTimeout(() => {
+        fetchCSTInfo();
+        fetchTransferHistory();
+        setAddress("");
+      }, 3000);
     } catch (err) {
       console.log(err);
       if (err.code !== 4001) {
@@ -145,6 +139,14 @@ const NFTTrait = ({ tokenId }) => {
         });
       }, 2000);
     } catch (err) {
+      if (err?.data?.message) {
+        const msg = err?.data?.message;
+        setNotification({
+          visible: true,
+          type: "error",
+          text: msg,
+        });
+      }
       console.log(err);
     }
   };
@@ -162,6 +164,14 @@ const NFTTrait = ({ tokenId }) => {
         });
       }, 2000);
     } catch (err) {
+      if (err?.data?.message) {
+        const msg = err?.data?.message;
+        setNotification({
+          visible: true,
+          type: "error",
+          text: msg,
+        });
+      }
       console.log(err);
     }
   };
@@ -218,9 +228,6 @@ const NFTTrait = ({ tokenId }) => {
       console.log(e);
     }
   };
-  const handleNotificationClose = () => {
-    setNotification({ ...notification, visible: false });
-  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -248,20 +255,6 @@ const NFTTrait = ({ tokenId }) => {
   return (
     <Container>
       <SectionWrapper>
-        <Snackbar
-          anchorOrigin={{ vertical: "top", horizontal: "right" }}
-          autoHideDuration={10000}
-          open={notification.visible}
-          onClose={handleNotificationClose}
-        >
-          <Alert
-            severity={notification.type}
-            variant="filled"
-            onClose={handleNotificationClose}
-          >
-            {notification.text}
-          </Alert>
-        </Snackbar>
         <Grid container spacing={4} justifyContent="center">
           <Grid item xs={12} sm={8} md={6}>
             <StyledCard>

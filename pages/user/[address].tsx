@@ -14,10 +14,12 @@ import { StakingActionsTable } from "../../components/StakingActionsTable";
 import { MarketingRewardsTable } from "../../components/MarketingRewardsTable";
 import { useStakedToken } from "../../contexts/StakedTokenContext";
 import { useApiData } from "../../contexts/ApiDataContext";
-import { useRouter } from "next/router";
 import { useActiveWeb3React } from "../../hooks/web3";
 import useCosmicGameContract from "../../hooks/useCosmicGameContract";
 import DonatedNFTTable from "../../components/DonatedNFTTable";
+import { CSTTable } from "../my-tokens";
+import getErrorMessage from "../../utils/alert";
+import { useNotification } from "../../contexts/NotificationContext";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -42,9 +44,7 @@ function CustomTabPanel(props: TabPanelProps) {
 }
 
 const UserInfo = ({ address }) => {
-  const router = useRouter();
   const { account } = useActiveWeb3React();
-  const { apiData: status } = useApiData();
   const [claimedDonatedNFTs, setClaimedDonatedNFTs] = useState({
     data: [],
     loading: false,
@@ -64,12 +64,12 @@ const UserInfo = ({ address }) => {
   const [stakingCSTActions, setStakingCSTActions] = useState([]);
   const [stakingRWLKActions, setStakingRWLKActions] = useState([]);
   const [marketingRewards, setMarketingRewards] = useState([]);
-  const { fetchData: fetchStakedToken } = useStakedToken();
-  const [isClaiming, setIsClaiming] = useState({
-    donatedNFT: false,
-    raffleETH: false,
-  });
+  const [cstList, setCSTList] = useState([]);
+  const [isClaiming, setIsClaiming] = useState(false);
   const [stakingTable, setStakingTable] = useState(0);
+  const { fetchData: fetchStakedToken } = useStakedToken();
+  const { fetchData: fetchStatusData } = useApiData();
+  const { setNotification } = useNotification();
 
   const cosmicGameContract = useCosmicGameContract();
 
@@ -103,20 +103,23 @@ const UserInfo = ({ address }) => {
     setStakingRWLKActions(stakingActions);
     const marketingRewards = await api.get_marketing_rewards_by_user(addr);
     setMarketingRewards(marketingRewards);
+    const cstList = await api.get_cst_tokens_by_user(addr);
+    setCSTList(cstList);
     fetchStakedToken();
+    fetchStatusData();
     setLoading(false);
   };
 
-  const fetchDonatedNFTs = async () => {
+  const fetchDonatedNFTs = async (reload: boolean = true) => {
     setClaimedDonatedNFTs((prev) => ({
       ...prev,
-      loading: true,
+      loading: reload,
     }));
     const claimed = await api.get_claimed_donated_nft_by_user(address);
     setClaimedDonatedNFTs({ data: claimed, loading: false });
     setUnclaimedDonatedNFTs((prev) => ({
       ...prev,
-      loading: true,
+      loading: reload,
     }));
     const unclaimed = await api.get_unclaimed_donated_nft_by_user(address);
     setUnclaimedDonatedNFTs({ data: unclaimed, loading: false });
@@ -129,10 +132,16 @@ const UserInfo = ({ address }) => {
       const res = await cosmicGameContract.claimDonatedNFT(tokenID);
       console.log(res);
       setTimeout(() => {
-        router.reload();
-      }, 4000);
+        fetchData(address, false);
+        fetchDonatedNFTs(false);
+        setIsClaiming(false);
+      }, 3000);
     } catch (err) {
       console.log(err);
+      if (err?.data?.message) {
+        const msg = getErrorMessage(err?.data?.message);
+        setNotification({ text: msg, type: "error", visible: true });
+      }
       e.target.disabled = false;
       e.target.classList.remove("Mui-disabled");
     }
@@ -140,22 +149,22 @@ const UserInfo = ({ address }) => {
 
   const handleAllDonatedNFTsClaim = async () => {
     try {
-      setIsClaiming({
-        ...isClaiming,
-        donatedNFT: true,
-      });
+      setIsClaiming(true);
       const indexList = unclaimedDonatedNFTs.data.map((item) => item.Index);
       const res = await cosmicGameContract.claimManyDonatedNFTs(indexList);
       console.log(res);
       setTimeout(() => {
-        router.reload();
-      }, 4000);
+        fetchData(address, false);
+        fetchDonatedNFTs(false);
+        setIsClaiming(false);
+      }, 3000);
     } catch (err) {
       console.log(err);
-      setIsClaiming({
-        ...isClaiming,
-        donatedNFT: false,
-      });
+      if (err?.data?.message) {
+        const msg = getErrorMessage(err?.data?.message);
+        setNotification({ text: msg, type: "error", visible: true });
+      }
+      setIsClaiming(false);
     }
   };
 
@@ -338,7 +347,12 @@ const UserInfo = ({ address }) => {
                   </Typography>
                   &nbsp;
                   <Typography component="span">
-                    {userInfo.RaffleNFTWon}
+                    <Link
+                      href={`/user/raffle-nft/${address}`}
+                      sx={{ color: "inherit", fontSize: "inherit" }}
+                    >
+                      {userInfo.RaffleNFTWon}
+                    </Link>
                   </Typography>
                 </Box>
                 <Box mb={1}>
@@ -575,6 +589,12 @@ const UserInfo = ({ address }) => {
                 </Box>
                 <Box>
                   <Typography variant="h6" lineHeight={1} mt={8} mb={2}>
+                    Cosmic Signature Tokens User Own
+                  </Typography>
+                  <CSTTable list={cstList} />
+                </Box>
+                <Box>
+                  <Typography variant="h6" lineHeight={1} mt={8} mb={2}>
                     History of Winnings
                   </Typography>
                   <WinningHistoryTable
@@ -598,6 +618,7 @@ const UserInfo = ({ address }) => {
                   </Typography>
                   <CollectedStakingRewardsTable
                     list={collectedStakingRewards}
+                    owner={address}
                   />
                 </Box>
                 {marketingRewards.length > 0 && (
@@ -618,15 +639,16 @@ const UserInfo = ({ address }) => {
                     }}
                   >
                     <Typography variant="h6">Donated NFTs User Won</Typography>
-                    {status?.NumDonatedNFTToClaim > 0 && account === address && (
-                      <Button
-                        onClick={handleAllDonatedNFTsClaim}
-                        variant="contained"
-                        disabled={isClaiming.donatedNFT}
-                      >
-                        Claim All
-                      </Button>
-                    )}
+                    {unclaimedDonatedNFTs.data.length > 0 &&
+                      account === address && (
+                        <Button
+                          onClick={handleAllDonatedNFTsClaim}
+                          variant="contained"
+                          disabled={isClaiming}
+                        >
+                          Claim All
+                        </Button>
+                      )}
                   </Box>
                   {unclaimedDonatedNFTs.loading ||
                   claimedDonatedNFTs.loading ? (

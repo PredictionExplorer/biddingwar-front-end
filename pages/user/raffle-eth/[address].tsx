@@ -1,16 +1,8 @@
 import React, { useEffect, useState } from "react";
-import {
-  Box,
-  Button,
-  Link,
-  Pagination,
-  TableBody,
-  Typography,
-} from "@mui/material";
+import { Box, Button, Link, TableBody, Typography } from "@mui/material";
 import Head from "next/head";
 import { GetServerSidePropsContext } from "next";
 import { ethers } from "ethers";
-import { useRouter } from "next/router";
 import { useActiveWeb3React } from "../../../hooks/web3";
 import { useApiData } from "../../../contexts/ApiDataContext";
 import useRaffleWalletContract from "../../../hooks/useRaffleWalletContract";
@@ -25,7 +17,11 @@ import {
   TablePrimaryRow,
 } from "../../../components/styled";
 import { Tr } from "react-super-responsive-table";
+import "react-super-responsive-table/dist/SuperResponsiveTableStyle.css";
 import { convertTimestampToDateTime } from "../../../utils";
+import { CustomPagination } from "../../../components/CustomPagination";
+import getErrorMessage from "../../../utils/alert";
+import { useNotification } from "../../../contexts/NotificationContext";
 
 const MyWinningsRow = ({ winning }) => {
   if (!winning) {
@@ -57,7 +53,7 @@ const MyWinningsRow = ({ winning }) => {
 };
 
 const MyWinningsTable = ({ list }) => {
-  const perPage = 5;
+  const perPage = 10;
   const [curPage, setCurPage] = useState(1);
   if (list.length === 0) {
     return <Typography>No Raffle ETH yet.</Typography>;
@@ -84,39 +80,30 @@ const MyWinningsTable = ({ list }) => {
           </TableBody>
         </TablePrimary>
       </TablePrimaryContainer>
-      <Box display="flex" justifyContent="center" mt={4}>
-        <Pagination
-          color="primary"
-          page={curPage}
-          onChange={(_e, page) => setCurPage(page)}
-          count={Math.ceil(list.length / perPage)}
-          hideNextButton
-          hidePrevButton
-          shape="rounded"
-        />
-      </Box>
+      <CustomPagination
+        page={curPage}
+        setPage={setCurPage}
+        totalLength={list.length}
+        perPage={perPage}
+      />
     </>
   );
 };
 
 const UserRaffleETH = ({ address }) => {
-  const router = useRouter();
   const { account } = useActiveWeb3React();
-  const { apiData: status } = useApiData();
+  const { apiData: status, fetchData: fetchStatusData } = useApiData();
   const [raffleETHToClaim, setRaffleETHToClaim] = useState({
     data: [],
     loading: false,
   });
   const [invalidAddress, setInvalidAddress] = useState(false);
-  const [isClaiming, setIsClaiming] = useState({
-    donatedNFT: false,
-    raffleETH: false,
-  });
-
+  const [isClaiming, setIsClaiming] = useState(false);
   const raffleWalletContract = useRaffleWalletContract();
+  const { setNotification } = useNotification();
 
-  const fetchRaffleETHDeposits = async () => {
-    setRaffleETHToClaim((prev) => ({ ...prev, loading: true }));
+  const fetchRaffleETHDeposits = async (reload = true) => {
+    setRaffleETHToClaim((prev) => ({ ...prev, loading: reload }));
     let deposits = await api.get_raffle_deposits_by_user(address);
     deposits = deposits.sort((a, b) => b.TimeStamp - a.TimeStamp);
     setRaffleETHToClaim({ data: deposits, loading: false });
@@ -124,21 +111,21 @@ const UserRaffleETH = ({ address }) => {
 
   const handleAllETHClaim = async () => {
     try {
-      setIsClaiming({
-        ...isClaiming,
-        raffleETH: true,
-      });
+      setIsClaiming(true);
       const res = await raffleWalletContract.withdraw();
       console.log(res);
       setTimeout(() => {
-        router.reload();
-      }, 4000);
+        fetchStatusData();
+        fetchRaffleETHDeposits(false);
+        setIsClaiming(false);
+      }, 2000);
     } catch (err) {
       console.log(err);
-      setIsClaiming({
-        ...isClaiming,
-        raffleETH: false,
-      });
+      if (err?.data?.message) {
+        const msg = getErrorMessage(err?.data?.message);
+        setNotification({ text: msg, type: "error", visible: true });
+      }
+      setIsClaiming(false);
     }
   };
 
@@ -191,7 +178,7 @@ const UserRaffleETH = ({ address }) => {
                     <Button
                       onClick={handleAllETHClaim}
                       variant="contained"
-                      disabled={isClaiming.raffleETH}
+                      disabled={isClaiming}
                     >
                       Claim All
                     </Button>
