@@ -238,7 +238,7 @@ const Statistics = () => {
               <Box display="flex" flexWrap="wrap" my={1}>
                 <Typography
                   color="primary"
-                  width={{ md: "400px", xs: "250px" }}
+                  width={{ md: "400px", xs: "200px" }}
                   mr={2}
                 >
                   Prize Claim Date

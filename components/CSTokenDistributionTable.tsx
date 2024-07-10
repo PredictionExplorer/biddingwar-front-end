@@ -11,6 +11,7 @@ import {
 import { Tr } from "react-super-responsive-table";
 import "react-super-responsive-table/dist/SuperResponsiveTableStyle.css";
 import { CustomPagination } from "./CustomPagination";
+import { AddressLink } from "./AddressLink";
 
 const CSTokenDistributionRow = ({ row }) => {
   if (!row) {
@@ -20,16 +21,7 @@ const CSTokenDistributionRow = ({ row }) => {
   return (
     <TablePrimaryRow>
       <TablePrimaryCell>
-        <Link
-          href={`/user/${row.OwnerAddr}`}
-          style={{
-            color: "inherit",
-            fontSize: "inherit",
-            fontFamily: "monospace",
-          }}
-        >
-          {row.OwnerAddr}
-        </Link>
+        <AddressLink address={row.OwnerAddr} url={`/user/${row.OwnerAddr}`} />
       </TablePrimaryCell>
       <TablePrimaryCell align="right">{row.NumTokens}</TablePrimaryCell>
     </TablePrimaryRow>

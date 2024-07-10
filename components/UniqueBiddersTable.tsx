@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Box, Link, TableBody, Typography } from "@mui/material";
+import { Box, Link, TableBody, Tooltip, Typography } from "@mui/material";
 import {
   TablePrimary,
   TablePrimaryCell,
@@ -11,6 +11,7 @@ import {
 import { Tr } from "react-super-responsive-table";
 import "react-super-responsive-table/dist/SuperResponsiveTableStyle.css";
 import { CustomPagination } from "./CustomPagination";
+import { AddressLink } from "./AddressLink";
 
 const UniqueBiddersRow = ({ bidder }) => {
   if (!bidder) {
@@ -20,16 +21,10 @@ const UniqueBiddersRow = ({ bidder }) => {
   return (
     <TablePrimaryRow>
       <TablePrimaryCell>
-        <Link
-          href={`/user/${bidder.BidderAddr}`}
-          style={{
-            color: "inherit",
-            fontSize: "inherit",
-            fontFamily: "monospace",
-          }}
-        >
-          {bidder.BidderAddr}
-        </Link>
+        <AddressLink
+          address={bidder.BidderAddr}
+          url={`/user/${bidder.BidderAddr}`}
+        />
       </TablePrimaryCell>
       <TablePrimaryCell align="center">{bidder.NumBids}</TablePrimaryCell>
       <TablePrimaryCell align="right">
