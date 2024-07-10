@@ -18,6 +18,10 @@ import useCosmicGameContract from "../hooks/useCosmicGameContract";
 import { formatSeconds } from "../utils";
 import { useNotification } from "../contexts/NotificationContext";
 import { ethers } from "ethers";
+import useContractNoSigner from "../hooks/useContractNoSigner";
+import CHARITY_WALLET_ABI from "../contracts/CharityWallet.json";
+import { CHARITY_WALLET_ADDRESS } from "../config/app";
+import { useActiveWeb3React } from "../hooks/web3";
 
 const ContractItem = ({ name, value, copyable = false }) => {
   const theme = useTheme();
@@ -78,12 +82,15 @@ const ContractItem = ({ name, value, copyable = false }) => {
 const Contracts = () => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [timeoutClaimPrize, setTimeoutClaimPrize] = useState(0);
   const [donateAmount, setDonateAmount] = useState("");
-  const [initialSecondsUntilPrize, setInitialSecondsUntilPrize] = useState(0);
-  const [auctionLength, setAuctionLength] = useState(0);
-  const cosmicGameContract = useCosmicGameContract();
   const { setNotification } = useNotification();
+  const [charityAddress, setCharityAddress] = useState("");
+  const cosmicGameContract = useCosmicGameContract();
+  const charityWalletContract = useContractNoSigner(
+    CHARITY_WALLET_ADDRESS,
+    CHARITY_WALLET_ABI
+  );
+  const { account } = useActiveWeb3React();
 
   const handleDonate = async () => {
     try {
@@ -119,17 +126,13 @@ const Contracts = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const timeout = await cosmicGameContract.timeoutClaimPrize();
-      setTimeoutClaimPrize(Number(timeout));
-      const initialSeconds = await cosmicGameContract.initialSecondsUntilPrize();
-      setInitialSecondsUntilPrize(Number(initialSeconds));
-      const auctionLength = await cosmicGameContract.RoundStartCSTAuctionLength();
-      setAuctionLength(Number(auctionLength));
+      const addr = await charityWalletContract.charityAddress();
+      setCharityAddress(addr);
     };
-    if (cosmicGameContract) {
+    if (charityWalletContract) {
       fetchData();
     }
-  }, [cosmicGameContract]);
+  }, [charityWalletContract]);
 
   return (
     <>
@@ -149,14 +152,14 @@ const Contracts = () => {
         ) : (
           <>
             <List sx={{ mt: 4 }}>
-              <ContractItem name="Network" value="Arbitrum Sepolia" />
-              <ContractItem name="Chain ID" value={421614} />
+              <ContractItem name="Network" value="Local Network" />
+              <ContractItem name="Chain ID" value={31337} />
               <ContractItem
                 name="Cosmic Game Address"
                 value={data?.ContractAddrs.CosmicGameAddr}
                 copyable={true}
               />
-              {!!cosmicGameContract && (
+              {!!account && (
                 <Box sx={{ display: "flex", p: 2 }}>
                   <Box sx={{ display: "flex", alignItems: "center", mr: 4 }}>
                     <TextField
@@ -250,17 +253,17 @@ const Contracts = () => {
                 name="Raffle NFT Winners for Bidding"
                 value={data.NumRaffleNFTWinnersBidding}
               />
-              <ContractItem
+              {/* <ContractItem
                 name="Raffle NFT Winners for Staking CST"
                 value={data.NumRaffleNFTWinnersStakingCST}
-              />
+              /> */}
               <ContractItem
                 name="Raffle NFT Winners for Staking Random Walk"
                 value={data.NumRaffleNFTWinnersStakingRWalk}
               />
               <ContractItem
                 name="Charity Address"
-                value={data.CharityAddr}
+                value={charityAddress}
                 copyable={true}
               />
               <ContractItem
@@ -274,16 +277,16 @@ const Contracts = () => {
               />
               <ContractItem
                 name="Auction Duration"
-                value={formatSeconds(auctionLength)}
+                value={formatSeconds(data?.RoundStartCSTAuctionLength)}
               />
               <ContractItem
                 name="Timeout to claim prize"
-                value={formatSeconds(timeoutClaimPrize)}
+                value={formatSeconds(data?.TimeoutClaimPrize)}
               />
               <ContractItem name="Maximum message length" value={280} />
               <ContractItem
                 name="Initial increment first bid"
-                value={formatSeconds(initialSecondsUntilPrize)}
+                value={formatSeconds(data?.InitialSecondsUntilPrize)}
               />
               <ContractItem
                 name="Random Walk contract address"

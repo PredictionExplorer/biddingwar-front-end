@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, TableBody, Typography } from "@mui/material";
+import { Box, Link, TableBody, Typography } from "@mui/material";
 import {
   TablePrimary,
   TablePrimaryCell,
@@ -28,7 +28,7 @@ const UniqueBiddersRow = ({ bidder }) => {
             fontFamily: "monospace",
           }}
         >
-          {/* {bidder.BidderAddr} */}
+          {bidder.BidderAddr}
         </Link>
       </TablePrimaryCell>
       <TablePrimaryCell align="center">{bidder.NumBids}</TablePrimaryCell>
@@ -46,7 +46,7 @@ export const UniqueBiddersTable = ({ list }) => {
     return <Typography>No bidders yet.</Typography>;
   }
   return (
-    <>
+    <Box sx={{ width: "100%" }}>
       <TablePrimaryContainer>
         <TablePrimary>
           <TablePrimaryHead>
@@ -73,6 +73,6 @@ export const UniqueBiddersTable = ({ list }) => {
         totalLength={list.length}
         perPage={perPage}
       />
-    </>
+    </Box>
   );
 };

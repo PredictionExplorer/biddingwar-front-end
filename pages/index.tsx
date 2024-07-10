@@ -59,7 +59,6 @@ import getErrorMessage from "../utils/alert";
 import NFTImage from "../components/NFTImage";
 import { calculateTimeDiff, formatSeconds } from "../utils";
 import WinningHistoryTable from "../components/WinningHistoryTable";
-import AlertDialog from "../components/AlertDialog";
 import Lightbox from "react-awesome-lightbox";
 import "react-awesome-lightbox/build/style.css";
 import { useRouter } from "next/router";
@@ -113,11 +112,6 @@ const NewHome = () => {
   const [claimHistory, setClaimHistory] = useState(null);
   const [imageOpen, setImageOpen] = useState(false);
   const [advancedExpanded, setAdvancedExpanded] = useState(false);
-  const [alertDlg, setAlertDlg] = useState({
-    title: "",
-    content: "",
-    open: false,
-  });
   const perPage = 12;
 
   const { library, account } = useActiveWeb3React();
@@ -157,10 +151,6 @@ const NewHome = () => {
       (props.dataItem.value * data?.CosmicGameBalanceEth) /
       100
     ).toFixed(4)} ETH)`;
-  };
-
-  const setAlertOpen = (status) => {
-    setAlertDlg((prev) => ({ ...prev, open: status }));
   };
 
   const onClaimPrize = async () => {
@@ -298,10 +288,11 @@ const NewHome = () => {
       }
       const enoughBalance = await checkBalance("ETH", newBidPrice);
       if (!enoughBalance) {
-        setAlertDlg({
-          title: "Insufficient ETH balance",
-          content: "There isn't enough ETH in you wallet.",
-          open: true,
+        setNotification({
+          visible: true,
+          type: "error",
+          text:
+            "Insufficient ETH balance! There isn't enough ETH in you wallet.",
         });
         setIsBidding(false);
         return;
@@ -428,10 +419,11 @@ const NewHome = () => {
       if (cstBidData?.CSTPrice > 0) {
         const enoughBalance = await checkBalance("CST", cstBidData?.CSTPrice);
         if (!enoughBalance) {
-          setAlertDlg({
-            title: "Insufficient CST balance",
-            content: "There isn't enough Cosmic Token in you wallet.",
-            open: true,
+          setNotification({
+            visible: true,
+            type: "error",
+            text:
+              "Insufficient CST balance! There isn't enough Cosmic Token in you wallet.",
           });
           setIsBidding(false);
           return;
@@ -1237,7 +1229,7 @@ const NewHome = () => {
                 and these people will win {data?.RafflePercentage}% of the pot.
                 Also, {data?.NumRaffleNFTWinnersBidding} additional winners and{" "}
                 {data?.NumRaffleNFTWinnersStakingRWalk} Random Walk NFT stakers
-                and {data?.NumRaffleNFTWinnersStakingCST} Cosmic Token stakers
+                {/* and {data?.NumRaffleNFTWinnersStakingCST} Cosmic Token stakers */}
                 will be chosen which will receive a Cosmic Signature NFT.
               </Typography>
             </Box>
@@ -1330,7 +1322,7 @@ const NewHome = () => {
               <GradientBorder sx={{ p: 2 }}>
                 <Typography variant="subtitle1" textAlign="center">
                   {data?.NumRaffleNFTWinnersBidding +
-                    data?.NumRaffleNFTWinnersStakingCST +
+                    // data?.NumRaffleNFTWinnersStakingCST +
                     data?.NumRaffleNFTWinnersStakingRWalk}{" "}
                   will receive
                 </Typography>
@@ -1436,12 +1428,6 @@ const NewHome = () => {
           <FAQ />
         </Box>
       </Container>
-      <AlertDialog
-        title={alertDlg.title}
-        content={alertDlg.content}
-        open={alertDlg.open}
-        setOpen={setAlertOpen}
-      />
       {imageOpen && (
         <Lightbox
           image={
@@ -1460,14 +1446,15 @@ const NewHome = () => {
 export default NewHome;
 
 // Todo:
+// mobile responsiveness
+// table, styledcard, wallet connect
+
+
+
 // how-to-play page, hide contract option from header
 // show previous round winner, history of winnings
 
-// donation receiver address on contract page
 // CST balance update
-// add donate button to contract page
-// fix contract page error
-// add my-statistics page
 // add donate button, donor list, add eth-donate list to user detail
 // update site-map and show link
 // add link to user-detail for marketing reward for user
