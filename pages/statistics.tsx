@@ -64,7 +64,9 @@ const StatisticsItem = ({ title, value }) => {
       <Typography color="primary" width={{ md: "400px", xs: "200px" }} mr={2}>
         {title}
       </Typography>
-      <Typography sx={{ flex: 1, wordBreak: "break-all" }}>{value}</Typography>
+      <Typography sx={{ flex: 1, wordBreak: "break-all", fontSize: "inherit" }}>
+        {value}
+      </Typography>
     </Box>
   );
 };
