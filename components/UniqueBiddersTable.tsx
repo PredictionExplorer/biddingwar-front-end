@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, TableBody, Typography } from "@mui/material";
+import { Box, Link, TableBody, Typography } from "@mui/material";
 import {
   TablePrimary,
   TablePrimaryCell,
@@ -46,7 +46,7 @@ export const UniqueBiddersTable = ({ list }) => {
     return <Typography>No bidders yet.</Typography>;
   }
   return (
-    <>
+    <Box>
       <TablePrimaryContainer>
         <TablePrimary>
           <TablePrimaryHead>
@@ -73,6 +73,6 @@ export const UniqueBiddersTable = ({ list }) => {
         totalLength={list.length}
         perPage={perPage}
       />
-    </>
+    </Box>
   );
 };
