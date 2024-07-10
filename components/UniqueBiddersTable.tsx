@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Box, Link, TableBody, Typography } from "@mui/material";
+import { Link, TableBody, Typography } from "@mui/material";
 import {
   TablePrimary,
   TablePrimaryCell,
@@ -42,37 +42,42 @@ const UniqueBiddersRow = ({ bidder }) => {
 export const UniqueBiddersTable = ({ list }) => {
   const perPage = 5;
   const [page, setPage] = useState(1);
-  if (list.length === 0) {
-    return <Typography>No bidders yet.</Typography>;
-  }
   return (
-    <Box>
-      <TablePrimaryContainer>
-        <TablePrimary>
-          <TablePrimaryHead>
-            <Tr>
-              <TablePrimaryHeadCell align="left">
-                Bidder Address
-              </TablePrimaryHeadCell>
-              <TablePrimaryHeadCell>Num Bids</TablePrimaryHeadCell>
-              <TablePrimaryHeadCell align="right">
-                Max Bid (ETH)
-              </TablePrimaryHeadCell>
-            </Tr>
-          </TablePrimaryHead>
-          <TableBody>
-            {list.slice((page - 1) * perPage, page * perPage).map((bidder) => (
-              <UniqueBiddersRow bidder={bidder} key={bidder.BidderAid} />
-            ))}
-          </TableBody>
-        </TablePrimary>
-      </TablePrimaryContainer>
-      <CustomPagination
-        page={page}
-        setPage={setPage}
-        totalLength={list.length}
-        perPage={perPage}
-      />
-    </Box>
+    <>
+      {list.length > 0 ? (
+        <>
+          <TablePrimaryContainer>
+            <TablePrimary>
+              <TablePrimaryHead>
+                <Tr>
+                  <TablePrimaryHeadCell align="left">
+                    Bidder Address
+                  </TablePrimaryHeadCell>
+                  <TablePrimaryHeadCell>Num Bids</TablePrimaryHeadCell>
+                  <TablePrimaryHeadCell align="right">
+                    Max Bid (ETH)
+                  </TablePrimaryHeadCell>
+                </Tr>
+              </TablePrimaryHead>
+              <TableBody>
+                {list
+                  .slice((page - 1) * perPage, page * perPage)
+                  .map((bidder) => (
+                    <UniqueBiddersRow bidder={bidder} key={bidder.BidderAid} />
+                  ))}
+              </TableBody>
+            </TablePrimary>
+          </TablePrimaryContainer>
+          <CustomPagination
+            page={page}
+            setPage={setPage}
+            totalLength={list.length}
+            perPage={perPage}
+          />
+        </>
+      ) : (
+        <Typography>No bidders yet.</Typography>
+      )}
+    </>
   );
 };
