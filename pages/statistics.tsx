@@ -61,10 +61,10 @@ function CustomTabPanel(props: TabPanelProps) {
 const StatisticsItem = ({ title, value }) => {
   return (
     <Box display="flex" my={1}>
-      <Typography color="primary" width={{ md: "400px", xs: "250px" }} mr={2}>
+      <Typography color="primary" width={{ md: "400px", xs: "200px" }} mr={2}>
         {title}
       </Typography>
-      <Typography sx={{ flex: 1 }}>{value}</Typography>
+      <Typography sx={{ flex: 1, wordBreak: "break-all" }}>{value}</Typography>
     </Box>
   );
 };
