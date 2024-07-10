@@ -1447,7 +1447,7 @@ export default NewHome;
 
 // Todo:
 // mobile responsiveness
-// table, styledcard, wallet connect
+// table, styledcard, wallet connect, text break
 
 
 
