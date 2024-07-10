@@ -1,11 +1,5 @@
-import React, { useState } from "react";
-import {
-  Box,
-  TableBody,
-  Link,
-  Typography,
-  Tooltip,
-} from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { Box, TableBody, Link, Typography, Tooltip } from "@mui/material";
 import {
   TablePrimaryContainer,
   TablePrimaryCell,
@@ -19,8 +13,9 @@ import router from "next/router";
 import { Tr } from "react-super-responsive-table";
 import "react-super-responsive-table/dist/SuperResponsiveTableStyle.css";
 import { CustomPagination } from "./CustomPagination";
+import api from "../services/api";
 
-const HistoryRow = ({ history }) => {
+const HistoryRow = ({ history, isBanned }) => {
   if (!history) {
     return <TablePrimaryRow />;
   }
@@ -90,9 +85,7 @@ const HistoryRow = ({ history }) => {
           )}) with ID ${history.NFTDonationTokenId} was donated`}{" "}
       </TablePrimaryCell>
       <TablePrimaryCell>
-        <Link
-          sx={{ textDecoration: "none", color: "inherit", fontSize: "inherit" }}
-        >
+        {!isBanned && (
           <Tooltip title={history.Message}>
             <Typography
               sx={{
@@ -104,18 +97,25 @@ const HistoryRow = ({ history }) => {
                 textOverflow: "ellipsis",
                 lineHeight: 1,
               }}
-              component="span"
             >
               {history.Message}
             </Typography>
           </Tooltip>
-        </Link>
+        )}
       </TablePrimaryCell>
     </TablePrimaryRow>
   );
 };
 
 const HistoryTable = ({ biddingHistory, perPage, curPage }) => {
+  const [bannedList, setBannedList] = useState([]);
+  const getBannedList = async () => {
+    const bids = await api.get_banned_bids();
+    setBannedList(bids.map((x) => x.bid_id));
+  };
+  useEffect(() => {
+    getBannedList();
+  }, []);
   return (
     <TablePrimaryContainer>
       <TablePrimary>
@@ -134,7 +134,11 @@ const HistoryTable = ({ biddingHistory, perPage, curPage }) => {
           {biddingHistory
             .slice((curPage - 1) * perPage, curPage * perPage)
             .map((history, i) => (
-              <HistoryRow history={history} key={i} />
+              <HistoryRow
+                history={history}
+                key={history.EvtLogId}
+                isBanned={bannedList.includes(history.EvtLogId)}
+              />
             ))}
         </TableBody>
       </TablePrimary>

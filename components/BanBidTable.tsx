@@ -22,16 +22,30 @@ import { CustomPagination } from "./CustomPagination";
 import { AddressLink } from "./AddressLink";
 import api from "../services/api";
 import { useActiveWeb3React } from "../hooks/web3";
+import { useNotification } from "../contexts/NotificationContext";
 
-const HistoryRow = ({ history }) => {
+const HistoryRow = ({ history, isBanned, updateBannedList }) => {
   const { account } = useActiveWeb3React();
+  const { setNotification } = useNotification();
   const handleBan = async () => {
     const res = await api.ban_bid(history.EvtLogId, account);
     console.log(res);
+    updateBannedList();
+    setNotification({
+      visible: true,
+      type: "success",
+      text: "Bid was banned successfully!",
+    });
   };
   const handleUnban = async () => {
     const res = await api.unban_bid(history.EvtLogId);
     console.log(res);
+    updateBannedList();
+    setNotification({
+      visible: true,
+      type: "success",
+      text: "Bid was unbanned successfully!",
+    });
   };
   if (!history) {
     return <TablePrimaryRow />;
@@ -61,7 +75,7 @@ const HistoryRow = ({ history }) => {
       <TablePrimaryCell align="center">
         <AddressLink
           address={history.BidderAddr}
-          url={`/url/${history.BidderAddr}`}
+          url={`/user/${history.BidderAddr}`}
         />
       </TablePrimaryCell>
       <TablePrimaryCell align="center">
@@ -82,43 +96,45 @@ const HistoryRow = ({ history }) => {
           : "ETH Bid"}
       </TablePrimaryCell>
       <TablePrimaryCell>
-        <Link
-          sx={{ textDecoration: "none", color: "inherit", fontSize: "inherit" }}
-        >
-          <Tooltip title={history.Message}>
-            <Typography
-              sx={{
-                fontSize: "inherit !important",
-                maxWidth: "180px",
-                overflow: "hidden",
-                whiteSpace: "nowrap",
-                display: "inline-block",
-                textOverflow: "ellipsis",
-                lineHeight: 1,
-              }}
-              component="span"
-            >
-              {history.Message}
-            </Typography>
-          </Tooltip>
-        </Link>
+        <Tooltip title={history.Message}>
+          <Typography
+            sx={{
+              fontSize: "inherit !important",
+              maxWidth: "180px",
+              overflow: "hidden",
+              whiteSpace: "nowrap",
+              display: "inline-block",
+              textOverflow: "ellipsis",
+              lineHeight: 1,
+            }}
+          >
+            {history.Message}
+          </Typography>
+        </Tooltip>
       </TablePrimaryCell>
       <TablePrimaryCell align="center">
-        <Button size="small" onClick={handleBan}>
-          Ban
-        </Button>
+        {isBanned ? (
+          <Button size="small" onClick={handleUnban}>
+            Unban
+          </Button>
+        ) : (
+          <Button size="small" onClick={handleBan}>
+            Ban
+          </Button>
+        )}
       </TablePrimaryCell>
     </TablePrimaryRow>
   );
 };
 
 const HistoryTable = ({ biddingHistory, perPage, curPage }) => {
+  const [bannedList, setBannedList] = useState([]);
+  const getBannedList = async () => {
+    const bids = await api.get_banned_bids();
+    setBannedList(bids.map((x) => x.bid_id));
+  };
   useEffect(() => {
-    const fetchData = async () => {
-      const bids = await api.get_banned_bids();
-      console.log(bids);
-    };
-    fetchData();
+    getBannedList();
   }, []);
 
   return (
@@ -138,7 +154,12 @@ const HistoryTable = ({ biddingHistory, perPage, curPage }) => {
           {biddingHistory
             .slice((curPage - 1) * perPage, curPage * perPage)
             .map((history) => (
-              <HistoryRow history={history} key={history.EvtLogId} />
+              <HistoryRow
+                history={history}
+                key={history.EvtLogId}
+                isBanned={bannedList.includes(history.EvtLogId)}
+                updateBannedList={getBannedList}
+              />
             ))}
         </TableBody>
       </TablePrimary>
