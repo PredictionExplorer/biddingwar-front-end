@@ -245,7 +245,7 @@ const Statistics = () => {
                 >
                   Prize Claim Date
                 </Typography>
-                <Box>
+                <>
                   <Typography>
                     {convertTimestampToDateTime(data.PrizeClaimTs)}
                   </Typography>
@@ -255,7 +255,7 @@ const Statistics = () => {
                       renderer={renderer}
                     />
                   )}
-                </Box>
+                </>
               </Box>
               <StatisticsItem
                 title="Last Bidder"
