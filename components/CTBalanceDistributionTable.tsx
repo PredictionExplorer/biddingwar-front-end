@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, TableBody, Typography } from "@mui/material";
+import { TableBody, Typography } from "@mui/material";
 import {
   TablePrimary,
   TablePrimaryCell,

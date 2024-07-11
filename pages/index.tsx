@@ -64,6 +64,7 @@ import "react-awesome-lightbox/build/style.css";
 import { useRouter } from "next/router";
 import { CustomPagination } from "../components/CustomPagination";
 import { useNotification } from "../contexts/NotificationContext";
+import RaffleHolderTable from "../components/RaffleHolderTable";
 
 const bidParamsEncoding: ethers.utils.ParamType = {
   type: "tuple(string,int256)",
@@ -1286,7 +1287,9 @@ const NewHome = () => {
             you are also buying a raffle ticket. When the round ends, there
             are&nbsp;
             {data?.NumRaffleEthWinnersBidding +
-              data?.NumRaffleNFTWinnersBidding}
+              data?.NumRaffleNFTWinnersBidding +
+              // data?.NumRaffleNFTWinnersStakingCST +
+              data?.NumRaffleNFTWinnersStakingRWalk}
             &nbsp;raffle winners:
           </Typography>
           <Box textAlign="center" mb={6}>
@@ -1397,6 +1400,12 @@ const NewHome = () => {
           </Box>
           <BiddingHistory biddingHistory={curBidList} />
         </Box>
+        <Box mt={10}>
+            <Typography variant="h6">
+              TOP RAFFLE TICKETS HOLDERS
+            </Typography>
+          <RaffleHolderTable list={curBidList} />
+        </Box>
       </MainWrapper>
 
       <LatestNFTs />
@@ -1448,8 +1457,6 @@ export default NewHome;
 // Todo:
 // mobile responsiveness
 // table, styledcard, wallet connect, text break
-
-
 
 // how-to-play page, hide contract option from header
 // show previous round winner, history of winnings
