@@ -1310,10 +1310,7 @@ const NewHome = () => {
             <Grid item xs={12} sm={12} md={6} lg={6}>
               <GradientBorder sx={{ p: 2 }}>
                 <Typography variant="subtitle1" textAlign="center">
-                  {data?.NumRaffleNFTWinnersBidding +
-                    // data?.NumRaffleNFTWinnersStakingCST +
-                    data?.NumRaffleNFTWinnersStakingRWalk}{" "}
-                  will receive
+                  {data?.NumRaffleNFTWinnersBidding} will receive
                 </Typography>
                 <GradientText variant="h4" textAlign="center">
                   1 Cosmic NFT
@@ -1392,9 +1389,7 @@ const NewHome = () => {
             list={curBidList}
             numRaffleWinner={
               data?.NumRaffleEthWinnersBidding +
-              data?.NumRaffleNFTWinnersBidding +
-              // data?.NumRaffleNFTWinnersStakingCST +
-              data?.NumRaffleNFTWinnersStakingRWalk
+              data?.NumRaffleNFTWinnersBidding
             }
           />
         </Box>
