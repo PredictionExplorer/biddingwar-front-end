@@ -65,7 +65,6 @@ import { useRouter } from "next/router";
 import { CustomPagination } from "../components/CustomPagination";
 import { useNotification } from "../contexts/NotificationContext";
 import RaffleHolderTable from "../components/RaffleHolderTable";
-import { UniqueBiddersTable } from "../components/UniqueBiddersTable";
 
 const bidParamsEncoding: ethers.utils.ParamType = {
   type: "tuple(string,int256)",
@@ -97,7 +96,6 @@ const NewHome = () => {
   const [curBidList, setCurBidList] = useState([]);
   const [winProbability, setWinProbability] = useState(null);
   const [donatedNFTs, setDonatedNFTs] = useState([]);
-  const [uniqueBidders, setUniqueBidders] = useState(null);
   const [prizeTime, setPrizeTime] = useState(0);
   const [timeoutClaimPrize, setTimeoutClaimPrize] = useState(0);
   const [prizeInfo, setPrizeInfo] = useState(null);
@@ -488,9 +486,6 @@ const NewHome = () => {
     setCurBidList(newBidData);
     const nftData = await api.get_donations_nft_by_round(round);
     setDonatedNFTs(nftData);
-    let uniqueBidders = await api.get_unique_bidders();
-    uniqueBidders = uniqueBidders.sort((a, b) => b.NumBids - a.NumBids);
-    setUniqueBidders(uniqueBidders);
     setData((prevData) => {
       if (
         account !== newData?.LastBidderAddr &&
@@ -1409,16 +1404,6 @@ const NewHome = () => {
 
       <Container>
         <Box mt="60px">
-          <Typography variant="h4" textAlign="center" mb={6}>
-            Unique Bidders
-          </Typography>
-          {uniqueBidders === null ? (
-            <Typography variant="h6">Loading...</Typography>
-          ) : (
-            <UniqueBiddersTable list={uniqueBidders} />
-          )}
-        </Box>
-        <Box mt="80px">
           <Typography variant="h4" textAlign="center" mb={6}>
             History of Winnings
           </Typography>
