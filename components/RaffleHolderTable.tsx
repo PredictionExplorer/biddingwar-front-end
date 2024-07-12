@@ -35,7 +35,6 @@ const HolderRow = ({ holder }) => {
 };
 
 const RaffleHolderTable = ({ list, numRaffleWinner }) => {
-  console.log(list.length, numRaffleWinner);
   const perPage = 5;
   const [page, setPage] = useState(1);
   const [holderList, setHolderList] = useState([]);
