@@ -35,19 +35,20 @@ const HolderRow = ({ holder }) => {
 };
 
 const RaffleHolderTable = ({ list, numRaffleWinner }) => {
+  console.log(list.length, numRaffleWinner);
   const perPage = 5;
   const [page, setPage] = useState(1);
   const [holderList, setHolderList] = useState([]);
 
   useEffect(() => {
     const groupAndCountByBidderAddr = (events) => {
-      const result: { [key: string]: { count: number; roundNum: number } } = {};
+      const result: { [key: string]: { count: number } } = {};
 
       events.forEach((event) => {
         if (result[event.BidderAddr]) {
           result[event.BidderAddr].count++;
         } else {
-          result[event.BidderAddr] = { count: 1, roundNum: event.RoundNum };
+          result[event.BidderAddr] = { count: 1 };
         }
       });
 
@@ -55,7 +56,6 @@ const RaffleHolderTable = ({ list, numRaffleWinner }) => {
         .map(([bidderAddr, data]) => ({
           userAddr: bidderAddr,
           count: data.count,
-          roundNum: data.roundNum,
           probability:
             1 -
             Math.pow((list.length - data.count) / list.length, numRaffleWinner),

@@ -1396,6 +1396,7 @@ const NewHome = () => {
           <RaffleHolderTable
             list={curBidList}
             numRaffleWinner={
+              data?.NumRaffleEthWinnersBidding +
               data?.NumRaffleNFTWinnersBidding +
               // data?.NumRaffleNFTWinnersStakingCST +
               data?.NumRaffleNFTWinnersStakingRWalk
