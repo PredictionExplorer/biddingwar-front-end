@@ -588,23 +588,9 @@ const NewHome = () => {
   }, []);
 
   useEffect(() => {
-    const factorial = (n) => {
-      if (n === 0 || n === 1) return 1;
-      let result = 1;
-      for (let i = 2; i <= n; i++) {
-        result *= i;
-      }
-      return result;
-    };
-    const combination = (n, k) => {
-      if (k > n) return 0;
-      return factorial(n) / (factorial(k) * factorial(n - k));
-    };
     const probabilityOfSelection = (totalBids, chosenBids, yourBids) => {
-      const totalWays = combination(totalBids, chosenBids);
-      const excludeYourBidsWays = combination(totalBids - yourBids, chosenBids);
-      const includeYourBidsWays = totalWays - excludeYourBidsWays;
-      const probability = includeYourBidsWays / totalWays;
+      const probability =
+        1 - Math.pow((totalBids - yourBids) / totalBids, chosenBids);
       return probability;
     };
 
@@ -1407,7 +1393,14 @@ const NewHome = () => {
         </Box>
         <Box mt={10}>
           <Typography variant="h6">TOP RAFFLE TICKETS HOLDERS</Typography>
-          <RaffleHolderTable list={curBidList} />
+          <RaffleHolderTable
+            list={curBidList}
+            numRaffleWinner={
+              data?.NumRaffleNFTWinnersBidding +
+              // data?.NumRaffleNFTWinnersStakingCST +
+              data?.NumRaffleNFTWinnersStakingRWalk
+            }
+          />
         </Box>
       </MainWrapper>
 
