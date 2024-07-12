@@ -12,12 +12,12 @@ import "react-super-responsive-table/dist/SuperResponsiveTableStyle.css";
 import { Tr } from "react-super-responsive-table";
 import { CustomPagination } from "./CustomPagination";
 import { AddressLink } from "./AddressLink";
+import { isMobile } from "react-device-detect";
 
 const HolderRow = ({ holder }) => {
   if (!holder) {
     return <TablePrimaryRow />;
   }
-
   return (
     <TablePrimaryRow>
       <TablePrimaryCell align="left">
@@ -34,7 +34,10 @@ const HolderRow = ({ holder }) => {
           {holder.roundNum}
         </Link>
       </TablePrimaryCell>
-      <TablePrimaryCell align="center">{holder.count * 8}</TablePrimaryCell>
+      <TablePrimaryCell align="center">{holder.count}</TablePrimaryCell>
+      <TablePrimaryCell align="center">
+        {holder.probability.toFixed(2)}%
+      </TablePrimaryCell>
     </TablePrimaryRow>
   );
 };
@@ -61,6 +64,7 @@ const RaffleHolderTable = ({ list }) => {
           userAddr: bidderAddr,
           count: data.count,
           roundNum: data.roundNum,
+          probability: data.count / list.length,
         }))
         .sort((a, b) => b.count - a.count);
     };
@@ -75,6 +79,14 @@ const RaffleHolderTable = ({ list }) => {
     <>
       <TablePrimaryContainer>
         <TablePrimary>
+          {!isMobile && (
+            <colgroup>
+              <col width="25%" />
+              <col width="25%" />
+              <col width="25%" />
+              <col width="25%" />
+            </colgroup>
+          )}
           <TablePrimaryHead>
             <Tr>
               <TablePrimaryHeadCell align="left">Holder</TablePrimaryHeadCell>
@@ -83,6 +95,9 @@ const RaffleHolderTable = ({ list }) => {
               </TablePrimaryHeadCell>
               <TablePrimaryHeadCell align="center">
                 Number of Raffle Tickets
+              </TablePrimaryHeadCell>
+              <TablePrimaryHeadCell align="center">
+                Probability of Winning
               </TablePrimaryHeadCell>
             </Tr>
           </TablePrimaryHead>
