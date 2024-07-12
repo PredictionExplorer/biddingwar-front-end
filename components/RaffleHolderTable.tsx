@@ -37,7 +37,7 @@ const HolderRow = ({ holder }) => {
 const RaffleHolderTable = ({ list, numRaffleWinner }) => {
   const perPage = 5;
   const [page, setPage] = useState(1);
-  const [holderList, setHolderList] = useState([]);
+  const [holderList, setHolderList] = useState(null);
 
   useEffect(() => {
     const groupAndCountByBidderAddr = (events) => {
@@ -61,50 +61,60 @@ const RaffleHolderTable = ({ list, numRaffleWinner }) => {
         }))
         .sort((a, b) => b.count - a.count);
     };
-    const holders = groupAndCountByBidderAddr(list);
-    setHolderList(holders);
-  }, [list]);
+    if (numRaffleWinner) {
+      const holders = groupAndCountByBidderAddr(list);
+      setHolderList(holders);
+    }
+  }, [list, numRaffleWinner]);
 
   if (list.length === 0) {
     return <Typography>No holders yet.</Typography>;
   }
   return (
     <>
-      <TablePrimaryContainer>
-        <TablePrimary>
-          {!isMobile && (
-            <colgroup>
-              <col width="40%" />
-              <col width="30%" />
-              <col width="30%" />
-            </colgroup>
-          )}
-          <TablePrimaryHead>
-            <Tr>
-              <TablePrimaryHeadCell align="left">Holder</TablePrimaryHeadCell>
-              <TablePrimaryHeadCell align="center">
-                Number of Raffle Tickets
-              </TablePrimaryHeadCell>
-              <TablePrimaryHeadCell align="center">
-                Probability of Winning
-              </TablePrimaryHeadCell>
-            </Tr>
-          </TablePrimaryHead>
-          <TableBody>
-            {holderList
-              .slice((page - 1) * perPage, page * perPage)
-              .map((holder) => (
-                <HolderRow key={holder.userAddr} holder={holder} />
-              ))}
-          </TableBody>
-        </TablePrimary>
-      </TablePrimaryContainer>
-      <CustomPagination
-        page={page}
-        setPage={setPage}
-        totalLength={holderList.length}
-        perPage={perPage}
-      />
+      {holderList === null ? (
+        <Typography variant="h6">Loading...</Typography>
+      ) : (
+        <>
+          <TablePrimaryContainer>
+            <TablePrimary>
+              {!isMobile && (
+                <colgroup>
+                  <col width="40%" />
+                  <col width="30%" />
+                  <col width="30%" />
+                </colgroup>
+              )}
+              <TablePrimaryHead>
+                <Tr>
+                  <TablePrimaryHeadCell align="left">
+                    Holder
+                  </TablePrimaryHeadCell>
+                  <TablePrimaryHeadCell align="center">
+                    Number of Raffle Tickets
+                  </TablePrimaryHeadCell>
+                  <TablePrimaryHeadCell align="center">
+                    Probability of Winning
+                  </TablePrimaryHeadCell>
+                </Tr>
+              </TablePrimaryHead>
+              <TableBody>
+                {holderList
+                  .slice((page - 1) * perPage, page * perPage)
+                  .map((holder) => (
+                    <HolderRow key={holder.userAddr} holder={holder} />
+                  ))}
+              </TableBody>
+            </TablePrimary>
+          </TablePrimaryContainer>
+          <CustomPagination
+            page={page}
+            setPage={setPage}
+            totalLength={holderList.length}
+            perPage={perPage}
+          />
+        </>
+      )}
     </>
   );
 };
