@@ -1273,9 +1273,7 @@ const NewHome = () => {
             you are also buying a raffle ticket. When the round ends, there
             are&nbsp;
             {data?.NumRaffleEthWinnersBidding +
-              data?.NumRaffleNFTWinnersBidding +
-              // data?.NumRaffleNFTWinnersStakingCST +
-              data?.NumRaffleNFTWinnersStakingRWalk}
+              data?.NumRaffleNFTWinnersBidding}
             &nbsp;raffle winners:
           </Typography>
           <Box textAlign="center" mb={6}>
