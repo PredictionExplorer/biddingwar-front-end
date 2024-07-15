@@ -656,6 +656,11 @@ const NewHome = () => {
         >
           <CircularProgress color="inherit" />
         </Backdrop>
+
+        <Typography variant="h4" textAlign="center" color="primary" mb={2}>
+          BETA ON ARBITRUM SEPOLIA TESTNET
+        </Typography>
+
         <Grid container spacing={{ lg: 16, md: 8, sm: 8, xs: 4 }} mb={4}>
           <Grid item sm={12} md={6}>
             {!loading && (
