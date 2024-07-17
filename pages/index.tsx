@@ -1404,7 +1404,7 @@ const NewHome = () => {
       <LatestNFTs />
 
       <Container>
-        <Box mt="60px">
+        <Box mt="60px" mb={10}>
           <Typography variant="h4" textAlign="center" mb={6}>
             History of Winnings
           </Typography>
@@ -1413,21 +1413,6 @@ const NewHome = () => {
           ) : (
             <WinningHistoryTable winningHistory={claimHistory} />
           )}
-        </Box>
-
-        <Box sx={{ padding: "90px 0 80px" }}>
-          <Typography variant="h4" textAlign="center">
-            FAQ&#39;S
-          </Typography>
-          <Box textAlign="center" marginBottom="56px">
-            <Image
-              src={"/images/divider.svg"}
-              width={93}
-              height={3}
-              alt="divider"
-            />
-          </Box>
-          <FAQ />
         </Box>
       </Container>
       {imageOpen && (
