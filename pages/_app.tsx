@@ -29,7 +29,6 @@ import { CookiesProvider } from 'react-cookie'
 import { StakedTokenProvider } from '../contexts/StakedTokenContext'
 import { SystemModeProvider } from '../contexts/SystemModeContext'
 import { NotificationProvider } from '../contexts/NotificationContext'
-import { formatId } from '../utils'
 
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache()
@@ -38,8 +37,32 @@ interface MyAppProps extends AppProps {
   emotionCache?: EmotionCache
 }
 
+const defaultTitle = "Cosmic Signature";
+const defaultDescription = "Cosmic Signature is a strategy bidding game.";
+const defaultImage = "https://cosmic-game2.s3.us-east-2.amazonaws.com/logo.png";
+
+interface OpenGraphDataItem {
+  property?: string;
+  name?: string;
+  content: string;
+}
+
+const defaultOpenGraphData = [
+  { property: "og:type", content: "website" },
+  { property: "og:site_name", content: defaultTitle },
+  { property: "og:description", content: defaultDescription },
+  { property: "og:title", content: defaultTitle },
+  { property: "og:image", content: defaultImage },
+  { name: "twitter:card", content: "summary_large_image" },
+  { name: "twitter:title", content: defaultTitle },
+  { name: "twitter:description", content: defaultDescription },
+  { name: "twitter:image", content: defaultImage },
+];
+
+
 function MyApp(props: MyAppProps) {
   const { Component, emotionCache = clientSideEmotionCache, pageProps } = props
+  const { openGraphData = defaultOpenGraphData, title, description } = pageProps;
   const router = useRouter()
   useEffect(() => {
     const handleRouteChange = (url) => {
@@ -50,66 +73,21 @@ function MyApp(props: MyAppProps) {
       router.events.off('routeChangeComplete', handleRouteChange)
     }
   }, [router.events])
-  const canonicalUrl = (`https://www.randomwalknft.com` + (router.asPath === "/" ? "": router.asPath)).split("?")[0];
 
   return (
     <>
       <Head>
-        <title>Cosmic Signature</title>
+        <title>{title || defaultTitle}</title>
         <meta name="viewport" content="width=device-width,initial-scale=1" />
         <meta name="theme-color" content={theme.palette.primary.main} />
         <meta
           name="google-site-verification"
           content="ZUw5gzqw7CFIEZgCJ2pLy-MhDe7Fdotpc31fS75v3dE"
         />
-        <meta
-          name="description"
-          content="Cosmic Signature is a strategy bidding game."
-        />
-        <meta property="og:image" content="https://cosmic-game2.s3.us-east-2.amazonaws.com/logo.png" />
-        <link rel="canonical" href={canonicalUrl} />
-        {pageProps.tokenId >=0 && (
-          <>
-            <meta
-              name="description"
-              content={`Discover the unique attributes and ownership history of Cosmic Signature Token #${pageProps.tokenId}, an exclusive digital collectible from the Cosmic Signature game.`}
-            />
-            <meta
-              property="og:title"
-              content={`Cosmic Signature Token: Details for ${formatId(pageProps.tokenId)}`}
-            />
-            <meta
-              property="og:image"
-              content={`https://cosmic-game2.s3.us-east-2.amazonaws.com/${pageProps.tokenId
-                .toString()
-                .padStart(6, "0")}.png`}
-            />
-            <meta
-              property="og:description"
-              content={`Programmatically generated CosmicSignature image and video NFTs. ETH spent on minting goes back to the minters. These are the details for ${formatId(
-                pageProps.tokenId
-              )}`}
-            />
-    
-            <meta name="twitter:card" content="summary" />
-            <meta
-              name="twitter:title"
-              content={`Cosmic Signature Token: Details for ${formatId(pageProps.tokenId)}`}
-            />
-            <meta
-              name="twitter:image"
-              content={`https://cosmic-game2.s3.us-east-2.amazonaws.com/${pageProps.tokenId
-                .toString()
-                .padStart(6, "0")}.png`}
-            />
-            <meta
-              name="twitter:description"
-              content={`Programmatically generated CosmicSignature image and video NFTs. ETH spent on minting goes back to the minters. These are the details for ${formatId(
-                pageProps.tokenId
-              )}`}
-            />
-          </>
-        )}
+        <meta name="description" content={description || defaultDescription} />
+        {openGraphData.map((og: OpenGraphDataItem) => (
+          <meta key={og.property || og.name} {...og} />
+        ))}
       </Head>
       <Web3ReactProvider getLibrary={getLibrary}>
         <Web3ProviderNetwork getLibrary={getLibrary}>

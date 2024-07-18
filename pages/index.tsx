@@ -65,6 +65,7 @@ import { useRouter } from "next/router";
 import { CustomPagination } from "../components/CustomPagination";
 import { useNotification } from "../contexts/NotificationContext";
 import RaffleHolderTable from "../components/RaffleHolderTable";
+import { GetServerSideProps } from "next";
 
 const bidParamsEncoding: ethers.utils.ParamType = {
   type: "tuple(string,int256)",
@@ -1437,6 +1438,26 @@ const NewHome = () => {
       )}
     </>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async () => {
+  const title = "Cosmic Signature";
+  const data = await api.get_dashboard_info();
+  const description = `Cosmic Signature is a strategy bidding game. In an exhilarating contest, players will bid against other players and against time to win exciting ${data?.PrizeAmountEth.toFixed(
+    4
+  )}ETH prizes and Cosmic Signature NFTs.`;
+  const imageUrl = "https://cosmic-game2.s3.us-east-2.amazonaws.com/logo.png";
+
+  const openGraphData = [
+    { property: "og:title", content: title },
+    { property: "og:description", content: description },
+    { property: "og:image", content: imageUrl },
+    { name: "twitter:title", content: title },
+    { name: "twitter:description", content: description },
+    { name: "twitter:image", content: imageUrl },
+  ];
+
+  return { props: { title, description, openGraphData } };
 };
 
 export default NewHome;
