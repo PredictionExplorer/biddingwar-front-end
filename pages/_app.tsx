@@ -63,7 +63,7 @@ function MyApp(props: MyAppProps) {
         />
         <meta
           name="description"
-          content="Cosmic Signature is a strategy bidding game."
+          content="Cosmic Signature is a strategy bidding game.1"
         />
         <meta property="og:image" content="https://cosmic-game2.s3.us-east-2.amazonaws.com/logo.png" />
         <link rel="canonical" href={canonicalUrl} />
