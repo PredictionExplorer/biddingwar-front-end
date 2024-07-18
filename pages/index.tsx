@@ -1265,6 +1265,78 @@ const NewHome = () => {
             </ChartSeries>
           </Chart>
         </Box>
+        <Box mt={10}>
+          <Typography variant="h6">TOP RAFFLE TICKETS HOLDERS</Typography>
+          <RaffleHolderTable
+            list={curBidList}
+            numRaffleWinner={
+              data?.NumRaffleEthWinnersBidding +
+              data?.NumRaffleNFTWinnersBidding
+            }
+          />
+        </Box>
+        <Box marginTop={10}>
+          <Box>
+            <Typography variant="h6" component="span">
+              DONATED
+            </Typography>
+            <Typography variant="h6" color="primary" component="span" mx={1}>
+              ERC721 TOKENS
+            </Typography>
+            <Typography variant="h6" component="span">
+              FOR CURRENT ROUND
+            </Typography>
+          </Box>
+          {donatedNFTs.length > 0 ? (
+            <>
+              <Grid container spacing={2} mt={2}>
+                {donatedNFTs.map((nft) => (
+                  <Grid
+                    item
+                    key={nft.RecordId}
+                    xs={gridLayout.xs}
+                    sm={gridLayout.sm}
+                    md={gridLayout.md}
+                    lg={gridLayout.lg}
+                  >
+                    <DonatedNFT nft={nft} />
+                  </Grid>
+                ))}
+              </Grid>
+              <CustomPagination
+                page={curPage}
+                setPage={setCurrentPage}
+                totalLength={donatedNFTs.length}
+                perPage={perPage}
+              />
+            </>
+          ) : (
+            <Typography mt={2}>
+              No ERC721 tokens were donated on this round.
+            </Typography>
+          )}
+        </Box>
+        <Box mt={10}>
+          <Box>
+            <Typography variant="h6" component="span">
+              CURRENT ROUND
+            </Typography>
+            <Typography
+              variant="h6"
+              component="span"
+              color="primary"
+              sx={{ ml: 1 }}
+            >
+              BID HISTORY
+            </Typography>
+          </Box>
+          <BiddingHistory biddingHistory={curBidList} />
+        </Box>
+      </MainWrapper>
+
+      <LatestNFTs />
+
+      <Container>
         <Prize prizeAmount={data?.PrizeAmountEth || 0} />
         <Box margin="50px 0">
           <Typography variant="h4" textAlign="center">
@@ -1332,79 +1404,7 @@ const NewHome = () => {
             </Grid>
           </Grid>
         </Box>
-        <Box marginTop={10}>
-          <Box>
-            <Typography variant="h6" component="span">
-              DONATED
-            </Typography>
-            <Typography variant="h6" color="primary" component="span" mx={1}>
-              ERC721 TOKENS
-            </Typography>
-            <Typography variant="h6" component="span">
-              FOR CURRENT ROUND
-            </Typography>
-          </Box>
-          {donatedNFTs.length > 0 ? (
-            <>
-              <Grid container spacing={2} mt={2}>
-                {donatedNFTs.map((nft) => (
-                  <Grid
-                    item
-                    key={nft.RecordId}
-                    xs={gridLayout.xs}
-                    sm={gridLayout.sm}
-                    md={gridLayout.md}
-                    lg={gridLayout.lg}
-                  >
-                    <DonatedNFT nft={nft} />
-                  </Grid>
-                ))}
-              </Grid>
-              <CustomPagination
-                page={curPage}
-                setPage={setCurrentPage}
-                totalLength={donatedNFTs.length}
-                perPage={perPage}
-              />
-            </>
-          ) : (
-            <Typography mt={2}>
-              No ERC721 tokens were donated on this round.
-            </Typography>
-          )}
-        </Box>
-        <Box mt={10}>
-          <Box>
-            <Typography variant="h6" component="span">
-              CURRENT ROUND
-            </Typography>
-            <Typography
-              variant="h6"
-              component="span"
-              color="primary"
-              sx={{ ml: 1 }}
-            >
-              BID HISTORY
-            </Typography>
-          </Box>
-          <BiddingHistory biddingHistory={curBidList} />
-        </Box>
-        <Box mt={10}>
-          <Typography variant="h6">TOP RAFFLE TICKETS HOLDERS</Typography>
-          <RaffleHolderTable
-            list={curBidList}
-            numRaffleWinner={
-              data?.NumRaffleEthWinnersBidding +
-              data?.NumRaffleNFTWinnersBidding
-            }
-          />
-        </Box>
-      </MainWrapper>
-
-      <LatestNFTs />
-
-      <Container>
-        <Box mt="60px" mb={10}>
+        <Box margin="100px 0">
           <Typography variant="h4" textAlign="center" mb={6}>
             History of Winnings
           </Typography>
