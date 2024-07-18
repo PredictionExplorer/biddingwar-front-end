@@ -8,7 +8,12 @@ const Detail = ({ tokenId }) => {
   return (
     <>
       <Head>
-        <title>NFT #{tokenId} | Cosmic Signature Token</title>
+        <title>Token #{tokenId} | Cosmic Signature Token</title>
+        <meta
+          name="description"
+          content={`Discover the unique attributes and ownership history of Cosmic Signature Token #${tokenId}, an exclusive digital collectible from the Cosmic Signature game.`}
+          key="description"
+        />
         <meta
           property="og:title"
           content={`Cosmic Signature Token: Details for ${formatId(tokenId)}`}
