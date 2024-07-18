@@ -61,11 +61,6 @@ function MyApp(props: MyAppProps) {
           name="google-site-verification"
           content="ZUw5gzqw7CFIEZgCJ2pLy-MhDe7Fdotpc31fS75v3dE"
         />
-        <meta
-          name="description"
-          content="Cosmic Signature is a strategy bidding game."
-          key="defaultDescription"
-        />
         <meta property="og:image" content="https://cosmic-game2.s3.us-east-2.amazonaws.com/logo.png" />
         <link rel="canonical" href={canonicalUrl} />
       </Head>
