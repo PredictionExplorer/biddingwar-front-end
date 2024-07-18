@@ -37,7 +37,6 @@ import useRWLKNFTContract from "../hooks/useRWLKNFTContract";
 import { useActiveWeb3React } from "../hooks/web3";
 import { ART_BLOCKS_ADDRESS, COSMICGAME_ADDRESS } from "../config/app";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import FAQ from "../components/FAQ";
 import { ArrowForward } from "@mui/icons-material";
 import NFT_ABI from "../contracts/RandomWalkNFT.json";
 import PaginationRWLKGrid from "../components/PaginationRWLKGrid";

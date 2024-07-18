@@ -66,8 +66,9 @@ function MyApp(props: MyAppProps) {
           name="description"
           content="Programmatically generated CosmicSignature image and video NFTs. ETH spent on minting goes back to the minters."
         />
+        <meta property="og:image" content="https://cosmic-game2.s3.us-east-2.amazonaws.com/logo.png" />
         <link rel="canonical" href={canonicalUrl} />
-        {pageProps.nft && (
+        {/* {pageProps.nft && (
           <>
             <meta
               property="og:title"
@@ -101,7 +102,7 @@ function MyApp(props: MyAppProps) {
               )}`}
             />
           </>
-        )}
+        )} */}
       </Head>
       <Web3ReactProvider getLibrary={getLibrary}>
         <Web3ProviderNetwork getLibrary={getLibrary}>
