@@ -18,7 +18,6 @@ import Footer from '../components/Footer'
 import createEmotionCache from '../cache/createEmotionCache'
 import getLibrary from '../utils/getLibrary'
 import theme from '../config/styles'
-import { formatId } from '../utils'
 
 import '../styles/global.css'
 import { useRouter } from 'next/router'
@@ -61,10 +60,6 @@ function MyApp(props: MyAppProps) {
         <meta
           name="google-site-verification"
           content="ZUw5gzqw7CFIEZgCJ2pLy-MhDe7Fdotpc31fS75v3dE"
-        />
-        <meta
-          name="description"
-          content="abc"
         />
         <meta property="og:image" content="https://cosmic-game2.s3.us-east-2.amazonaws.com/logo.png" />
         <link rel="canonical" href={canonicalUrl} />
