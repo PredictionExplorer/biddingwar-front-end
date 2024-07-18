@@ -652,9 +652,9 @@ const NewHome = () => {
       <Head>
         <meta
           name="description"
-          content={`Cosmic Signature is a strategy bidding game. In an exhilarating contest, players will bid against other players and against time to win exciting ${data?.PrizeAmountEth.toFixed(
+          content="Cosmic Signature is a strategy bidding game. In an exhilarating contest, players will bid against other players and against time to win exciting ${data?.PrizeAmountEth.toFixed(
             4
-          )}ETH prizes and Cosmic Signature NFTs.`}
+          )}ETH prizes and Cosmic Signature NFTs."
         />
       </Head>
       <MainWrapper>
