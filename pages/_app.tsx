@@ -29,6 +29,7 @@ import { CookiesProvider } from 'react-cookie'
 import { StakedTokenProvider } from '../contexts/StakedTokenContext'
 import { SystemModeProvider } from '../contexts/SystemModeContext'
 import { NotificationProvider } from '../contexts/NotificationContext'
+import { formatId } from '../utils'
 
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache()
@@ -61,8 +62,54 @@ function MyApp(props: MyAppProps) {
           name="google-site-verification"
           content="ZUw5gzqw7CFIEZgCJ2pLy-MhDe7Fdotpc31fS75v3dE"
         />
+        <meta
+          name="description"
+          content="Cosmic Signature is a strategy bidding game."
+        />
         <meta property="og:image" content="https://cosmic-game2.s3.us-east-2.amazonaws.com/logo.png" />
         <link rel="canonical" href={canonicalUrl} />
+        {pageProps.tokenId >=0 && (
+          <>
+            <meta
+              name="description"
+              content={`Discover the unique attributes and ownership history of Cosmic Signature Token #${pageProps.tokenId}, an exclusive digital collectible from the Cosmic Signature game.`}
+            />
+            <meta
+              property="og:title"
+              content={`Cosmic Signature Token: Details for ${formatId(pageProps.tokenId)}`}
+            />
+            <meta
+              property="og:image"
+              content={`https://cosmic-game2.s3.us-east-2.amazonaws.com/${pageProps.tokenId
+                .toString()
+                .padStart(6, "0")}.png`}
+            />
+            <meta
+              property="og:description"
+              content={`Programmatically generated CosmicSignature image and video NFTs. ETH spent on minting goes back to the minters. These are the details for ${formatId(
+                pageProps.tokenId
+              )}`}
+            />
+    
+            <meta name="twitter:card" content="summary" />
+            <meta
+              name="twitter:title"
+              content={`Cosmic Signature Token: Details for ${formatId(pageProps.tokenId)}`}
+            />
+            <meta
+              name="twitter:image"
+              content={`https://cosmic-game2.s3.us-east-2.amazonaws.com/${pageProps.tokenId
+                .toString()
+                .padStart(6, "0")}.png`}
+            />
+            <meta
+              name="twitter:description"
+              content={`Programmatically generated CosmicSignature image and video NFTs. ETH spent on minting goes back to the minters. These are the details for ${formatId(
+                pageProps.tokenId
+              )}`}
+            />
+          </>
+        )}
       </Head>
       <Web3ReactProvider getLibrary={getLibrary}>
         <Web3ProviderNetwork getLibrary={getLibrary}>
