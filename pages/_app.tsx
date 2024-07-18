@@ -64,7 +64,7 @@ function MyApp(props: MyAppProps) {
         />
         <meta
           name="description"
-          content="Programmatically generated CosmicSignature image and video NFTs. ETH spent on minting goes back to the minters."
+          content="abc"
         />
         <meta property="og:image" content="https://cosmic-game2.s3.us-east-2.amazonaws.com/logo.png" />
         <link rel="canonical" href={canonicalUrl} />
