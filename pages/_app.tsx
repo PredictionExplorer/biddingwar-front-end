@@ -63,45 +63,10 @@ function MyApp(props: MyAppProps) {
         />
         <meta
           name="description"
-          content="Cosmic Signature is a strategy bidding game.1"
+          content="Cosmic Signature is a strategy bidding game."
         />
         <meta property="og:image" content="https://cosmic-game2.s3.us-east-2.amazonaws.com/logo.png" />
         <link rel="canonical" href={canonicalUrl} />
-        {/* {pageProps.nft && (
-          <>
-            <meta
-              property="og:title"
-              content={`CosmicSignature NFT: Details for ${formatId(
-                pageProps.nft.TokenId,
-              )}`}
-            />
-            <meta property="og:image" content={pageProps.nft.black_image_thumb_url} />
-            <meta
-              property="og:description"
-              content={`Programmatically generated CosmicSignature image and video NFTs. ETH spent on minting goes back to the minters. These are the details for ${formatId(
-                pageProps.nft.TokenId,
-              )}`}
-            />
-
-            <meta name="twitter:card" content="summary" />
-            <meta
-              name="twitter:title"
-              content={`CosmicSignature NFT: Details for ${formatId(
-                pageProps.nft.TokenId,
-              )}`}
-            />
-            <meta
-              name="twitter:image"
-              content={pageProps.nft.black_image_thumb_url}
-            />
-            <meta
-              name="twitter:description"
-              content={`Programmatically generated CosmicSignature image and video NFTs. ETH spent on minting goes back to the minters. These are the details for ${formatId(
-                pageProps.nft.TokenId,
-              )}`}
-            />
-          </>
-        )} */}
       </Head>
       <Web3ReactProvider getLibrary={getLibrary}>
         <Web3ProviderNetwork getLibrary={getLibrary}>
