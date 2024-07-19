@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import Head from "next/head";
 import Image from "next/image";
 import {
   Button,
@@ -650,15 +649,6 @@ const NewHome = () => {
 
   return (
     <>
-      <Head>
-        <meta
-          name="description"
-          content={`Cosmic Signature is a strategy bidding game. In an exhilarating contest, players will bid against other players and against time to win exciting ${data?.PrizeAmountEth.toFixed(
-            4
-          )}ETH prizes and Cosmic Signature NFTs.`}
-          key="description"
-        />
-      </Head>
       <MainWrapper>
         <Backdrop
           sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
