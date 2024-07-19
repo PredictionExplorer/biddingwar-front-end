@@ -1,37 +1,37 @@
-import type { AppProps } from 'next/app'
-import dynamic from 'next/dynamic'
-import Head from 'next/head'
-import { ThemeProvider } from '@mui/material/styles'
-import CssBaseline from '@mui/material/CssBaseline'
-import { CacheProvider, EmotionCache } from '@emotion/react'
-import { Web3ReactProvider } from '@web3-react/core'
+import type { AppProps } from 'next/app';
+import dynamic from 'next/dynamic';
+import Head from 'next/head';
+import { ThemeProvider } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
+import { CacheProvider, EmotionCache } from '@emotion/react';
+import { Web3ReactProvider } from '@web3-react/core';
 
 const Web3ProviderNetwork = dynamic(
   () => import('../components/Web3ProviderNetwork'),
   { ssr: false },
 )
 
-import Web3ReactManager from '../components/Web3ReactManager'
-import Header from '../components/Header'
-import Footer from '../components/Footer'
+import Web3ReactManager from '../components/Web3ReactManager';
+import Header from '../components/Header';
+import Footer from '../components/Footer';
 
-import createEmotionCache from '../cache/createEmotionCache'
-import getLibrary from '../utils/getLibrary'
-import theme from '../config/styles'
+import createEmotionCache from '../cache/createEmotionCache';
+import getLibrary from '../utils/getLibrary';
+import theme from '../config/styles';
 
-import '../styles/global.css'
-import { useRouter } from 'next/router'
-import { useEffect } from 'react'
-import * as ga from '../utils/analytics'
-import { ApiDataProvider } from '../contexts/ApiDataContext'
-import ApiDataFetcher from '../contexts/ApiDataFetcher'
-import { CookiesProvider } from 'react-cookie'
-import { StakedTokenProvider } from '../contexts/StakedTokenContext'
-import { SystemModeProvider } from '../contexts/SystemModeContext'
-import { NotificationProvider } from '../contexts/NotificationContext'
+import '../styles/global.css';
+import { useRouter } from 'next/router';
+import { useEffect } from 'react';
+import * as ga from '../utils/analytics';
+import { ApiDataProvider } from '../contexts/ApiDataContext';
+import ApiDataFetcher from '../contexts/ApiDataFetcher';
+import { CookiesProvider } from 'react-cookie';
+import { StakedTokenProvider } from '../contexts/StakedTokenContext';
+import { SystemModeProvider } from '../contexts/SystemModeContext';
+import { NotificationProvider } from '../contexts/NotificationContext';
 
 // Client-side cache, shared for the whole session of the user in the browser.
-const clientSideEmotionCache = createEmotionCache()
+const clientSideEmotionCache = createEmotionCache();
 
 interface MyAppProps extends AppProps {
   emotionCache?: EmotionCache
