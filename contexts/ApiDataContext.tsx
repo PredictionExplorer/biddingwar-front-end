@@ -61,8 +61,7 @@ export const ApiDataProvider: React.FC<ApiDataContextProps> = ({
       account,
       depositId
     );
-    // const current = await api.get_current_time();
-    const current = Date.now() / 1000;
+    const current = await api.get_current_time();
     await Promise.all(
       response.map(async (x) => {
         try {

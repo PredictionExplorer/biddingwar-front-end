@@ -26,6 +26,7 @@ import NFTImage from "./NFTImage";
 import { CustomPagination } from "./CustomPagination";
 
 const StakedTokensRow = ({
+  offset,
   row,
   handleUnstake,
   isItemSelected,
@@ -73,14 +74,14 @@ const StakedTokensRow = ({
       sx={{
         cursor: "pointer",
         pointerEvents:
-          row.UnstakeTimeStamp > Date.now() / 1000 ? "none" : "auto",
+          row.UnstakeTimeStamp > Date.now() / 1000 + offset ? "none" : "auto",
       }}
     >
       <TablePrimaryCell padding="checkbox">
         <Checkbox
           color="primary"
           checked={isItemSelected}
-          disabled={row.UnstakeTimeStamp > Date.now() / 1000}
+          disabled={row.UnstakeTimeStamp > Date.now() / 1000 + offset}
           size="small"
         />
       </TablePrimaryCell>
@@ -127,7 +128,7 @@ const StakedTokensRow = ({
         {convertTimestampToDateTime(row.UnstakeTimeStamp)}
       </TablePrimaryCell>
       <TablePrimaryCell align="center">
-        {row.UnstakeTimeStamp <= Date.now() / 1000 && (
+        {row.UnstakeTimeStamp <= Date.now() / 1000 + offset && (
           <Button
             size="small"
             sx={{ mr: 1 }}
@@ -153,8 +154,10 @@ export const StakedTokensTable = ({
   IsRwalk,
 }) => {
   const perPage = 5;
-  // const [offset, setOffset] = useState(0);
-  const filtered = list.filter((x) => x.UnstakeTimeStamp <= Date.now() / 1000);
+  const [offset, setOffset] = useState(0);
+  const filtered = list.filter(
+    (x) => x.UnstakeTimeStamp <= Date.now() / 1000 + offset
+  );
   const [page, setPage] = useState(1);
   const [anchorEl, setAnchorEl] = useState(null);
   const [selected, setSelected] = useState([]);
@@ -203,12 +206,12 @@ export const StakedTokensTable = ({
     await handleUnstake(actionId, IsRwalk);
   };
   useEffect(() => {
-    // const fetchData = async () => {
-    //   const current = await api.get_current_time();
-    //   const offset = current - Date.now() / 1000;
-    //   setOffset(offset);
-    // };
-    // fetchData();
+    const fetchData = async () => {
+      const current = await api.get_current_time();
+      const offset = current - Date.now() / 1000;
+      setOffset(offset);
+    };
+    fetchData();
     setSelected([]);
     setPage(1);
   }, [list]);
@@ -295,6 +298,7 @@ export const StakedTokensTable = ({
               .map((row, index) => (
                 <StakedTokensRow
                   key={(page - 1) * perPage + index}
+                  offset={offset}
                   row={row}
                   handleUnstake={onUnstake}
                   isItemSelected={isSelected(
