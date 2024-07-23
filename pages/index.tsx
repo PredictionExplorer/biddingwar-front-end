@@ -1109,56 +1109,53 @@ const NewHome = () => {
                 )}
               </Grid>
               <Grid item xs={12} sm={4} md={6}>
-                {prizeTime > Date.now() && (
-                  <Button
-                    variant="outlined"
-                    size="large"
-                    endIcon={<ArrowForward />}
-                    onClick={bidType === "CST" ? onBidWithCST : onBid}
-                    fullWidth
-                    disabled={
-                      isBidding ||
-                      (bidType === "RandomWalk" && rwlkId === -1) ||
-                      bidType === ""
-                    }
-                    sx={{ mt: 3 }}
-                  >
-                    {`Bid now with ${bidType} ${
-                      bidType === "ETH"
-                        ? `(${
-                            data?.BidPriceEth * (1 + bidPricePlus / 100) > 0.1
-                              ? (
-                                  data?.BidPriceEth *
-                                  (1 + bidPricePlus / 100)
-                                ).toFixed(2)
-                              : (
-                                  data?.BidPriceEth *
-                                  (1 + bidPricePlus / 100)
-                                ).toFixed(5)
-                          } ETH)`
-                        : bidType === "RandomWalk" && rwlkId !== -1
-                        ? ` token ${rwlkId} (${
-                            data?.BidPriceEth * (1 + bidPricePlus / 100) > 0.2
-                              ? (
-                                  data?.BidPriceEth *
-                                  (1 + bidPricePlus / 100) *
-                                  0.5
-                                ).toFixed(2)
-                              : (
-                                  data?.BidPriceEth *
-                                  (1 + bidPricePlus / 100) *
-                                  0.5
-                                ).toFixed(5)
-                          } ETH)`
-                        : bidType === "CST"
-                        ? cstBidData?.SecondsElapsed >
-                          cstBidData?.AuctionDuration
-                          ? "(FREE BID)"
-                          : `(${cstBidData?.CSTPrice.toFixed(2)} CST)`
-                        : ""
-                    }`}
-                  </Button>
-                )}
+                <Button
+                  variant="outlined"
+                  size="large"
+                  endIcon={<ArrowForward />}
+                  onClick={bidType === "CST" ? onBidWithCST : onBid}
+                  fullWidth
+                  disabled={
+                    isBidding ||
+                    (bidType === "RandomWalk" && rwlkId === -1) ||
+                    bidType === ""
+                  }
+                  sx={{ mt: 3 }}
+                >
+                  {`Bid now with ${bidType} ${
+                    bidType === "ETH"
+                      ? `(${
+                          data?.BidPriceEth * (1 + bidPricePlus / 100) > 0.1
+                            ? (
+                                data?.BidPriceEth *
+                                (1 + bidPricePlus / 100)
+                              ).toFixed(2)
+                            : (
+                                data?.BidPriceEth *
+                                (1 + bidPricePlus / 100)
+                              ).toFixed(5)
+                        } ETH)`
+                      : bidType === "RandomWalk" && rwlkId !== -1
+                      ? ` token ${rwlkId} (${
+                          data?.BidPriceEth * (1 + bidPricePlus / 100) > 0.2
+                            ? (
+                                data?.BidPriceEth *
+                                (1 + bidPricePlus / 100) *
+                                0.5
+                              ).toFixed(2)
+                            : (
+                                data?.BidPriceEth *
+                                (1 + bidPricePlus / 100) *
+                                0.5
+                              ).toFixed(5)
+                        } ETH)`
+                      : bidType === "CST"
+                      ? cstBidData?.SecondsElapsed > cstBidData?.AuctionDuration
+                        ? "(FREE BID)"
+                        : `(${cstBidData?.CSTPrice.toFixed(2)} CST)`
+                      : ""
+                  }`}
+                </Button>
                 {!(
                   prizeTime > Date.now() ||
                   data?.LastBidderAddr === constants.AddressZero ||
