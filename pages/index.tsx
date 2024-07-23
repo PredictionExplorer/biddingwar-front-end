@@ -1326,7 +1326,7 @@ const NewHome = () => {
         <Box mt={10}>
           <Box>
             <Typography variant="h6" component="span">
-              CURRENT ROUND
+              CURRENT ROUND BID HISTORY
             </Typography>
             <Typography
               variant="h6"
@@ -1334,10 +1334,10 @@ const NewHome = () => {
               color="primary"
               sx={{ ml: 1 }}
             >
-              BID HISTORY
+              ROUND {data?.CurRoundNum}
             </Typography>
           </Box>
-          <BiddingHistory biddingHistory={curBidList} />
+          <BiddingHistory biddingHistory={curBidList} showRound={false} />
         </Box>
       </MainWrapper>
 
