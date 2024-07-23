@@ -237,7 +237,7 @@ const MyStaking = () => {
     const data = await api.get_dashboard_info();
     setData(data);
     const activationTime = await cosmicGameContract.activationTime();
-    const timestamp = await api.get_current_time();
+    const timestamp = Date.now() / 1000;
     setStakingPeriod(timestamp - Number(activationTime));
     const stakingAmount = await cosmicGameContract.stakingAmount();
     setRewardPerCST(

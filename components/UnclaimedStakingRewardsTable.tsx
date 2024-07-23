@@ -43,7 +43,8 @@ const fetchInfo = async (account, depositId, stakedActionIds) => {
     account,
     depositId
   );
-  const current = await api.get_current_time();
+  // const current = await api.get_current_time();
+  const current = Date.now() / 1000;
   await Promise.all(
     response.map(async (x) => {
       try {
@@ -107,7 +108,7 @@ interface stakeStateInterface {
 const UnclaimedStakingRewardsRow = ({
   row,
   owner,
-  offset,
+  // offset,
   handleUnstakeClaimRestake,
   showWaitingTokensColumn,
 }) => {
@@ -194,7 +195,7 @@ const UnclaimedStakingRewardsRow = ({
             href={`https://arbiscan.io/tx/${row.TxHash}`}
             target="__blank"
           >
-            {convertTimestampToDateTime(row.TimeStamp - offset)}
+            {convertTimestampToDateTime(row.TimeStamp)}
           </Link>
         </TablePrimaryCell>
         <TablePrimaryCell align="center">{row.DepositId}</TablePrimaryCell>
@@ -461,7 +462,7 @@ export const UnclaimedStakingRewardsTable = ({ list, owner, fetchData }) => {
   const [page, setPage] = useState(1);
   const { cstokens: stakedTokens } = useStakedToken();
   const stakedActionIds = stakedTokens.map((x) => x.TokenInfo.StakeActionId);
-  const [offset, setOffset] = useState(undefined);
+  // const [offset, setOffset] = useState(undefined);
   const [claimableActionIds, setClaimableActionIds] = useState([]);
   const [unstakableActionIds, setUnstakeableActionIds] = useState([]);
   const [waitingActionIds, setWaitingActionIds] = useState([]);
@@ -542,11 +543,11 @@ export const UnclaimedStakingRewardsTable = ({ list, owner, fetchData }) => {
   };
 
   useEffect(() => {
-    const calculateOffset = async () => {
-      const current = await api.get_current_time();
-      const offset = current - Date.now() / 1000;
-      setOffset(offset);
-    };
+    // const calculateOffset = async () => {
+    //   const current = await api.get_current_time();
+    //   const offset = current - Date.now() / 1000;
+    //   setOffset(offset);
+    // };
     const fetchActionIds = async () => {
       let cl_actionIds = [],
         us_actionIds = [],
@@ -568,10 +569,10 @@ export const UnclaimedStakingRewardsTable = ({ list, owner, fetchData }) => {
       setWaitingActionIds(wa_actionIds);
     };
     fetchActionIds();
-    calculateOffset();
+    // calculateOffset();
   }, [list, stakedTokens]);
 
-  if (offset === undefined) return;
+  // if (offset === undefined) return;
 
   if (list.length === 0) {
     return <Typography>No rewards yet.</Typography>;
@@ -620,7 +621,7 @@ export const UnclaimedStakingRewardsTable = ({ list, owner, fetchData }) => {
                 key={row.EvtLogId}
                 owner={owner}
                 handleUnstakeClaimRestake={handleUnstakeClaimRestake}
-                offset={offset}
+                // offset={offset}
                 showWaitingTokensColumn={waitingActionIds.length > 0}
               />
             ))}
