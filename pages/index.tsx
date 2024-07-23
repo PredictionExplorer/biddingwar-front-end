@@ -169,29 +169,30 @@ const NewHome = () => {
         data?.NumRaffleNFTWinnersBidding +
         data?.NumRaffleNFTWinnersStakingRWalk +
         1;
-      await Promise.all(
-        Array(count)
-          .fill(1)
-          .map(async (_value, index) => {
-            try {
-              const seed = await cosmicSignatureContract.seeds(
-                token_id - index
-              );
-              await api.create(token_id - index, seed);
-            } catch (err) {
-              if (err?.data?.message) {
-                const msg = err?.data?.message;
-                setNotification({
-                  visible: true,
-                  type: "error",
-                  text: msg,
-                });
+
+      setTimeout(async () => {
+        const prize = await fetchPrizeInfo();
+        await Promise.all(
+          Array(count)
+            .fill(1)
+            .map(async (_value, index) => {
+              try {
+                const t = token_id - index;
+                const seed = await cosmicSignatureContract.seeds(t);
+                await api.create(t, seed, prize?.TokenId === t);
+              } catch (err) {
+                if (err?.data?.message) {
+                  const msg = err?.data?.message;
+                  setNotification({
+                    visible: true,
+                    type: "error",
+                    text: msg,
+                  });
+                }
+                console.log(err);
               }
-              console.log(err);
-            }
-          })
-      );
-      setTimeout(() => {
+            })
+        );
         router.push({
           pathname: "/prize-claimed",
           query: {
@@ -515,6 +516,7 @@ const NewHome = () => {
       prizeInfo = null;
     }
     setPrizeInfo(prizeInfo);
+    return prizeInfo;
   };
 
   const fetchClaimHistory = async () => {
@@ -656,11 +658,6 @@ const NewHome = () => {
         >
           <CircularProgress color="inherit" />
         </Backdrop>
-
-        <Typography variant="h4" textAlign="center" color="primary" mb={2}>
-          BETA ON ARBITRUM SEPOLIA TESTNET
-        </Typography>
-
         <Grid container spacing={{ lg: 16, md: 8, sm: 8, xs: 4 }} mb={4}>
           <Grid item sm={12} md={6}>
             {!loading && (
