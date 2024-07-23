@@ -109,6 +109,7 @@ const NewHome = () => {
   const [rwlknftIds, setRwlknftIds] = useState([]);
   const [offset, setOffset] = useState(0);
   const [roundStarted, setRoundStarted] = useState("");
+  const [lastBidderElapsed, setLastBidderElapsed] = useState("");
   const [curPage, setCurrentPage] = useState(1);
   const [claimHistory, setClaimHistory] = useState(null);
   const [imageOpen, setImageOpen] = useState(false);
@@ -630,8 +631,12 @@ const NewHome = () => {
         setBannerTokenId(fileName);
       }
     }
-    const interval = setInterval(async () => {
+    const interval = setInterval(() => {
       setRoundStarted(calculateTimeDiff(data?.TsRoundStart - offset / 1000));
+      if (curBidList.length) {
+        const lastBidTime = curBidList[0].TimeStamp;
+        setLastBidderElapsed(calculateTimeDiff(lastBidTime - offset / 1000));
+      }
     }, 1000);
 
     return () => {
@@ -699,7 +704,7 @@ const NewHome = () => {
                           ))}
                         {roundStarted !== "" && (
                           <Typography sx={{ mt: 1 }}>
-                            (Round started {roundStarted} ago)
+                            (Started {roundStarted} ago.)
                           </Typography>
                         )}
                       </Grid>
@@ -821,14 +826,19 @@ const NewHome = () => {
                       {data?.LastBidderAddr === constants.AddressZero ? (
                         "There is no bidder yet."
                       ) : (
-                        <Link
-                          href={`/user/${data?.LastBidderAddr}`}
-                          color="rgb(255, 255, 255)"
-                          fontSize="inherit"
-                          sx={{ wordBreak: "break-all" }}
-                        >
-                          {data?.LastBidderAddr}
-                        </Link>
+                        <>
+                          <Link
+                            href={`/user/${data?.LastBidderAddr}`}
+                            color="rgb(255, 255, 255)"
+                            fontSize="inherit"
+                            sx={{ wordBreak: "break-all" }}
+                          >
+                            {data?.LastBidderAddr}
+                          </Link>{" "}
+                          {lastBidderElapsed !== "" && (
+                            <>({lastBidderElapsed} Elapsed)</>
+                          )}
+                        </>
                       )}
                     </Typography>
                   </Grid>
