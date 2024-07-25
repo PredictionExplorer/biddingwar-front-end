@@ -851,7 +851,9 @@ const NewHome = () => {
                       </Typography>
                     </Grid>
                     <Grid item xs={12} sm={8} md={8}>
-                      <Typography sx={{ wordWrap: "break-word" }}>
+                      <Typography
+                        sx={{ wordWrap: "break-word", color: "#ff0" }}
+                      >
                         {curBidList[0].Message}
                       </Typography>
                     </Grid>
