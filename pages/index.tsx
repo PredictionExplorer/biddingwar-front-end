@@ -545,6 +545,22 @@ const NewHome = () => {
     fetchCSTBidData();
   };
 
+  const requestNotificationPermission = () => {
+    if ("Notification" in window && Notification.permission !== "granted") {
+      Notification.requestPermission().then((permission) => {
+        if (permission === "granted") {
+          console.log("Notification permission granted.");
+        }
+      });
+    }
+  };
+
+  const sendNotification = (title, options) => {
+    if ("Notification" in window && Notification.permission === "granted") {
+      new Notification(title, options);
+    }
+  };
+
   useEffect(() => {
     if (nftRWLKContract && account) {
       getRwlkNFTIds();
@@ -552,6 +568,7 @@ const NewHome = () => {
   }, [nftRWLKContract, account]);
 
   useEffect(() => {
+    requestNotificationPermission();
     if (router.query) {
       if (router.query.randomwalk) {
         setRwlkId(Number(router.query.tokenId));
@@ -636,6 +653,15 @@ const NewHome = () => {
       if (curBidList.length) {
         const lastBidTime = curBidList[0].TimeStamp;
         setLastBidderElapsed(calculateTimeDiff(lastBidTime - offset / 1000));
+      }
+
+      const now = Date.now();
+      if (prizeTime && now >= prizeTime - 5 * 60 * 1000) {
+        sendNotification("Bid Now or Miss Out!", {
+          body:
+            "Time is running out! You have 5 minutes to place your bids and win amazing prizes.",
+        });
+        clearInterval(interval); // Stop the interval once the notification is sent
       }
     }, 1000);
 
