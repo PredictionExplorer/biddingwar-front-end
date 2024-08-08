@@ -23,7 +23,6 @@ const PrizeInfo = ({ roundNum }) => {
   const [stakingRewards, setStakingRewards] = useState([]);
   const [loading, setLoading] = useState(true);
   const { setNotification } = useNotification();
-
   const handleAllDonatedNFTsClaim = async () => {
     try {
       const indexList = donatedNFTToClaim.map((item) => item.Index);
@@ -137,6 +136,88 @@ const PrizeInfo = ({ roundNum }) => {
                 {prizeInfo.CharityAmountETH.toFixed(4)} ETH
               </Typography>
             </Box>
+            <Box mb={1}>
+              <Typography color="primary" component="span">
+                Endurance Champion Prize Winner Address:
+              </Typography>
+              &nbsp;
+              <Typography component="span">
+                <Link
+                  href={`/user/${prizeInfo.EnduranceWinnerAddr}`}
+                  color="inherit"
+                  fontSize="inherit"
+                >
+                  {prizeInfo.EnduranceWinnerAddr}
+                </Link>
+              </Typography>
+            </Box>
+            <Box mb={1}>
+              <Typography color="primary" component="span">
+                Endurance Champion rewarded with CST NFT TokenID:
+              </Typography>
+              &nbsp;
+              <Typography component="span">
+                <Link
+                  href={`/detail/${prizeInfo.EnduranceERC721TokenId}`}
+                  color="inherit"
+                  fontSize="inherit"
+                >
+                  {prizeInfo.EnduranceERC721TokenId}
+                </Link>
+              </Typography>
+            </Box>
+            <Box mb={1}>
+              <Typography color="primary" component="span">
+                Endurance Champion rewarded with CST (ERC20):
+              </Typography>
+              &nbsp;
+              <Typography component="span">
+                {prizeInfo.EnduranceERC20AmountEth} CST
+              </Typography>
+            </Box>
+            {prizeInfo.StellarWinnerAddr !== "" && (
+              <>
+                <Box mb={1}>
+                  <Typography color="primary" component="span">
+                    Stellar Spender Prize Winner Address:
+                  </Typography>
+                  &nbsp;
+                  <Typography component="span">
+                    <Link
+                      href={`/user/${prizeInfo.StellarWinnerAddr}`}
+                      color="inherit"
+                      fontSize="inherit"
+                    >
+                      {prizeInfo.StellarWinnerAddr}
+                    </Link>
+                  </Typography>
+                </Box>
+                <Box mb={1}>
+                  <Typography color="primary" component="span">
+                    Stellar Spender rewarded with CST NFT Token ID:
+                  </Typography>
+                  &nbsp;
+                  <Typography component="span">
+                    <Link
+                      href={`/detail/${prizeInfo.StellarERC721TokenId}`}
+                      color="inherit"
+                      fontSize="inherit"
+                    >
+                      {prizeInfo.StellarERC721TokenId}
+                    </Link>
+                  </Typography>
+                </Box>
+                <Box mb={1}>
+                  <Typography color="primary" component="span">
+                    Stellar Spender rewarded with CST (ERC20):
+                  </Typography>
+                  &nbsp;
+                  <Typography component="span">
+                    {prizeInfo.StellarERC20AmountEth} CST
+                  </Typography>
+                </Box>
+              </>
+            )}
             <Box mb={1}>
               <Typography color="primary" component="span">
                 Total Bids:

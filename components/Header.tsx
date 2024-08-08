@@ -306,7 +306,7 @@ const Header = () => {
                 </ListItem>
                 <Divider />
                 <ListItem sx={{ justifyContent: "space-between" }}>
-                  <Typography sx={{ fontSize: 16 }}>STAKED CST:</Typography>
+                  <Typography sx={{ fontSize: 16 }}>STAKED CST NFT:</Typography>
                   <Typography
                     color="secondary"
                     sx={{ fontSize: 16, fontWeight: 600 }}
@@ -315,7 +315,9 @@ const Header = () => {
                   </Typography>
                 </ListItem>
                 <ListItem sx={{ justifyContent: "space-between" }}>
-                  <Typography sx={{ fontSize: 16 }}>STAKED RWALK:</Typography>
+                  <Typography sx={{ fontSize: 16 }}>
+                    STAKED RWALK NFT:
+                  </Typography>
                   <Typography
                     color="secondary"
                     sx={{ fontSize: 16, fontWeight: 600 }}

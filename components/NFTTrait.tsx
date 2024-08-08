@@ -433,6 +433,15 @@ const NFTTrait = ({ tokenId }) => {
                 </Typography>
               </Box>
             )}
+            {!nft.Staked && !nft.WasUnstaked ? (
+              <Typography sx={{ color: "#0f0" }}>
+                The token is eligible for staking.
+              </Typography>
+            ) : (
+              <Typography sx={{ color: "#f00" }}>
+                {"The token has already been staked, can't bee staked again."}
+              </Typography>
+            )}
             <Box mt={6}>
               <Button
                 variant="outlined"

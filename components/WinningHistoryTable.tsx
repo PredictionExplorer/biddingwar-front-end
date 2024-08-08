@@ -73,7 +73,7 @@ const HistoryRow = ({ history, showClaimedStatus }) => {
             </>
           ) : history.RecordType === 4 ? (
             <>
-              <EmojiEventsIcon />
+              <ConfirmationNumberIcon />
               &nbsp;<span>Cosmic Signature Staking ETH Deposit</span>
             </>
           ) : history.RecordType === 5 ? (
@@ -85,6 +85,26 @@ const HistoryRow = ({ history, showClaimedStatus }) => {
             <>
               <LayersIcon />
               &nbsp;<span>Cosmic Signature Staking Raffle Token</span>
+            </>
+          ) : history.RecordType === 7 ? (
+            <>
+              <EmojiEventsIcon />
+              &nbsp;<span>Endurance Champion NFT Winner</span>
+            </>
+          ) : history.RecordType === 8 ? (
+            <>
+              <EmojiEventsIcon />
+              &nbsp;<span>Stellar Spender NFT Winner</span>
+            </>
+          ) : history.RecordType === 9 ? (
+            <>
+              <EmojiEventsIcon />
+              &nbsp;<span>Endurance Champion ERC20 winner</span>
+            </>
+          ) : history.RecordType === 10 ? (
+            <>
+              <EmojiEventsIcon />
+              &nbsp;<span>Stellar Spender ERC20 Winner</span>
             </>
           ) : (
             " "

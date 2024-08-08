@@ -21,7 +21,6 @@ import { RWLKNFTTable } from "../components/RWLKNFTTable";
 import useRWLKNFTContract from "../hooks/useRWLKNFTContract";
 import { StakingRewardMintsTable } from "../components/StakingRewardMintsTable";
 import useCosmicGameContract from "../hooks/useCosmicGameContract";
-import { formatSeconds } from "../utils";
 import { ethers } from "ethers";
 import getErrorMessage from "../utils/alert";
 import { useNotification } from "../contexts/NotificationContext";
@@ -62,7 +61,6 @@ const MyStaking = () => {
   const [rwlkTokens, setRwlkTokens] = useState([]);
   const [rwlkMints, setRwlkMints] = useState([]);
   const [cstMints, setCSTMints] = useState([]);
-  const [stakingPeriod, setStakingPeriod] = useState(0);
   const [rewardPerCST, setRewardPerCST] = useState(0);
   const [stakingTable, setStakingTable] = useState(0);
   const {
@@ -236,9 +234,6 @@ const MyStaking = () => {
   const fetchData = async () => {
     const data = await api.get_dashboard_info();
     setData(data);
-    const activationTime = await cosmicGameContract.activationTime();
-    const timestamp = await api.get_current_time();
-    setStakingPeriod(timestamp - Number(activationTime));
     const stakingAmount = await cosmicGameContract.stakingAmount();
     setRewardPerCST(
       Number(ethers.utils.formatEther(stakingAmount)) /
@@ -259,7 +254,7 @@ const MyStaking = () => {
     const stakingActions = await api.get_staking_cst_actions_by_user(addr);
     setStakingCSTActions(stakingActions);
     const CSTokens = await api.get_cst_tokens_by_user(addr);
-    setCSTokens(CSTokens);
+    setCSTokens(CSTokens.filter((x) => !x.WasUnstaked));
     const mints = await api.get_staking_cst_mints_by_user(addr);
     setCSTMints(mints);
     fetchStakedTokens();
@@ -277,7 +272,12 @@ const MyStaking = () => {
     const nftIds = tokens
       .map((t) => t.toNumber())
       .sort()
-      .filter((x) => !rwlkStaked.includes(x));
+      .filter((x) => {
+        if (rwlkStaked.includes(x)) return false;
+        return !stakingActions.some(
+          (action) => action.ActionType !== 1 && action.TokenId === x
+        );
+      });
     setRwlkTokens(nftIds);
   };
 
@@ -311,15 +311,7 @@ const MyStaking = () => {
           <>
             <Box sx={{ display: "flex" }}>
               <Typography variant="subtitle1" mr={1}>
-                Staking period:
-              </Typography>
-              <Typography variant="subtitle1">
-                {formatSeconds(stakingPeriod)}
-              </Typography>
-            </Box>
-            <Box sx={{ display: "flex" }}>
-              <Typography variant="subtitle1" mr={1}>
-                Number of staked CST tokens:
+                Number of globally staked CST tokens:
               </Typography>
               <Typography variant="subtitle1">
                 {data?.MainStats.StakeStatisticsCST.TotalTokensStaked}
@@ -327,20 +319,22 @@ const MyStaking = () => {
             </Box>
             <Box sx={{ display: "flex" }}>
               <Typography variant="subtitle1" mr={1}>
-                Number of staked RandomWalk tokens:
+                Number of globally staked RandomWalk tokens:
               </Typography>
               <Typography variant="subtitle1">
                 {data?.MainStats.StakeStatisticsRWalk.TotalTokensStaked}
               </Typography>
             </Box>
-            <Box sx={{ display: "flex" }}>
-              <Typography variant="subtitle1" mr={1}>
-                Reward (as of now) for staking 1 CST token:
-              </Typography>
-              <Typography variant="subtitle1">
-                {rewardPerCST.toFixed(6)}
-              </Typography>
-            </Box>
+            {data?.MainStats.StakeStatisticsCST.TotalTokensStaked > 0 && (
+              <Box sx={{ display: "flex" }}>
+                <Typography variant="subtitle1" mr={1}>
+                  Reward (as of now) for staking 1 CST token:
+                </Typography>
+                <Typography variant="subtitle1">
+                  {rewardPerCST.toFixed(6)}
+                </Typography>
+              </Box>
+            )}
             <Box sx={{ mt: 4, borderBottom: 1, borderColor: "divider" }}>
               <Tabs
                 variant="fullWidth"
