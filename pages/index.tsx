@@ -1514,7 +1514,6 @@ export default NewHome;
 // file naming scheme to seed from token id
 // system mode changes on statistics page
 // update statistics page with new data
-// add notification message
 //
 // get_bid_list_by_round: implement pagination
 // get_user_info: remove bid field
