@@ -233,14 +233,20 @@ const Statistics = () => {
                   Prize Claim Date
                 </Typography>
                 <Box sx={{ flex: 1 }}>
-                  <Typography>
-                    {convertTimestampToDateTime(data.PrizeClaimTs)}
-                  </Typography>
-                  {data.PrizeClaimTs > Date.now() / 1000 && (
-                    <Countdown
-                      date={data.PrizeClaimTs * 1000}
-                      renderer={renderer}
-                    />
+                  {data.PrizeClaimTs === 0 ? (
+                    <Typography>Round isn't started yet.</Typography>
+                  ) : (
+                    <>
+                      <Typography>
+                        {convertTimestampToDateTime(data.PrizeClaimTs)}
+                      </Typography>
+                      {data.PrizeClaimTs > Date.now() / 1000 && (
+                        <Countdown
+                          date={data.PrizeClaimTs * 1000}
+                          renderer={renderer}
+                        />
+                      )}
+                    </>
                   )}
                 </Box>
               </Box>
