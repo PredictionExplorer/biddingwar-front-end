@@ -234,7 +234,7 @@ const Statistics = () => {
                 </Typography>
                 <Box sx={{ flex: 1 }}>
                   {data.PrizeClaimTs === 0 ? (
-                    <Typography>Round isn't started yet.</Typography>
+                    <Typography>{"Round isn't started yet."}</Typography>
                   ) : (
                     <>
                       <Typography>
