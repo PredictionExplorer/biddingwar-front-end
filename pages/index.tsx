@@ -1192,186 +1192,175 @@ const NewHome = () => {
                     </Link>
                   </CardActionArea>
                 </StyledCard>
-                {data?.TsRoundStart !== 0 && (
-                  <>
-                    <Typography
-                      variant="subtitle1"
-                      color="primary"
-                      mt={4}
-                      mb={2}
-                    >
-                      Potential winners of Special Prizes
+              </>
+            )}
+            {data?.TsRoundStart !== 0 && (
+              <>
+                <Typography variant="subtitle1" color="primary" mt={4} mb={2}>
+                  Potential winners of Special Prizes
+                </Typography>
+                <Grid container spacing={2} mb={2} alignItems="center">
+                  <Grid item xs={12} sm={4} md={4}>
+                    <Typography>Endurance Champion</Typography>
+                  </Grid>
+                  <Grid item xs={12} sm={8} md={8}>
+                    <Typography>
+                      <Link
+                        href={`/user/${specialWinners?.EnduranceChampionAddress}`}
+                        color="rgb(255, 255, 255)"
+                        fontSize="inherit"
+                        sx={{ wordBreak: "break-all" }}
+                      >
+                        {specialWinners?.EnduranceChampionAddress}
+                      </Link>
+                      {specialWinners?.EnduranceChampionDuration > 0 && (
+                        <>
+                          {` (Lasted ${formatSeconds(
+                            specialWinners?.EnduranceChampionDuration
+                          )})`}
+                        </>
+                      )}
                     </Typography>
-                    <Grid container spacing={2} mb={2} alignItems="center">
-                      <Grid item xs={12} sm={4} md={4}>
-                        <Typography>Endurance Champion</Typography>
-                      </Grid>
-                      <Grid item xs={12} sm={8} md={8}>
-                        <Typography>
-                          <Link
-                            href={`/user/${specialWinners?.EnduranceChampionAddress}`}
-                            color="rgb(255, 255, 255)"
-                            fontSize="inherit"
-                            sx={{ wordBreak: "break-all" }}
-                          >
-                            {specialWinners?.EnduranceChampionAddress}
-                          </Link>
-                          {specialWinners?.EnduranceChampionDuration > 0 && (
+                  </Grid>
+                </Grid>
+                <Grid container spacing={2} mb={2} alignItems="center">
+                  <Grid item xs={12} sm={4} md={4}>
+                    <Typography>Stellar Spender Address</Typography>
+                  </Grid>
+                  <Grid item xs={12} sm={8} md={8}>
+                    <Typography>
+                      <Link
+                        href={`/user/${specialWinners?.StellarSpenderAddress}`}
+                        color="rgb(255, 255, 255)"
+                        fontSize="inherit"
+                        sx={{ wordBreak: "break-all" }}
+                      >
+                        {specialWinners?.StellarSpenderAddress}
+                      </Link>
+                    </Typography>
+                  </Grid>
+                </Grid>
+                <Grid container spacing={2} mb={2} alignItems="center">
+                  <Grid item xs={12} sm={4} md={4}>
+                    <Typography>Stellar Spender Amount</Typography>
+                  </Grid>
+                  <Grid item xs={12} sm={8} md={8}>
+                    <Typography>
+                      {specialWinners?.StellarSpenderAmountEth.toFixed(4)} ETH
+                    </Typography>
+                  </Grid>
+                </Grid>
+              </>
+            )}
+            {account !== null && (
+              <>
+                {(prizeTime > Date.now() || data?.LastBidderAddr !== account) &&
+                  !loading && (
+                    <Button
+                      variant="outlined"
+                      size="large"
+                      endIcon={<ArrowForward />}
+                      onClick={bidType === "CST" ? onBidWithCST : onBid}
+                      fullWidth
+                      disabled={
+                        isBidding ||
+                        (bidType === "RandomWalk" && rwlkId === -1) ||
+                        bidType === ""
+                      }
+                      sx={{ mt: 3 }}
+                    >
+                      {`Bid now with ${bidType} ${
+                        bidType === "ETH"
+                          ? `(${
+                              data?.BidPriceEth * (1 + bidPricePlus / 100) > 0.1
+                                ? (
+                                    data?.BidPriceEth *
+                                    (1 + bidPricePlus / 100)
+                                  ).toFixed(2)
+                                : (
+                                    data?.BidPriceEth *
+                                    (1 + bidPricePlus / 100)
+                                  ).toFixed(5)
+                            } ETH)`
+                          : bidType === "RandomWalk" && rwlkId !== -1
+                          ? ` token ${rwlkId} (${
+                              data?.BidPriceEth * (1 + bidPricePlus / 100) > 0.2
+                                ? (
+                                    data?.BidPriceEth *
+                                    (1 + bidPricePlus / 100) *
+                                    0.5
+                                  ).toFixed(2)
+                                : (
+                                    data?.BidPriceEth *
+                                    (1 + bidPricePlus / 100) *
+                                    0.5
+                                  ).toFixed(5)
+                            } ETH)`
+                          : bidType === "CST"
+                          ? cstBidData?.SecondsElapsed >
+                            cstBidData?.AuctionDuration
+                            ? "(FREE BID)"
+                            : `(${cstBidData?.CSTPrice.toFixed(2)} CST)`
+                          : ""
+                      }`}
+                    </Button>
+                  )}
+                {!(
+                  prizeTime > Date.now() ||
+                  data?.LastBidderAddr === constants.AddressZero ||
+                  loading
+                ) && (
+                  <>
+                    <Button
+                      variant="contained"
+                      size="large"
+                      onClick={onClaimPrize}
+                      fullWidth
+                      disabled={
+                        data?.LastBidderAddr !== account &&
+                        prizeTime + timeoutClaimPrize * 1000 > Date.now()
+                      }
+                      sx={{ mt: 3 }}
+                    >
+                      Claim Prize
+                      <Box sx={{ display: "flex", alignItems: "center" }}>
+                        {prizeTime + timeoutClaimPrize * 1000 > Date.now() &&
+                          data?.LastBidderAddr !== account && (
                             <>
-                              {` (Lasted ${formatSeconds(
-                                specialWinners?.EnduranceChampionDuration
-                              )})`}
+                              &nbsp;available in &nbsp;
+                              <Countdown
+                                date={prizeTime + timeoutClaimPrize * 1000}
+                              />
                             </>
                           )}
+                        &nbsp;
+                        <ArrowForward sx={{ width: 22, height: 22 }} />
+                      </Box>
+                    </Button>
+                    {data?.LastBidderAddr !== account &&
+                      prizeTime + timeoutClaimPrize * 1000 > Date.now() && (
+                        <Typography
+                          variant="body2"
+                          fontStyle="italic"
+                          textAlign="right"
+                          color="primary"
+                          mt={2}
+                        >
+                          Please wait until the last bidder claims the prize.
                         </Typography>
-                      </Grid>
-                    </Grid>
-                    <Grid container spacing={2} mb={2} alignItems="center">
-                      <Grid item xs={12} sm={4} md={4}>
-                        <Typography>Stellar Spender Address</Typography>
-                      </Grid>
-                      <Grid item xs={12} sm={8} md={8}>
-                        <Typography>
-                          <Link
-                            href={`/user/${specialWinners?.StellarSpenderAddress}`}
-                            color="rgb(255, 255, 255)"
-                            fontSize="inherit"
-                            sx={{ wordBreak: "break-all" }}
-                          >
-                            {specialWinners?.StellarSpenderAddress}
-                          </Link>
-                        </Typography>
-                      </Grid>
-                    </Grid>
-                    <Grid container spacing={2} mb={2} alignItems="center">
-                      <Grid item xs={12} sm={4} md={4}>
-                        <Typography>Stellar Spender Amount</Typography>
-                      </Grid>
-                      <Grid item xs={12} sm={8} md={8}>
-                        <Typography>
-                          {specialWinners?.StellarSpenderAmountEth.toFixed(4)}{" "}
-                          ETH
-                        </Typography>
-                      </Grid>
-                    </Grid>
+                      )}
                   </>
                 )}
-                {account !== null && (
-                  <>
-                    {(prizeTime > Date.now() ||
-                      data?.LastBidderAddr !== account) &&
-                      !loading && (
-                        <Button
-                          variant="outlined"
-                          size="large"
-                          endIcon={<ArrowForward />}
-                          onClick={bidType === "CST" ? onBidWithCST : onBid}
-                          fullWidth
-                          disabled={
-                            isBidding ||
-                            (bidType === "RandomWalk" && rwlkId === -1) ||
-                            bidType === ""
-                          }
-                          sx={{ mt: 3 }}
-                        >
-                          {`Bid now with ${bidType} ${
-                            bidType === "ETH"
-                              ? `(${
-                                  data?.BidPriceEth * (1 + bidPricePlus / 100) >
-                                  0.1
-                                    ? (
-                                        data?.BidPriceEth *
-                                        (1 + bidPricePlus / 100)
-                                      ).toFixed(2)
-                                    : (
-                                        data?.BidPriceEth *
-                                        (1 + bidPricePlus / 100)
-                                      ).toFixed(5)
-                                } ETH)`
-                              : bidType === "RandomWalk" && rwlkId !== -1
-                              ? ` token ${rwlkId} (${
-                                  data?.BidPriceEth * (1 + bidPricePlus / 100) >
-                                  0.2
-                                    ? (
-                                        data?.BidPriceEth *
-                                        (1 + bidPricePlus / 100) *
-                                        0.5
-                                      ).toFixed(2)
-                                    : (
-                                        data?.BidPriceEth *
-                                        (1 + bidPricePlus / 100) *
-                                        0.5
-                                      ).toFixed(5)
-                                } ETH)`
-                              : bidType === "CST"
-                              ? cstBidData?.SecondsElapsed >
-                                cstBidData?.AuctionDuration
-                                ? "(FREE BID)"
-                                : `(${cstBidData?.CSTPrice.toFixed(2)} CST)`
-                              : ""
-                          }`}
-                        </Button>
-                      )}
-                    {!(
-                      prizeTime > Date.now() ||
-                      data?.LastBidderAddr === constants.AddressZero ||
-                      loading
-                    ) && (
-                      <>
-                        <Button
-                          variant="contained"
-                          size="large"
-                          onClick={onClaimPrize}
-                          fullWidth
-                          disabled={
-                            data?.LastBidderAddr !== account &&
-                            prizeTime + timeoutClaimPrize * 1000 > Date.now()
-                          }
-                          sx={{ mt: 3 }}
-                        >
-                          Claim Prize
-                          <Box sx={{ display: "flex", alignItems: "center" }}>
-                            {prizeTime + timeoutClaimPrize * 1000 >
-                              Date.now() &&
-                              data?.LastBidderAddr !== account && (
-                                <>
-                                  &nbsp;available in &nbsp;
-                                  <Countdown
-                                    date={prizeTime + timeoutClaimPrize * 1000}
-                                  />
-                                </>
-                              )}
-                            &nbsp;
-                            <ArrowForward sx={{ width: 22, height: 22 }} />
-                          </Box>
-                        </Button>
-                        {data?.LastBidderAddr !== account &&
-                          prizeTime + timeoutClaimPrize * 1000 > Date.now() && (
-                            <Typography
-                              variant="body2"
-                              fontStyle="italic"
-                              textAlign="right"
-                              color="primary"
-                              mt={2}
-                            >
-                              Please wait until the last bidder claims the
-                              prize.
-                            </Typography>
-                          )}
-                      </>
-                    )}
-                    {!matches && (
-                      <Button
-                        variant="outlined"
-                        size="large"
-                        fullWidth
-                        sx={{ mt: 3 }}
-                        onClick={() => setImageOpen(true)}
-                      >
-                        Show Random Sample NFT
-                      </Button>
-                    )}
-                  </>
+                {!matches && (
+                  <Button
+                    variant="outlined"
+                    size="large"
+                    fullWidth
+                    sx={{ mt: 3 }}
+                    onClick={() => setImageOpen(true)}
+                  >
+                    Show Random Sample NFT
+                  </Button>
                 )}
               </>
             )}
