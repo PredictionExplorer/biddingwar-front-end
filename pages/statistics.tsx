@@ -435,7 +435,7 @@ const Statistics = () => {
                 title="Number of Unique Winners"
                 value={data.MainStats.NumUniqueWinners}
               />
-              <StatisticsItem
+              {/* <StatisticsItem
                 title="Number of Raffle Eth Bidding Winners"
                 value={data.NumRaffleEthWinnersBidding}
               />
@@ -443,14 +443,14 @@ const Statistics = () => {
                 title="Number of Raffle NFT Bidding Winners"
                 value={data.NumRaffleNFTWinnersBidding}
               />
-              {/* <StatisticsItem
+              <StatisticsItem
                 title="Number of Raffle NFT CST Staking Winners"
                 value={data.NumRaffleNFTWinnersStakingCST}
-              /> */}
+              />
               <StatisticsItem
                 title="Number of Raffle NFT Random Walk Staking Winners"
                 value={data.NumRaffleNFTWinnersStakingRWalk}
-              />
+              /> */}
               <StatisticsItem
                 title="Number of Donated NFTs"
                 value={
