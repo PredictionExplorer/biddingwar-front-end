@@ -674,13 +674,15 @@ const NewHome = () => {
   }, [data, account, curBidList]);
 
   useEffect(() => {
-    if (data) {
-      if (data?.MainStats.NumCSTokenMints > 0 && bannerTokenId === "") {
+    if (data && bannerTokenId === "") {
+      if (data?.MainStats.NumCSTokenMints > 0) {
         let bannerId = Math.floor(
           Math.random() * data?.MainStats.NumCSTokenMints
         );
         const fileName = bannerId.toString().padStart(6, "0");
         setBannerTokenId(fileName);
+      } else if (data?.MainStats.NumCSTokenMints === 0) {
+        setBannerTokenId("sample");
       }
     }
     const interval = setInterval(() => {
@@ -1179,7 +1181,11 @@ const NewHome = () => {
                 <StyledCard>
                   <CardActionArea>
                     <Link
-                      href={bannerTokenId ? `/detail/${bannerTokenId}` : ""}
+                      href={
+                        bannerTokenId && bannerTokenId !== "sample"
+                          ? `/detail/${bannerTokenId}`
+                          : "#"
+                      }
                       sx={{ display: "block" }}
                     >
                       <NFTImage
@@ -1351,18 +1357,18 @@ const NewHome = () => {
                       )}
                   </>
                 )}
-                {!matches && (
-                  <Button
-                    variant="outlined"
-                    size="large"
-                    fullWidth
-                    sx={{ mt: 3 }}
-                    onClick={() => setImageOpen(true)}
-                  >
-                    Show Random Sample NFT
-                  </Button>
-                )}
               </>
+            )}
+            {!matches && (
+              <Button
+                variant="outlined"
+                size="large"
+                fullWidth
+                sx={{ mt: 3 }}
+                onClick={() => setImageOpen(true)}
+              >
+                Show Random Sample NFT
+              </Button>
             )}
           </Grid>
         </Grid>
