@@ -1182,9 +1182,9 @@ const NewHome = () => {
                   <CardActionArea>
                     <Link
                       href={
-                        bannerTokenId && bannerTokenId !== "sample"
+                        bannerTokenId
                           ? `/detail/${bannerTokenId}`
-                          : "#"
+                          : "/detail/sample"
                       }
                       sx={{ display: "block" }}
                     >

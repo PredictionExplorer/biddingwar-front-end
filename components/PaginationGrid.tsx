@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
-import { Grid, Box, Typography, CardActionArea } from "@mui/material";
+import { Grid, Box, Typography, CardActionArea, Link } from "@mui/material";
 import Pagination from "@mui/material/Pagination";
 import {
   SearchBox,
@@ -100,11 +100,13 @@ const PaginationGrid = ({ data, loading }) => {
               <Grid item xs={6} sm={6} md={4}>
                 <StyledCard>
                   <CardActionArea>
-                    <NFTImage
-                      src={
-                        "https://cosmic-game2.s3.us-east-2.amazonaws.com/sample.png"
-                      }
-                    />
+                    <Link href="/detail/sample" sx={{ display: "block" }}>
+                      <NFTImage
+                        src={
+                          "https://cosmic-game2.s3.us-east-2.amazonaws.com/sample.png"
+                        }
+                      />
+                    </Link>
                     <NFTInfoWrapper sx={{ width: "calc(100% - 40px)" }}>
                       <Typography
                         variant="subtitle1"
