@@ -66,6 +66,7 @@ import { useNotification } from "../contexts/NotificationContext";
 import RaffleHolderTable from "../components/RaffleHolderTable";
 import { GetServerSideProps } from "next";
 import TwitterPopup from "../components/TwitterPopup";
+import TwitterShareButton from "../components/TwitterShareButton";
 
 const bidParamsEncoding: ethers.utils.ParamType = {
   type: "tuple(string,int256)",
@@ -1578,6 +1579,12 @@ const NewHome = () => {
           ) : (
             <WinningHistoryTable winningHistory={claimHistory} />
           )}
+        </Box>
+        <Box margin="100px 0">
+          <Typography variant="h4" textAlign="center" mb={6}>
+            Create a Twitter Post and Refer People
+          </Typography>
+          <TwitterShareButton />
         </Box>
       </Container>
       {imageOpen && (
