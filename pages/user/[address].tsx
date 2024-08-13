@@ -130,21 +130,23 @@ const UserInfo = ({ address }) => {
     let count = 0;
     const newData = await api.get_dashboard_info();
     setData(newData);
-    const round = newData?.CurRoundNum;
-    const bidList = await api.get_bid_list_by_round(round, "desc");
-    bidList.forEach((bid) => {
-      if (bid.BidderAddr === address) {
-        count++;
-      }
-    });
-    const probability =
-      1 -
-      Math.pow(
-        (bidList.length - count) / bidList.length,
-        newData?.NumRaffleEthWinnersBidding +
-          newData?.NumRaffleNFTWinnersBidding
-      );
-    setRaffleProbability(probability);
+    if (newData) {
+      const round = newData?.CurRoundNum;
+      const bidList = await api.get_bid_list_by_round(round, "desc");
+      bidList.forEach((bid) => {
+        if (bid.BidderAddr === address) {
+          count++;
+        }
+      });
+      const probability =
+        1 -
+        Math.pow(
+          (bidList.length - count) / bidList.length,
+          newData?.NumRaffleEthWinnersBidding +
+            newData?.NumRaffleNFTWinnersBidding
+        );
+      setRaffleProbability(probability);
+    }
   };
 
   const handleDonatedNFTsClaim = async (e, tokenID) => {

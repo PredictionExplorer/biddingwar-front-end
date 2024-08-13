@@ -489,11 +489,13 @@ const NewHome = () => {
 
   const fetchData = async () => {
     const newData = await api.get_dashboard_info();
-    const round = newData?.CurRoundNum;
-    const newBidData = await api.get_bid_list_by_round(round, "desc");
-    setCurBidList(newBidData);
-    const nftData = await api.get_donations_nft_by_round(round);
-    setDonatedNFTs(nftData);
+    if (newData) {
+      const round = newData?.CurRoundNum;
+      const newBidData = await api.get_bid_list_by_round(round, "desc");
+      setCurBidList(newBidData);
+      const nftData = await api.get_donations_nft_by_round(round);
+      setDonatedNFTs(nftData);
+    }
     const specials = await api.get_current_special_winners();
     setSpecialWinners(specials);
     setData((prevData) => {
