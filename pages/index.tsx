@@ -1235,7 +1235,7 @@ const NewHome = () => {
                 </Grid>
                 <Grid container spacing={2} mb={2} alignItems="center">
                   <Grid item xs={12} sm={4} md={4}>
-                    <Typography>Stellar Spender Address</Typography>
+                    <Typography>Stellar Spender</Typography>
                   </Grid>
                   <Grid item xs={12} sm={8} md={8}>
                     <Typography>
@@ -1247,16 +1247,8 @@ const NewHome = () => {
                       >
                         {specialWinners?.StellarSpenderAddress}
                       </Link>
-                    </Typography>
-                  </Grid>
-                </Grid>
-                <Grid container spacing={2} mb={2} alignItems="center">
-                  <Grid item xs={12} sm={4} md={4}>
-                    <Typography>Stellar Spender Amount</Typography>
-                  </Grid>
-                  <Grid item xs={12} sm={8} md={8}>
-                    <Typography>
-                      {specialWinners?.StellarSpenderAmountEth.toFixed(4)} ETH
+                      &nbsp; (
+                      {specialWinners?.StellarSpenderAmountEth.toFixed(4)} ETH)
                     </Typography>
                   </Grid>
                 </Grid>

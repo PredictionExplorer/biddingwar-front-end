@@ -27,6 +27,7 @@ import { UniqueStakersRWLKTable } from "../components/UniqueStakersRWLKTable";
 import { CustomPagination } from "../components/CustomPagination";
 import { CTBalanceDistributionChart } from "../components/CTBalanceDistributionChart";
 import { GetServerSideProps } from "next";
+import EnduranceChampionsTable from "../components/EnduranceChampionsTable";
 // import { UniqueStakersBothTable } from "../components/UniqueStakersBothTable";
 
 interface TabPanelProps {
@@ -66,6 +67,7 @@ const Statistics = () => {
   const [curPage, setCurrentPage] = useState(1);
   const perPage = 12;
   const [data, setData] = useState(null);
+  const [currentRoundBidHistory, setCurrentRoundBidHistory] = useState([]);
   const [bidHistory, setBidHistory] = useState([]);
   const [uniqueBidders, setUniqueBidders] = useState([]);
   const [uniqueWinners, setUniqueWinners] = useState([]);
@@ -97,10 +99,12 @@ const Statistics = () => {
       setLoading(true);
       const data = await api.get_dashboard_info();
       setData(data);
-      const bidHistory = await api.get_bid_list_by_round(
+      const curBidHistory = await api.get_bid_list_by_round(
         data?.CurRoundNum,
         "desc"
       );
+      setCurrentRoundBidHistory(curBidHistory);
+      const bidHistory = await api.get_bid_list();
       setBidHistory(bidHistory);
       let uniqueBidders = await api.get_unique_bidders();
       uniqueBidders = uniqueBidders.sort((a, b) => b.NumBids - a.NumBids);
@@ -285,7 +289,7 @@ const Statistics = () => {
                 </Typography>
               </Box>
               <BiddingHistoryTable
-                biddingHistory={bidHistory}
+                biddingHistory={currentRoundBidHistory}
                 showRound={false}
               />
             </Box>
@@ -512,6 +516,12 @@ const Statistics = () => {
             </Box> */}
             <Box mt={4}>
               <Typography variant="h6" mb={2}>
+                Endurance Champions
+              </Typography>
+              <EnduranceChampionsTable list={bidHistory} />
+            </Box>
+            <Box mt={4}>
+              <Typography variant="h6" mb={2}>
                 Donated Token Distribution per Contract Address
               </Typography>
               <DonatedNFTDistributionTable
@@ -536,7 +546,6 @@ const Statistics = () => {
                 list={ctBalanceDistribution.slice(0, 20)}
               />
             </Box>
-
             <Box sx={{ mt: 4, borderBottom: 1, borderColor: "divider" }}>
               <Tabs value={stakingType} onChange={handleTabChange}>
                 <Tab

@@ -81,7 +81,7 @@ const ETHSpentTable = ({ list }) => {
   }, [list, account]);
 
   if (list.length === 0) {
-    return <Typography>No holders yet.</Typography>;
+    return <Typography>No spenders yet.</Typography>;
   }
   return (
     <>
