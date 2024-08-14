@@ -30,6 +30,8 @@ const ETHSpentRow = ({ row }) => {
     >
       <TablePrimaryCell align="left">
         <AddressLink address={row.bidderAddr} url={`/user/${row.bidderAddr}`} />
+        &nbsp;
+        {account === row.bidderAddr && "(You)"}
       </TablePrimaryCell>
       <TablePrimaryCell align="center">
         {row.amount.toFixed(4)} ETH

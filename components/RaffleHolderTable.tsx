@@ -33,6 +33,8 @@ const HolderRow = ({ holder }) => {
           address={holder.userAddr}
           url={`/user/${holder.userAddr}`}
         />
+        &nbsp;
+        {account === holder.userAddr && "(You)"}
       </TablePrimaryCell>
       <TablePrimaryCell align="center">{holder.count}</TablePrimaryCell>
       <TablePrimaryCell align="center">
