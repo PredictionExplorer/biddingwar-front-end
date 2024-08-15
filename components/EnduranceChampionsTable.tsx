@@ -38,21 +38,19 @@ const EnduranceChampionsTable = ({ list }) => {
   const perPage = 5;
   const [page, setPage] = useState(1);
   const [championList, setChampionList] = useState(null);
+  const reversed = list.sort((a, b) => a.TimeStamp - b.TimeStamp);
 
   useEffect(() => {
     const getEnduranceChampions = () => {
-      console.log("Original list:", list); // Debug log
-
       let maxDuration = 0;
       let currentChampion = null;
       const champions = new Map();
 
-      for (let i = 1; i < list.length; i++) {
-        const duration = Math.abs(list[i].TimeStamp - list[i - 1].TimeStamp);
-        const bidder = list[i - 1].BidderAddr;
-
-        console.log(`Bid ${i}: Duration ${duration}, Bidder ${bidder}`); // Debug log
-
+      for (let i = 1; i < reversed.length; i++) {
+        const duration = Math.abs(
+          reversed[i].TimeStamp - reversed[i - 1].TimeStamp
+        );
+        const bidder = reversed[i - 1].BidderAddr;
         if (duration > maxDuration) {
           maxDuration = duration;
           if (currentChampion) {
@@ -67,16 +65,10 @@ const EnduranceChampionsTable = ({ list }) => {
             championDuration: duration,
             championTime: duration,
           });
-          console.log(
-            `New max duration: ${maxDuration}, New champion: ${currentChampion}`
-          ); // Debug log
         } else if (currentChampion) {
           const championData = champions.get(currentChampion);
           championData.championDuration += duration;
           champions.set(currentChampion, championData);
-          console.log(
-            `Updated champion ${currentChampion}: Duration ${championData.championDuration}`
-          ); // Debug log
         }
       }
 
@@ -88,8 +80,6 @@ const EnduranceChampionsTable = ({ list }) => {
           championTime,
         })
       ).sort((a, b) => b.championTime - a.championTime);
-
-      console.log("Final champions:", result); // Debug log
       return result;
     };
 
