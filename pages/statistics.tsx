@@ -27,7 +27,6 @@ import { UniqueStakersRWLKTable } from "../components/UniqueStakersRWLKTable";
 import { CustomPagination } from "../components/CustomPagination";
 import { CTBalanceDistributionChart } from "../components/CTBalanceDistributionChart";
 import { GetServerSideProps } from "next";
-import EnduranceChampionsTable from "../components/EnduranceChampionsTable";
 // import { UniqueStakersBothTable } from "../components/UniqueStakersBothTable";
 
 interface TabPanelProps {
@@ -68,7 +67,6 @@ const Statistics = () => {
   const perPage = 12;
   const [data, setData] = useState(null);
   const [currentRoundBidHistory, setCurrentRoundBidHistory] = useState([]);
-  const [bidHistory, setBidHistory] = useState([]);
   const [uniqueBidders, setUniqueBidders] = useState([]);
   const [uniqueWinners, setUniqueWinners] = useState([]);
   // const [uniqueStakers, setUniqueStakers] = useState([]);
@@ -104,8 +102,6 @@ const Statistics = () => {
         "desc"
       );
       setCurrentRoundBidHistory(curBidHistory);
-      const bidHistory = await api.get_bid_list();
-      setBidHistory(bidHistory);
       let uniqueBidders = await api.get_unique_bidders();
       uniqueBidders = uniqueBidders.sort((a, b) => b.NumBids - a.NumBids);
       setUniqueBidders(uniqueBidders);
@@ -514,12 +510,6 @@ const Statistics = () => {
               </Typography>
               <UniqueStakersBothTable list={uniqueStakers} />
             </Box> */}
-            <Box mt={4}>
-              <Typography variant="h6" mb={2}>
-                Endurance Champions
-              </Typography>
-              <EnduranceChampionsTable list={bidHistory} />
-            </Box>
             <Box mt={4}>
               <Typography variant="h6" mb={2}>
                 Donated Token Distribution per Contract Address

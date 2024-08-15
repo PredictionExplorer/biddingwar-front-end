@@ -43,23 +43,13 @@ const EnduranceChampionsTable = ({ list }) => {
     const getEnduranceChampions = () => {
       console.log("Original list:", list); // Debug log
 
-      const currentRound = list[list.length - 1].RoundNum;
-      console.log("Current round:", currentRound); // Debug log
-
-      const currentRoundBids = list
-        .filter((item) => item.RoundNum === currentRound)
-        .sort((a, b) => a.TimeStamp - b.TimeStamp); // Sort bids by timestamp
-      console.log("Current round bids:", currentRoundBids); // Debug log
-
       let maxDuration = 0;
       let currentChampion = null;
       const champions = new Map();
 
-      for (let i = 1; i < currentRoundBids.length; i++) {
-        const duration = Math.abs(
-          currentRoundBids[i].TimeStamp - currentRoundBids[i - 1].TimeStamp
-        );
-        const bidder = currentRoundBids[i - 1].BidderAddr;
+      for (let i = 1; i < list.length; i++) {
+        const duration = Math.abs(list[i].TimeStamp - list[i - 1].TimeStamp);
+        const bidder = list[i - 1].BidderAddr;
 
         console.log(`Bid ${i}: Duration ${duration}, Bidder ${bidder}`); // Debug log
 
@@ -116,9 +106,6 @@ const EnduranceChampionsTable = ({ list }) => {
 
   return (
     <>
-      <Typography variant="h6" gutterBottom>
-        Endurance Champions for Current Round
-      </Typography>
       {championList === null ? (
         <Typography>Loading...</Typography>
       ) : championList.length === 0 ? (

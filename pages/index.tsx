@@ -68,6 +68,7 @@ import { GetServerSideProps } from "next";
 import TwitterPopup from "../components/TwitterPopup";
 import TwitterShareButton from "../components/TwitterShareButton";
 import ETHSpentTable from "../components/ETHSpentTable";
+import EnduranceChampionsTable from "../components/EnduranceChampionsTable";
 
 const bidParamsEncoding: ethers.utils.ParamType = {
   type: "tuple(string,int256)",
@@ -1459,6 +1460,12 @@ const NewHome = () => {
         <Box mt={10}>
           <Typography variant="h6">TOP ETH SPENDERS FOR BID</Typography>
           <ETHSpentTable list={curBidList} />
+        </Box>
+        <Box mt={10}>
+          <Typography variant="h6">
+            ENDURANCE CHAMPIONS FOR CURRENT ROUND
+          </Typography>
+          <EnduranceChampionsTable list={curBidList} />
         </Box>
         <Box marginTop={10}>
           <Box>
