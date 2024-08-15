@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, TableBody, Typography } from "@mui/material";
+import { TableBody, Typography } from "@mui/material";
 import {
   TablePrimaryContainer,
   TablePrimaryCell,
@@ -38,7 +38,8 @@ const EnduranceChampionsTable = ({ list }) => {
   const perPage = 5;
   const [page, setPage] = useState(1);
   const [championList, setChampionList] = useState(null);
-  const reversed = list.sort((a, b) => a.TimeStamp - b.TimeStamp);
+  let reversed = [...list];
+  reversed.sort((a, b) => a.TimeStamp - b.TimeStamp);
 
   useEffect(() => {
     const getEnduranceChampions = () => {
