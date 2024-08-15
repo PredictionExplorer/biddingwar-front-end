@@ -21,7 +21,7 @@ const EnduranceChampionsRow = ({ row }) => {
   }
   return (
     <TablePrimaryRow>
-      <TablePrimaryCell align="center">
+      <TablePrimaryCell align="left">
         <AddressLink address={row.bidder} url={`/user/${row.bidder}`} />
       </TablePrimaryCell>
       <TablePrimaryCell align="center">
@@ -122,7 +122,7 @@ const EnduranceChampionsTable = ({ list }) => {
             )}
             <TablePrimaryHead>
               <Tr>
-                <TablePrimaryHeadCell align="center">
+                <TablePrimaryHeadCell align="left">
                   User Address
                 </TablePrimaryHeadCell>
                 <TablePrimaryHeadCell align="center">
