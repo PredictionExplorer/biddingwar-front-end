@@ -120,6 +120,7 @@ const NewHome = () => {
   const [advancedExpanded, setAdvancedExpanded] = useState(false);
   const [twitterPopupOpen, setTwitterPopupOpen] = useState(false);
   const [twitterHandle, setTwitterHandle] = useState("");
+  const [activationTime, setActivationTime] = useState(0);
 
   const perPage = 12;
 
@@ -707,8 +708,14 @@ const NewHome = () => {
       const timeout = await cosmicGameContract.timeoutClaimPrize();
       setTimeoutClaimPrize(Number(timeout));
     };
+    const fetchActivationTime = async () => {
+      const activationTime = await cosmicGameContract.activationTime();
+      setActivationTime(Number(activationTime));
+    };
+
     if (cosmicGameContract) {
       fetchTimeoutClaimPrize();
+      fetchActivationTime();
     }
   }, [cosmicGameContract]);
 
@@ -725,49 +732,62 @@ const NewHome = () => {
           <Grid item sm={12} md={6}>
             {!loading && (
               <>
-                {data?.TsRoundStart !== 0 ? (
-                  <>
-                    <Grid container spacing={2} alignItems="center" mb={4}>
-                      <Grid item xs={12} sm={4} md={4}>
-                        <Typography variant="h5">
-                          Round #{data?.CurRoundNum}
-                        </Typography>
-                      </Grid>
-                      <Grid item xs={12} sm={8} md={8} sx={{ width: "100%" }}>
-                        {data?.LastBidderAddr !== constants.AddressZero &&
-                          (prizeTime > Date.now() ? (
-                            <>
-                              <Typography
-                                variant="subtitle1"
-                                textAlign="center"
-                                fontWeight={400}
-                              >
-                                Finishes In
-                              </Typography>
-                              <Countdown
-                                key={0}
-                                date={prizeTime}
-                                renderer={Counter}
-                              />
-                            </>
-                          ) : (
-                            <>
-                              <Typography variant="h5" color="primary">
-                                Bids exhausted!
-                              </Typography>
-                              <Typography variant="subtitle2" color="primary">
-                                Waiting for the winner to claim the prize.
-                              </Typography>
-                            </>
-                          ))}
-                        {roundStarted !== "" && (
-                          <Typography sx={{ mt: 1 }}>
-                            (Started {roundStarted} ago.)
-                          </Typography>
-                        )}
-                      </Grid>
+                {activationTime > Date.now() / 1000 ? (
+                  <Box mb={4}>
+                    <Typography
+                      variant="subtitle1"
+                      textAlign="center"
+                      fontWeight={400}
+                    >
+                      Activates In
+                    </Typography>
+                    <Countdown
+                      key={3}
+                      date={activationTime * 1000}
+                      renderer={Counter}
+                    />
+                  </Box>
+                ) : data?.TsRoundStart !== 0 ? (
+                  <Grid container spacing={2} alignItems="center" mb={4}>
+                    <Grid item xs={12} sm={4} md={4}>
+                      <Typography variant="h5">
+                        Round #{data?.CurRoundNum}
+                      </Typography>
                     </Grid>
-                  </>
+                    <Grid item xs={12} sm={8} md={8} sx={{ width: "100%" }}>
+                      {data?.LastBidderAddr !== constants.AddressZero &&
+                        (prizeTime > Date.now() ? (
+                          <>
+                            <Typography
+                              variant="subtitle1"
+                              textAlign="center"
+                              fontWeight={400}
+                            >
+                              Finishes In
+                            </Typography>
+                            <Countdown
+                              key={0}
+                              date={prizeTime}
+                              renderer={Counter}
+                            />
+                          </>
+                        ) : (
+                          <>
+                            <Typography variant="h5" color="primary">
+                              Bids exhausted!
+                            </Typography>
+                            <Typography variant="subtitle2" color="primary">
+                              Waiting for the winner to claim the prize.
+                            </Typography>
+                          </>
+                        ))}
+                      {roundStarted !== "" && (
+                        <Typography sx={{ mt: 1 }}>
+                          (Started {roundStarted} ago.)
+                        </Typography>
+                      )}
+                    </Grid>
+                  </Grid>
                 ) : (
                   <>
                     {data?.CurRoundNum > 0 && data?.TsRoundStart === 0 ? (
