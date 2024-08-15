@@ -1268,8 +1268,11 @@ const NewHome = () => {
                       >
                         {specialWinners?.StellarSpenderAddress}
                       </Link>
-                      &nbsp; (
-                      {specialWinners?.StellarSpenderAmountEth.toFixed(4)} ETH)
+                      &nbsp;
+                      {specialWinners?.StellarSpenderAmountEth > 0 &&
+                        `(${specialWinners?.StellarSpenderAmountEth.toFixed(
+                          4
+                        )} ETH)`}
                     </Typography>
                   </Grid>
                 </Grid>

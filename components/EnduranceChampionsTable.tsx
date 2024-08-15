@@ -1,5 +1,5 @@
-import React, { useEffect, useState, useRef } from "react";
-import { Link, TableBody, Typography } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { TableBody, TableSortLabel, Typography } from "@mui/material";
 import {
   TablePrimaryContainer,
   TablePrimaryCell,
@@ -14,8 +14,6 @@ import { CustomPagination } from "./CustomPagination";
 import { isMobile } from "react-device-detect";
 import { AddressLink } from "./AddressLink";
 import { formatSeconds } from "../utils";
-import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
-import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 
 const EnduranceChampionsRow = ({ row }) => {
   if (!row) {
@@ -23,7 +21,7 @@ const EnduranceChampionsRow = ({ row }) => {
   }
   return (
     <TablePrimaryRow>
-      <TablePrimaryCell align="center">
+      <TablePrimaryCell align="left">
         <AddressLink address={row.bidder} url={`/user/${row.bidder}`} />
       </TablePrimaryCell>
       <TablePrimaryCell align="center">
@@ -40,28 +38,20 @@ const EnduranceChampionsTable = ({ list }) => {
   const perPage = 5;
   const [championList, setChampionList] = useState(null);
   const [sortField, setSortField] = useState("championTime");
-  const [sortDirection, setSortDirection] = useState("desc");
-
-  // Use useRef and localStorage to maintain page state
-  const pageRef = useRef(
-    parseInt(localStorage.getItem("enduranceChampionsPage") || "1", 10)
-  );
-  const [page, setPage] = useState(pageRef.current);
+  const [sortDirection, setSortDirection] = useState<"asc" | "desc">("desc");
+  const [page, setPage] = useState(1);
 
   useEffect(() => {
     const getEnduranceChampions = (bidList) => {
       if (!bidList || bidList.length === 0) {
-        console.log("List is empty or undefined");
         return [];
       }
-
-      const currentRound = bidList[bidList.length - 1].RoundNum;
-      const currentRoundBids = bidList
-        .filter((item) => item.RoundNum === currentRound)
-        .sort((a, b) => a.TimeStamp - b.TimeStamp);
+      let currentRoundBids = [...bidList];
+      currentRoundBids = currentRoundBids.sort(
+        (a, b) => a.TimeStamp - b.TimeStamp
+      );
 
       if (currentRoundBids.length < 2) {
-        console.log("Not enough bids in the current round");
         return [];
       }
 
@@ -100,23 +90,9 @@ const EnduranceChampionsTable = ({ list }) => {
         chronoWarrior: champion.chronoWarrior,
       }));
     };
-
     const champions = getEnduranceChampions(list);
     setChampionList(champions);
-
-    // Ensure the current page is valid for the new data
-    const maxPage = Math.ceil(champions.length / perPage);
-    if (pageRef.current > maxPage) {
-      pageRef.current = Math.max(1, maxPage);
-      setPage(pageRef.current);
-    }
-  }, [list, perPage]);
-
-  // Update localStorage when page changes
-  useEffect(() => {
-    localStorage.setItem("enduranceChampionsPage", page.toString());
-    pageRef.current = page;
-  }, [page]);
+  }, [list]);
 
   const handleSort = (field) => {
     if (field === sortField) {
@@ -142,25 +118,12 @@ const EnduranceChampionsTable = ({ list }) => {
     page * perPage
   );
 
-  const SortIcon = ({ field }) => {
-    if (field !== sortField) return null;
-    return sortDirection === "asc" ? (
-      <ArrowUpwardIcon fontSize="small" />
-    ) : (
-      <ArrowDownwardIcon fontSize="small" />
-    );
-  };
-
   if (!list || list.length === 0) {
-    console.log("List is empty or undefined");
     return <Typography>No bid data available.</Typography>;
   }
 
   return (
     <>
-      <Typography variant="h6" gutterBottom>
-        Endurance Champions for Current Round
-      </Typography>
       {championList === null ? (
         <Typography>Loading...</Typography>
       ) : championList.length === 0 ? (
@@ -177,22 +140,26 @@ const EnduranceChampionsTable = ({ list }) => {
             )}
             <TablePrimaryHead>
               <Tr>
-                <TablePrimaryHeadCell align="center">
+                <TablePrimaryHeadCell align="left">
                   User Address
                 </TablePrimaryHeadCell>
-                <TablePrimaryHeadCell
-                  align="center"
-                  onClick={() => handleSort("championTime")}
-                  style={{ cursor: "pointer" }}
-                >
-                  Champion Time <SortIcon field="championTime" />
+                <TablePrimaryHeadCell align="center">
+                  <TableSortLabel
+                    active={sortField === "championTime"}
+                    direction={sortDirection}
+                    onClick={() => handleSort("championTime")}
+                  >
+                    Champion Time
+                  </TableSortLabel>
                 </TablePrimaryHeadCell>
-                <TablePrimaryHeadCell
-                  align="center"
-                  onClick={() => handleSort("chronoWarrior")}
-                  style={{ cursor: "pointer" }}
-                >
-                  Chrono Warrior <SortIcon field="chronoWarrior" />
+                <TablePrimaryHeadCell align="center">
+                  <TableSortLabel
+                    active={sortField === "chronoWarrior"}
+                    direction={sortDirection}
+                    onClick={() => handleSort("chronoWarrior")}
+                  >
+                    Chrono Warrior
+                  </TableSortLabel>
                 </TablePrimaryHeadCell>
               </Tr>
             </TablePrimaryHead>
