@@ -46,8 +46,7 @@ const EnduranceChampionsTable = ({ list }) => {
       if (!bidList || bidList.length === 0) {
         return [];
       }
-      let currentRoundBids = [...bidList];
-      currentRoundBids = currentRoundBids.sort(
+      let currentRoundBids = [...bidList].sort(
         (a, b) => a.TimeStamp - b.TimeStamp
       );
 
@@ -68,19 +67,22 @@ const EnduranceChampionsTable = ({ list }) => {
             address: currentRoundBids[i - 1].BidderAddr,
             championTime: enduranceDuration,
             startTime: currentRoundBids[i - 1].TimeStamp,
+            endTime: currentRoundBids[i].TimeStamp,
           });
         }
       }
 
       // Second pass: Calculate chrono warrior time
       for (let i = 0; i < enduranceChampions.length; i++) {
-        const chronoDuration =
-          i === enduranceChampions.length - 1
-            ? currentRoundBids[currentRoundBids.length - 1].TimeStamp -
-              enduranceChampions[i].startTime
-            : enduranceChampions[i + 1].startTime -
-              enduranceChampions[i].startTime;
-
+        let chronoDuration;
+        if (i === enduranceChampions.length - 1) {
+          chronoDuration =
+            currentRoundBids[currentRoundBids.length - 1].TimeStamp -
+            enduranceChampions[i].endTime;
+        } else {
+          chronoDuration =
+            enduranceChampions[i + 1].startTime - enduranceChampions[i].endTime;
+        }
         enduranceChampions[i].chronoWarrior = chronoDuration;
       }
 
