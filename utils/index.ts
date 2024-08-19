@@ -45,10 +45,10 @@ export const convertTimestampToDateTime = (timestamp: any) => {
 };
 
 export const formatSeconds = (seconds: any) => {
-  if (seconds <= 0) {
+  if (seconds < 0) {
     return " ";
   }
-  let minutes = Math.ceil(seconds / 60);
+  let minutes = Math.floor(seconds / 60);
   seconds = seconds % 60;
   let hours = Math.floor(minutes / 60);
   minutes = minutes % 60;
@@ -64,7 +64,7 @@ export const formatSeconds = (seconds: any) => {
   if (minutes) {
     str += minutes + (minutes === 1 ? " Minute" : " Minutes");
   }
-  return str;
+  return str === "" ? "0 Minutes" : str;
 };
 
 export const calculateTimeDiff = (timestamp: any) => {

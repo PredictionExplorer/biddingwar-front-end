@@ -13,19 +13,7 @@ import { Tr } from "react-super-responsive-table";
 import { CustomPagination } from "./CustomPagination";
 import { isMobile } from "react-device-detect";
 import { AddressLink } from "./AddressLink";
-
-const formatTime = (seconds: number): string => {
-  const days = Math.floor(seconds / (3600 * 24));
-  const hours = Math.floor((seconds % (3600 * 24)) / 3600);
-  const minutes = Math.floor((seconds % 3600) / 60);
-
-  const parts = [];
-  if (days > 0) parts.push(`${days}d`);
-  if (hours > 0) parts.push(`${hours}h`);
-  if (minutes > 0) parts.push(`${minutes}m`);
-
-  return parts.length > 0 ? parts.join(" ") : "0m";
-};
+import { formatSeconds } from "../utils";
 
 const EnduranceChampionsRow = ({ row }) => {
   if (!row) {
@@ -37,10 +25,10 @@ const EnduranceChampionsRow = ({ row }) => {
         <AddressLink address={row.bidder} url={`/user/${row.bidder}`} />
       </TablePrimaryCell>
       <TablePrimaryCell align="center">
-        {formatTime(row.championTime)}
+        {formatSeconds(row.championTime)}
       </TablePrimaryCell>
       <TablePrimaryCell align="center">
-        {formatTime(row.chronoWarrior || 0)}
+        {formatSeconds(row.chronoWarrior || 0)}
       </TablePrimaryCell>
     </TablePrimaryRow>
   );
