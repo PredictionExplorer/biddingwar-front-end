@@ -58,16 +58,16 @@ export const formatSeconds = (seconds: any) => {
   if (days) {
     str = days + 'd ';
   }
-  if (hours || str) {
+  if (hours || (str && (minutes || seconds))) {
     str += hours + 'h ';
   }
-  if (minutes || str) {
+  if (minutes || (str && seconds)) {
     str += minutes + 'm ';
   }
   if (seconds) {
     str += seconds + 's';
   }
-  return str === "" ? "0m" : str;
+  return str === "" ? "0s" : str;
 };
 
 export const calculateTimeDiff = (timestamp: any) => {
@@ -85,14 +85,14 @@ export const calculateTimeDiff = (timestamp: any) => {
   if (days) {
     str = days + 'd ';
   }
-  if (hours || str) {
+  if (hours || (str && (minutes || seconds))) {
     str += hours + 'h ';
   }
-  if (minutes || str) {
+  if (minutes || (str && seconds)) {
     str += minutes + 'm ';
   }
-  if (seconds || str) {
-    str += seconds + 's ';
+  if (seconds) {
+    str += seconds + 's';
   }
   return str === "" ? "0s" : str;
 };
