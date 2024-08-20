@@ -784,7 +784,7 @@ const NewHome = () => {
                         ))}
                       {roundStarted !== "" && (
                         <Typography sx={{ mt: 1 }}>
-                          (Started {roundStarted} ago.)
+                          (Round was started {roundStarted} ago.)
                         </Typography>
                       )}
                     </Grid>
@@ -1659,13 +1659,8 @@ export const getServerSideProps: GetServerSideProps = async () => {
 export default NewHome;
 
 // Todo:
-// mobile responsiveness
-// table, styledcard, wallet connect, text break
 
-// how-to-play page, hide contract option from header
-// show previous round winner, history of winnings
-
-// CST balance update
+// how-to-play page, hide contract option from header: refactor header
 // add donate button, donor list, add eth-donate list to user detail
 // update site-map and show link
 // add link to user-detail for marketing reward for user
@@ -1674,7 +1669,7 @@ export default NewHome;
 // file naming scheme to seed from token id
 // system mode changes on statistics page
 // update statistics page with new data
-//
 // get_bid_list_by_round: implement pagination
 // get_user_info: remove bid field
 // complete admin page
+// update FAQ page: stellar, endurance champion

@@ -49,55 +49,61 @@ export const formatSeconds = (seconds: any) => {
     return " ";
   }
   let minutes = Math.floor(seconds / 60);
-  seconds = seconds % 60;
+  seconds = Math.floor(seconds % 60);
   let hours = Math.floor(minutes / 60);
   minutes = minutes % 60;
   let days = Math.floor(hours / 24);
   hours = hours % 24;
   let str = "";
   if (days) {
-    str = days + (days === 1 ? " Day " : " Days ");
+    str = days + 'd ';
   }
   if (hours || str) {
-    str += hours + (hours === 1 ? " Hour " : " Hours ");
+    str += hours + 'h ';
   }
-  if (minutes) {
-    str += minutes + (minutes === 1 ? " Minute" : " Minutes");
+  if (minutes || str) {
+    str += minutes + 'm ';
   }
-  return str === "" ? "0 Minutes" : str;
+  if (seconds) {
+    str += seconds + 's';
+  }
+  return str === "" ? "0m" : str;
 };
 
 export const calculateTimeDiff = (timestamp: any) => {
   let seconds = Math.floor(Date.now() / 1000) - timestamp;
-  if (seconds <= 0) {
+  if (seconds < 0) {
     return "";
   }
   let minutes = Math.floor(seconds / 60);
-  seconds = seconds % 60;
+  seconds = Math.floor(seconds % 60);
   let hours = Math.floor(minutes / 60);
   minutes = minutes % 60;
   let days = Math.floor(hours / 24);
   hours = hours % 24;
   let str = "";
   if (days) {
-    str = days + (days === 1 ? " Day " : " Days ");
+    str = days + 'd ';
   }
   if (hours || str) {
-    str += hours + (hours === 1 ? " Hour " : " Hours ");
+    str += hours + 'h ';
   }
-  if (minutes) {
-    str += minutes + (minutes === 1 ? " Minute" : " Minutes");
+  if (minutes || str) {
+    str += minutes + 'm ';
   }
-  return str;
+  if (seconds || str) {
+    str += seconds + 's ';
+  }
+  return str === "" ? "0s" : str;
 };
 
 export const formatEthValue = (value: number) => {
   if (!value) return '';
   if (value < 10) return `${value.toFixed(4)} ETH`;
-  return `${value.toFixed(1)} ETH`;
+  return `${value.toFixed(2)} ETH`;
 };
 
 export const formatCSTValue = (value: number) => {
   if (value < 10) return `${value.toFixed(4)} CST`;
-  return `${value.toFixed(1)} CST`;
+  return `${value.toFixed(2)} CST`;
 };

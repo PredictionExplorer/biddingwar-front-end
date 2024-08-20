@@ -129,6 +129,9 @@ const Statistics = () => {
       setStakedRWLKTokens(tokens);
       const sysChanges = await api.get_system_modelist();
       setSystemModeChanges(sysChanges);
+      setLoading(false);
+    };
+    const fetchCSTBidData = async () => {
       let ctData = await api.get_ct_price();
       if (ctData) {
         setCSTBidData({
@@ -137,32 +140,31 @@ const Statistics = () => {
           SecondsElapsed: parseInt(ctData.SecondsElapsed),
         });
       }
-      setLoading(false);
     };
     fetchData();
+    fetchCSTBidData();
+
+    const interval = setInterval(() => {
+      fetchCSTBidData();
+    }, 5000);
+    return () => {
+      clearInterval(interval);
+    };
   }, []);
 
   const renderer = ({ days, hours, minutes, seconds }) => {
     let result = "";
-    if (days > 1) {
-      result = `${days} days `;
-    } else if (days === 1) {
-      result = `${days} day `;
+    if (days) {
+      result = `${days}d `;
     }
-    if (hours > 1) {
-      result += `${hours} hours `;
-    } else if (hours === 1 || (hours === 0 && result !== "")) {
-      result += `${hours} hour `;
+    if (hours || result) {
+      result += `${hours}h `;
     }
-    if (minutes > 1) {
-      result += `${minutes} minutes `;
-    } else if (minutes === 1 || (minutes === 0 && result !== "")) {
-      result += `${minutes} minute `;
+    if (minutes || result) {
+      result += `${minutes}m `;
     }
-    if (seconds > 1) {
-      result += `${seconds} seconds`;
-    } else if (seconds === 1 || (seconds === 0 && result !== "")) {
-      result += `${seconds} second`;
+    if (seconds || result) {
+      result += `${seconds}s`;
     }
     if (result !== "") {
       result += " left";
