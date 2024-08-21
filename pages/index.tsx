@@ -69,6 +69,7 @@ import TwitterPopup from "../components/TwitterPopup";
 import TwitterShareButton from "../components/TwitterShareButton";
 import ETHSpentTable from "../components/ETHSpentTable";
 import EnduranceChampionsTable from "../components/EnduranceChampionsTable";
+import EthDonationTable from "../components/EthDonationTable";
 
 const bidParamsEncoding: ethers.utils.ParamType = {
   type: "tuple(string,int256)",
@@ -101,6 +102,7 @@ const NewHome = () => {
   const [specialWinners, setSpecialWinners] = useState(null);
   const [winProbability, setWinProbability] = useState(null);
   const [donatedNFTs, setDonatedNFTs] = useState([]);
+  const [ethDonations, setEthDonations] = useState([]);
   const [prizeTime, setPrizeTime] = useState(0);
   const [timeoutClaimPrize, setTimeoutClaimPrize] = useState(0);
   const [prizeInfo, setPrizeInfo] = useState(null);
@@ -122,7 +124,6 @@ const NewHome = () => {
   const [twitterPopupOpen, setTwitterPopupOpen] = useState(false);
   const [twitterHandle, setTwitterHandle] = useState("");
   const [activationTime, setActivationTime] = useState(0);
-
   const perPage = 12;
 
   const { library, account } = useActiveWeb3React();
@@ -498,6 +499,9 @@ const NewHome = () => {
       setCurBidList(newBidData);
       const nftData = await api.get_donations_nft_by_round(round);
       setDonatedNFTs(nftData);
+      const donations = await api.get_donations_with_info_by_round(round);
+      setEthDonations(donations);
+      console.log(donations);
     }
     const specials = await api.get_current_special_winners();
     setSpecialWinners(specials);
@@ -1470,6 +1474,10 @@ const NewHome = () => {
           </Typography>
           <EnduranceChampionsTable list={curBidList} />
         </Box>
+        <Box mt={10}>
+          <Typography variant="h6">ETH DONATIONS FOR CURRENT ROUND</Typography>
+          <EthDonationTable list={ethDonations} />
+        </Box>
         <Box marginTop={10}>
           <Box>
             <Typography variant="h6" component="span">
@@ -1522,7 +1530,7 @@ const NewHome = () => {
               color="primary"
               sx={{ ml: 1 }}
             >
-              ROUND {data?.CurRoundNum}
+              (ROUND {data?.CurRoundNum})
             </Typography>
           </Box>
           <BiddingHistory biddingHistory={curBidList} showRound={false} />
@@ -1673,3 +1681,5 @@ export default NewHome;
 // get_user_info: remove bid field
 // complete admin page
 // update FAQ page: stellar, endurance champion
+// get_donations_with_info_by_user
+// update donations page

@@ -32,6 +32,16 @@ const EthDonationRow = ({ row }) => {
         </Link>
       </TablePrimaryCell>
       <TablePrimaryCell align="center">
+        <Link
+          color="inherit"
+          fontSize="inherit"
+          href={`/prize/${row.RoundNum}`}
+          target="__blank"
+        >
+          {row.RoundNum}
+        </Link>
+      </TablePrimaryCell>
+      <TablePrimaryCell align="center">
         <AddressLink address={row.DonorAddr} url={`/user/${row.DonorAddr}`} />
       </TablePrimaryCell>
       <TablePrimaryCell align="right">
@@ -54,6 +64,7 @@ const EthDonationTable = ({ list }) => {
           <TablePrimaryHead>
             <Tr>
               <TablePrimaryHeadCell align="left">Datetime</TablePrimaryHeadCell>
+              <TablePrimaryHeadCell>Round</TablePrimaryHeadCell>
               <TablePrimaryHeadCell>Donor</TablePrimaryHeadCell>
               <TablePrimaryHeadCell align="right">
                 Amount (ETH)
