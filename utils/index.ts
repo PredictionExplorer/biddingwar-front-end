@@ -1,5 +1,12 @@
 import type { BigNumberish } from '@ethersproject/bignumber'
 import { formatUnits } from '@ethersproject/units'
+import axios from "axios";
+
+const proxyUrl = "/api/proxy?url=";
+
+const getAPIUrl = (url: string) => {
+  return `${proxyUrl}${encodeURIComponent(url)}`;
+};
 
 export function shortenHex(hex: string, length = 4) {
   if (hex) {
@@ -108,3 +115,35 @@ export const formatCSTValue = (value: number) => {
   if (value < 10) return `${value.toFixed(4)} CST`;
   return `${value.toFixed(2)} CST`;
 };
+
+export async function getMetadata(url: string) {
+  try {
+    const { data: html } = await axios.get(getAPIUrl(url));
+
+    // Extract title using a regex
+    const titleMatch = html.match(/<title>(.*?)<\/title>/);
+    const title = titleMatch ? titleMatch[1] : '';
+
+    // Extract description using a regex
+    const descriptionMatch = html.match(/<meta\s+name=["']description["']\s+content=["'](.*?)["']/i);
+    const description = descriptionMatch ? descriptionMatch[1] : '';
+
+    // Extract keywords using a regex
+    const keywordsMatch = html.match(/<meta\s+name=["']keywords["']\s+content=["'](.*?)["']/i);
+    const keywords = keywordsMatch ? keywordsMatch[1] : '';
+
+    // Extract image using a regex for og:image
+    const imageMatch = html.match(/<meta\s+property=["']og:image["']\s+content=["'](.*?)["']/i);
+    const image = imageMatch ? imageMatch[1] : '';
+
+    return {
+      title,
+      description,
+      keywords,
+      image,
+    };
+  } catch (error) {
+    console.error('Error fetching metadata:', error);
+    return null;
+  }
+}

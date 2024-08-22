@@ -43,6 +43,7 @@
     "@progress/kendo-react-charts": "^5.13.1",
     "@progress/kendo-react-intl": "^5.13.1",
     "@progress/kendo-theme-default": "^6.4.0",
+    "@types/node": "^22.5.0",
     "@uiw/codemirror-themes": "^4.19.16",
     "@uiw/react-codemirror": "^4.19.16",
     "@web3-react/core": "^6.1.9",
