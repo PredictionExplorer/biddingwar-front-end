@@ -468,7 +468,7 @@ const Statistics = () => {
               <StatisticsItem
                 title="Number of Direct ETH Donors"
                 value={
-                  <Link color="inherit" fontSize="inherit" href="/donations">
+                  <Link color="inherit" fontSize="inherit" href="/eth-donation">
                     {data.MainStats.NumDirectDonations}
                   </Link>
                 }
