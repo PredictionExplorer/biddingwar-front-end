@@ -3,23 +3,7 @@ import { Box, Link, Typography } from "@mui/material";
 import { MainWrapper } from "../../components/styled";
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import { convertTimestampToDateTime, getMetadata } from "../../utils";
-
-const sample = {
-  EvtLogId: 69287,
-  BlockNum: 314,
-  TxId: 21343,
-  TxHash: "0xac6158478e44bc7d25d98adae9cf76500973e6b249bf0f77c2916bfa84d8cde1",
-  TimeStamp: 1723062133,
-  DateTime: "2024-08-07T20:22:13Z",
-  DonorAid: 1,
-  DonorAddr: "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
-  Amount: "8000000000000000000",
-  AmountEth: 8,
-  RoundNum: 4,
-  CGRecordId: 2,
-  DataJson:
-    '{"version":1,"title":"EF donation","message":"Ethereum Foundation is a non-profit and part of a community of organizations and people working to fund protocol development, grow the ecosystem, and advocate for Ethereum.","url":"http://ethereum.org/en"}',
-};
+import api from "../../services/api";
 
 const EthDonationDetail = ({ id }) => {
   const [loading, setLoading] = useState(true);
@@ -30,8 +14,7 @@ const EthDonationDetail = ({ id }) => {
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
-      // const info = await api.get_bid_info(id);
-      const info = sample;
+      const info = await api.get_bid_info(id);
       setDonationInfo(info);
       if (info?.DataJson) {
         const jsonData = JSON.parse(info.DataJson);
@@ -43,6 +26,7 @@ const EthDonationDetail = ({ id }) => {
     };
     fetchData();
   }, []);
+
   return (
     <>
       <MainWrapper>
@@ -60,7 +44,7 @@ const EthDonationDetail = ({ id }) => {
         ) : (
           <>
             <Box mb={1} display="flex" flexWrap="wrap">
-              <Typography color="primary">Bid Datetime:</Typography>
+              <Typography color="primary">Donate Datetime:</Typography>
               &nbsp;
               <Link
                 href={`https://arbiscan.io/tx/${donationInfo.TxHash}`}
@@ -136,7 +120,9 @@ const EthDonationDetail = ({ id }) => {
               <Typography>{metaData?.Keywords}</Typography>
             </Box>
             <Box>
-              <Typography color="primary" mb={1}>Meta Image:</Typography>
+              <Typography color="primary" mb={1}>
+                Meta Image:
+              </Typography>
               <img src={metaData?.image} width="100%" alt="meta image" />
             </Box>
           </>
@@ -151,8 +137,8 @@ export const getServerSideProps: GetServerSideProps = async (
 ) => {
   const params = context.params!.id;
   const id = Array.isArray(params) ? params[0] : params;
-  const title = "Direct (ETH) Donations | Cosmic Signature";
-  const description = "Direct (ETH) Donations";
+  const title = "Direct (ETH) Donation Detail | Cosmic Signature";
+  const description = "Direct (ETH) Donation Detail";
   const imageUrl = "https://cosmic-game2.s3.us-east-2.amazonaws.com/logo.png";
 
   const openGraphData = [
