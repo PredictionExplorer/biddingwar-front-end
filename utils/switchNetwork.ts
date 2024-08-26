@@ -39,6 +39,9 @@ const addChainRequest = (ethereum: any) => {
           symbol: 'ETH',
           decimals: 18,
         },
+        blockExplorerUrls: [
+          "https://sepolia.arbiscan.io/"
+        ]
       },
     ],
   })
@@ -68,7 +71,7 @@ export const switchNetwork = async () => {
     } catch (error) {
       if (error.code === 4902) {
         try {
-          await addChainRequest(ethereum)
+          const res = await addChainRequest(ethereum)
           await switchRequest(ethereum)
         } catch (addError) {
           console.log(addError)

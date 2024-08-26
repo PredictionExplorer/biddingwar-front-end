@@ -501,7 +501,6 @@ const NewHome = () => {
       setDonatedNFTs(nftData);
       const donations = await api.get_donations_with_info_by_round(round);
       setEthDonations(donations);
-      console.log(donations);
     }
     const specials = await api.get_current_special_winners();
     setSpecialWinners(specials);
