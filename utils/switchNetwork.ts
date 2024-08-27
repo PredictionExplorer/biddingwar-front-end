@@ -71,7 +71,7 @@ export const switchNetwork = async () => {
     } catch (error) {
       if (error.code === 4902) {
         try {
-          const res = await addChainRequest(ethereum)
+          await addChainRequest(ethereum)
           await switchRequest(ethereum)
         } catch (addError) {
           console.log(addError)
