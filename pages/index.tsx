@@ -103,6 +103,7 @@ const NewHome = () => {
   const [winProbability, setWinProbability] = useState(null);
   const [donatedNFTs, setDonatedNFTs] = useState([]);
   const [ethDonations, setEthDonations] = useState([]);
+  const [championList, setChampionList] = useState(null);
   const [prizeTime, setPrizeTime] = useState(0);
   const [timeoutClaimPrize, setTimeoutClaimPrize] = useState(0);
   const [prizeInfo, setPrizeInfo] = useState(null);
@@ -491,6 +492,61 @@ const NewHome = () => {
     }
   };
 
+  const getEnduranceChampions = (bidList) => {
+    const currentTime = Math.floor(Date.now() / 1000);
+    if (!bidList || bidList.length === 0) {
+      return [];
+    }
+    let currentRoundBids = [...bidList].sort(
+      (a, b) => a.TimeStamp - b.TimeStamp
+    );
+
+    if (currentRoundBids.length < 2) {
+      return [];
+    }
+
+    let maxEnduranceDuration = 0;
+    let enduranceChampions = [];
+
+    // First pass: Calculate endurance champions
+    for (let i = 1; i < currentRoundBids.length; i++) {
+      const enduranceDuration =
+        currentRoundBids[i].TimeStamp - currentRoundBids[i - 1].TimeStamp;
+      if (enduranceDuration > maxEnduranceDuration) {
+        maxEnduranceDuration = enduranceDuration;
+        enduranceChampions.push({
+          address: currentRoundBids[i - 1].BidderAddr,
+          championTime: enduranceDuration,
+          startTime: currentRoundBids[i - 1].TimeStamp,
+          endTime: currentRoundBids[i].TimeStamp,
+        });
+      }
+    }
+
+    // Second pass: Calculate chrono warrior time
+    for (let i = 0; i < enduranceChampions.length; i++) {
+      let chronoDuration;
+      if (i === enduranceChampions.length - 1) {
+        chronoDuration = Math.max(
+          0,
+          currentTime - enduranceChampions[i].endTime
+        );
+      } else {
+        chronoDuration = Math.max(
+          0,
+          enduranceChampions[i + 1].startTime - enduranceChampions[i].endTime
+        );
+      }
+      enduranceChampions[i].chronoWarrior = chronoDuration;
+    }
+
+    return enduranceChampions.map((champion) => ({
+      bidder: champion.address,
+      championTime: champion.championTime,
+      chronoWarrior: champion.chronoWarrior,
+    }));
+  };
+
   const fetchData = async () => {
     const newData = await api.get_dashboard_info();
     if (newData) {
@@ -501,6 +557,11 @@ const NewHome = () => {
       setDonatedNFTs(nftData);
       const donations = await api.get_donations_with_info_by_round(round);
       setEthDonations(donations);
+      const champions = getEnduranceChampions(newBidData);
+      const sortedChampions = [...champions].sort(
+        (a, b) => b.chronoWarrior - a.chronoWarrior
+      );
+      setChampionList(sortedChampions);
     }
     const specials = await api.get_current_special_winners();
     setSpecialWinners(specials);
@@ -1279,6 +1340,32 @@ const NewHome = () => {
                     </Typography>
                   </Grid>
                 </Grid>
+                <Grid container spacing={2} mb={2} alignItems="center">
+                  <Grid item xs={12} sm={4} md={4}>
+                    <Typography>Chronor Warrior</Typography>
+                  </Grid>
+                  {championList && championList.length > 0 && (
+                    <Grid item xs={12} sm={8} md={8}>
+                      <Typography>
+                        <Link
+                          href={`/user/${championList[0].bidder}`}
+                          color="rgb(255, 255, 255)"
+                          fontSize="inherit"
+                          sx={{ wordBreak: "break-all" }}
+                        >
+                          {championList[0].bidder}
+                        </Link>
+                        {championList[0].chronoWarrior > 0 && (
+                          <>
+                            {` (Lasted ${formatSeconds(
+                              championList[0].chronoWarrior
+                            )})`}
+                          </>
+                        )}
+                      </Typography>
+                    </Grid>
+                  )}
+                </Grid>
               </>
             )}
             {account !== null && (
@@ -1471,7 +1558,7 @@ const NewHome = () => {
           <Typography variant="h6">
             ENDURANCE CHAMPIONS FOR CURRENT ROUND
           </Typography>
-          <EnduranceChampionsTable list={curBidList} />
+          <EnduranceChampionsTable championList={championList} />
         </Box>
         <Box mt={10}>
           <Typography variant="h6">ETH DONATIONS FOR CURRENT ROUND</Typography>

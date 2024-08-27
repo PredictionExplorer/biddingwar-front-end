@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { TableBody, TableSortLabel, Typography } from "@mui/material";
 import {
   TablePrimaryContainer,
@@ -34,79 +34,11 @@ const EnduranceChampionsRow = ({ row }) => {
   );
 };
 
-const EnduranceChampionsTable = ({ list }) => {
+const EnduranceChampionsTable = ({ championList }) => {
   const perPage = 5;
-  const [championList, setChampionList] = useState(null);
   const [sortField, setSortField] = useState("championTime");
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("desc");
   const [page, setPage] = useState(1);
-  const [currentTime, setCurrentTime] = useState(Math.floor(Date.now() / 1000));
-
-  useEffect(() => {
-    const getEnduranceChampions = (bidList) => {
-      if (!bidList || bidList.length === 0) {
-        return [];
-      }
-      let currentRoundBids = [...bidList].sort(
-        (a, b) => a.TimeStamp - b.TimeStamp
-      );
-
-      if (currentRoundBids.length < 2) {
-        return [];
-      }
-
-      let maxEnduranceDuration = 0;
-      let enduranceChampions = [];
-
-      // First pass: Calculate endurance champions
-      for (let i = 1; i < currentRoundBids.length; i++) {
-        const enduranceDuration =
-          currentRoundBids[i].TimeStamp - currentRoundBids[i - 1].TimeStamp;
-        if (enduranceDuration > maxEnduranceDuration) {
-          maxEnduranceDuration = enduranceDuration;
-          enduranceChampions.push({
-            address: currentRoundBids[i - 1].BidderAddr,
-            championTime: enduranceDuration,
-            startTime: currentRoundBids[i - 1].TimeStamp,
-            endTime: currentRoundBids[i].TimeStamp,
-          });
-        }
-      }
-
-      // Second pass: Calculate chrono warrior time
-      for (let i = 0; i < enduranceChampions.length; i++) {
-        let chronoDuration;
-        if (i === enduranceChampions.length - 1) {
-          chronoDuration = Math.max(
-            0,
-            currentTime - enduranceChampions[i].endTime
-          );
-        } else {
-          chronoDuration = Math.max(
-            0,
-            enduranceChampions[i + 1].startTime - enduranceChampions[i].endTime
-          );
-        }
-        enduranceChampions[i].chronoWarrior = chronoDuration;
-      }
-
-      return enduranceChampions.map((champion) => ({
-        bidder: champion.address,
-        championTime: champion.championTime,
-        chronoWarrior: champion.chronoWarrior,
-      }));
-    };
-    const champions = getEnduranceChampions(list);
-    setChampionList(champions);
-  }, [list, currentTime]);
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentTime(Math.floor(Date.now() / 1000));
-    }, 60000); // Update every minute
-
-    return () => clearInterval(timer);
-  }, []);
 
   const handleSort = (field) => {
     if (field === sortField) {
@@ -132,7 +64,7 @@ const EnduranceChampionsTable = ({ list }) => {
     page * perPage
   );
 
-  if (!list || list.length === 0) {
+  if (!championList || championList.length === 0) {
     return <Typography>No bid data available.</Typography>;
   }
 
