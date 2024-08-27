@@ -1342,7 +1342,7 @@ const NewHome = () => {
                 </Grid>
                 <Grid container spacing={2} mb={2} alignItems="center">
                   <Grid item xs={12} sm={4} md={4}>
-                    <Typography>Chronor Warrior</Typography>
+                    <Typography>Chrono Warrior</Typography>
                   </Grid>
                   {championList && championList.length > 0 && (
                     <Grid item xs={12} sm={8} md={8}>
