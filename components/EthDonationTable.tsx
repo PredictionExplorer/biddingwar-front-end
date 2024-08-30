@@ -46,7 +46,7 @@ const EthDonationRow = ({ row }) => {
         </Link>
       </TablePrimaryCell>
       <TablePrimaryCell align="center">
-        {row.RecordType ? "Donation with info" : "Simple donation"}
+        {row.RecordType ? "Simple donation" : "Donation with info"}
       </TablePrimaryCell>
       <TablePrimaryCell align="center">
         <Link
