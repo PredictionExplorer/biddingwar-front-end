@@ -1775,3 +1775,5 @@ export default NewHome;
 // update FAQ page: stellar, endurance champion
 // get_donations_with_info_by_user
 // update donations page
+
+// fix eth-donation page
