@@ -1528,8 +1528,7 @@ const NewHome = () => {
           <Typography variant="subtitle1" color="primary" textAlign="center">
             Distribution of funds on each round
           </Typography>
-
-          <Chart transitions={false} style={{ width: "100%" }}>
+          {/* <Chart transitions={false} style={{ width: "100%" }}>
             <ChartLegend visible={false} />
             <ChartArea background="transparent" />
             <ChartCategoryAxis>
@@ -1551,8 +1550,7 @@ const NewHome = () => {
                 }}
               />
             </ChartSeries>
-          </Chart>
-          {/*
+          </Chart> */}
           <Chart
             transitions={false}
             style={{ width: "100%", height: matches ? 300 : 200 }}
@@ -1574,7 +1572,7 @@ const NewHome = () => {
               />
             </ChartSeries>
           </Chart>
-          */}
+         
         </Box>
         <Box mt={10}>
           <Typography variant="h6">TOP RAFFLE TICKETS HOLDERS</Typography>
