@@ -519,15 +519,18 @@ const NewHome = () => {
       return [];
     }
 
-    let maxEnduranceDuration = 0;
     let enduranceChampions = [];
 
-    // First pass: Calculate endurance champions
+    // Calculate endurance champions
     for (let i = 1; i < currentRoundBids.length; i++) {
       const enduranceDuration =
         currentRoundBids[i].TimeStamp - currentRoundBids[i - 1].TimeStamp;
-      if (enduranceDuration > maxEnduranceDuration) {
-        maxEnduranceDuration = enduranceDuration;
+
+      if (
+        enduranceChampions.length === 0 ||
+        enduranceDuration >
+          enduranceChampions[enduranceChampions.length - 1].championTime
+      ) {
         enduranceChampions.push({
           address: currentRoundBids[i - 1].BidderAddr,
           championTime: enduranceDuration,
@@ -537,21 +540,47 @@ const NewHome = () => {
       }
     }
 
-    // Second pass: Calculate chrono warrior time
+    // Handle the last bid's duration to currentTime
+    const lastBid = currentRoundBids[currentRoundBids.length - 1];
+    const lastEnduranceDuration = currentTime - lastBid.TimeStamp;
+
+    if (
+      enduranceChampions.length === 0 ||
+      lastEnduranceDuration >
+        enduranceChampions[enduranceChampions.length - 1].championTime
+    ) {
+      enduranceChampions.push({
+        address: lastBid.BidderAddr,
+        championTime: lastEnduranceDuration,
+        startTime: lastBid.TimeStamp,
+        endTime: currentTime,
+      });
+    }
+
+    // Calculate chrono warrior time
     for (let i = 0; i < enduranceChampions.length; i++) {
-      let chronoDuration;
-      if (i === enduranceChampions.length - 1) {
-        chronoDuration = Math.max(
-          0,
-          currentTime - enduranceChampions[i].endTime
-        );
+      let chronoStartTime, chronoEndTime;
+
+      if (i === 0) {
+        chronoStartTime = enduranceChampions[i].startTime;
       } else {
-        chronoDuration = Math.max(
-          0,
-          enduranceChampions[i + 1].startTime - enduranceChampions[i].endTime
-        );
+        chronoStartTime =
+          enduranceChampions[i].startTime +
+          enduranceChampions[i - 1].championTime;
       }
-      enduranceChampions[i].chronoWarrior = chronoDuration;
+
+      if (i < enduranceChampions.length - 1) {
+        chronoEndTime =
+          enduranceChampions[i + 1].startTime +
+          enduranceChampions[i].championTime;
+      } else {
+        chronoEndTime = currentTime;
+      }
+
+      enduranceChampions[i].chronoWarrior = Math.max(
+        0,
+        chronoEndTime - chronoStartTime
+      );
     }
 
     return enduranceChampions.map((champion) => ({
