@@ -24,6 +24,7 @@ import "react-super-responsive-table/dist/SuperResponsiveTableStyle.css";
 import api from "../services/api";
 import NFTImage from "./NFTImage";
 import { CustomPagination } from "./CustomPagination";
+import { isMobile } from "react-device-detect";
 
 const StakedTokensRow = ({
   row,
@@ -42,6 +43,7 @@ const StakedTokensRow = ({
     }
     return `https://cosmic-game2.s3.us-east-2.amazonaws.com/0x${fileName}.png`;
   };
+
   useEffect(() => {
     const getTokenName = async () => {
       if (IsRwalk) {
@@ -56,9 +58,11 @@ const StakedTokensRow = ({
     };
     getTokenName();
   }, []);
+
   if (!row) {
     return <TablePrimaryRow />;
   }
+
   return (
     <TablePrimaryRow
       hover="true"
@@ -197,6 +201,16 @@ export const StakedTokensTable = ({
     <>
       <TablePrimaryContainer>
         <TablePrimary>
+          {!isMobile && (
+            <colgroup>
+              <col width="5%" />
+              <col width="15%" />
+              <col width="20%" />
+              <col width="20%" />
+              <col width="20%" />
+              <col width="20%" />
+            </colgroup>
+          )}
           <TablePrimaryHead>
             <Tr>
               <TablePrimaryHeadCell padding="checkbox" align="left">

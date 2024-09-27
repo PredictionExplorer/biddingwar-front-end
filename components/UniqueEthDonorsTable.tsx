@@ -13,28 +13,25 @@ import "react-super-responsive-table/dist/SuperResponsiveTableStyle.css";
 import { CustomPagination } from "./CustomPagination";
 import { AddressLink } from "./AddressLink";
 
-const UniqueBiddersRow = ({ bidder }) => {
-  if (!bidder) {
+const UniqueEthDonorsRow = ({ row }) => {
+  if (!row) {
     return <TablePrimaryRow />;
   }
 
   return (
     <TablePrimaryRow>
       <TablePrimaryCell>
-        <AddressLink
-          address={bidder.BidderAddr}
-          url={`/user/${bidder.BidderAddr}`}
-        />
+        <AddressLink address={row.DonorAddr} url={`/user/${row.DonorAddr}`} />
       </TablePrimaryCell>
-      <TablePrimaryCell align="center">{bidder.NumBids}</TablePrimaryCell>
+      <TablePrimaryCell align="center">{row.CountDonations}</TablePrimaryCell>
       <TablePrimaryCell align="right">
-        {bidder.MaxBidAmountEth.toFixed(6)}
+        {row.TotalDonatedEth.toFixed(2)}
       </TablePrimaryCell>
     </TablePrimaryRow>
   );
 };
 
-export const UniqueBiddersTable = ({ list }) => {
+export const UniqueEthDonorsTable = ({ list }) => {
   const perPage = 5;
   const [page, setPage] = useState(1);
   if (list.length === 0) {
@@ -47,17 +44,17 @@ export const UniqueBiddersTable = ({ list }) => {
           <TablePrimaryHead>
             <Tr>
               <TablePrimaryHeadCell align="left">
-                Bidder Address
+                Donor Address
               </TablePrimaryHeadCell>
-              <TablePrimaryHeadCell>Number of Bids</TablePrimaryHeadCell>
+              <TablePrimaryHeadCell>Number of Donations</TablePrimaryHeadCell>
               <TablePrimaryHeadCell align="right">
-                Max Bid (ETH)
+                Total Donated Amount (ETH)
               </TablePrimaryHeadCell>
             </Tr>
           </TablePrimaryHead>
           <TableBody>
-            {list.slice((page - 1) * perPage, page * perPage).map((bidder) => (
-              <UniqueBiddersRow bidder={bidder} key={bidder.BidderAid} />
+            {list.slice((page - 1) * perPage, page * perPage).map((donor) => (
+              <UniqueEthDonorsRow row={donor} key={donor.DonorAid} />
             ))}
           </TableBody>
         </TablePrimary>

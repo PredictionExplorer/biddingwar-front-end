@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
+import { isMobile } from "react-device-detect";
 import {
   Button,
   Box,
@@ -506,7 +507,15 @@ const NewHome = () => {
       (a, b) => a.TimeStamp - b.TimeStamp
     );
 
-    if (currentRoundBids.length < 2) {
+    if (currentRoundBids.length === 1) {
+      return [
+        {
+          bidder: currentRoundBids[0].BidderAddr,
+          championTime: currentTime - currentRoundBids[0].TimeStamp,
+          chronoWarrior: 0,
+        },
+      ];
+    } else if (currentRoundBids.length === 0) {
       return [];
     }
 
@@ -560,7 +569,7 @@ const NewHome = () => {
       setCurBidList(newBidData);
       const nftData = await api.get_donations_nft_by_round(round);
       setDonatedNFTs(nftData);
-      const donations = await api.get_donations_with_info_by_round(round);
+      const donations = await api.get_donations_both_by_round(round);
       setEthDonations(donations);
       const champions = getEnduranceChampions(newBidData);
       const sortedChampions = [...champions].sort(
@@ -1354,7 +1363,7 @@ const NewHome = () => {
                   <Grid item xs={12} sm={4} md={4}>
                     <Typography>Chrono Warrior</Typography>
                   </Grid>
-                  {championList && championList.length > 0 && (
+                  {championList?.length > 0 && (
                     <Grid item xs={12} sm={8} md={8}>
                       <Typography>
                         <Link
@@ -1494,8 +1503,8 @@ const NewHome = () => {
         </Grid>
         <Box>
           <Typography variant="body2" mt={4}>
-            When you bid, you will get 100 tokens as a reward. These tokens
-            allow you to participate in the DAO.
+            When you bid, you will get 100 Cosmic Tokens as a reward. These
+            tokens allow you to participate in the DAO.
           </Typography>
           <Box mt={2}>
             <Typography variant="body2" color="primary" component="span">
@@ -1507,7 +1516,6 @@ const NewHome = () => {
               and these people will win {data?.RafflePercentage}% of the pot.
               Also, {data?.NumRaffleNFTWinnersBidding} additional winners and{" "}
               {data?.NumRaffleNFTWinnersStakingRWalk} Random Walk NFT stakers{" "}
-              {/* and {data?.NumRaffleNFTWinnersStakingCST} Cosmic Token stakers */}
               will be chosen which will receive a Cosmic Signature NFT.
             </Typography>
           </Box>
@@ -1528,51 +1536,61 @@ const NewHome = () => {
           <Typography variant="subtitle1" color="primary" textAlign="center">
             Distribution of funds on each round
           </Typography>
-          {/* <Chart transitions={false} style={{ width: "100%" }}>
-            <ChartLegend visible={false} />
-            <ChartArea background="transparent" />
-            <ChartCategoryAxis>
-              <ChartCategoryAxisItem color="white" />
-            </ChartCategoryAxis>
-            <ChartValueAxis>
-              <ChartValueAxisItem visible={false} />
-            </ChartValueAxis>
-            <ChartSeries>
-              <ChartSeriesItem
-                type="bar"
-                data={series}
-                field="value"
-                categoryField="category"
-                labels={{
-                  visible: true,
-                  color: "white",
-                  background: "none",
-                }}
-              />
-            </ChartSeries>
-          </Chart> */}
-          <Chart
-            transitions={false}
-            style={{ width: "100%", height: matches ? 300 : 200 }}
-          >
-            <ChartLegend visible={false} />
-            <ChartArea background="transparent" />
-            <ChartSeries>
-              <ChartSeriesItem
-                type="pie"
-                data={series}
-                field="value"
-                categoryField="category"
-                labels={{
-                  visible: true,
-                  content: labelContent,
-                  color: "white",
-                  background: "none",
-                }}
-              />
-            </ChartSeries>
-          </Chart>
-         
+          {isMobile ? (
+            <Chart
+              transitions={false}
+              style={{ width: "100%", height: "100%" }}
+            >
+              <ChartLegend visible={false} />
+              <ChartArea background="transparent" />
+              <ChartCategoryAxis>
+                <ChartCategoryAxisItem color="white" />
+              </ChartCategoryAxis>
+              <ChartValueAxis>
+                <ChartValueAxisItem visible={false} max={80} />
+              </ChartValueAxis>
+              <ChartSeries>
+                <ChartSeriesItem
+                  type="bar"
+                  data={series}
+                  field="value"
+                  categoryField="category"
+                  labels={{
+                    visible: true,
+                    color: "white",
+                    background: "none",
+                    content: (props) =>
+                      `${props.value}% (${(
+                        (props.dataItem.value * data?.CosmicGameBalanceEth) /
+                        100
+                      ).toFixed(4)} ETH)`,
+                  }}
+                />
+              </ChartSeries>
+            </Chart>
+          ) : (
+            <Chart
+              transitions={false}
+              style={{ width: "100%", height: matches ? 300 : 200 }}
+            >
+              <ChartLegend visible={false} />
+              <ChartArea background="transparent" />
+              <ChartSeries>
+                <ChartSeriesItem
+                  type="pie"
+                  data={series}
+                  field="value"
+                  categoryField="category"
+                  labels={{
+                    visible: true,
+                    content: labelContent,
+                    color: "white",
+                    background: "none",
+                  }}
+                />
+              </ChartSeries>
+            </Chart>
+          )}
         </Box>
         <Box mt={10}>
           <Typography variant="h6">TOP RAFFLE TICKETS HOLDERS</Typography>
@@ -1594,10 +1612,14 @@ const NewHome = () => {
           </Typography>
           <EnduranceChampionsTable championList={championList} />
         </Box>
-        <Box mt={10}>
-          <Typography variant="h6">ETH DONATIONS FOR CURRENT ROUND</Typography>
-          <EthDonationTable list={ethDonations} />
-        </Box>
+        {ethDonations.length > 0 && (
+          <Box mt={10}>
+            <Typography variant="h6">
+              ETH DONATIONS FOR CURRENT ROUND
+            </Typography>
+            <EthDonationTable list={ethDonations} />
+          </Box>
+        )}
         <Box marginTop={10}>
           <Box>
             <Typography variant="h6" component="span">
@@ -1804,3 +1826,5 @@ export default NewHome;
 // update donations page
 
 // fix eth-donation page
+// add eth donate feature, simple donation, donation with info
+// add link to top 5 donations

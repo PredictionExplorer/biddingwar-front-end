@@ -67,7 +67,7 @@ const MyWinningsTable = ({ list }) => {
       <TablePrimary>
         <TablePrimaryHead>
           <Tr>
-            <TablePrimaryHeadCell align="left">Date</TablePrimaryHeadCell>
+            <TablePrimaryHeadCell align="left">Datetime</TablePrimaryHeadCell>
             <TablePrimaryHeadCell>Round</TablePrimaryHeadCell>
             <TablePrimaryHeadCell align="right">
               Amount (ETH)
@@ -107,8 +107,7 @@ const MyWinnings = () => {
         ...isClaiming,
         raffleETH: true,
       });
-      const res = await raffleWalletContract.withdraw();
-      console.log(res);
+      await raffleWalletContract.withdraw();
       setTimeout(() => {
         fetchStatusData();
       }, 3000);
@@ -128,8 +127,7 @@ const MyWinnings = () => {
     try {
       e.target.disabled = true;
       e.target.classList.add("Mui-disabled");
-      const res = await cosmicGameContract.claimDonatedNFT(tokenID);
-      console.log(res);
+      await cosmicGameContract.claimDonatedNFT(tokenID);
       setTimeout(() => {
         fetchStatusData();
       }, 3000);
@@ -188,125 +186,119 @@ const MyWinnings = () => {
     fetchUnclaimedDonatedNFTs();
     fetchUnclaimedRaffleETHDeposits();
   }, [status]);
+
   return (
-    <>
-      <MainWrapper>
-        <Typography
-          variant="h4"
-          color="primary"
-          gutterBottom
-          textAlign="center"
-        >
-          Pending Winnings
+    <MainWrapper>
+      <Typography variant="h4" color="primary" gutterBottom textAlign="center">
+        Pending Winnings
+      </Typography>
+      {!account ? (
+        <Typography variant="subtitle1" mt={4}>
+          Please login to Metamask to see your winnings.
         </Typography>
-        {!account ? (
-          <Typography variant="subtitle1" mt={4}>
-            Please login to Metamask to see your winnings.
-          </Typography>
-        ) : (
-          <>
-            <Box mt={6}>
-              <Typography variant="h5" mb={2}>
-                Claimable Raffle ETH
-              </Typography>
-              {raffleETHToClaim !== null && raffleETHToClaim.length === 0 ? (
-                <Typography>No winnings yet.</Typography>
-              ) : raffleETHToClaim === null ? (
-                <Typography>Loading...</Typography>
-              ) : (
-                <>
-                  <MyWinningsTable
-                    list={raffleETHToClaim.slice(
-                      (curPage - 1) * perPage,
-                      curPage * perPage
-                    )}
-                  />
-                  {status?.ETHRaffleToClaim > 0 && (
-                    <Box
-                      sx={{
-                        display: "flex",
-                        justifyContent: "end",
-                        alignItems: "center",
-                        mt: 2,
-                      }}
-                    >
-                      <Typography mr={2}>
-                        Your claimable winnings are{" "}
-                        {`${status?.ETHRaffleToClaim.toFixed(6)} ETH`}
-                      </Typography>
-                      <Button
-                        onClick={handleAllETHClaim}
-                        variant="contained"
-                        disabled={isClaiming.raffleETH}
-                      >
-                        Claim All
-                      </Button>
-                    </Box>
+      ) : (
+        <>
+          <Box mt={6}>
+            <Typography variant="h5" mb={2}>
+              Claimable Raffle ETH
+            </Typography>
+            {raffleETHToClaim !== null && raffleETHToClaim.length === 0 ? (
+              <Typography>No winnings yet.</Typography>
+            ) : raffleETHToClaim === null ? (
+              <Typography>Loading...</Typography>
+            ) : (
+              <>
+                <MyWinningsTable
+                  list={raffleETHToClaim.slice(
+                    (curPage - 1) * perPage,
+                    curPage * perPage
                   )}
-                  <CustomPagination
-                    page={curPage}
-                    setPage={setCurPage}
-                    totalLength={raffleETHToClaim.length}
-                    perPage={perPage}
-                  />
-                </>
-              )}
-            </Box>
-            <Box mt={8}>
-              <Typography variant="h5" mb={2}>
-                Earned Staking Rewards
-              </Typography>
-              {unclaimedStakingRewards !== null &&
-              unclaimedStakingRewards.length === 0 ? (
-                <Typography>No rewards yet.</Typography>
-              ) : unclaimedStakingRewards === null ? (
-                <Typography>Loading...</Typography>
-              ) : (
-                <UnclaimedStakingRewardsTable
-                  list={unclaimedStakingRewards}
-                  owner={account}
-                  fetchData={fetchUnclaimedStakingRewards}
                 />
-              )}
-            </Box>
-            <Box mt={8}>
-              <Box
-                sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}
-              >
-                <Typography variant="h5">Donated NFTs</Typography>
-                {status?.NumDonatedNFTToClaim > 0 && (
-                  <Button
-                    onClick={handleAllDonatedNFTsClaim}
-                    variant="contained"
-                    disabled={isClaiming.donatedNFT}
+                {status?.ETHRaffleToClaim > 0 && (
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "end",
+                      alignItems: "center",
+                      mt: 2,
+                    }}
                   >
-                    Claim All
-                  </Button>
+                    <Typography mr={2}>
+                      Your claimable winnings are{" "}
+                      {`${status?.ETHRaffleToClaim.toFixed(6)} ETH`}
+                    </Typography>
+                    <Button
+                      onClick={handleAllETHClaim}
+                      variant="contained"
+                      disabled={isClaiming.raffleETH}
+                    >
+                      Claim All
+                    </Button>
+                  </Box>
                 )}
-              </Box>
-              {donatedNFTToClaim !== null && donatedNFTToClaim.length === 0 ? (
-                <Typography>No NFTs yet.</Typography>
-              ) : donatedNFTToClaim === null ? (
-                <Typography>Loading...</Typography>
-              ) : (
-                <DonatedNFTTable
-                  list={donatedNFTToClaim}
-                  handleClaim={handleDonatedNFTsClaim}
+                <CustomPagination
+                  page={curPage}
+                  setPage={setCurPage}
+                  totalLength={raffleETHToClaim.length}
+                  perPage={perPage}
                 />
+              </>
+            )}
+          </Box>
+          <Box mt={8}>
+            <Typography variant="h5" mb={2}>
+              Earned Staking Rewards
+            </Typography>
+            {unclaimedStakingRewards !== null &&
+            unclaimedStakingRewards.length === 0 ? (
+              <Typography>No rewards yet.</Typography>
+            ) : unclaimedStakingRewards === null ? (
+              <Typography>Loading...</Typography>
+            ) : (
+              <UnclaimedStakingRewardsTable
+                list={unclaimedStakingRewards}
+                owner={account}
+                fetchData={fetchUnclaimedStakingRewards}
+              />
+            )}
+          </Box>
+          <Box mt={8}>
+            <Box
+              sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}
+            >
+              <Typography variant="h5">Donated NFTs</Typography>
+              {status?.NumDonatedNFTToClaim > 0 && (
+                <Button
+                  onClick={handleAllDonatedNFTsClaim}
+                  variant="contained"
+                  disabled={isClaiming.donatedNFT}
+                >
+                  Claim All
+                </Button>
               )}
             </Box>
-            <Box mt={6}>
-              <Button
-                variant="outlined"
-                onClick={() => router.push("/winning-history")}
-              >
-                Go to my winning history page.
-              </Button>
-            </Box>
-          </>
-        )}
-      </MainWrapper>
-    </>
+            {donatedNFTToClaim !== null && donatedNFTToClaim.length === 0 ? (
+              <Typography>No NFTs yet.</Typography>
+            ) : donatedNFTToClaim === null ? (
+              <Typography>Loading...</Typography>
+            ) : (
+              <DonatedNFTTable
+                list={donatedNFTToClaim}
+                handleClaim={handleDonatedNFTsClaim}
+              />
+            )}
+          </Box>
+          <Box mt={6}>
+            <Button
+              variant="outlined"
+              onClick={() => router.push("/winning-history")}
+            >
+              Go to my winning history page.
+            </Button>
+          </Box>
+        </>
+      )}
+    </MainWrapper>
   );
 };
 

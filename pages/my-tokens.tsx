@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Box, Link, TableBody, Typography } from "@mui/material";
+import { Box, Link, TableBody, Tooltip, Typography } from "@mui/material";
 import {
   MainWrapper,
   TablePrimary,
@@ -31,7 +31,12 @@ const CSTRow = ({ nft }) => {
   return (
     <TablePrimaryRow>
       <TablePrimaryCell sx={{ width: "120px" }}>
-        <NFTImage src={getTokenImageURL()} />
+        <Link
+          href={`/detail/${nft.TokenId}`}
+          style={{ color: "inherit", fontSize: "inherit" }}
+        >
+          <NFTImage src={getTokenImageURL()} />
+        </Link>
       </TablePrimaryCell>
       <TablePrimaryCell>
         <Link
@@ -61,16 +66,18 @@ const CSTRow = ({ nft }) => {
         </Link>
       </TablePrimaryCell>
       <TablePrimaryCell align="center">
-        <Link
-          href={`/user/${nft.WinnerAddr}`}
-          style={{
-            color: "inherit",
-            fontSize: "inherit",
-            fontFamily: "monospace",
-          }}
-        >
-          {shortenHex(nft.WinnerAddr, 6)}
-        </Link>
+        <Tooltip title={nft.WinnerAddr}>
+          <Link
+            href={`/user/${nft.WinnerAddr}`}
+            style={{
+              color: "inherit",
+              fontSize: "inherit",
+              fontFamily: "monospace",
+            }}
+          >
+            {shortenHex(nft.WinnerAddr, 6)}
+          </Link>
+        </Tooltip>
       </TablePrimaryCell>
       <TablePrimaryCell align="center">
         {nft.Staked ? "Yes" : "No"}
@@ -123,7 +130,7 @@ export const CSTTable = ({ list }) => {
           <TablePrimaryHead>
             <Tr>
               <TablePrimaryHeadCell />
-              <TablePrimaryHeadCell align="left">Date</TablePrimaryHeadCell>
+              <TablePrimaryHeadCell align="left">Datetime</TablePrimaryHeadCell>
               <TablePrimaryHeadCell>Token ID</TablePrimaryHeadCell>
               <TablePrimaryHeadCell>Token Name</TablePrimaryHeadCell>
               <TablePrimaryHeadCell>Round</TablePrimaryHeadCell>
@@ -174,36 +181,29 @@ const MyWallet = () => {
   }, []);
 
   return (
-    <>
-      <MainWrapper>
-        <Typography
-          variant="h4"
-          color="primary"
-          gutterBottom
-          textAlign="center"
-        >
-          My Cosmic Signature (ERC721) Tokens
+    <MainWrapper>
+      <Typography variant="h4" color="primary" gutterBottom textAlign="center">
+        My Cosmic Signature (ERC721) Tokens
+      </Typography>
+      {!account ? (
+        <Typography variant="subtitle1">
+          Please login to Metamask to see your tokens.
         </Typography>
-        {!account ? (
-          <Typography variant="subtitle1">
-            Please login to Metamask to see your tokens.
-          </Typography>
-        ) : (
-          <>
-            <Box mt={6}>
-              <Typography variant="h6" mb={2}>
-                Cosmic Signature Tokens I Own
-              </Typography>
-              {CSTList.loading ? (
-                <Typography variant="h6">Loading...</Typography>
-              ) : (
-                <CSTTable list={CSTList.data} />
-              )}
-            </Box>
-          </>
-        )}
-      </MainWrapper>
-    </>
+      ) : (
+        <>
+          <Box mt={6}>
+            <Typography variant="h6" mb={2}>
+              Cosmic Signature Tokens I Own
+            </Typography>
+            {CSTList.loading ? (
+              <Typography variant="h6">Loading...</Typography>
+            ) : (
+              <CSTTable list={CSTList.data} />
+            )}
+          </Box>
+        </>
+      )}
+    </MainWrapper>
   );
 };
 

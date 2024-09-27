@@ -82,7 +82,7 @@ const DetailTable = ({ list }) => {
                 Claimed?
               </TablePrimaryHeadCell>
               <TablePrimaryHeadCell align="right" sx={{ py: 1 }}>
-                Reward
+                Reward (ETH)
               </TablePrimaryHeadCell>
             </Tr>
           </TablePrimaryHead>
@@ -217,20 +217,20 @@ export const GlobalStakingRewardsTable = ({ list }) => {
             <Tr>
               <TablePrimaryHeadCell sx={{ p: 0 }} />
               <TablePrimaryHeadCell align="left">
-                Stake Datetime
+                Deposit Datetime
               </TablePrimaryHeadCell>
               <TablePrimaryHeadCell>Staker</TablePrimaryHeadCell>
               <TablePrimaryHeadCell>Round</TablePrimaryHeadCell>
               <TablePrimaryHeadCell>Deposit Id</TablePrimaryHeadCell>
               <TablePrimaryHeadCell>Total Staked Tokens</TablePrimaryHeadCell>
-              <TablePrimaryHeadCell>Total Deposited</TablePrimaryHeadCell>
+              <TablePrimaryHeadCell>Total Deposited (ETH)</TablePrimaryHeadCell>
               <TablePrimaryHeadCell>Staked Tokens</TablePrimaryHeadCell>
               <TablePrimaryHeadCell>Fully Claimed?</TablePrimaryHeadCell>
               <TablePrimaryHeadCell align="right">
-                Collected Amount
+                Collected Amount (ETH)
               </TablePrimaryHeadCell>
               <TablePrimaryHeadCell align="right">
-                Amount to Claim
+                Amount to Claim (ETH)
               </TablePrimaryHeadCell>
             </Tr>
           </TablePrimaryHead>

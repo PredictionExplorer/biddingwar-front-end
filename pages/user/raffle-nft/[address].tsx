@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Box, Link, TableBody, Tooltip, Typography } from "@mui/material";
+import { Box, Link, TableBody, Typography } from "@mui/material";
 import { GetServerSidePropsContext } from "next";
 import { ethers } from "ethers";
 import api from "../../../services/api";
@@ -14,7 +14,7 @@ import {
 } from "../../../components/styled";
 import { Tr } from "react-super-responsive-table";
 import "react-super-responsive-table/dist/SuperResponsiveTableStyle.css";
-import { convertTimestampToDateTime, shortenHex } from "../../../utils";
+import { convertTimestampToDateTime } from "../../../utils";
 import { CustomPagination } from "../../../components/CustomPagination";
 
 const NFTWinningsRow = ({ row }) => {
@@ -33,20 +33,6 @@ const NFTWinningsRow = ({ row }) => {
         >
           {convertTimestampToDateTime(row.TimeStamp)}
         </Link>
-      </TablePrimaryCell>
-      <TablePrimaryCell align="center">
-        <Tooltip title={row.WinnerAddr}>
-          <Link
-            href={`/user/${row.WinnerAddr}`}
-            style={{
-              color: "inherit",
-              fontSize: "inherit",
-              fontFamily: "monospace",
-            }}
-          >
-            {shortenHex(row.WinnerAddr, 6)}
-          </Link>
-        </Tooltip>
       </TablePrimaryCell>
       <TablePrimaryCell align="center">
         <Link
@@ -95,7 +81,6 @@ const NFTWinningsTable = ({ list }) => {
           <TablePrimaryHead>
             <Tr>
               <TablePrimaryHeadCell align="left">Datetime</TablePrimaryHeadCell>
-              <TablePrimaryHeadCell>Winner</TablePrimaryHeadCell>
               <TablePrimaryHeadCell>Round</TablePrimaryHeadCell>
               <TablePrimaryHeadCell>Is RandomWalk</TablePrimaryHeadCell>
               <TablePrimaryHeadCell>Is Staker</TablePrimaryHeadCell>
@@ -143,34 +128,32 @@ const UserRaffleNFT = ({ address }) => {
   }, [address]);
 
   return (
-    <>
-      <MainWrapper>
-        {invalidAddress ? (
-          <Typography variant="h6">Invalid Address</Typography>
-        ) : (
-          <>
-            <Box mb={4}>
-              <Typography variant="h6" color="primary" component="span" mr={2}>
-                User
-              </Typography>
-              <Typography variant="h6" component="span" fontFamily="monospace">
-                {address}
-              </Typography>
-            </Box>
-            <Box mt={4}>
-              <Typography variant="h6" lineHeight={1} mb={2}>
-                Raffle NFTs User Won
-              </Typography>
-              {raffleNfts.loading ? (
-                <Typography variant="h6">Loading...</Typography>
-              ) : (
-                <NFTWinningsTable list={raffleNfts.data} />
-              )}
-            </Box>
-          </>
-        )}
-      </MainWrapper>
-    </>
+    <MainWrapper>
+      {invalidAddress ? (
+        <Typography variant="h6">Invalid Address</Typography>
+      ) : (
+        <>
+          <Box mb={4}>
+            <Typography variant="h6" color="primary" component="span" mr={2}>
+              User
+            </Typography>
+            <Typography variant="h6" component="span" fontFamily="monospace">
+              {address}
+            </Typography>
+          </Box>
+          <Box mt={4}>
+            <Typography variant="h6" lineHeight={1} mb={2}>
+              Raffle NFTs User Won
+            </Typography>
+            {raffleNfts.loading ? (
+              <Typography variant="h6">Loading...</Typography>
+            ) : (
+              <NFTWinningsTable list={raffleNfts.data} />
+            )}
+          </Box>
+        </>
+      )}
+    </MainWrapper>
   );
 };
 

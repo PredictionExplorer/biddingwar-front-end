@@ -26,7 +26,14 @@ const TransferHistoryRow = ({ record }) => {
   return (
     <TablePrimaryRow>
       <TablePrimaryCell>
-        {convertTimestampToDateTime(record.TimeStamp)}
+        <Link
+          color="inherit"
+          fontSize="inherit"
+          href={`https://arbiscan.io/tx/${record.TxHash}`}
+          target="__blank"
+        >
+          {convertTimestampToDateTime(record.TimeStamp)}
+        </Link>
       </TablePrimaryCell>
       <TablePrimaryCell>
         <Tooltip title={record.FromAddr}>

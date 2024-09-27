@@ -29,7 +29,7 @@ import "react-super-responsive-table/dist/SuperResponsiveTableStyle.css";
 import { CustomPagination } from "./CustomPagination";
 import { isMobile } from "react-device-detect";
 
-const HistoryRow = ({ history, showClaimedStatus }) => {
+const HistoryRow = ({ history, showClaimedStatus, showWinnerAddr }) => {
   const [tokenURI, setTokenURI] = useState(null);
   useEffect(() => {
     const fetchTokenURI = async () => {
@@ -129,19 +129,25 @@ const HistoryRow = ({ history, showClaimedStatus }) => {
           {convertTimestampToDateTime(history.TimeStamp)}
         </Link>
       </TablePrimaryCell>
-      <TablePrimaryCell align="center">
-        <Tooltip title={history.WinnerAddr}>
-          <Link
-            color="inherit"
-            fontSize="inherit"
-            fontFamily="monospace"
-            href={`/user/${history.WinnerAddr}`}
-            target="__blank"
-          >
-            {shortenHex(history.WinnerAddr, 6)}
-          </Link>
-        </Tooltip>
-      </TablePrimaryCell>
+      {showWinnerAddr && (
+        <TablePrimaryCell align="center">
+          {history.WinnerAddr === "" ? (
+            " "
+          ) : (
+            <Tooltip title={history.WinnerAddr}>
+              <Link
+                color="inherit"
+                fontSize="inherit"
+                fontFamily="monospace"
+                href={`/user/${history.WinnerAddr}`}
+                target="__blank"
+              >
+                {shortenHex(history.WinnerAddr, 6)}
+              </Link>
+            </Tooltip>
+          )}
+        </TablePrimaryCell>
+      )}
       <TablePrimaryCell align="center">
         <Link
           href={`/prize/${history.RoundNum}`}
@@ -181,7 +187,7 @@ const HistoryRow = ({ history, showClaimedStatus }) => {
               }}
               target="_blank"
             >
-              {shortenHex(COSMIC_SIGNATURE_TOKEN_ADDRESS.toString(), 6)}
+              {shortenHex(COSMIC_SIGNATURE_TOKEN_ADDRESS, 6)}
             </Link>
           </Tooltip>
         ) : history.TokenAddress !== "" ? (
@@ -201,7 +207,7 @@ const HistoryRow = ({ history, showClaimedStatus }) => {
               }}
               target="_blank"
             >
-              {shortenHex(history.TokenAddress.toString(), 6)}
+              {shortenHex(history.TokenAddress, 6)}
             </Link>
           </Tooltip>
         ) : (
@@ -260,20 +266,21 @@ const HistoryTable = ({
   perPage,
   curPage,
   showClaimedStatus,
+  showWinnerAddr,
 }) => {
   return (
     <TablePrimaryContainer>
       <TablePrimary>
         {!isMobile && (
           <colgroup>
-            <col width="21%" />
-            <col width="13%" />
-            <col width="17%" />
+            <col width="20%" />
+            <col width="14%" />
+            {showWinnerAddr && <col width="17%" />}
             <col width="7%" />
-            <col width="8%" />
+            <col width="11%" />
             <col width="17%" />
-            <col width="9%" />
-            <col width="9%" />
+            <col width="8%" />
+            <col width="7%" />
           </colgroup>
         )}
         <TablePrimaryHead>
@@ -282,7 +289,9 @@ const HistoryTable = ({
               Record Type
             </TablePrimaryHeadCell>
             <TablePrimaryHeadCell align="left">Datetime</TablePrimaryHeadCell>
-            <TablePrimaryHeadCell>Winner</TablePrimaryHeadCell>
+            {showWinnerAddr && (
+              <TablePrimaryHeadCell>Winner</TablePrimaryHeadCell>
+            )}
             <TablePrimaryHeadCell>Round</TablePrimaryHeadCell>
             <TablePrimaryHeadCell align="right">
               Amount (ETH)
@@ -300,6 +309,7 @@ const HistoryTable = ({
                 history={history}
                 key={(curPage - 1) * perPage + index}
                 showClaimedStatus={showClaimedStatus}
+                showWinnerAddr={showWinnerAddr}
               />
             ))}
         </TableBody>
@@ -308,7 +318,11 @@ const HistoryTable = ({
   );
 };
 
-const WinningHistoryTable = ({ winningHistory, showClaimedStatus = false }) => {
+const WinningHistoryTable = ({
+  winningHistory,
+  showClaimedStatus = false,
+  showWinnerAddr = true,
+}) => {
   const perPage = 5;
   const [curPage, setCurrentPage] = useState(1);
   if (winningHistory.length === 0) {
@@ -319,6 +333,7 @@ const WinningHistoryTable = ({ winningHistory, showClaimedStatus = false }) => {
       <HistoryTable
         winningHistory={winningHistory}
         showClaimedStatus={showClaimedStatus}
+        showWinnerAddr={showWinnerAddr}
         perPage={perPage}
         curPage={curPage}
       />

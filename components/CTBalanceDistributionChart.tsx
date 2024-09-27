@@ -9,6 +9,7 @@ import {
   ChartValueAxis,
   ChartValueAxisItem,
 } from "@progress/kendo-react-charts";
+import "@progress/kendo-theme-default/dist/all.css";
 import { MARKETING_WALLET_ADDRESS } from "../config/app";
 import { shortenHex } from "../utils";
 import { useEffect, useState } from "react";
@@ -30,12 +31,10 @@ export const CTBalanceDistributionChart = ({ list }) => {
         ...list.slice(0, limit),
         {
           OwnerAddr: "Others",
-          BalanceFloat: otherValue / (list.length - limit),
+          BalanceFloat: otherValue,
         },
       ]);
-      setMaxValue(
-        list[0].BalanceFloat > otherValue ? list[0].BalanceFloat : otherValue
-      );
+      setMaxValue(Math.max(list[0].BalanceFloat, otherValue));
     } else if (list.length > 0) {
       setNewList(list);
       setMaxValue(list[0].BalanceFloat);
@@ -69,7 +68,7 @@ export const CTBalanceDistributionChart = ({ list }) => {
               categoryField="category"
               labels={{
                 visible: true,
-                content: (props) => props.value.toFixed(4),
+                content: (props) => props.value.toFixed(2),
                 color: "white",
                 background: "none",
               }}
