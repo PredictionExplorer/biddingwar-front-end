@@ -245,7 +245,7 @@ const PrizeInfo = ({ roundNum }) => {
               {prizeInfo.RoundStats.TotalBids}
             </Typography>
           </Box>
-          <Box mb={1}>
+          {/* <Box mb={1}>
             <Typography color="primary" component="span">
               Number of Eth Donations:
             </Typography>
@@ -262,7 +262,7 @@ const PrizeInfo = ({ roundNum }) => {
             <Typography component="span">
               {prizeInfo.RoundStats.TotalDonatedAmountEth.toFixed(4)} ETH
             </Typography>
-          </Box>
+          </Box> */}
           <Box mb={1}>
             <Typography color="primary" component="span">
               Total Donated NFTs:
