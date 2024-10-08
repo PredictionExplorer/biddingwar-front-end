@@ -198,9 +198,12 @@ const NewHome = () => {
                 const t = token_id - index;
                 const seed = await cosmicSignatureContract.seeds(t);
                 let color = "";
-                if (t === prize?.TokenId) color = "amethyst"; // white
-                else if (t === prize?.EnduranceERC721TokenId) color = "fuchsia"; // gold
-                else if (t === prize?.StellarERC721TokenId) color = "sapphire"; // silver
+                // if (t === prize?.TokenId) color = "white"; // white
+                // else if (t === prize?.EnduranceERC721TokenId) color = "gold"; // gold
+                // else if (t === prize?.StellarERC721TokenId) color = "silver"; // silver
+                if (index === count - 1) color = "amethyst";
+                else if (index === count - 2) color = "fuchsia";
+                else if (index === count - 3) color = "sapphire";
                 await api.create(t, seed, color);
               } catch (err) {
                 if (err?.data?.message) {
