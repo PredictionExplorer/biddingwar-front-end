@@ -61,8 +61,8 @@ const PrizeInfo = ({ roundNum }) => {
         roundNum
       );
       setStakingRewards(stakingRewards);
-      const donation = await api.get_donations_both_by_round(roundNum);
-      setEthDonations(donation);
+      // const donation = await api.get_donations_both_by_round(roundNum);
+      // setEthDonations(donation);
       setLoading(false);
     };
     fetchData();
@@ -321,12 +321,12 @@ const PrizeInfo = ({ roundNum }) => {
             </Typography>
             <BiddingHistoryTable biddingHistory={bidHistory} />
           </Box>
-          <Box mt={4}>
+          {/* <Box mt={4}>
             <Typography variant="h6" lineHeight={1}>
               ETH Donation History
             </Typography>
             <EthDonationTable list={ethDonations} />
-          </Box>
+          </Box> */}
           <Box mt={4}>
             <Typography variant="h6" mb={2}>
               Raffle Winners

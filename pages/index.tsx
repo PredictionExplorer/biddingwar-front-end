@@ -182,13 +182,10 @@ const NewHome = () => {
       await cosmicGameContract.claimPrize({ gasLimit }).then((tx) => tx.wait());
       const balance = await cosmicSignatureContract.totalSupply();
       let token_id = balance.toNumber() - 1;
-      const count =
-        data?.NumRaffleNFTWinnersBidding +
-        data?.NumRaffleNFTWinnersStakingRWalk +
-        1;
-
+      let count = data?.NumRaffleNFTWinnersBidding + 3;
+      if (data && data?.MainStats.StakeStatisticsRWalk.TotalTokensStaked > 0)
+        count += data?.NumRaffleNFTWinnersStakingRWalk;
       setTimeout(async () => {
-        const prize = await fetchPrizeInfo();
         await Promise.all(
           Array(count)
             .fill(1)
@@ -1767,7 +1764,9 @@ const NewHome = () => {
               <GradientBorder sx={{ p: 2 }}>
                 <Typography variant="subtitle1" textAlign="center">
                   {data?.NumRaffleNFTWinnersBidding +
-                    data?.NumRaffleNFTWinnersStakingRWalk}{" "}
+                    (data?.MainStats.StakeStatisticsRWalk.TotalTokensStaked > 0
+                      ? data?.NumRaffleNFTWinnersStakingRWalk + 3
+                      : 3)}{" "}
                   will receive
                 </Typography>
                 <GradientText variant="h4" textAlign="center">

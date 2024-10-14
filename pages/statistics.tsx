@@ -116,10 +116,10 @@ const Statistics = () => {
       setUniqueDonors(uniqueDonors);
       const nftDonations = await api.get_donations_nft_list();
       setNftDonations(nftDonations);
-      const donations = await api.get_donations_both_by_round(
-        data?.CurRoundNum
-      );
-      setEthDonations(donations);
+      // const donations = await api.get_donations_both_by_round(
+      //   data?.CurRoundNum
+      // );
+      // setEthDonations(donations);
       const distribution = await api.get_cst_distribution();
       setCSTDistribution(distribution);
       const ctbDistribution = await api.get_ct_balances_distribution();
