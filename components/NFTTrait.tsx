@@ -424,7 +424,9 @@ const NFTTrait = ({ tokenId }) => {
               <Typography component="span">
                 {nft.RecordType === 1 ? (
                   "Raffle Winner"
-                ) : (
+                ) : nft.RecordType === 2 ? (
+                  "Staking Winner"
+                ) : nft.RecordType === 3 ? (
                   <>
                     Round Winner (
                     <Link
@@ -436,20 +438,15 @@ const NFTTrait = ({ tokenId }) => {
                     </Link>
                     )
                   </>
+                ) : nft.RecordType === 4 ? (
+                  "Endurance Champion NFT Winner"
+                ) : nft.RecordType === 5 ? (
+                  "Stellar Spender NFT Winner"
+                ) : (
+                  " "
                 )}
               </Typography>
             </Box>
-            {nft.RecordType === 3 && (
-              <Box mb={3}>
-                <Typography color="primary" component="span">
-                  Prize Amount:
-                </Typography>
-                &nbsp;
-                <Typography component="span">
-                  {prizeInfo.AmountEth.toFixed(4)} ETH
-                </Typography>
-              </Box>
-            )}
             {!nft.Staked && !nft.WasUnstaked ? (
               <Typography sx={{ color: "#0f0" }}>
                 The token is eligible for staking.
