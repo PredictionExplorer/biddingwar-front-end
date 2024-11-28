@@ -5,14 +5,13 @@ import {
   TablePrimaryCell,
   TablePrimaryHead,
   TablePrimaryRow,
-  TablePrimary,
   TablePrimaryHeadCell,
+  TablePrimary,
 } from "./styled";
 import { convertTimestampToDateTime, shortenHex } from "../utils";
-import "react-super-responsive-table/dist/SuperResponsiveTableStyle.css";
 import { Tr } from "react-super-responsive-table";
+import "react-super-responsive-table/dist/SuperResponsiveTableStyle.css";
 import { CustomPagination } from "./CustomPagination";
-import { isMobile } from "react-device-detect";
 
 const WinnerRow = ({ winner }) => {
   if (!winner) {
@@ -31,79 +30,61 @@ const WinnerRow = ({ winner }) => {
           {convertTimestampToDateTime(winner.TimeStamp)}
         </Link>
       </TablePrimaryCell>
-      <TablePrimaryCell>
-        <Tooltip title={winner.WinnerAddr}>
+      <TablePrimaryCell align="left">
+        <Tooltip title={winner.StakerAddr}>
           <Link
-            href={`/user/${winner.WinnerAddr}`}
+            href={`/user/${winner.StakerAddr}`}
             style={{
               color: "inherit",
               fontSize: "inherit",
               fontFamily: "monospace",
             }}
           >
-            {shortenHex(winner.WinnerAddr, 6)}
+            {shortenHex(winner.StakerAddr, 6)}
           </Link>
         </Tooltip>
       </TablePrimaryCell>
       <TablePrimaryCell align="center">
-        <Link
-          href={`/prize/${winner.RoundNum}`}
-          style={{ color: "inherit", fontSize: "inherit" }}
-        >
-          {winner.RoundNum}
-        </Link>
+        {winner.StakerNumStakedNFTs}
       </TablePrimaryCell>
-      <TablePrimaryCell>
-        {winner.IsRwalk ? "Random Walk Token" : "Cosmic Signature Token"}
-      </TablePrimaryCell>
-      <TablePrimaryCell align="center">
-        <Link
-          href={`/detail/${winner.TokenId}`}
-          style={{ color: "inherit", fontSize: "inherit" }}
-        >
-          {winner.TokenId}
-        </Link>
+      <TablePrimaryCell align="right">
+        {winner.StakerAmountEth.toFixed(4)} ETH
       </TablePrimaryCell>
     </TablePrimaryRow>
   );
 };
 
-const StakingWinnerTable = ({ list }) => {
+const StakingRewardTable = ({ list }) => {
   const perPage = 5;
   const [page, setPage] = useState(1);
   if (list.length === 0) {
-    return <Typography>No winners yet.</Typography>;
+    return (
+      <Typography>
+        There were no staked tokens at the time round ended, the deposit amount
+        was sent to charity address.
+      </Typography>
+    );
   }
   return (
     <>
       <TablePrimaryContainer>
         <TablePrimary>
-          {!isMobile && (
-            <colgroup>
-              <col width="20%" />
-              <col width="15%" />
-              <col width="15%" />
-              <col width="32%" />
-              <col width="20%" />
-            </colgroup>
-          )}
           <TablePrimaryHead>
             <Tr>
               <TablePrimaryHeadCell align="left">Datetime</TablePrimaryHeadCell>
-              <TablePrimaryHeadCell align="left">Winner</TablePrimaryHeadCell>
-              <TablePrimaryHeadCell align="center">
-                Round #
-              </TablePrimaryHeadCell>
-              <TablePrimaryHeadCell align="left">Type</TablePrimaryHeadCell>
-              <TablePrimaryHeadCell align="center">
-                Token ID
+              <TablePrimaryHeadCell align="left">Staker</TablePrimaryHeadCell>
+              <TablePrimaryHeadCell>Number of NFTs</TablePrimaryHeadCell>
+              <TablePrimaryHeadCell align="right">
+                Reward Amount (ETH)
               </TablePrimaryHeadCell>
             </Tr>
           </TablePrimaryHead>
           <TableBody>
-            {list.slice((page - 1) * perPage, page * perPage).map((winner) => (
-              <WinnerRow key={winner.EvtLogId} winner={winner} />
-            ))}
+            {list
+              .slice((page - 1) * perPage, page * perPage)
+              .map((winner, i) => (
+                <WinnerRow key={winner.StakerAddr} winner={winner} />
+              ))}
           </TableBody>
         </TablePrimary>
       </TablePrimaryContainer>
@@ -117,4 +98,4 @@ const StakingWinnerTable = ({ list }) => {
   );
 };
 
-export default StakingWinnerTable;
+export default StakingRewardTable;

@@ -8,11 +8,12 @@ import RaffleWinnerTable from "../../components/RaffleWinnerTable";
 import BiddingHistoryTable from "../../components/BiddingHistoryTable";
 import useCosmicGameContract from "../../hooks/useCosmicGameContract";
 import { useApiData } from "../../contexts/ApiDataContext";
-import StakingWinnerTable from "../../components/StakingWinnerTable";
+import StakingRewardTable from "../../components/StakingRewardTable";
 import DonatedNFTTable from "../../components/DonatedNFTTable";
 import getErrorMessage from "../../utils/alert";
 import { useNotification } from "../../contexts/NotificationContext";
 import EnduranceChampionsTable from "../../components/EnduranceChampionsTable";
+import StakingWinnerTable from "../../components/StakingWinnerTable";
 
 interface InfoRowProps {
   label: string;
@@ -269,14 +270,24 @@ const PrizeInfo: React.FC<PrizeInfoProps> = ({ roundNum }) => {
             </Typography>
             <RaffleWinnerTable
               RaffleETHDeposits={prizeInfo.RaffleETHDeposits}
-              RaffleNFTWinners={prizeInfo.RaffleNFTWinners}
+              RaffleNFTWinners={prizeInfo.RaffleNFTWinners.filter(
+                (x) => !x.IsStaker
+              )}
+            />
+          </Box>
+          <Box mt={4}>
+            <Typography variant="h6" mb={2}>
+              Staking Winners
+            </Typography>
+            <StakingWinnerTable
+              list={prizeInfo.RaffleNFTWinners.filter((x) => x.IsStaker)}
             />
           </Box>
           <Box mt={4}>
             <Typography variant="h6" mb={2}>
               Staking Rewards
             </Typography>
-            <StakingWinnerTable list={stakingRewards} />
+            <StakingRewardTable list={stakingRewards} />
           </Box>
           <Box mt={8}>
             <Box
