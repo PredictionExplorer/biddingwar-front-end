@@ -8,7 +8,11 @@ import {
   TablePrimaryHeadCell,
   TablePrimary,
 } from "./styled";
-import { shortenHex, convertTimestampToDateTime } from "../utils";
+import {
+  shortenHex,
+  convertTimestampToDateTime,
+  formatSeconds,
+} from "../utils";
 import router from "next/router";
 import { Tr } from "react-super-responsive-table";
 import "react-super-responsive-table/dist/SuperResponsiveTableStyle.css";
@@ -16,25 +20,50 @@ import { CustomPagination } from "./CustomPagination";
 import api from "../services/api";
 import { isMobile } from "react-device-detect";
 
-const HistoryRow = ({ history, isBanned, showRound }) => {
+const bidTypeStyles = {
+  2: "rgba(0,128,128, 0.1)", // CST Bid
+  1: "rgba(128,128,128, 0.1)", // RWLK Token Bid
+  0: "rgba(0,0,0, 0.1)", // ETH Bid
+};
+
+const bidTypeLabels = {
+  2: "CST Bid",
+  1: "RWLK Token Bid",
+  0: "ETH Bid",
+};
+
+const HistoryRow = ({ history, isBanned, showRound, bidDuration }) => {
   if (!history) {
     return <TablePrimaryRow />;
   }
+
+  const handleRowClick = () => {
+    router.push(`/bid/${history.EvtLogId}`);
+  };
+
+  const backgroundStyle = bidTypeStyles[history.BidType] || "rgba(0,0,0,0.1)";
+  const bidTypeLabel = bidTypeLabels[history.BidType] || "Unknown Bid";
+
+  const price =
+    history.BidType === 2
+      ? `${
+          (history.NumCSTTokensEth || 0) < 1
+            ? (history.NumCSTTokensEth || 0).toFixed(7)
+            : (history.NumCSTTokensEth || 0).toFixed(4)
+        } CST`
+      : `${
+          (history.BidPriceEth || 0) < 1
+            ? (history.BidPriceEth || 0).toFixed(7)
+            : (history.BidPriceEth || 0).toFixed(4)
+        } ETH`;
 
   return (
     <TablePrimaryRow
       sx={{
         cursor: "pointer",
-        background:
-          history.BidType === 2
-            ? "rgba(0,128,128, 0.1)"
-            : history.BidType === 1
-            ? "rgba(128,128,128, 0.1)"
-            : "rgba(0,0,0, 0.1)",
+        background: backgroundStyle,
       }}
-      onClick={() => {
-        router.push(`/bid/${history.EvtLogId}`);
-      }}
+      onClick={handleRowClick}
     >
       <TablePrimaryCell sx={{ whiteSpace: "nowrap" }}>
         {convertTimestampToDateTime(history.TimeStamp, true)}
@@ -48,34 +77,19 @@ const HistoryRow = ({ history, isBanned, showRound }) => {
           </Typography>
         </Tooltip>
       </TablePrimaryCell>
-      <TablePrimaryCell align="right">
-        {history.BidType === 2
-          ? `${
-              history.NumCSTTokensEth && history.NumCSTTokensEth < 1
-                ? history.NumCSTTokensEth?.toFixed(7)
-                : history.NumCSTTokensEth?.toFixed(4)
-            } CST`
-          : `${
-              history.BidPriceEth && history.BidPriceEth < 1
-                ? history.BidPriceEth?.toFixed(7)
-                : history.BidPriceEth?.toFixed(4)
-            } ETH`}
-      </TablePrimaryCell>
+      <TablePrimaryCell align="right">{price}</TablePrimaryCell>
       {showRound && (
         <TablePrimaryCell align="center">{history.RoundNum}</TablePrimaryCell>
       )}
+      <TablePrimaryCell align="center">{bidTypeLabel}</TablePrimaryCell>
       <TablePrimaryCell align="center">
-        {history.BidType === 2
-          ? "CST Bid"
-          : history.BidType === 1
-          ? "RWLK Token Bid"
-          : "ETH Bid"}
+        {formatSeconds(bidDuration)}
       </TablePrimaryCell>
       <TablePrimaryCell>
         <Typography sx={{ wordBreak: "break-all" }}>
-          {history.BidType === 1 && (
+          {history.BidType === 1 && history.RWalkNFTId && (
             <>
-              {`Bid was made using RandomWalk Token(id = ${history.RWalkNFTId})`}
+              {`Bid was made using RandomWalk Token (ID = ${history.RWalkNFTId})`}
               <img
                 src={`https://randomwalknft.s3.us-east-2.amazonaws.com/${history.RWalkNFTId.toString().padStart(
                   6,
@@ -83,24 +97,24 @@ const HistoryRow = ({ history, isBanned, showRound }) => {
                 )}_black_thumb.jpg`}
                 width="32px"
                 style={{ verticalAlign: "middle" }}
+                alt="RWLK Token"
               />
             </>
           )}
-          {!!history.NFTDonationTokenAddr &&
-            history.BidType === 2 &&
-            "Bid was made using Cosmic Tokens"}
-          {!!history.NFTDonationTokenAddr &&
-            history.BidType === 0 &&
-            "Bid was made using ETH"}
-          {!!history.NFTDonationTokenAddr &&
-            ` and a token(${shortenHex(
-              history.NFTDonationTokenAddr,
-              6
-            )}) with ID ${history.NFTDonationTokenId} was donated`}{" "}
+          {!!history.NFTDonationTokenAddr && (
+            <>
+              {history.BidType === 2 && "Bid was made using Cosmic Tokens"}
+              {history.BidType === 0 && "Bid was made using ETH"}
+              {` and a token (${shortenHex(
+                history.NFTDonationTokenAddr,
+                6
+              )}) with ID ${history.NFTDonationTokenId} was donated`}
+            </>
+          )}
         </Typography>
       </TablePrimaryCell>
       <TablePrimaryCell>
-        {!isBanned && (
+        {!isBanned && history.Message && (
           <Tooltip title={history.Message}>
             <Typography
               sx={{
@@ -124,23 +138,35 @@ const HistoryRow = ({ history, isBanned, showRound }) => {
 
 const HistoryTable = ({ biddingHistory, perPage, curPage, showRound }) => {
   const [bannedList, setBannedList] = useState([]);
-  const getBannedList = async () => {
-    const bids = await api.get_banned_bids();
-    setBannedList(bids.map((x) => x.bid_id));
-  };
+
   useEffect(() => {
+    const getBannedList = async () => {
+      try {
+        const bids = await api.get_banned_bids();
+        setBannedList(bids.map((x) => x.bid_id));
+      } catch (error) {
+        console.error("Error fetching banned bids:", error);
+      }
+    };
     getBannedList();
   }, []);
+
+  const displayedBids = biddingHistory.slice(
+    (curPage - 1) * perPage,
+    curPage * perPage
+  );
+
   return (
     <TablePrimaryContainer>
       <TablePrimary>
         {!isMobile && (
           <colgroup>
-            <col width="16%" />
+            <col width="10%" />
             <col width="17%" />
             <col width="15%" />
             {showRound && <col width="8%" />}
             <col width="9%" />
+            <col width="12%" />
             <col width="15%" />
             <col width="20%" />
           </colgroup>
@@ -152,21 +178,29 @@ const HistoryTable = ({ biddingHistory, perPage, curPage, showRound }) => {
             <TablePrimaryHeadCell align="right">Price</TablePrimaryHeadCell>
             {showRound && <TablePrimaryHeadCell>Round</TablePrimaryHeadCell>}
             <TablePrimaryHeadCell>Bid Type</TablePrimaryHeadCell>
+            <TablePrimaryHeadCell align="center">
+              Bid Duration
+            </TablePrimaryHeadCell>
             <TablePrimaryHeadCell align="left">Bid Info</TablePrimaryHeadCell>
             <TablePrimaryHeadCell align="left">Message</TablePrimaryHeadCell>
           </Tr>
         </TablePrimaryHead>
         <TableBody>
-          {biddingHistory
-            .slice((curPage - 1) * perPage, curPage * perPage)
-            .map((history, i) => (
-              <HistoryRow
-                history={history}
-                key={history.EvtLogId}
-                isBanned={bannedList.includes(history.EvtLogId)}
-                showRound={showRound}
-              />
-            ))}
+          {displayedBids.map((history, index) => (
+            <HistoryRow
+              history={history}
+              key={history.EvtLogId}
+              isBanned={bannedList.includes(history.EvtLogId)}
+              showRound={showRound}
+              bidDuration={
+                (curPage - 1) * perPage + index === biddingHistory.length - 1
+                  ? 0
+                  : history.TimeStamp -
+                    biddingHistory[(curPage - 1) * perPage + index + 1]
+                      .TimeStamp
+              }
+            />
+          ))}
         </TableBody>
       </TablePrimary>
     </TablePrimaryContainer>
@@ -174,6 +208,7 @@ const HistoryTable = ({ biddingHistory, perPage, curPage, showRound }) => {
 };
 
 const BiddingHistoryTable = ({ biddingHistory, showRound = true }) => {
+  console.log(biddingHistory);
   const perPage = 5;
   const [curPage, setCurrentPage] = useState(1);
 
