@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const baseUrl = "https://randomwalknft-api.com/";
+// const baseUrl = "https://randomwalknft-api.com/";
+const baseUrl = "http://69.10.55.2/";
 const proxyUrl = "/api/proxy?url=";
 export const cosmicGameBaseUrl = "http://170.187.142.12:9191/api/cosmicgame/";
 
@@ -8,10 +9,14 @@ const getAPIUrl = (url: string) => {
   return `${proxyUrl}${encodeURIComponent(cosmicGameBaseUrl + url)}`;
 };
 
+const getCosmicSignatureAPIUrl = (url: string) => {
+  return `${proxyUrl}${encodeURIComponent(baseUrl + url)}`;
+};
+
 class ApiService {
   public async create(token_id: number, seed: string, color: string) {
     try {
-      const { data } = await axios.post(baseUrl + "cosmicgame_tokens", { token_id, seed, color });
+      const { data } = await axios.post(getCosmicSignatureAPIUrl("cosmicgame_tokens"), { token_id, seed, color });
       return data?.task_id || -1;
     } catch (err) {
       console.log(err);
@@ -21,7 +26,7 @@ class ApiService {
 
   public async get_banned_bids() {
     try {
-      const { data } = await axios.get(baseUrl + "get_banned_bids");
+      const { data } = await axios.get(getCosmicSignatureAPIUrl("get_banned_bids"));
       return data;
     } catch (err) {
       console.log(err);
@@ -31,7 +36,7 @@ class ApiService {
 
   public async ban_bid(bid_id: number, user_addr: string) {
     try {
-      const { data } = await axios.post(baseUrl + "ban_bid", { bid_id, user_addr });
+      const { data } = await axios.post(getCosmicSignatureAPIUrl("ban_bid"), { bid_id, user_addr });
       return data;
     } catch (err) {
       console.log(err);
@@ -41,11 +46,21 @@ class ApiService {
 
   public async unban_bid(bid_id: number) {
     try {
-      const { data } = await axios.post(baseUrl + "unban_bid", { bid_id });
+      const { data } = await axios.post(getCosmicSignatureAPIUrl("unban_bid"), { bid_id });
       return data;
     } catch (err) {
       console.log(err);
       return -1;
+    }
+  }
+
+  public async get_info(token_id: number | string) {
+    try {
+      const { data } = await axios.get(getCosmicSignatureAPIUrl(`token_info/${token_id}`));
+      return data.TokenInfo;
+    } catch (err) {
+      console.log(err);
+      return null;
     }
   }
 
@@ -242,16 +257,6 @@ class ApiService {
     } catch (err) {
       console.log(err);
       return [];
-    }
-  }
-
-  public async get_info(token_id: number | string) {
-    try {
-      const { data } = await axios.get(baseUrl + "token_info/" + token_id);
-      return data.TokenInfo;
-    } catch (err) {
-      console.log(err);
-      return null;
     }
   }
 
