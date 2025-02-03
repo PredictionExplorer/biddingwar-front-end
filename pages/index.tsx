@@ -908,7 +908,7 @@ const NewHome = () => {
                     >
                       <Typography>Using Ether</Typography>
                       <Typography>
-                        {data?.BidPriceEth.toFixed(2)} ETH
+                        {data?.BidPriceEth.toFixed(4)} ETH
                       </Typography>
                     </Box>
                     <Box
@@ -920,7 +920,7 @@ const NewHome = () => {
                     >
                       <Typography>Using RandomWalk</Typography>
                       <Typography>
-                        {(data?.BidPriceEth / 2).toFixed(2)} ETH
+                        {(data?.BidPriceEth / 2).toFixed(4)} ETH
                       </Typography>
                     </Box>
                     <Box
@@ -933,7 +933,7 @@ const NewHome = () => {
                       <Typography>Using CST</Typography>
                       {cstBidData?.CSTPrice > 0 ? (
                         <Typography>
-                          {cstBidData?.CSTPrice.toFixed(2)} CST
+                          {cstBidData?.CSTPrice.toFixed(4)} CST
                         </Typography>
                       ) : (
                         <Typography color="#ff0">FREE</Typography>
