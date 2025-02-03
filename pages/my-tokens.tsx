@@ -22,7 +22,7 @@ import { GetServerSideProps } from "next";
 
 const CSTRow = ({ nft }) => {
   const getTokenImageURL = () => {
-    return `http://69.10.55.2/images/cosmicsignature/0x${nft.Seed}.png`;
+    return `/api/proxy?url=http://69.10.55.2/images/cosmicsignature/0x${nft.Seed}.png`;
   };
   if (!nft) {
     return <TablePrimaryRow />;
@@ -211,7 +211,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
   const title = "My Tokens | Cosmic Signature";
   const description =
     "Manage your digital assets on the My Tokens page at Cosmic Signature. View your token balance, transaction history, and ownership details. Keep track of your NFTs and tokens effortlessly.";
-  const imageUrl = "http://69.10.55.2/images/cosmicsignature/logo.png";
+  const imageUrl = "/api/proxy?url=http://69.10.55.2/images/cosmicsignature/logo.png";
 
   const openGraphData = [
     { property: "og:title", content: title },

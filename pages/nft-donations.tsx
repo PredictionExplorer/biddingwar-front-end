@@ -38,7 +38,7 @@ const NFTDonations = () => {
 export const getServerSideProps: GetServerSideProps = async () => {
   const title = "NFT Donations | Cosmic Signature";
   const description = "NFT Donations";
-  const imageUrl = "http://69.10.55.2/images/cosmicsignature/logo.png";
+  const imageUrl = "/api/proxy?url=http://69.10.55.2/images/cosmicsignature/logo.png";
 
   const openGraphData = [
     { property: "og:title", content: title },

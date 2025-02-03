@@ -91,7 +91,7 @@ const HistoryRow = ({ history, isBanned, showRound, bidDuration }) => {
             <>
               {`Bid was made using RandomWalk Token (ID = ${history.RWalkNFTId})`}
               <img
-                src={`http://69.10.55.2/images/randomwalk/${history.RWalkNFTId.toString().padStart(
+                src={`/api/proxy?url=http://69.10.55.2/images/randomwalk/${history.RWalkNFTId.toString().padStart(
                   6,
                   "0"
                 )}_black_thumb.jpg`}

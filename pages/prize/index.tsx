@@ -35,7 +35,7 @@ const PrizeWinners = () => {
 export const getServerSideProps: GetServerSideProps = async () => {
   const title = "Main Prize Winnings | Cosmic Signature";
   const description = "Main Prize Winnings";
-  const imageUrl = "http://69.10.55.2/images/cosmicsignature/logo.png";
+  const imageUrl = "/api/proxy?url=http://69.10.55.2/images/cosmicsignature/logo.png";
 
   const openGraphData = [
     { property: "og:title", content: title },

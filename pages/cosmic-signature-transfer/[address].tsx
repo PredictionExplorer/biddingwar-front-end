@@ -163,7 +163,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   }
   const title = `Cosmic Signature Token Transfer History for ${address} | Cosmic Signature`;
   const description = `Cosmic Signature Token Transfer History for ${address}`;
-  const imageUrl = "http://69.10.55.2/images/cosmicsignature/logo.png";
+  const imageUrl = "/api/proxy?url=http://69.10.55.2/images/cosmicsignature/logo.png";
 
   const openGraphData = [
     { property: "og:title", content: title },

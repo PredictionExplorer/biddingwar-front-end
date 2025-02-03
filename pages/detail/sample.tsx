@@ -29,8 +29,8 @@ const SampleDetail = () => {
   const [imageOpen, setImageOpen] = useState(false);
   const [videoPath, setVideoPath] = useState(null);
   const [anchorEl, setAnchorEl] = useState(null);
-  const image = "http://69.10.55.2/images/cosmicsignature/sample.png";
-  const video = "http://69.10.55.2/images/cosmicsignature/sample.mp4";
+  const image = "/api/proxy?url=http://69.10.55.2/images/cosmicsignature/sample.png";
+  const video = "/api/proxy?url=http://69.10.55.2/images/cosmicsignature/sample.mp4";
   const handlePlay = (videoPath) => {
     setVideoPath(videoPath);
     setOpen(true);
@@ -160,7 +160,7 @@ export async function getServerSideProps() {
   const title = "Sample Token | Cosmic Signature Token";
   const description =
     "Discover the unique attributes and ownership history of Cosmic Signature Token, an exclusive digital collectible from the Cosmic Signature game.";
-  const imageUrl = "http://69.10.55.2/images/cosmicsignature/sample.png";
+  const imageUrl = "/api/proxy?url=http://69.10.55.2/images/cosmicsignature/sample.png";
 
   const openGraphData = [
     { property: "og:title", content: title },

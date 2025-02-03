@@ -131,7 +131,7 @@ const UsedRwlkNfts = () => {
 export const getServerSideProps: GetServerSideProps = async () => {
   const title = "Used RandomWalk NFTs for Bid | Cosmic Signature";
   const description = "Used RandomWalk NFTs for Bid";
-  const imageUrl = "http://69.10.55.2/images/cosmicsignature/logo.png";
+  const imageUrl = "/api/proxy?url=http://69.10.55.2/images/cosmicsignature/logo.png";
 
   const openGraphData = [
     { property: "og:title", content: title },

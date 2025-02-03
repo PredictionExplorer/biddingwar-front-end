@@ -54,11 +54,11 @@ const StakingActionDetail = ({ IsRwalk, actionId }) => {
                       <NFTImage
                         src={
                           IsRwalk
-                            ? `http://69.10.55.2/images/randomwalk/${actionInfo.Stake.TokenId.toString().padStart(
+                            ? `/api/proxy?url=http://69.10.55.2/images/randomwalk/${actionInfo.Stake.TokenId.toString().padStart(
                                 6,
                                 "0"
                               )}_black_thumb.jpg`
-                            : `http://69.10.55.2/images/cosmicsignature/0x${actionInfo.Stake.Seed}.png`
+                            : `/api/proxy?url=http://69.10.55.2/images/cosmicsignature/0x${actionInfo.Stake.Seed}.png`
                         }
                       />
                     </Link>
@@ -185,7 +185,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   const description = `Detail for ${
     IsRwalk ? "RandomWalk NFT" : "Cosmic Signature Token"
   } Staking Action Id = ${actionId}`;
-  const imageUrl = "http://69.10.55.2/images/cosmicsignature/logo.png";
+  const imageUrl = "/api/proxy?url=http://69.10.55.2/images/cosmicsignature/logo.png";
 
   const openGraphData = [
     { property: "og:title", content: title },

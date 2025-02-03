@@ -83,7 +83,7 @@ const FAQPage = () => {
 export const getServerSideProps: GetServerSideProps = async () => {
   const title = "FAQ | Cosmic Signature";
   const description = "Frequenly Asked Questions (FAQ)";
-  const imageUrl = "http://69.10.55.2/images/cosmicsignature/logo.png";
+  const imageUrl = "/api/proxy?url=http://69.10.55.2/images/cosmicsignature/logo.png";
 
   const openGraphData = [
     { property: "og:title", content: title },

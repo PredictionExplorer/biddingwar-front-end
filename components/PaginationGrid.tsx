@@ -103,7 +103,7 @@ const PaginationGrid = ({ data, loading }) => {
                     <Link href="/detail/sample" sx={{ display: "block" }}>
                       <NFTImage
                         src={
-                          "http://69.10.55.2/images/cosmicsignature/sample.png"
+                          "/api/proxy?url=http://69.10.55.2/images/cosmicsignature/sample.png"
                         }
                       />
                     </Link>

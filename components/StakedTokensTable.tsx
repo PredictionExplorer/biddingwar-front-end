@@ -39,9 +39,9 @@ const StakedTokensRow = ({
       .toString()
       .padStart(6, "0");
     if (IsRwalk) {
-      return `http://69.10.55.2/images/randomwalk/${fileName}_black_thumb.jpg`;
+      return `/api/proxy?url=http://69.10.55.2/images/randomwalk/${fileName}_black_thumb.jpg`;
     }
-    return `http://69.10.55.2/images/cosmicsignature/0x${fileName}.png`;
+    return `/api/proxy?url=http://69.10.55.2/images/cosmicsignature/0x${fileName}.png`;
   };
 
   useEffect(() => {

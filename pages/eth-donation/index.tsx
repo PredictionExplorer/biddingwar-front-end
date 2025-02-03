@@ -135,7 +135,7 @@ const EthDonations = () => {
 export const getServerSideProps: GetServerSideProps = async () => {
   const title = "Direct (ETH) Donations | Cosmic Signature";
   const description = "Direct (ETH) Donations";
-  const imageUrl = "http://69.10.55.2/images/cosmicsignature/logo.png";
+  const imageUrl = "/api/proxy?url=http://69.10.55.2/images/cosmicsignature/logo.png";
 
   const openGraphData = [
     { property: "og:title", content: title },

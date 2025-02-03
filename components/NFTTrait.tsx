@@ -224,10 +224,10 @@ const NFTTrait = ({ tokenId }) => {
       setNft(res.TokenInfo);
       setPrizeInfo(res.PrizeInfo);
       setImage(
-        `http://69.10.55.2/images/cosmicsignature/0x${res.TokenInfo.Seed}.png`
+        `/api/proxy?url=http://69.10.55.2/images/cosmicsignature/0x${res.TokenInfo.Seed}.png`
       );
       setVideo(
-        `http://69.10.55.2/images/cosmicsignature/0x${res.TokenInfo.Seed}.mp4`
+        `/api/proxy?url=http://69.10.55.2/images/cosmicsignature/0x${res.TokenInfo.Seed}.mp4`
       );
     } catch (e) {
       console.log(e);
