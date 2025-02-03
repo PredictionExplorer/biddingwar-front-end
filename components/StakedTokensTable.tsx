@@ -39,9 +39,9 @@ const StakedTokensRow = ({
       .toString()
       .padStart(6, "0");
     if (IsRwalk) {
-      return `https://randomwalknft.s3.us-east-2.amazonaws.com/${fileName}_black_thumb.jpg`;
+      return `http://69.10.55.2/images/randomwalk/${fileName}_black_thumb.jpg`;
     }
-    return `https://cosmic-game2.s3.us-east-2.amazonaws.com/0x${fileName}.png`;
+    return `http://69.10.55.2/images/cosmicsignature/0x${fileName}.png`;
   };
 
   useEffect(() => {

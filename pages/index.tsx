@@ -1240,7 +1240,7 @@ const NewHome = () => {
                         src={
                           bannerToken.seed === ""
                             ? "/images/qmark.png"
-                            : `https://cosmic-game2.s3.us-east-2.amazonaws.com/${bannerToken.seed}.png`
+                            : `http://69.10.55.2/images/cosmicsignature/${bannerToken.seed}.png`
                         }
                       />
                     </Link>
@@ -1711,7 +1711,7 @@ const NewHome = () => {
           image={
             bannerToken.seed === ""
               ? "/images/qmark.png"
-              : `https://cosmic-game2.s3.us-east-2.amazonaws.com/${bannerToken.seed}.png`
+              : `http://69.10.55.2/images/cosmicsignature/${bannerToken.seed}.png`
           }
           title="This is a possible image of the NFT you are going to receive."
           onClose={() => setImageOpen(false)}
@@ -1732,7 +1732,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
   const description = `Cosmic Signature is a strategy bidding game. In an exhilarating contest, players will bid against other players and against time to win exciting ${data?.PrizeAmountEth.toFixed(
     4
   )}ETH prizes and Cosmic Signature NFTs.`;
-  const imageUrl = "https://cosmic-game2.s3.us-east-2.amazonaws.com/logo.png";
+  const imageUrl = "http://69.10.55.2/images/cosmicsignature/logo.png";
 
   const openGraphData = [
     { property: "og:title", content: title },
