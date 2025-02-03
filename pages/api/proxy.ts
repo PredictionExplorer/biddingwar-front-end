@@ -1,5 +1,6 @@
 import axios, { AxiosRequestConfig, Method } from 'axios';
 import type { NextApiRequest, NextApiResponse } from 'next';
+import { URL } from 'url';
 
 export const config = {
   api: {
@@ -20,17 +21,26 @@ export default async function handler(
       return;
     }
 
+    // Ensure the URL is correctly formatted
+    let targetUrl: string;
+    try {
+      const parsedUrl = new URL(url.startsWith('http') ? url : `http://${url}`);
+      targetUrl = parsedUrl.href; // Get the full URL with protocol
+    } catch {
+      res.status(400).json({ error: 'Invalid URL format' });
+      return;
+    }
+
     const method: Method = req.method as Method;
     const isGet = method === 'GET';
 
     // Configure Axios request
     const axiosConfig: AxiosRequestConfig = {
       method,
-      url: `http://${url}`, // Force HTTP
+      url: targetUrl, // Use the validated full URL
       headers: {
         ...req.headers,
-        host: undefined, // Remove host header to prevent issues
-      } as any,
+      } as Record<string, string>,
       data: isGet ? undefined : req.body, // Include body only for non-GET requests
       responseType: 'arraybuffer', // Support binary content (images, PDFs, etc.)
     };

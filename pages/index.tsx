@@ -1240,7 +1240,7 @@ const NewHome = () => {
                         src={
                           bannerToken.seed === ""
                             ? "/images/qmark.png"
-                            : `http://69.10.55.2/images/cosmicsignature/${bannerToken.seed}.png`
+                            : `/api/proxy?url=http://69.10.55.2/images/cosmicsignature/${bannerToken.seed}.png`
                         }
                       />
                     </Link>
@@ -1711,7 +1711,7 @@ const NewHome = () => {
           image={
             bannerToken.seed === ""
               ? "/images/qmark.png"
-              : `http://69.10.55.2/images/cosmicsignature/${bannerToken.seed}.png`
+              : `/api/proxy?url=http://69.10.55.2/images/cosmicsignature/${bannerToken.seed}.png`
           }
           title="This is a possible image of the NFT you are going to receive."
           onClose={() => setImageOpen(false)}
