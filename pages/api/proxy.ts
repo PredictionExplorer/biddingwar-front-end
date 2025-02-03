@@ -1,40 +1,54 @@
-import axios, { Method } from 'axios';
-import { NextApiRequest, NextApiResponse } from 'next';
+import axios, { AxiosRequestConfig, Method } from 'axios';
+import type { NextApiRequest, NextApiResponse } from 'next';
 
 export const config = {
   api: {
-    responseLimit: false,
+    responseLimit: false, // Allow large responses
+    bodyParser: false, // Prevent Next.js from parsing request bodies (important for binary data)
   },
 };
 
-export default async (req: NextApiRequest, res: NextApiResponse) => {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+): Promise<void> {
   try {
     const { url } = req.query;
 
     if (!url || typeof url !== 'string') {
-      return res.status(400).json({ error: 'URL parameter is missing or invalid' });
+      res.status(400).json({ error: 'URL parameter is missing or invalid' });
+      return;
     }
 
-    // Cast req.method to Axios' Method type
-    const method = req.method as Method;
+    const method: Method = req.method as Method;
+    const isGet = method === 'GET';
 
-    // Configure the request to the external API
-    const axiosConfig = {
+    // Configure Axios request
+    const axiosConfig: AxiosRequestConfig = {
       method,
-      url,
-      headers: req.headers as unknown as Record<string, string>, // Forward request headers
-      data: req.body, // Include the request body for POST, PUT, etc.
+      url: `http://${url}`, // Force HTTP
+      headers: {
+        ...req.headers,
+        host: undefined, // Remove host header to prevent issues
+      } as any,
+      data: isGet ? undefined : req.body, // Include body only for non-GET requests
+      responseType: 'arraybuffer', // Support binary content (images, PDFs, etc.)
     };
 
-    // Make the request to the external endpoint
+    // Make the request to the external HTTP server
     const response = await axios(axiosConfig);
 
-    // Forward the response to the client
-    res.status(response.status).json(response.data);
+    // Set headers for response
+    res.setHeader('Content-Type', response.headers['content-type'] || 'application/octet-stream');
+    res.setHeader('Content-Length', response.headers['content-length'] || '0');
+    res.setHeader('Cache-Control', 's-maxage=86400, stale-while-revalidate');
+
+    // Send the response back to the client
+    res.status(response.status).send(Buffer.from(response.data));
   } catch (error: any) {
     res.status(error.response?.status || 500).json({
       message: 'Proxy request failed',
       error: error.response?.data || error.message,
     });
   }
-};
+}
