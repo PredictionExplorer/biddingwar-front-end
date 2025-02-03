@@ -6,7 +6,7 @@ import BiddingHistoryTable from "../components/BiddingHistoryTable";
 import WinningHistoryTable from "../components/WinningHistoryTable";
 import EthDonationTable from "../components/EthDonationTable";
 import { ethers } from "ethers";
-import { formatEthValue } from "../utils";
+import { formatEthValue, getAssetsUrl } from "../utils";
 import { UnclaimedStakingRewardsTable } from "../components/UnclaimedStakingRewardsTable";
 import { CollectedStakingRewardsTable } from "../components/CollectedStakingRewardsTable";
 import { StakingActionsTable } from "../components/StakingActionsTable";
@@ -690,7 +690,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
   const title = "My Statistics | Cosmic Signature";
   const description =
     "Track your performance with Cosmic Signature's My Statistics page. View detailed bid history, stake status, rewards, and more. Stay informed and optimize your participation in our blockchain ecosystem.";
-  const imageUrl = "/api/proxy?url=http://69.10.55.2/images/cosmicsignature/logo.png";
+  const imageUrl = getAssetsUrl("cosmicsignature/logo.png");
 
   const openGraphData = [
     { property: "og:title", content: title },

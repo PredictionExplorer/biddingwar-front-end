@@ -25,6 +25,7 @@ import { ethers } from "ethers";
 import getErrorMessage from "../utils/alert";
 import { useNotification } from "../contexts/NotificationContext";
 import { GetServerSideProps } from "next";
+import { getAssetsUrl } from "../utils";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -485,7 +486,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
   const title = "My Staking | Cosmic Signature";
   const description =
     "Manage your staking with Cosmic Signature. View your staking status, rewards, and history. Maximize your earnings and participate in the growth of our blockchain ecosystem with ease.";
-  const imageUrl = "/api/proxy?url=http://69.10.55.2/images/cosmicsignature/logo.png";
+  const imageUrl = getAssetsUrl("cosmicsignature/logo.png");
 
   const openGraphData = [
     { property: "og:title", content: title },

@@ -18,7 +18,7 @@ import {
   TablePrimaryHeadCell,
   TablePrimaryRow,
 } from "./styled";
-import { convertTimestampToDateTime } from "../utils";
+import { convertTimestampToDateTime, getAssetsUrl } from "../utils";
 import { Tr } from "react-super-responsive-table";
 import "react-super-responsive-table/dist/SuperResponsiveTableStyle.css";
 import api from "../services/api";
@@ -39,9 +39,9 @@ const StakedTokensRow = ({
       .toString()
       .padStart(6, "0");
     if (IsRwalk) {
-      return `/api/proxy?url=http://69.10.55.2/images/randomwalk/${fileName}_black_thumb.jpg`;
+      return getAssetsUrl(`randomwalk/${fileName}_black_thumb.jpg`);
     }
-    return `/api/proxy?url=http://69.10.55.2/images/cosmicsignature/0x${fileName}.png`;
+    return getAssetsUrl(`cosmicsignature/0x${fileName}.png`);
   };
 
   useEffect(() => {

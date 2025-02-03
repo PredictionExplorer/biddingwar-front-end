@@ -4,6 +4,7 @@ import { MainWrapper } from "../components/styled";
 import api from "../services/api";
 import DonatedNFTTable from "../components/DonatedNFTTable";
 import { GetServerSideProps } from "next";
+import { getAssetsUrl } from "../utils";
 
 const NFTDonations = () => {
   const [nftDonations, setNftDonations] = useState(null);
@@ -38,7 +39,7 @@ const NFTDonations = () => {
 export const getServerSideProps: GetServerSideProps = async () => {
   const title = "NFT Donations | Cosmic Signature";
   const description = "NFT Donations";
-  const imageUrl = "/api/proxy?url=http://69.10.55.2/images/cosmicsignature/logo.png";
+  const imageUrl = getAssetsUrl("cosmicsignature/logo.png");
 
   const openGraphData = [
     { property: "og:title", content: title },

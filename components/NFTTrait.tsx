@@ -25,7 +25,7 @@ import "react-modal-video/css/modal-video.min.css";
 
 import NFTVideo from "./NFTVideo";
 import { useActiveWeb3React } from "../hooks/web3";
-import { convertTimestampToDateTime, formatId } from "../utils";
+import { convertTimestampToDateTime, formatId, getAssetsUrl } from "../utils";
 import {
   StyledCard,
   SectionWrapper,
@@ -223,12 +223,8 @@ const NFTTrait = ({ tokenId }) => {
       const res = await api.get_cst_info(tokenId);
       setNft(res.TokenInfo);
       setPrizeInfo(res.PrizeInfo);
-      setImage(
-        `/api/proxy?url=http://69.10.55.2/images/cosmicsignature/0x${res.TokenInfo.Seed}.png`
-      );
-      setVideo(
-        `/api/proxy?url=http://69.10.55.2/images/cosmicsignature/0x${res.TokenInfo.Seed}.mp4`
-      );
+      setImage(getAssetsUrl(`cosmicsignature/0x${res.TokenInfo.Seed}.png`));
+      setVideo(getAssetsUrl(`cosmicsignature/0x${res.TokenInfo.Seed}.mp4`));
     } catch (e) {
       console.log(e);
     }
