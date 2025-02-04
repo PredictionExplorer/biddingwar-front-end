@@ -126,7 +126,6 @@ const NewHome = () => {
   const [isBidding, setIsBidding] = useState(false);
   const [bannerToken, setBannerToken] = useState({ seed: "", id: -1 });
   const [rwlknftIds, setRwlknftIds] = useState([]);
-  const [offset, setOffset] = useState(0);
   const [roundStarted, setRoundStarted] = useState("");
   const [lastBidderElapsed, setLastBidderElapsed] = useState("");
   const [curPage, setCurrentPage] = useState(1);
@@ -539,9 +538,7 @@ const NewHome = () => {
 
   const fetchPrizeTime = async () => {
     const t = await api.get_prize_time();
-    const current = await api.get_current_time();
-    const diff = current * 1000 - Date.now();
-    setPrizeTime(t * 1000 - diff);
+    setPrizeTime(t * 1000);
   };
 
   const fetchPrizeInfo = async () => {
@@ -644,9 +641,6 @@ const NewHome = () => {
     }
 
     const calculateTimeOffset = async () => {
-      const current = await api.get_current_time();
-      const offset = current * 1000 - Date.now();
-      setOffset(offset);
     };
     calculateTimeOffset();
     fetchDataCollection();
@@ -720,10 +714,10 @@ const NewHome = () => {
     }
 
     const interval = setInterval(() => {
-      setRoundStarted(calculateTimeDiff(data?.TsRoundStart - offset / 1000));
+      setRoundStarted(calculateTimeDiff(data?.TsRoundStart));
       if (curBidList.length) {
         const lastBidTime = curBidList[0].TimeStamp;
-        setLastBidderElapsed(calculateTimeDiff(lastBidTime - offset / 1000));
+        setLastBidderElapsed(calculateTimeDiff(lastBidTime));
       }
     }, 1000);
 
