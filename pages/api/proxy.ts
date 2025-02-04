@@ -42,7 +42,7 @@ export default async function handler(
         ...req.headers,
       } as Record<string, string>,
       data: isGet ? undefined : req.body, // Include body only for non-GET requests
-      // responseType: 'arraybuffer', // Support binary content (images, PDFs, etc.)
+      responseType: 'arraybuffer', // Support binary content (images, PDFs, etc.)
     };
 
     // Make the request to the external HTTP server
