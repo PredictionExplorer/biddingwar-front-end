@@ -49,7 +49,6 @@ export default async function handler(
     const contentType = response.headers['content-type'] || 'application/octet-stream';
 
     res.setHeader('Content-Type', contentType);
-    res.setHeader('Cache-Control', 's-maxage=86400, stale-while-revalidate');
 
     if (contentType.includes('application/json')) {
       // If JSON, parse the response and send JSON
