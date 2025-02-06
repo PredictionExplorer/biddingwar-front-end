@@ -449,7 +449,7 @@ const NFTTrait = ({ tokenId }) => {
               </Typography>
             ) : (
               <Typography sx={{ color: "#f00" }}>
-                {"The token has already been staked, can't bee staked again."}
+                {"Token currently at stake"}
               </Typography>
             )}
             <Box mt={6}>
