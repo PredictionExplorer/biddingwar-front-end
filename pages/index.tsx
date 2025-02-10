@@ -635,8 +635,7 @@ const NewHome = () => {
       }
     }
 
-    const calculateTimeOffset = async () => {
-    };
+    const calculateTimeOffset = async () => {};
     calculateTimeOffset();
     fetchDataCollection();
 
@@ -695,7 +694,12 @@ const NewHome = () => {
     const fetchCSTInfo = async (bannerId) => {
       const res = await api.get_cst_info(bannerId);
       const fileName = `0x${res.TokenInfo.Seed}`;
-      setBannerToken({ seed: fileName, id: bannerId });
+      // setBannerToken({ seed: fileName, id: bannerId });
+      setBannerToken({
+        seed:
+          "0xb07c6dc911835a6c828854984d2f4805a7e3f1183cd2680090d9d4f9e832f98a",
+        id: 152,
+      });
     };
     if (data && bannerToken.seed === "") {
       if (data?.MainStats.NumCSTokenMints > 0) {
