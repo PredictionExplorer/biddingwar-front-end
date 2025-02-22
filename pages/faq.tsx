@@ -50,7 +50,7 @@ const FAQPage = () => {
                   fontWeight: 800,
                   color: "#fff",
                 }}
-                href="https://twitter.com/RandomWalkNFT"
+                href="https://x.com/CosmicSignature"
               >
                 Twitter
               </Link>
@@ -61,7 +61,7 @@ const FAQPage = () => {
                   fontWeight: 800,
                   color: "#fff",
                 }}
-                href="https://discord.gg/bGnPn96Qwt"
+                href="https://discord.com/channels/892288714007539722/896092674472423484"
               >
                 Discord
               </Link>

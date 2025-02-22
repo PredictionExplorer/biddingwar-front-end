@@ -237,13 +237,13 @@ const HowToPlay = () => {
       <Typography mt={8}>
         If you have any questions or confusion, feel free to ask them in the{" "}
         <Link
-          href="https://discord.com/channels/1258032742084509779/1258691600951935056"
+          href="https://discord.com/channels/892288714007539722/896092674472423484"
           target="_blank"
         >
           #cosmic-gameroom
         </Link>{" "}
         channel inside our Discord, or{" "}
-        <Link href="https://x.com/CosmicSignatureNFT" target="_blank">
+        <Link href="https://x.com/CosmicSignature" target="_blank">
           write us a message on Twitter/X
         </Link>
         .

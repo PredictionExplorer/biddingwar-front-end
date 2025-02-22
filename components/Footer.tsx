@@ -83,10 +83,7 @@ const Footer = () => (
               <IconButton href="/site-map">
                 <AccountTreeIcon sx={{ color: "#A9AAB5" }} />
               </IconButton>
-              <IconButton
-                href="https://twitter.com/CosmicSignatureNFT"
-                target="_blank"
-              >
+              <IconButton href="https://x.com/CosmicSignature" target="_blank">
                 <FontAwesomeIcon
                   icon={faTwitter}
                   color="#A9AAB5"
@@ -94,7 +91,10 @@ const Footer = () => (
                   height={24}
                 />
               </IconButton>
-              <IconButton href="https://discord.gg/bGnPn96Qwt" target="_blank">
+              <IconButton
+                href="https://discord.com/channels/892288714007539722/896092674472423484"
+                target="_blank"
+              >
                 <FontAwesomeIcon
                   icon={faDiscord}
                   color="#A9AAB5"
