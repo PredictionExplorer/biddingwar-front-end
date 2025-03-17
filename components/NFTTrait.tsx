@@ -25,7 +25,12 @@ import "react-modal-video/css/modal-video.min.css";
 
 import NFTVideo from "./NFTVideo";
 import { useActiveWeb3React } from "../hooks/web3";
-import { convertTimestampToDateTime, formatId, getAssetsUrl } from "../utils";
+import {
+  convertTimestampToDateTime,
+  formatId,
+  getAssetsUrl,
+  getOriginUrl,
+} from "../utils";
 import {
   StyledCard,
   SectionWrapper,
@@ -55,7 +60,6 @@ const NFTTrait = ({ tokenId }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [loading, setLoading] = useState(true);
   const [nft, setNft] = useState(null);
-  const [prizeInfo, setPrizeInfo] = useState(null);
   const [dashboard, setDashboard] = useState(null);
   const [tokenName, setTokenName] = useState("");
   const [nameHistory, setNameHistory] = useState([]);
@@ -222,7 +226,6 @@ const NFTTrait = ({ tokenId }) => {
     try {
       const res = await api.get_cst_info(tokenId);
       setNft(res.TokenInfo);
-      setPrizeInfo(res.PrizeInfo);
       setImage(getAssetsUrl(`cosmicsignature/0x${res.TokenInfo.Seed}.png`));
       setVideo(getAssetsUrl(`cosmicsignature/0x${res.TokenInfo.Seed}.mp4`));
     } catch (e) {
@@ -245,7 +248,7 @@ const NFTTrait = ({ tokenId }) => {
     fetchData();
   }, [tokenId]);
 
-  if (loading) {
+  if (loading || !nft) {
     return (
       <Container>
         <Typography variant="h6">Loading...</Typography>
@@ -301,12 +304,12 @@ const NFTTrait = ({ tokenId }) => {
                     open={Boolean(anchorEl)}
                     onClose={handleMenuClose}
                   >
-                    <CopyToClipboard text={video}>
+                    <CopyToClipboard text={getOriginUrl(video)}>
                       <PrimaryMenuItem onClick={handleMenuClose}>
                         <Typography>Video</Typography>
                       </PrimaryMenuItem>
                     </CopyToClipboard>
-                    <CopyToClipboard text={image}>
+                    <CopyToClipboard text={getOriginUrl(image)}>
                       <PrimaryMenuItem onClick={handleMenuClose}>
                         <Typography>Image</Typography>
                       </PrimaryMenuItem>

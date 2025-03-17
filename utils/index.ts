@@ -259,3 +259,9 @@ export const getAssetsUrl = (url: string) => {
   const imageServerUrl = "http://69.10.55.2/images/";
   return `${proxyUrl}${encodeURIComponent(imageServerUrl + url)}`;
 };
+
+export const getOriginUrl = (url: string) => {
+  const strippedUrl = url.replace("/api/proxy?url=", "");
+  const decodedUrl = decodeURIComponent(strippedUrl);
+  return decodedUrl;
+}

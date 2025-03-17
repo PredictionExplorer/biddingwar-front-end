@@ -23,7 +23,7 @@ import "react-awesome-lightbox/build/style.css";
 import ModalVideo from "react-modal-video";
 import "react-modal-video/css/modal-video.min.css";
 import NFTVideo from "../../components/NFTVideo";
-import { getAssetsUrl } from "../../utils";
+import { getAssetsUrl, getOriginUrl } from "../../utils";
 
 const SampleDetail = () => {
   const [open, setOpen] = useState(false);
@@ -89,12 +89,12 @@ const SampleDetail = () => {
                       open={Boolean(anchorEl)}
                       onClose={handleMenuClose}
                     >
-                      <CopyToClipboard text={video}>
+                      <CopyToClipboard text={getOriginUrl(video)}>
                         <PrimaryMenuItem onClick={handleMenuClose}>
                           <Typography>Video</Typography>
                         </PrimaryMenuItem>
                       </CopyToClipboard>
-                      <CopyToClipboard text={image}>
+                      <CopyToClipboard text={getOriginUrl(image)}>
                         <PrimaryMenuItem onClick={handleMenuClose}>
                           <Typography>Image</Typography>
                         </PrimaryMenuItem>
